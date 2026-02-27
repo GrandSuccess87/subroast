@@ -130,3 +130,6 @@
 - [x] Pricing page: lower Growth price from $49 to $39/mo
 - [x] Stripe products.ts: update Growth price to $39
 - [x] Fix login flash: show loading skeleton while auth state resolves instead of flashing Sign In page
+
+## Campaign Sync UX (v4.4)
+- [x] DM Campaigns: show "Last synced X ago" and "Next sync in Y" per campaign card based on plan sync frequency

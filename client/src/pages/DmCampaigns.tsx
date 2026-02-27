@@ -10,6 +10,7 @@ import {
   Bot,
   CheckCircle2,
   ChevronRight,
+  Clock,
   ExternalLink,
   Inbox,
   Loader2,
@@ -28,6 +29,33 @@ import {
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { toast } from "sonner";
+
+// ─── Sync timing helpers ──────────────────────────────────────────────────────
+
+/** Sync interval in ms based on plan */
+function getSyncIntervalMs(plan: string | undefined): number {
+  // Growth: every 4 hours; Starter/trial/none: twice daily (12h)
+  return plan === "growth" ? 4 * 60 * 60 * 1000 : 12 * 60 * 60 * 1000;
+}
+
+/** Human-readable relative time (e.g. "3 min ago", "2 hr ago") */
+function relativeTime(ms: number): string {
+  const diff = Date.now() - ms;
+  if (diff < 60_000) return "just now";
+  if (diff < 3_600_000) return `${Math.floor(diff / 60_000)} min ago`;
+  if (diff < 86_400_000) return `${Math.floor(diff / 3_600_000)} hr ago`;
+  return `${Math.floor(diff / 86_400_000)}d ago`;
+}
+
+/** Human-readable countdown (e.g. "in 2 hr 15 min") */
+function countdown(targetMs: number): string {
+  const diff = targetMs - Date.now();
+  if (diff <= 0) return "soon";
+  const h = Math.floor(diff / 3_600_000);
+  const m = Math.floor((diff % 3_600_000) / 60_000);
+  if (h > 0) return `in ${h}h ${m}m`;
+  return `in ${m}m`;
+}
 
 type Campaign = {
   id: number;
@@ -692,6 +720,9 @@ export default function DmCampaigns() {
 
   const utils = trpc.useUtils();
   const { data: campaigns = [], isLoading } = trpc.outreach.listCampaigns.useQuery();
+  const { data: subStatus } = trpc.subscription.getStatus.useQuery();
+
+  const syncIntervalMs = getSyncIntervalMs(subStatus?.plan);
 
   const deleteCampaign = trpc.outreach.deleteCampaign.useMutation({
     onSuccess: () => {
@@ -788,6 +819,19 @@ export default function DmCampaigns() {
                       <span>{campaign.keywords.length} keywords</span>
                       <span className="text-primary font-medium">{campaign.leadsFound} leads found</span>
                       <span>{campaign.dmsSent} DMs sent</span>
+                    </div>
+                    {/* Sync timing row */}
+                    <div className="flex items-center gap-1.5 mt-1.5 text-[10px] text-muted-foreground/70">
+                      <Clock className="w-3 h-3 shrink-0" />
+                      {campaign.lastSyncAt ? (
+                        <>
+                          <span>Last synced {relativeTime(campaign.lastSyncAt)}</span>
+                          <span className="text-muted-foreground/40">&middot;</span>
+                          <span>Next sync {countdown(campaign.lastSyncAt + syncIntervalMs)}</span>
+                        </>
+                      ) : (
+                        <span>Not yet synced &mdash; click Sync Leads to discover your first prospects</span>
+                      )}
                     </div>
                     {campaign.subreddits.length > 0 && (
                       <div className="flex gap-1 mt-2">
