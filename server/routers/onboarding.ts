@@ -67,8 +67,8 @@ export const onboardingRouter = router({
       },
       {
         id: "post_drafted",
-        label: "Draft and roast your first post",
-        description: "Get AI feedback on a Reddit post before you publish it",
+        label: "Roast your first post & check your virality score",
+        description: "Get AI feedback, a brutally honest roast, and a 1-100 virality score on your next Reddit post",
         href: "/draft",
         completed: postDrafted,
       },

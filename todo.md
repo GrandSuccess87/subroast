@@ -139,3 +139,6 @@
 - [x] DB: add onboardingDismissedAt field to users table so dismissal persists
 - [x] Dashboard: dismissible OnboardingChecklist card showing step completion with progress bar
 - [x] Checklist auto-hides once all steps complete or user dismisses
+
+## Onboarding Copy (v4.5.1)
+- [x] Onboarding step 4: rename to "Roast your first post & check your virality score", update description, remove word "draft"
