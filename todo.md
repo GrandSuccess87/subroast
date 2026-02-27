@@ -115,3 +115,6 @@
 - [x] Day 6 trial reminder email (background job)
 - [x] New leads email notification (per campaign, on lead sync)
 - [x] Tests for subscription gating logic
+
+## Billing UX (v4.1)
+- [x] Settings page: Manage Billing section showing current plan, trial status, and Stripe portal button
