@@ -118,3 +118,9 @@
 
 ## Billing UX (v4.1)
 - [x] Settings page: Manage Billing section showing current plan, trial status, and Stripe portal button
+
+## Auto-sync & UX Polish (v4.2)
+- [x] Settings page: remove "Setup your own Reddit app" card
+- [x] Background job: auto-sync Starter campaigns twice daily (8am + 8pm EST), staggered with 500ms delay between campaigns
+- [x] Background job: auto-sync Growth campaigns every 4 hours, staggered with 500ms delay between campaigns
+- [x] Pricing page: add sync frequency as a plan differentiator (2x/day vs 6x/day)

@@ -8,7 +8,6 @@ import {
   CheckCircle2,
   Clock,
   CreditCard,
-  ExternalLink,
   Loader2,
   MessageSquare,
   RefreshCw,
@@ -337,28 +336,7 @@ export default function SettingsPage() {
           </CardContent>
         </Card>
 
-        {/* Reddit OAuth setup guide */}
-        <Card className="bg-card border-border">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-muted-foreground">Setup your own Reddit app</CardTitle>
-          </CardHeader>
-          <CardContent className="text-xs text-muted-foreground space-y-2">
-            <p>To use SubSignal with your own Reddit app credentials:</p>
-            <ol className="space-y-1.5 ml-1">
-              {[
-                <>Go to <a href="https://www.reddit.com/prefs/apps" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary/80 inline-flex items-center gap-0.5">reddit.com/prefs/apps <ExternalLink className="w-2.5 h-2.5" /></a></>,
-                <>Create a "web app" with redirect URI pointing to your domain</>,
-                <>Copy the Client ID and Client Secret</>,
-                <>Add them as <code className="bg-muted/60 px-1 rounded font-mono">REDDIT_CLIENT_ID</code> and <code className="bg-muted/60 px-1 rounded font-mono">REDDIT_CLIENT_SECRET</code> in your .env</>,
-              ].map((step, i) => (
-                <li key={i} className="flex items-start gap-2">
-                  <span className="w-4 h-4 rounded-full bg-muted/60 flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">{i + 1}</span>
-                  <span>{step}</span>
-                </li>
-              ))}
-            </ol>
-          </CardContent>
-        </Card>
+
       </div>
     </DashboardLayout>
   );

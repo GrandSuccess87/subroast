@@ -25,6 +25,7 @@ const PLANS = [
       "AI Draft & Roast with virality score",
       "AI auto-scheduling (3–7 pm EST)",
       "Lead discovery via Reddit search",
+      "Lead sync: 2x daily (8am & 8pm EST)",
       "AI-generated personalized DMs",
       "Match scoring (Strong / Partial / Lowest)",
       "Email alerts for new leads",
@@ -46,7 +47,7 @@ const PLANS = [
       "5 posts per day",
       "25 DMs per day",
       "Everything in Starter",
-      "Priority lead sync",
+      "Lead sync: every 4 hours (6x daily)",
       "DM template library (coming soon)",
       "Advanced analytics (coming soon)",
     ],
@@ -141,6 +142,12 @@ export default function Pricing() {
                   </div>
                   <h2 className="text-2xl font-bold">{plan.name}</h2>
                   <p className="text-muted-foreground text-sm mt-1">{plan.description}</p>
+                {plan.key === "growth" && (
+                  <div className="mt-2 inline-flex items-center gap-1.5 text-xs text-purple-400 bg-purple-500/10 border border-purple-500/20 rounded-full px-2.5 py-1">
+                    <TrendingUp className="w-3 h-3" />
+                    3× faster lead discovery
+                  </div>
+                )}
                 </div>
 
                 {/* Price */}
