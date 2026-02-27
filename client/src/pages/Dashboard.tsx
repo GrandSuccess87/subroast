@@ -2,6 +2,7 @@ import DashboardLayout from "@/components/DashboardLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
+import OnboardingChecklist from "@/components/OnboardingChecklist";
 import {
   AlertTriangle,
   ArrowRight,
@@ -172,6 +173,9 @@ export default function Dashboard() {
             </Card>
           ))}
         </div>
+
+        {/* Onboarding checklist — shown to new users until all steps complete or dismissed */}
+        <OnboardingChecklist />
 
         {/* Quick actions */}
         <div>

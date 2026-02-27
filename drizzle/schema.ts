@@ -24,6 +24,7 @@ export const users = mysqlTable("users", {
   trialEndsAt: bigint("trialEndsAt", { mode: "number" }),     // unix ms
   subscriptionStatus: mysqlEnum("subscriptionStatus", ["active", "trialing", "past_due", "canceled", "none"]).default("none").notNull(),
   trialReminderSentAt: bigint("trialReminderSentAt", { mode: "number" }), // unix ms
+  onboardingDismissedAt: bigint("onboardingDismissedAt", { mode: "number" }), // unix ms — set when user dismisses checklist
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),

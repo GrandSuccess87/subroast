@@ -133,3 +133,9 @@
 
 ## Campaign Sync UX (v4.4)
 - [x] DM Campaigns: show "Last synced X ago" and "Next sync in Y" per campaign card based on plan sync frequency
+
+## Onboarding Checklist (v4.5)
+- [x] tRPC: onboarding.getStatus procedure — checks Reddit connected, campaign created, first lead synced, first post drafted
+- [x] DB: add onboardingDismissedAt field to users table so dismissal persists
+- [x] Dashboard: dismissible OnboardingChecklist card showing step completion with progress bar
+- [x] Checklist auto-hides once all steps complete or user dismisses

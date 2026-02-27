@@ -32,6 +32,7 @@ import { nanoid } from "nanoid";
 import axios from "axios";
 import { outreachRouter } from "./routers/outreach";
 import { subscriptionRouter } from "./routers/subscription";
+import { onboardingRouter } from "./routers/onboarding";
 
 // ─── AI Roast Router ─────────────────────────────────────────────────────────
 
@@ -395,6 +396,7 @@ export const appRouter = router({
   dm: dmRouter,
   outreach: outreachRouter,
   subscription: subscriptionRouter,
+  onboarding: onboardingRouter,
   history: historyRouter,
   settings: settingsRouter,
 });
