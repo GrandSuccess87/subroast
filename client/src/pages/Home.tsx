@@ -67,7 +67,7 @@ const SAFETY_ITEMS = [
   "Max 5 posts/day with 30-min cooldown",
   "Max 25 DMs/day at 5/hour",
   "2–10 min randomized delays between DMs",
-  "Auto-pause after 3 consecutive failures",
+  "Alerts you after repeated failures so you stay in control",
   "Warning at 80% of daily limit",
 ];
 
@@ -76,7 +76,7 @@ const HOW_IT_WORKS = [
     step: "01",
     icon: Flame,
     title: "Roast your post",
-    desc: "Paste your draft and get an AI roast, a clarity score, a virality score, and a rewritten version — before you ever hit submit.",
+    desc: "Paste your draft and get an AI roast, a clarity score, a fit score, a virality score, and a rewritten version — before you ever hit submit.",
     color: "text-primary",
     bg: "bg-primary/10",
     border: "border-primary/20",
@@ -85,7 +85,7 @@ const HOW_IT_WORKS = [
     step: "02",
     icon: CalendarClock,
     title: "Schedule it automatically",
-    desc: "SubRoast picks the optimal time in the 3–7pm EST window, enforces cooldowns, and posts on your behalf — no manual timing needed.",
+    desc: "SubRoast picks the optimal posting time, enforces cooldowns, and posts on your behalf — no manual timing needed.",
     color: "text-blue-400",
     bg: "bg-blue-400/10",
     border: "border-blue-400/20",
@@ -193,9 +193,11 @@ export default function Home() {
       <nav className="border-b border-border/50 bg-background/80 backdrop-blur sticky top-0 z-50">
         <div className="container flex items-center justify-between h-14">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
-              <Zap className="w-4 h-4 text-primary-foreground" />
-            </div>
+            <img
+              src="https://d2xsxph8kpxj0f.cloudfront.net/310519663208942813/D6eMQgvSZZr9tsyS9zVhzn/subroast-icon-RB9JvJQZEXaJSeVt2u3DT9.webp"
+              alt="SubRoast"
+              className="w-7 h-7 rounded-lg object-cover"
+            />
             <span className="font-bold text-sm tracking-tight">SubRoast</span>
           </div>
           <div className="flex items-center gap-4">
@@ -231,15 +233,10 @@ export default function Home() {
         {/* Left glow */}
         <div className="absolute top-0 left-0 w-[500px] h-[400px] bg-primary/8 rounded-full blur-3xl -translate-x-1/3" />
 
-        <div className="container relative py-16 lg:py-24">
+        <div className="container relative py-16 pb-24 lg:py-24">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Left: copy */}
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium mb-6">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                For indie SaaS founders
-              </div>
-
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] mb-5">
                 Stop guessing.
                 <br />
@@ -270,17 +267,17 @@ export default function Home() {
               </div>
 
               {/* Trust row */}
-              <div className="flex items-center gap-4 flex-wrap">
+              <div className="flex flex-wrap gap-x-5 gap-y-2.5">
                 <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />
                   No credit card required
                 </div>
                 <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />
                   Cancel anytime
                 </div>
                 <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
+                  <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                   Account safety built in
                 </div>
               </div>
@@ -398,9 +395,11 @@ export default function Home() {
       <footer className="border-t border-border/50 py-6">
         <div className="container flex items-center justify-between text-xs text-muted-foreground">
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded bg-primary/20 flex items-center justify-center">
-              <Zap className="w-3 h-3 text-primary" />
-            </div>
+            <img
+              src="https://d2xsxph8kpxj0f.cloudfront.net/310519663208942813/D6eMQgvSZZr9tsyS9zVhzn/subroast-icon-RB9JvJQZEXaJSeVt2u3DT9.webp"
+              alt="SubRoast"
+              className="w-5 h-5 rounded object-cover"
+            />
             <span>SubRoast</span>
           </div>
           <div className="flex items-center gap-4">

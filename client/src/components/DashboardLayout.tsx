@@ -106,9 +106,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     return (
       <div className="flex items-center justify-center min-h-screen bg-background">
         <div className="flex flex-col items-center gap-8 p-8 max-w-md w-full">
-          <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-            <Zap className="w-5 h-5 text-primary-foreground" />
-          </div>
+          <img
+            src="https://d2xsxph8kpxj0f.cloudfront.net/310519663208942813/D6eMQgvSZZr9tsyS9zVhzn/subroast-icon-RB9JvJQZEXaJSeVt2u3DT9.webp"
+            alt="SubRoast"
+            className="w-10 h-10 rounded-xl object-cover"
+          />
           <div className="flex flex-col items-center gap-3 text-center">
             <h1 className="text-2xl font-semibold tracking-tight">Sign in to SubRoast</h1>
             <p className="text-sm text-muted-foreground max-w-sm">
@@ -210,9 +212,11 @@ function DashboardLayoutContent({
               </button>
               {!isCollapsed && (
                 <div className="flex items-center gap-2 min-w-0">
-                  <div className="w-6 h-6 rounded-md bg-primary flex items-center justify-center shrink-0">
-                    <Zap className="w-3.5 h-3.5 text-primary-foreground" />
-                  </div>
+                  <img
+                    src="https://d2xsxph8kpxj0f.cloudfront.net/310519663208942813/D6eMQgvSZZr9tsyS9zVhzn/subroast-icon-RB9JvJQZEXaJSeVt2u3DT9.webp"
+                    alt="SubRoast"
+                    className="w-6 h-6 rounded-md shrink-0 object-cover"
+                  />
                   <span className="font-bold tracking-tight text-sidebar-foreground truncate text-sm">
                     SubRoast
                   </span>
