@@ -142,3 +142,7 @@
 
 ## Onboarding Copy (v4.5.1)
 - [x] Onboarding step 4: rename to "Roast your first post & check your virality score", update description, remove word "draft"
+
+## Landing Page Polish (v4.6)
+- [x] Hero: simplify safety callout to one clean line instead of dense specs
+- [x] Rate Limiting section: increase heading and body font sizes

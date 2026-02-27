@@ -146,12 +146,11 @@ export default function Home() {
           </div>
 
           {/* Safety callout */}
-          <div className="mt-10 inline-flex items-start gap-2.5 px-4 py-3 rounded-xl bg-amber-500/5 border border-amber-500/20 text-left max-w-lg mx-auto">
-            <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-            <p className="text-xs text-amber-300/80 leading-relaxed">
-              <span className="font-semibold text-amber-300">Built-in Reddit safety:</span>{" "}
-              Max 5 posts/day with 30-min cooldown. Max 25 DMs/day at 5/hour with 2–10 min
-              randomized delays. Auto-pause after 3 failures.
+          <div className="mt-10 inline-flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-amber-500/5 border border-amber-500/20">
+            <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+            <p className="text-xs text-amber-300/80">
+              <span className="font-semibold text-amber-300">Built-in Reddit safety</span>{" — "}
+              your account stays protected automatically.
             </p>
           </div>
         </div>
@@ -187,14 +186,14 @@ export default function Home() {
           <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
             <Shield className="w-5 h-5 text-primary" />
           </div>
-          <h2 className="text-xl font-bold mb-2">Rate limiting built in</h2>
-          <p className="text-sm text-muted-foreground mb-6">
+          <h2 className="text-2xl font-bold mb-3">Rate limiting built in</h2>
+          <p className="text-base text-muted-foreground mb-8">
             SubSignal enforces Reddit's unwritten rules automatically so you never have to think about it.
           </p>
-          <div className="grid sm:grid-cols-2 gap-2 text-left max-w-md mx-auto">
+          <div className="grid sm:grid-cols-2 gap-3 text-left max-w-lg mx-auto">
             {SAFETY_ITEMS.map((item) => (
-              <div key={item} className="flex items-start gap-2 text-xs text-muted-foreground">
-                <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
+              <div key={item} className="flex items-start gap-2.5 text-sm text-muted-foreground">
+                <CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                 {item}
               </div>
             ))}
