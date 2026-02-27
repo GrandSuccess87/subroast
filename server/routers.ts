@@ -30,6 +30,7 @@ import { getRedditAuthUrl, submitRedditPost, refreshRedditToken } from "./reddit
 import { ENV } from "./_core/env";
 import { nanoid } from "nanoid";
 import axios from "axios";
+import { outreachRouter } from "./routers/outreach";
 
 // ─── AI Roast Router ─────────────────────────────────────────────────────────
 
@@ -61,9 +62,15 @@ Return a JSON object with this EXACT structure:
     "promo_risk": "Low|Medium|High",
     "explanation": "2 sentences explaining the scores"
   },
+  "virality": {
+    "score": 42,
+    "tip": "One specific, actionable tip to increase virality"
+  },
   "roast": "3-5 witty lines like a Redditor would say, separated by newlines",
   "improved_draft": "Full rewritten version of the post/DM that would perform better on Reddit"
-}`;
+}
+
+For the virality score (1-100), consider: does the title ask a question (+15), is there an emotional hook (+10), is it specific/concrete (+10), does it fit the subreddit culture (+15), is there a story/narrative (+10), is there value for the reader (+15), is the length appropriate (+10), does it avoid overt self-promotion (+15). Sum these up for the score.`;
 
       const response = await invokeLLM({
         messages: [
@@ -89,10 +96,19 @@ Return a JSON object with this EXACT structure:
                   required: ["clarity", "subreddit_fit", "promo_risk", "explanation"],
                   additionalProperties: false,
                 },
+                virality: {
+                  type: "object",
+                  properties: {
+                    score: { type: "integer", description: "Virality score 1-100" },
+                    tip: { type: "string", description: "One actionable tip to increase virality" },
+                  },
+                  required: ["score", "tip"],
+                  additionalProperties: false,
+                },
                 roast: { type: "string" },
                 improved_draft: { type: "string" },
               },
-              required: ["review", "roast", "improved_draft"],
+              required: ["review", "virality", "roast", "improved_draft"],
               additionalProperties: false,
             },
           },
@@ -110,6 +126,10 @@ Return a JSON object with this EXACT structure:
             subreddit_fit: "High" | "Medium" | "Low";
             promo_risk: "Low" | "Medium" | "High";
             explanation: string;
+          };
+          virality: {
+            score: number;
+            tip: string;
           };
           roast: string;
           improved_draft: string;
@@ -372,6 +392,7 @@ export const appRouter = router({
   reddit: redditRouter,
   schedule: scheduleRouter,
   dm: dmRouter,
+  outreach: outreachRouter,
   history: historyRouter,
   settings: settingsRouter,
 });

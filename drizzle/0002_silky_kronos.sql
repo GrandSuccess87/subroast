@@ -1,0 +1,40 @@
+CREATE TABLE `outreach_campaigns` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`userId` int NOT NULL,
+	`name` varchar(256) NOT NULL,
+	`offering` text NOT NULL,
+	`websiteUrl` varchar(512),
+	`subreddits` text NOT NULL,
+	`keywords` text NOT NULL,
+	`aiPromptInstructions` text,
+	`reviewMode` enum('auto_send','review_first') NOT NULL DEFAULT 'review_first',
+	`status` enum('active','paused','completed') NOT NULL DEFAULT 'active',
+	`lastSyncAt` bigint,
+	`leadsFound` int NOT NULL DEFAULT 0,
+	`dmsSent` int NOT NULL DEFAULT 0,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `outreach_campaigns_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
+CREATE TABLE `outreach_leads` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`campaignId` int NOT NULL,
+	`userId` int NOT NULL,
+	`redditPostId` varchar(64) NOT NULL,
+	`redditPostUrl` text NOT NULL,
+	`subreddit` varchar(128) NOT NULL,
+	`postTitle` text NOT NULL,
+	`postBody` text,
+	`authorUsername` varchar(64) NOT NULL,
+	`matchScore` enum('strong','partial','lowest') NOT NULL DEFAULT 'partial',
+	`matchedKeywords` text,
+	`dmDraft` text,
+	`status` enum('new','dm_generated','queued','sent','skipped','failed') NOT NULL DEFAULT 'new',
+	`sentAt` bigint,
+	`errorMessage` text,
+	`discoveredAt` bigint NOT NULL,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `outreach_leads_id` PRIMARY KEY(`id`)
+);

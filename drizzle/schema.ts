@@ -65,7 +65,7 @@ export const scheduledPosts = mysqlTable("scheduled_posts", {
 export type ScheduledPost = typeof scheduledPosts.$inferSelect;
 export type InsertScheduledPost = typeof scheduledPosts.$inferInsert;
 
-// DM campaigns
+// DM campaigns (legacy - kept for backward compat)
 export const dmCampaigns = mysqlTable("dm_campaigns", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId").notNull(),
@@ -155,3 +155,52 @@ export const userSettings = mysqlTable("user_settings", {
 
 export type UserSettings = typeof userSettings.$inferSelect;
 export type InsertUserSettings = typeof userSettings.$inferInsert;
+
+// ─── V2: LeadVerse-style outreach campaigns ──────────────────────────────────
+
+// Outreach campaigns (v2) - keyword-based subreddit monitoring
+export const outreachCampaigns = mysqlTable("outreach_campaigns", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  name: varchar("name", { length: 256 }).notNull(),
+  offering: text("offering").notNull(),           // "What are you offering?"
+  websiteUrl: varchar("websiteUrl", { length: 512 }),
+  subreddits: text("subreddits").notNull(),        // JSON array of subreddit names
+  keywords: text("keywords").notNull(),            // JSON array of keyword strings
+  aiPromptInstructions: text("aiPromptInstructions"), // custom tone/style instructions
+  reviewMode: mysqlEnum("reviewMode", ["auto_send", "review_first"]).default("review_first").notNull(),
+  status: mysqlEnum("status", ["active", "paused", "completed"]).default("active").notNull(),
+  lastSyncAt: bigint("lastSyncAt", { mode: "number" }),
+  leadsFound: int("leadsFound").default(0).notNull(),
+  dmsSent: int("dmsSent").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type OutreachCampaign = typeof outreachCampaigns.$inferSelect;
+export type InsertOutreachCampaign = typeof outreachCampaigns.$inferInsert;
+
+// Leads discovered from subreddit monitoring
+export const outreachLeads = mysqlTable("outreach_leads", {
+  id: int("id").autoincrement().primaryKey(),
+  campaignId: int("campaignId").notNull(),
+  userId: int("userId").notNull(),
+  redditPostId: varchar("redditPostId", { length: 64 }).notNull(),
+  redditPostUrl: text("redditPostUrl").notNull(),
+  subreddit: varchar("subreddit", { length: 128 }).notNull(),
+  postTitle: text("postTitle").notNull(),
+  postBody: text("postBody"),
+  authorUsername: varchar("authorUsername", { length: 64 }).notNull(),
+  matchScore: mysqlEnum("matchScore", ["strong", "partial", "lowest"]).default("partial").notNull(),
+  matchedKeywords: text("matchedKeywords"),       // JSON array
+  dmDraft: text("dmDraft"),                       // AI-generated DM draft
+  status: mysqlEnum("status", ["new", "dm_generated", "queued", "sent", "skipped", "failed"]).default("new").notNull(),
+  sentAt: bigint("sentAt", { mode: "number" }),
+  errorMessage: text("errorMessage"),
+  discoveredAt: bigint("discoveredAt", { mode: "number" }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type OutreachLead = typeof outreachLeads.$inferSelect;
+export type InsertOutreachLead = typeof outreachLeads.$inferInsert;

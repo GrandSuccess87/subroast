@@ -80,3 +80,21 @@
 - [x] All pages: dark card backgrounds, subtle borders, green highlights on active states
 - [x] HistoryPage: dark theme redesign
 - [x] SettingsPage: dark theme redesign with progress bars for limits
+
+## Feature Additions (v3)
+- [x] Virality score (1-100) added to AI roast structured JSON output with actionable tip
+- [x] Draft & Roast UI: display virality score prominently with label and tip
+- [x] Auto-scheduling: remove manual time picker, AI picks optimal time in 3-7pm EST window
+- [x] Schedule page: show "Scheduled for today at X:XXpm EST" with optional override
+- [x] DB schema: add campaigns v2 table (name, offering, website_url, subreddits, keywords, ai_prompt, review_mode, status)
+- [x] DB schema: add leads table (campaign_id, reddit_post_url, author, post_title, post_body, match_score, dm_draft, status)
+- [x] tRPC: createCampaign with AI subreddit+keyword recommendations
+- [x] tRPC: recommendSubreddits - AI engine based on campaign description
+- [x] tRPC: syncLeads - poll Reddit public search API for matching posts
+- [x] tRPC: generateDM - AI writes personalized DM using campaign context + lead post
+- [x] tRPC: sendDM / queueDM - rate-limited send with review toggle
+- [x] DM Campaigns page: full redesign - campaign setup form with AI recommendations
+- [x] DM Campaigns page: leads inbox with match score badges (Strong/Partial/Lowest)
+- [x] DM Campaigns page: Generate DM button per lead, review modal, send/queue action
+- [x] DM Campaigns page: review toggle (Auto-send vs Review before send) per campaign
+- [x] Sidebar: add "Leads" nav item under OUTREACH section

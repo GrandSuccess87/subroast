@@ -441,3 +441,124 @@ export async function upsertUserSettings(data: InsertUserSettings): Promise<void
     },
   });
 }
+
+// ─── Outreach Campaigns ───────────────────────────────────────────────────────
+
+import {
+  InsertOutreachCampaign,
+  InsertOutreachLead,
+  OutreachCampaign,
+  OutreachLead,
+  outreachCampaigns,
+  outreachLeads,
+} from "../drizzle/schema";
+
+export async function createOutreachCampaign(data: InsertOutreachCampaign): Promise<number> {
+  const db = await getDb();
+  if (!db) throw new Error("DB not available");
+  const result = await db.insert(outreachCampaigns).values(data);
+  return (result as unknown as { insertId: number }).insertId;
+}
+
+export async function getOutreachCampaignsByUserId(userId: number): Promise<OutreachCampaign[]> {
+  const db = await getDb();
+  if (!db) return [];
+  return db
+    .select()
+    .from(outreachCampaigns)
+    .where(eq(outreachCampaigns.userId, userId))
+    .orderBy(desc(outreachCampaigns.createdAt));
+}
+
+export async function getOutreachCampaignById(id: number): Promise<OutreachCampaign | undefined> {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(outreachCampaigns).where(eq(outreachCampaigns.id, id)).limit(1);
+  return result[0];
+}
+
+export async function updateOutreachCampaign(
+  id: number,
+  data: Partial<InsertOutreachCampaign>
+): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  await db.update(outreachCampaigns).set(data).where(eq(outreachCampaigns.id, id));
+}
+
+export async function deleteOutreachCampaign(id: number, userId: number): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  await db
+    .update(outreachCampaigns)
+    .set({ status: "completed" })
+    .where(and(eq(outreachCampaigns.id, id), eq(outreachCampaigns.userId, userId)));
+}
+
+export async function getActiveCampaignsForSync(): Promise<OutreachCampaign[]> {
+  const db = await getDb();
+  if (!db) return [];
+  return db
+    .select()
+    .from(outreachCampaigns)
+    .where(eq(outreachCampaigns.status, "active"));
+}
+
+// ─── Outreach Leads ───────────────────────────────────────────────────────────
+
+export async function upsertOutreachLead(data: InsertOutreachLead): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  await db.insert(outreachLeads).values(data).onDuplicateKeyUpdate({
+    set: {
+      matchScore: data.matchScore,
+      matchedKeywords: data.matchedKeywords,
+    },
+  });
+}
+
+export async function getOutreachLeadsByCampaignId(campaignId: number): Promise<OutreachLead[]> {
+  const db = await getDb();
+  if (!db) return [];
+  return db
+    .select()
+    .from(outreachLeads)
+    .where(eq(outreachLeads.campaignId, campaignId))
+    .orderBy(desc(outreachLeads.discoveredAt))
+    .limit(100);
+}
+
+export async function getOutreachLeadsByUserId(userId: number): Promise<OutreachLead[]> {
+  const db = await getDb();
+  if (!db) return [];
+  return db
+    .select()
+    .from(outreachLeads)
+    .where(eq(outreachLeads.userId, userId))
+    .orderBy(desc(outreachLeads.discoveredAt))
+    .limit(200);
+}
+
+export async function updateOutreachLeadStatus(
+  id: number,
+  status: "new" | "dm_generated" | "queued" | "sent" | "skipped" | "failed",
+  extra?: { dmDraft?: string; sentAt?: number; errorMessage?: string }
+): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  await db
+    .update(outreachLeads)
+    .set({ status, ...extra })
+    .where(eq(outreachLeads.id, id));
+}
+
+export async function getQueuedLeadsForSending(): Promise<OutreachLead[]> {
+  const db = await getDb();
+  if (!db) return [];
+  return db
+    .select()
+    .from(outreachLeads)
+    .where(eq(outreachLeads.status, "queued"))
+    .orderBy(outreachLeads.discoveredAt)
+    .limit(5);
+}

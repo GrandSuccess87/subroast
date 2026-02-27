@@ -1,5 +1,4 @@
 import DashboardLayout from "@/components/DashboardLayout";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -12,7 +11,9 @@ import {
   Flame,
   Loader2,
   Sparkles,
+  TrendingUp,
   XCircle,
+  Zap,
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -24,6 +25,10 @@ type AnalysisResult = {
     subreddit_fit: "High" | "Medium" | "Low";
     promo_risk: "Low" | "Medium" | "High";
     explanation: string;
+  };
+  virality: {
+    score: number;
+    tip: string;
   };
   roast: string;
   improved_draft: string;
@@ -41,6 +46,63 @@ function ScoreBadge({ value, type }: { value: string; type: "positive" | "negati
     <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold border ${color}`}>
       {value}
     </span>
+  );
+}
+
+function ViralityGauge({ score }: { score: number }) {
+  const clampedScore = Math.max(1, Math.min(100, score));
+  const color =
+    clampedScore >= 70
+      ? "#10b981" // green
+      : clampedScore >= 40
+      ? "#f59e0b" // amber
+      : "#ef4444"; // red
+
+  const label =
+    clampedScore >= 70 ? "High Viral Potential" : clampedScore >= 40 ? "Moderate Potential" : "Low Potential";
+
+  // SVG arc gauge
+  const radius = 42;
+  const circumference = Math.PI * radius; // half circle
+  const progress = (clampedScore / 100) * circumference;
+
+  return (
+    <div className="flex flex-col items-center gap-2">
+      <div className="relative w-28 h-16 overflow-hidden">
+        <svg width="112" height="64" viewBox="0 0 112 64" className="overflow-visible">
+          {/* Background arc */}
+          <path
+            d="M 14 56 A 42 42 0 0 1 98 56"
+            fill="none"
+            stroke="rgba(255,255,255,0.08)"
+            strokeWidth="8"
+            strokeLinecap="round"
+          />
+          {/* Progress arc */}
+          <path
+            d="M 14 56 A 42 42 0 0 1 98 56"
+            fill="none"
+            stroke={color}
+            strokeWidth="8"
+            strokeLinecap="round"
+            strokeDasharray={`${progress} ${circumference}`}
+            style={{ transition: "stroke-dasharray 0.8s ease" }}
+          />
+        </svg>
+        {/* Score number centered */}
+        <div className="absolute inset-0 flex items-end justify-center pb-0">
+          <span className="text-2xl font-black" style={{ color }}>
+            {clampedScore}
+          </span>
+        </div>
+      </div>
+      <div className="text-center">
+        <p className="text-[10px] font-semibold uppercase tracking-widest" style={{ color }}>
+          {label}
+        </p>
+        <p className="text-[10px] text-muted-foreground mt-0.5">Virality Score</p>
+      </div>
+    </div>
   );
 }
 
@@ -87,7 +149,7 @@ export default function DraftRoast() {
             <h1 className="text-xl font-bold text-foreground">Draft & Roast</h1>
           </div>
           <p className="text-sm text-muted-foreground ml-10.5">
-            Paste your Reddit post or DM draft — get an AI review, a roast, and an improved version.
+            Paste your Reddit post or DM draft — get an AI review, virality score, roast, and improved version.
           </p>
         </div>
 
@@ -179,6 +241,24 @@ export default function DraftRoast() {
 
             {result && (
               <div className="space-y-3">
+                {/* Virality Score — always visible at top */}
+                <Card className="bg-card border-border overflow-hidden">
+                  <div className="flex items-center gap-4 p-4">
+                    <ViralityGauge score={result.virality.score} />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-1.5 mb-1.5">
+                        <TrendingUp className="w-3.5 h-3.5 text-primary" />
+                        <p className="text-xs font-semibold text-foreground uppercase tracking-wide">Virality Tip</p>
+                      </div>
+                      <p className="text-xs text-muted-foreground leading-relaxed">{result.virality.tip}</p>
+                      <div className="flex items-center gap-1.5 mt-2">
+                        <Zap className="w-3 h-3 text-amber-400" />
+                        <p className="text-[10px] text-muted-foreground/70">Apply the tip, then re-analyze for a higher score</p>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+
                 {/* Tab buttons */}
                 <div className="flex gap-1 p-1 rounded-lg bg-muted/40 border border-border">
                   {(["review", "roast", "improved"] as const).map((tab) => (
