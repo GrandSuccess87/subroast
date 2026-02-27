@@ -194,7 +194,7 @@ export default function Home() {
         <div className="container flex items-center justify-between h-14">
           <div className="flex items-center gap-2">
             <img
-              src="https://d2xsxph8kpxj0f.cloudfront.net/310519663208942813/D6eMQgvSZZr9tsyS9zVhzn/subroast-logo-bubble-g5rxfWJEJsHdPE3YxHuvfS.webp"
+              src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663208942813/BEbgHhBeLfKnEwiD.png"
               alt="SubRoast"
               className="w-7 h-7 rounded-lg object-cover"
             />
@@ -396,7 +396,7 @@ export default function Home() {
         <div className="container flex items-center justify-between text-xs text-muted-foreground">
           <div className="flex items-center gap-2">
             <img
-              src="https://d2xsxph8kpxj0f.cloudfront.net/310519663208942813/D6eMQgvSZZr9tsyS9zVhzn/subroast-logo-bubble-g5rxfWJEJsHdPE3YxHuvfS.webp"
+              src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663208942813/BEbgHhBeLfKnEwiD.png"
               alt="SubRoast"
               className="w-5 h-5 rounded object-cover"
             />
