@@ -185,6 +185,13 @@ export default function Home() {
     }
   }, [isAuthenticated, loading, setLocation]);
 
+  // SEO: set page title and meta description dynamically for crawlers
+  useEffect(() => {
+    document.title = "SubRoast — AI Reddit Growth Tool for Founders";
+    const desc = document.querySelector('meta[name="description"]');
+    if (desc) desc.setAttribute("content", "SubRoast scores your Reddit posts with AI, schedules them at peak times, and finds leads while you sleep. Built for indie SaaS founders.");
+  }, []);
+
   if (loading) return <DashboardLayoutSkeleton />;
 
   return (
