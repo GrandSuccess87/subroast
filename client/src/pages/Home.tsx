@@ -233,10 +233,10 @@ export default function Home() {
         {/* Left glow */}
         <div className="absolute top-0 left-0 w-[500px] h-[400px] bg-primary/8 rounded-full blur-3xl -translate-x-1/3" />
 
-        <div className="container relative py-16 pb-24 lg:py-24">
+        <div className="container relative py-16 pb-32 lg:py-24 lg:pb-24">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Left: copy */}
-            <div>
+            <div className="text-center lg:text-left">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] mb-5">
                 Stop guessing.
                 <br />
@@ -245,14 +245,14 @@ export default function Home() {
                 on Reddit.
               </h1>
 
-              <p className="text-lg text-muted-foreground max-w-lg mb-8 leading-relaxed">
+              <p className="text-lg text-muted-foreground max-w-lg mb-8 leading-relaxed mx-auto lg:mx-0">
                 SubRoast gives every post an AI roast, a virality score, and a rewrite — then schedules it at the perfect time and finds leads while you sleep.
               </p>
 
-              <div className="flex items-center gap-3 flex-wrap mb-8">
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 mb-8">
                 <a
                   href={getLoginUrl()}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:-translate-y-0.5"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:-translate-y-0.5"
                 >
                   <Zap className="w-4 h-4" />
                   Start free — 7 days on us
@@ -260,14 +260,14 @@ export default function Home() {
                 </a>
                 <a
                   href="#how-it-works"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-border text-foreground/70 font-medium text-sm hover:text-foreground hover:border-border/80 transition-all"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg border border-border text-foreground/70 font-medium text-sm hover:text-foreground hover:border-border/80 transition-all"
                 >
                   See how it works
                 </a>
               </div>
 
               {/* Trust row */}
-              <div className="flex flex-wrap gap-x-5 gap-y-2.5">
+              <div className="flex flex-wrap justify-center lg:justify-start gap-x-5 gap-y-2.5">
                 <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                   <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />
                   No credit card required
