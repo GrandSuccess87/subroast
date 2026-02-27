@@ -117,8 +117,13 @@ export const subscriptionRouter = router({
 
       const trialEndTimestamp = Math.floor(Date.now() / 1000) + TRIAL_DAYS * 24 * 60 * 60;
 
+      // Stripe requires exactly one of: customer or customer_email (not both)
+      const customerParam = customerId
+        ? { customer: customerId }
+        : { customer_email: ctx.user.email ?? undefined };
+
       const session = await stripe.checkout.sessions.create({
-        customer: customerId,
+        ...customerParam,
         mode: "subscription",
         line_items: [{ price: priceId, quantity: 1 }],
         subscription_data: {
@@ -131,7 +136,6 @@ export const subscriptionRouter = router({
         },
         allow_promotion_codes: true,
         client_reference_id: ctx.user.id.toString(),
-        customer_email: ctx.user.email ?? undefined,
         metadata: {
           plan: input.plan,
           user_id: ctx.user.id.toString(),
