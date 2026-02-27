@@ -221,7 +221,7 @@ export default function Home() {
       </nav>
 
       {/* ── ASYMMETRIC HERO ── */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden min-h-[calc(100svh-3.5rem)]">
         {/* Background grid */}
         <div
           className="absolute inset-0 opacity-[0.03]"
