@@ -9,6 +9,7 @@ import {
   MessageSquare,
   Shield,
   Sparkles,
+  TrendingUp,
   Zap,
 } from "lucide-react";
 import { useEffect } from "react";
@@ -19,28 +20,28 @@ const FEATURES = [
   {
     icon: Sparkles,
     title: "AI Draft & Roast",
-    desc: "Get a brutal honest review, a roast, and an improved version of your post — all in one click.",
+    desc: "Get a brutally honest review, a roast, and an improved version of your post — all in one click.",
     color: "text-primary",
     bg: "bg-primary/10",
   },
   {
     icon: CalendarClock,
     title: "Smart Scheduling",
-    desc: "Pick a time, SubSignal auto-posts at the right moment with 30-min cooldowns and 5/day limits.",
+    desc: "SubSignal auto-posts at the right moment with 30-min cooldowns and 5/day limits.",
     color: "text-blue-400",
     bg: "bg-blue-400/10",
   },
   {
     icon: MessageSquare,
-    title: "Rate-Limited DM Campaigns",
-    desc: "Upload a username list, send DMs at 5/hour with 2–10 min randomized delays. Max 25/day.",
+    title: "Personalized DM Generation",
+    desc: "AI writes a custom outreach message for each lead based on their actual Reddit post.",
     color: "text-purple-400",
     bg: "bg-purple-400/10",
   },
   {
     icon: Shield,
     title: "Account Safety",
-    desc: "Auto-pause after 3 failures, warnings at 80% daily limit. Your Reddit account stays safe.",
+    desc: "Warnings at 80% daily limit. Your Reddit account stays safe.",
     color: "text-amber-400",
     bg: "bg-amber-400/10",
   },
@@ -50,6 +51,13 @@ const FEATURES = [
     desc: "Track all posts with status, links, and Reddit engagement tips like 'questions get 2× comments'.",
     color: "text-rose-400",
     bg: "bg-rose-400/10",
+  },
+  {
+    icon: TrendingUp,
+    title: "Virality Score",
+    desc: "Get a 1–100 virality score on every post before you publish, with a specific tip to improve it.",
+    color: "text-cyan-400",
+    bg: "bg-cyan-400/10",
   },
 ];
 

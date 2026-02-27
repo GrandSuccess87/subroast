@@ -146,3 +146,9 @@
 ## Landing Page Polish (v4.6)
 - [x] Hero: simplify safety callout to one clean line instead of dense specs
 - [x] Rate Limiting section: increase heading and body font sizes
+
+## Landing Page Features (v4.7)
+- [x] Add Virality Score as 6th feature card
+- [x] Update DM Campaigns card to reflect AI-personalized outreach
+- [x] Update Account Safety card to remove auto-pause language
+- [x] Update Smart Scheduling card to remove "Pick a time,"
