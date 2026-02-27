@@ -1,28 +1,379 @@
+import { TRPCError } from "@trpc/server";
+import { z } from "zod";
+import { eq } from "drizzle-orm";
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
+import { invokeLLM } from "./_core/llm";
 import { systemRouter } from "./_core/systemRouter";
-import { publicProcedure, router } from "./_core/trpc";
+import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
+import { getDb } from "./db";
+import { redditAccounts } from "../drizzle/schema";
+import {
+  cancelScheduledPost,
+  createDmCampaign,
+  createDmRecipients,
+  createPostHistory,
+  createScheduledPost,
+  getDmCampaignsByUserId,
+  getDmRecipientsByCampaignId,
+  getPostHistoryByUserId,
+  getRedditAccountByUserId,
+  getRateLimitTracking,
+  getScheduledPostsByUserId,
+  getUserSettings,
+  incrementPostCount,
+  updateDmCampaignStatus,
+  upsertUserSettings,
+} from "./db";
+import { checkCanPost, getRateLimitStatus, randomDelayMs } from "./rateLimiter";
+import { getRedditAuthUrl, submitRedditPost, refreshRedditToken } from "./reddit";
+import { ENV } from "./_core/env";
+import { nanoid } from "nanoid";
+import axios from "axios";
+
+// ─── AI Roast Router ─────────────────────────────────────────────────────────
+
+const roastRouter = router({
+  analyze: protectedProcedure
+    .input(
+      z.object({
+        content: z.string().min(10).max(10000),
+        subreddit: z.string().min(1).max(128),
+        type: z.enum(["post", "dm"]).default("post"),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const systemPrompt = `You are a brutally honest Reddit veteran who reviews posts and DMs for indie SaaS founders.
+You analyze content for Reddit fit and provide structured feedback.
+Always respond with valid JSON matching the exact schema provided.`;
+
+      const userPrompt = `Analyze this Reddit ${input.type} for r/${input.subreddit}:
+
+---
+${input.content}
+---
+
+Return a JSON object with this EXACT structure:
+{
+  "review": {
+    "clarity": "High|Medium|Low",
+    "subreddit_fit": "High|Medium|Low",
+    "promo_risk": "Low|Medium|High",
+    "explanation": "2 sentences explaining the scores"
+  },
+  "roast": "3-5 witty lines like a Redditor would say, separated by newlines",
+  "improved_draft": "Full rewritten version of the post/DM that would perform better on Reddit"
+}`;
+
+      const response = await invokeLLM({
+        messages: [
+          { role: "system" as const, content: systemPrompt as string },
+          { role: "user" as const, content: userPrompt as string },
+        ],
+        response_format: {
+          type: "json_schema",
+          json_schema: {
+            name: "reddit_analysis",
+            strict: true,
+            schema: {
+              type: "object",
+              properties: {
+                review: {
+                  type: "object",
+                  properties: {
+                    clarity: { type: "string", enum: ["High", "Medium", "Low"] },
+                    subreddit_fit: { type: "string", enum: ["High", "Medium", "Low"] },
+                    promo_risk: { type: "string", enum: ["Low", "Medium", "High"] },
+                    explanation: { type: "string" },
+                  },
+                  required: ["clarity", "subreddit_fit", "promo_risk", "explanation"],
+                  additionalProperties: false,
+                },
+                roast: { type: "string" },
+                improved_draft: { type: "string" },
+              },
+              required: ["review", "roast", "improved_draft"],
+              additionalProperties: false,
+            },
+          },
+        },
+      });
+
+      const rawContent = response.choices[0]?.message?.content;
+      if (!rawContent) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "AI returned no content" });
+      const content = typeof rawContent === "string" ? rawContent : JSON.stringify(rawContent);
+
+      try {
+        return JSON.parse(content) as {
+          review: {
+            clarity: "High" | "Medium" | "Low";
+            subreddit_fit: "High" | "Medium" | "Low";
+            promo_risk: "Low" | "Medium" | "High";
+            explanation: string;
+          };
+          roast: string;
+          improved_draft: string;
+        };
+      } catch {
+        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Failed to parse AI response" });
+      }
+    }),
+});
+
+// ─── Reddit Router ────────────────────────────────────────────────────────────
+
+const redditRouter = router({
+  getAccount: protectedProcedure.query(async ({ ctx }) => {
+    const account = await getRedditAccountByUserId(ctx.user.id);
+    if (!account) return null;
+    return {
+      id: account.id,
+      redditUsername: account.redditUsername,
+      isActive: account.isActive,
+      isPaused: account.isPaused,
+      pauseReason: account.pauseReason,
+      failureCount: account.failureCount,
+      scopes: account.scopes,
+      createdAt: account.createdAt.getTime(),
+    };
+  }),
+
+  getConnectUrl: protectedProcedure
+    .input(z.object({ origin: z.string() }))
+    .query(({ input }) => {
+      const redirectUri = `${input.origin}/api/reddit/callback`;
+      // Return the connect URL for the frontend to navigate to
+      return { url: `/api/reddit/connect?origin=${encodeURIComponent(input.origin)}` };
+    }),
+
+  getRateLimitStatus: protectedProcedure.query(async ({ ctx }) => {
+    const account = await getRedditAccountByUserId(ctx.user.id);
+    if (!account) return null;
+    return getRateLimitStatus(account.id, ctx.user.id);
+  }),
+
+  disconnect: protectedProcedure.mutation(async ({ ctx }) => {
+    await axios.post(
+      "/api/reddit/disconnect",
+      {},
+      { headers: { cookie: ctx.req.headers.cookie ?? "" } }
+    );
+    return { success: true };
+  }),
+
+  unpauseAccount: protectedProcedure.mutation(async ({ ctx }) => {
+    const account = await getRedditAccountByUserId(ctx.user.id);
+    if (!account) throw new TRPCError({ code: "NOT_FOUND", message: "No Reddit account connected" });
+    const db = await getDb();
+    if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database unavailable" });
+    await db.update(redditAccounts)
+      .set({ isPaused: false, pauseReason: null, failureCount: 0 })
+      .where(eq(redditAccounts.id, account.id));
+    return { success: true };
+  }),
+});
+
+// ─── Scheduled Posts Router ───────────────────────────────────────────────────
+
+const scheduleRouter = router({
+  create: protectedProcedure
+    .input(
+      z.object({
+        subreddit: z.string().min(1).max(128),
+        title: z.string().min(1).max(300),
+        body: z.string().max(40000).optional(),
+        scheduledAt: z.number(), // unix ms
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const account = await getRedditAccountByUserId(ctx.user.id);
+      if (!account) {
+        throw new TRPCError({
+          code: "PRECONDITION_FAILED",
+          message: "Connect your Reddit account first",
+        });
+      }
+      if (account.isPaused) {
+        throw new TRPCError({
+          code: "PRECONDITION_FAILED",
+          message: `Account is paused: ${account.pauseReason}`,
+        });
+      }
+
+      await createScheduledPost({
+        userId: ctx.user.id,
+        redditAccountId: account.id,
+        subreddit: input.subreddit,
+        title: input.title,
+        body: input.body,
+        scheduledAt: input.scheduledAt,
+      });
+
+      return { success: true };
+    }),
+
+  list: protectedProcedure.query(async ({ ctx }) => {
+    return getScheduledPostsByUserId(ctx.user.id);
+  }),
+
+  cancel: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      await cancelScheduledPost(input.id, ctx.user.id);
+      return { success: true };
+    }),
+});
+
+// ─── DM Campaigns Router ──────────────────────────────────────────────────────
+
+const dmRouter = router({
+  createCampaign: protectedProcedure
+    .input(
+      z.object({
+        name: z.string().min(1).max(256),
+        subject: z.string().min(1).max(256),
+        message: z.string().min(1).max(10000),
+        usernames: z.array(z.string().min(1).max(64)).min(1).max(25),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const account = await getRedditAccountByUserId(ctx.user.id);
+      if (!account) {
+        throw new TRPCError({
+          code: "PRECONDITION_FAILED",
+          message: "Connect your Reddit account first",
+        });
+      }
+
+      const campaignId = await createDmCampaign({
+        userId: ctx.user.id,
+        redditAccountId: account.id,
+        name: input.name,
+        subject: input.subject,
+        message: input.message,
+        totalRecipients: input.usernames.length,
+        sentCount: 0,
+        failedCount: 0,
+      });
+
+      // Schedule recipients with randomized delays (2-10 min between each)
+      const now = Date.now();
+      let cumulativeDelay = 0;
+      const recipients = input.usernames.map((username) => {
+        const delay = randomDelayMs(2 * 60 * 1000, 10 * 60 * 1000);
+        cumulativeDelay += delay;
+        return {
+          campaignId,
+          userId: ctx.user.id,
+          username,
+          status: "pending" as const,
+          scheduledAt: now + cumulativeDelay,
+        };
+      });
+
+      await createDmRecipients(recipients);
+
+      return { success: true, campaignId };
+    }),
+
+  listCampaigns: protectedProcedure.query(async ({ ctx }) => {
+    return getDmCampaignsByUserId(ctx.user.id);
+  }),
+
+  getCampaignRecipients: protectedProcedure
+    .input(z.object({ campaignId: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const campaigns = await getDmCampaignsByUserId(ctx.user.id);
+      const campaign = campaigns.find((c) => c.id === input.campaignId);
+      if (!campaign) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Campaign not found" });
+      }
+      return getDmRecipientsByCampaignId(input.campaignId);
+    }),
+
+  pauseCampaign: protectedProcedure
+    .input(z.object({ campaignId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const campaigns = await getDmCampaignsByUserId(ctx.user.id);
+      const campaign = campaigns.find((c) => c.id === input.campaignId);
+      if (!campaign) throw new TRPCError({ code: "NOT_FOUND" });
+      await updateDmCampaignStatus(input.campaignId, "paused");
+      return { success: true };
+    }),
+
+  resumeCampaign: protectedProcedure
+    .input(z.object({ campaignId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const campaigns = await getDmCampaignsByUserId(ctx.user.id);
+      const campaign = campaigns.find((c) => c.id === input.campaignId);
+      if (!campaign) throw new TRPCError({ code: "NOT_FOUND" });
+      await updateDmCampaignStatus(input.campaignId, "active");
+      return { success: true };
+    }),
+});
+
+// ─── History Router ───────────────────────────────────────────────────────────
+
+const historyRouter = router({
+  list: protectedProcedure.query(async ({ ctx }) => {
+    return getPostHistoryByUserId(ctx.user.id);
+  }),
+});
+
+// ─── Settings Router ──────────────────────────────────────────────────────────
+
+const settingsRouter = router({
+  get: protectedProcedure.query(async ({ ctx }) => {
+    const settings = await getUserSettings(ctx.user.id);
+    return (
+      settings ?? {
+        maxPostsPerDay: 5,
+        maxDmsPerDay: 25,
+        maxDmsPerHour: 5,
+        minDelayBetweenDmsMs: 120000,
+        maxDelayBetweenDmsMs: 600000,
+        minDelayBetweenPostsMs: 1800000,
+      }
+    );
+  }),
+
+  update: protectedProcedure
+    .input(
+      z.object({
+        maxPostsPerDay: z.number().min(1).max(10).optional(),
+        maxDmsPerDay: z.number().min(1).max(25).optional(),
+        maxDmsPerHour: z.number().min(1).max(5).optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      await upsertUserSettings({
+        userId: ctx.user.id,
+        maxPostsPerDay: input.maxPostsPerDay ?? 5,
+        maxDmsPerDay: input.maxDmsPerDay ?? 25,
+        maxDmsPerHour: input.maxDmsPerHour ?? 5,
+      });
+      return { success: true };
+    }),
+});
+
+// ─── App Router ───────────────────────────────────────────────────────────────
 
 export const appRouter = router({
-    // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
   system: systemRouter,
   auth: router({
-    me: publicProcedure.query(opts => opts.ctx.user),
+    me: publicProcedure.query((opts) => opts.ctx.user),
     logout: publicProcedure.mutation(({ ctx }) => {
       const cookieOptions = getSessionCookieOptions(ctx.req);
       ctx.res.clearCookie(COOKIE_NAME, { ...cookieOptions, maxAge: -1 });
-      return {
-        success: true,
-      } as const;
+      return { success: true } as const;
     }),
   }),
-
-  // TODO: add feature routers here, e.g.
-  // todo: router({
-  //   list: protectedProcedure.query(({ ctx }) =>
-  //     db.getUserTodos(ctx.user.id)
-  //   ),
-  // }),
+  roast: roastRouter,
+  reddit: redditRouter,
+  schedule: scheduleRouter,
+  dm: dmRouter,
+  history: historyRouter,
+  settings: settingsRouter,
 });
 
 export type AppRouter = typeof appRouter;
