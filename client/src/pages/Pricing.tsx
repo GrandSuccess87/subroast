@@ -15,9 +15,9 @@ const PLANS = [
     price: 19,
     description: "Perfect for indie founders testing Reddit outreach",
     icon: Zap,
-    color: "text-indigo-400",
-    borderColor: "border-indigo-500/30",
-    bgColor: "bg-indigo-500/5",
+    color: "text-green-400",
+    borderColor: "border-green-500/30",
+    bgColor: "bg-green-500/5",
     features: [
       "1 outreach campaign",
       "5 posts per day",
@@ -108,7 +108,7 @@ export default function Pricing() {
             Start with a 7-day free trial. No credit card required upfront.
             Cancel anytime — no long-term commitment.
           </p>
-          <div className="mt-4 inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/20 rounded-full px-4 py-2 text-sm text-indigo-400">
+          <div className="mt-4 inline-flex items-center gap-2 bg-green-500/10 border border-green-500/20 rounded-full px-4 py-2 text-sm text-green-400">
             <Check className="w-4 h-4" />
             7-day free trial on all plans · Cancel anytime
           </div>
@@ -176,7 +176,7 @@ export default function Pricing() {
                   className={`w-full ${
                     plan.key === "growth"
                       ? "bg-purple-600 hover:bg-purple-700 text-white"
-                      : "bg-indigo-600 hover:bg-indigo-700 text-white"
+                      : "bg-green-600 hover:bg-green-700 text-white"
                   }`}
                   onClick={() => handleSelectPlan(plan.key)}
                   disabled={isLoading}

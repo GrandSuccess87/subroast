@@ -107,7 +107,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <div className="flex items-center justify-center min-h-screen bg-background">
         <div className="flex flex-col items-center gap-8 p-8 max-w-md w-full">
           <img
-            src="https://d2xsxph8kpxj0f.cloudfront.net/310519663208942813/D6eMQgvSZZr9tsyS9zVhzn/subroast-icon-RB9JvJQZEXaJSeVt2u3DT9.webp"
+            src="https://d2xsxph8kpxj0f.cloudfront.net/310519663208942813/D6eMQgvSZZr9tsyS9zVhzn/subroast-logo-bubble-g5rxfWJEJsHdPE3YxHuvfS.webp"
             alt="SubRoast"
             className="w-10 h-10 rounded-xl object-cover"
           />
@@ -213,7 +213,7 @@ function DashboardLayoutContent({
               {!isCollapsed && (
                 <div className="flex items-center gap-2 min-w-0">
                   <img
-                    src="https://d2xsxph8kpxj0f.cloudfront.net/310519663208942813/D6eMQgvSZZr9tsyS9zVhzn/subroast-icon-RB9JvJQZEXaJSeVt2u3DT9.webp"
+                    src="https://d2xsxph8kpxj0f.cloudfront.net/310519663208942813/D6eMQgvSZZr9tsyS9zVhzn/subroast-logo-bubble-g5rxfWJEJsHdPE3YxHuvfS.webp"
                     alt="SubRoast"
                     className="w-6 h-6 rounded-md shrink-0 object-cover"
                   />

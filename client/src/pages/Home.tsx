@@ -113,7 +113,7 @@ function ProductMockup() {
         <div className="flex items-center gap-1.5 px-4 py-3 border-b border-border bg-muted/30">
           <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
           <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
-          <div className="w-2.5 h-2.5 rounded-full bg-indigo-500/60" />
+          <div className="w-2.5 h-2.5 rounded-full bg-green-500/60" />
           <span className="ml-2 text-xs text-muted-foreground font-mono">subroast.app / draft</span>
         </div>
 
@@ -194,7 +194,7 @@ export default function Home() {
         <div className="container flex items-center justify-between h-14">
           <div className="flex items-center gap-2">
             <img
-              src="https://d2xsxph8kpxj0f.cloudfront.net/310519663208942813/D6eMQgvSZZr9tsyS9zVhzn/subroast-icon-RB9JvJQZEXaJSeVt2u3DT9.webp"
+              src="https://d2xsxph8kpxj0f.cloudfront.net/310519663208942813/D6eMQgvSZZr9tsyS9zVhzn/subroast-logo-bubble-g5rxfWJEJsHdPE3YxHuvfS.webp"
               alt="SubRoast"
               className="w-7 h-7 rounded-lg object-cover"
             />
@@ -396,7 +396,7 @@ export default function Home() {
         <div className="container flex items-center justify-between text-xs text-muted-foreground">
           <div className="flex items-center gap-2">
             <img
-              src="https://d2xsxph8kpxj0f.cloudfront.net/310519663208942813/D6eMQgvSZZr9tsyS9zVhzn/subroast-icon-RB9JvJQZEXaJSeVt2u3DT9.webp"
+              src="https://d2xsxph8kpxj0f.cloudfront.net/310519663208942813/D6eMQgvSZZr9tsyS9zVhzn/subroast-logo-bubble-g5rxfWJEJsHdPE3YxHuvfS.webp"
               alt="SubRoast"
               className="w-5 h-5 rounded object-cover"
             />
