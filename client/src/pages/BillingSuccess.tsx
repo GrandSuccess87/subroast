@@ -17,8 +17,8 @@ export default function BillingSuccess() {
     <div className="min-h-screen bg-background flex items-center justify-center px-6">
       <div className="max-w-md w-full text-center">
         <div className="flex justify-center mb-6">
-          <div className="w-20 h-20 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center">
-            <CheckCircle className="w-10 h-10 text-green-400" />
+          <div className="w-20 h-20 rounded-full bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center">
+            <CheckCircle className="w-10 h-10 text-indigo-400" />
           </div>
         </div>
 
@@ -34,26 +34,26 @@ export default function BillingSuccess() {
           <p className="text-sm font-medium text-foreground">What to do next:</p>
           <div className="space-y-2 text-sm text-muted-foreground">
             <div className="flex items-start gap-2">
-              <span className="text-green-400 font-bold mt-0.5">1.</span>
+              <span className="text-indigo-400 font-bold mt-0.5">1.</span>
               <span>Connect your Reddit account in Settings</span>
             </div>
             <div className="flex items-start gap-2">
-              <span className="text-green-400 font-bold mt-0.5">2.</span>
+              <span className="text-indigo-400 font-bold mt-0.5">2.</span>
               <span>Create your first outreach campaign in DM Campaigns</span>
             </div>
             <div className="flex items-start gap-2">
-              <span className="text-green-400 font-bold mt-0.5">3.</span>
+              <span className="text-indigo-400 font-bold mt-0.5">3.</span>
               <span>Hit "Sync Leads" to discover Reddit posts matching your keywords</span>
             </div>
             <div className="flex items-start gap-2">
-              <span className="text-green-400 font-bold mt-0.5">4.</span>
+              <span className="text-indigo-400 font-bold mt-0.5">4.</span>
               <span>Generate AI-personalized DMs and start outreach</span>
             </div>
           </div>
         </div>
 
         <Button
-          className="w-full bg-green-600 hover:bg-green-700 text-white"
+          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
           onClick={() => navigate("/dashboard")}
         >
           Go to Dashboard

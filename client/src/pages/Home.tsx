@@ -113,7 +113,7 @@ function ProductMockup() {
         <div className="flex items-center gap-1.5 px-4 py-3 border-b border-border bg-muted/30">
           <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
           <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
-          <div className="w-2.5 h-2.5 rounded-full bg-green-500/60" />
+          <div className="w-2.5 h-2.5 rounded-full bg-indigo-500/60" />
           <span className="ml-2 text-xs text-muted-foreground font-mono">subroast.app / draft</span>
         </div>
 
