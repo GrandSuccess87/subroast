@@ -11,6 +11,8 @@ import Schedule from "./pages/Schedule";
 import DmCampaigns from "./pages/DmCampaigns";
 import HistoryPage from "./pages/HistoryPage";
 import SettingsPage from "./pages/SettingsPage";
+import Pricing from "./pages/Pricing";
+import BillingSuccess from "./pages/BillingSuccess";
 
 function Router() {
   return (
@@ -22,6 +24,8 @@ function Router() {
       <Route path="/dashboard/campaigns" component={DmCampaigns} />
       <Route path="/dashboard/history" component={HistoryPage} />
       <Route path="/dashboard/settings" component={SettingsPage} />
+      <Route path="/pricing" component={Pricing} />
+      <Route path="/billing/success" component={BillingSuccess} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>

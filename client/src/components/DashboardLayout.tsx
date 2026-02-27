@@ -33,6 +33,8 @@ import {
   Settings,
   Sparkles,
   Zap,
+  Clock,
+  CreditCard,
 } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
@@ -149,6 +151,10 @@ function DashboardLayoutContent({
 
   const { data: rateLimits } = trpc.reddit.getRateLimitStatus.useQuery(undefined, {
     refetchInterval: 60_000,
+  });
+
+  const { data: subStatus } = trpc.subscription.getStatus.useQuery(undefined, {
+    refetchInterval: 5 * 60_000,
   });
 
   const postsUsed = rateLimits?.postsToday ?? 0;
@@ -338,6 +344,26 @@ function DashboardLayoutContent({
               <SidebarTrigger className="h-8 w-8 rounded-lg" />
               <span className="font-medium text-sm">{activeLabel}</span>
             </div>
+          </div>
+        )}
+        {/* Trial banner */}
+        {subStatus?.isTrialing && subStatus.trialDaysLeft !== undefined && subStatus.trialDaysLeft <= 3 && (
+          <div className="bg-amber-500/10 border-b border-amber-500/20 px-6 py-2.5 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2 text-sm text-amber-400">
+              <Clock className="w-4 h-4 shrink-0" />
+              <span>
+                {subStatus.trialDaysLeft === 0
+                  ? "Your free trial expires today!"
+                  : `Your free trial expires in ${subStatus.trialDaysLeft} day${subStatus.trialDaysLeft !== 1 ? "s" : ""}.`}
+              </span>
+            </div>
+            <button
+              onClick={() => setLocation("/pricing")}
+              className="text-xs font-medium text-amber-400 hover:text-amber-300 flex items-center gap-1 shrink-0"
+            >
+              <CreditCard className="w-3.5 h-3.5" />
+              Upgrade now
+            </button>
           </div>
         )}
         <main className="flex-1 p-6">{children}</main>

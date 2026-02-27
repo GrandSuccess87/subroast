@@ -98,3 +98,20 @@
 - [x] DM Campaigns page: Generate DM button per lead, review modal, send/queue action
 - [x] DM Campaigns page: review toggle (Auto-send vs Review before send) per campaign
 - [x] Sidebar: add "Leads" nav item under OUTREACH section
+
+## Payments & Subscriptions (v4)
+- [x] Stripe integration setup (webdev_add_feature)
+- [x] DB schema: subscriptions table (userId, stripeCustomerId, stripeSubscriptionId, plan, status, trialStartAt, trialEndsAt, currentPeriodEnd)
+- [x] DB schema: add plan/trialEndsAt fields to users table
+- [x] Stripe products/prices: Starter $19/mo, Growth $49/mo
+- [x] tRPC: createCheckoutSession (with 7-day trial)
+- [x] tRPC: createPortalSession (manage billing)
+- [x] tRPC: getSubscriptionStatus
+- [x] Stripe webhook handler (checkout.session.completed, customer.subscription.updated/deleted, invoice.payment_failed)
+- [x] Campaign paywall: limit to 1 campaign on Starter/trial, unlimited on Growth
+- [x] Pricing page with two-tier cards ($19 Starter / $49 Growth)
+- [x] Trial banner in dashboard showing days remaining
+- [x] Upgrade prompt modal when user hits campaign limit
+- [x] Day 6 trial reminder email (background job)
+- [x] New leads email notification (per campaign, on lead sync)
+- [x] Tests for subscription gating logic

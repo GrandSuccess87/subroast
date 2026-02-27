@@ -26,6 +26,7 @@ import {
   Zap,
 } from "lucide-react";
 import { useState } from "react";
+import { useLocation } from "wouter";
 import { toast } from "sonner";
 
 type Campaign = {
@@ -109,13 +110,35 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
     onError: (err) => toast.error(err.message),
   });
 
+  const [, navigate] = useLocation();
+
   const createCampaign = trpc.outreach.createCampaign.useMutation({
     onSuccess: () => {
       toast.success("Campaign created!");
       utils.outreach.listCampaigns.invalidate();
       onSuccess();
     },
-    onError: (err) => toast.error(err.message),
+    onError: (err) => {
+      if (err.message === "CAMPAIGN_LIMIT_REACHED") {
+        toast.error("Campaign limit reached. Upgrade to Growth for unlimited campaigns.", {
+          action: {
+            label: "Upgrade",
+            onClick: () => navigate("/pricing"),
+          },
+          duration: 8000,
+        });
+      } else if (err.message === "UPGRADE_REQUIRED") {
+        toast.error("Start a free trial to create campaigns.", {
+          action: {
+            label: "View Plans",
+            onClick: () => navigate("/pricing"),
+          },
+          duration: 8000,
+        });
+      } else {
+        toast.error(err.message);
+      }
+    },
   });
 
   const addSub = () => {

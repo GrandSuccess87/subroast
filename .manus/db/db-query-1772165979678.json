@@ -1,0 +1,9 @@
+{
+  "query": "ALTER TABLE `users` ADD `stripeCustomerId` varchar(64);\nALTER TABLE `users` ADD `stripeSubscriptionId` varchar(64);\nALTER TABLE `users` ADD `plan` enum('trial','starter','growth','none') DEFAULT 'none' NOT NULL;\nALTER TABLE `users` ADD `trialStartAt` bigint;\nALTER TABLE `users` ADD `trialEndsAt` bigint;\nALTER TABLE `users` ADD `subscriptionStatus` enum('active','trialing','past_due','canceled','none') DEFAULT 'none' NOT NULL;\nALTER TABLE `users` ADD `trialReminderSentAt` bigint;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute ALTER TABLE `users` ADD `stripeCustomerId` varchar(64);\nALTER TABLE `users` ADD `stripeSubscriptionId` varchar(64);\nALTER TABLE `users` ADD `plan` enum('trial','starter','growth','none') DEFAULT 'none' NOT NULL;\nALTER TABLE `users` ADD `trialStartAt` bigint;\nALTER TABLE `users` ADD `trialEndsAt` bigint;\nALTER TABLE `users` ADD `subscriptionStatus` enum('active','trialing','past_due','canceled','none') DEFAULT 'none' NOT NULL;\nALTER TABLE `users` ADD `trialReminderSentAt` bigint;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 2811
+}

@@ -2,6 +2,7 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { invokeLLM } from "../_core/llm";
 import { protectedProcedure, router } from "../_core/trpc";
+import { notifyNewLeads } from "../emailNotifications";
 import {
   createOutreachCampaign,
   deleteOutreachCampaign,
@@ -12,7 +13,10 @@ import {
   updateOutreachCampaign,
   updateOutreachLeadStatus,
   upsertOutreachLead,
+  getDb,
 } from "../db";
+import { users } from "../../drizzle/schema";
+import { eq } from "drizzle-orm";
 
 // ─── Reddit Public Search ─────────────────────────────────────────────────────
 
@@ -100,6 +104,42 @@ export const outreachRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      // ── Paywall: check campaign limit based on plan ──────────────────────────
+      const db = await getDb();
+      if (db) {
+        const userRows = await db.select().from(users).where(eq(users.id, ctx.user.id)).limit(1);
+        const user = userRows[0];
+        if (user) {
+          const now = Date.now();
+          const isTrialing = user.plan === "trial" && user.trialEndsAt != null && user.trialEndsAt > now;
+          const hasActiveAccess =
+            isTrialing ||
+            user.subscriptionStatus === "active" ||
+            user.subscriptionStatus === "trialing";
+
+          // No active plan at all → require subscription
+          if (!hasActiveAccess && user.plan === "none") {
+            throw new TRPCError({
+              code: "FORBIDDEN",
+              message: "UPGRADE_REQUIRED",
+            });
+          }
+
+          // Starter or trial → limit to 1 campaign
+          if (user.plan !== "growth") {
+            const existing = await getOutreachCampaignsByUserId(ctx.user.id);
+            const activeCampaigns = existing.filter((c) => c.status !== "completed");
+            if (activeCampaigns.length >= 1) {
+              throw new TRPCError({
+                code: "FORBIDDEN",
+                message: "CAMPAIGN_LIMIT_REACHED",
+              });
+            }
+          }
+        }
+      }
+      // ────────────────────────────────────────────────────────────────────────
+
       const id = await createOutreachCampaign({
         userId: ctx.user.id,
         name: input.name,
@@ -276,10 +316,24 @@ Rules:
       }
 
       // Update campaign lastSyncAt and leadsFound
+      const updatedLeadsFound = c.leadsFound + newLeads;
       await updateOutreachCampaign(input.campaignId, {
         lastSyncAt: Date.now(),
-        leadsFound: c.leadsFound + newLeads,
+        leadsFound: updatedLeadsFound,
       });
+
+      // Send email notification for new leads
+      if (newLeads > 0) {
+        const origin = typeof globalThis !== "undefined" && (globalThis as Record<string, unknown>).__appOrigin
+          ? String((globalThis as Record<string, unknown>).__appOrigin)
+          : "https://subsignal.manus.space";
+        notifyNewLeads({
+          campaignName: c.name,
+          newLeadsCount: newLeads,
+          totalLeadsCount: updatedLeadsFound,
+          appUrl: origin,
+        }).catch(() => {}); // fire-and-forget
+      }
 
       return { success: true, newLeads };
     }),

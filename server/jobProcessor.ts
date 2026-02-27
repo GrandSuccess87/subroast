@@ -26,6 +26,7 @@ import {
 } from "./db";
 import { checkCanDm, checkCanPost } from "./rateLimiter";
 import { refreshRedditToken, sendRedditDM, submitRedditPost } from "./reddit";
+import { sendTrialReminders } from "./emailNotifications";
 
 async function getValidAccessToken(account: {
   id: number;
@@ -207,6 +208,7 @@ export function startJobProcessor() {
     try {
       await processScheduledPosts();
       await processDmRecipients();
+      await sendTrialReminders();
     } catch (err) {
       console.error("[Jobs] Processor error:", err);
     }

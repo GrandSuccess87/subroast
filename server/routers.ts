@@ -31,6 +31,7 @@ import { ENV } from "./_core/env";
 import { nanoid } from "nanoid";
 import axios from "axios";
 import { outreachRouter } from "./routers/outreach";
+import { subscriptionRouter } from "./routers/subscription";
 
 // ─── AI Roast Router ─────────────────────────────────────────────────────────
 
@@ -393,6 +394,7 @@ export const appRouter = router({
   schedule: scheduleRouter,
   dm: dmRouter,
   outreach: outreachRouter,
+  subscription: subscriptionRouter,
   history: historyRouter,
   settings: settingsRouter,
 });

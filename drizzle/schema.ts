@@ -16,6 +16,14 @@ export const users = mysqlTable("users", {
   email: varchar("email", { length: 320 }),
   loginMethod: varchar("loginMethod", { length: 64 }),
   role: mysqlEnum("role", ["user", "admin"]).default("user").notNull(),
+  // Stripe billing
+  stripeCustomerId: varchar("stripeCustomerId", { length: 64 }),
+  stripeSubscriptionId: varchar("stripeSubscriptionId", { length: 64 }),
+  plan: mysqlEnum("plan", ["trial", "starter", "growth", "none"]).default("none").notNull(),
+  trialStartAt: bigint("trialStartAt", { mode: "number" }),   // unix ms
+  trialEndsAt: bigint("trialEndsAt", { mode: "number" }),     // unix ms
+  subscriptionStatus: mysqlEnum("subscriptionStatus", ["active", "trialing", "past_due", "canceled", "none"]).default("none").notNull(),
+  trialReminderSentAt: bigint("trialReminderSentAt", { mode: "number" }), // unix ms
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
