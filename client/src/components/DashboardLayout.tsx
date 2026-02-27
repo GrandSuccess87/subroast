@@ -110,7 +110,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <Zap className="w-5 h-5 text-primary-foreground" />
           </div>
           <div className="flex flex-col items-center gap-3 text-center">
-            <h1 className="text-2xl font-semibold tracking-tight">Sign in to SubSignal</h1>
+            <h1 className="text-2xl font-semibold tracking-tight">Sign in to SubRoast</h1>
             <p className="text-sm text-muted-foreground max-w-sm">
               Connect your account to start drafting smarter Reddit posts.
             </p>
@@ -192,7 +192,7 @@ function DashboardLayoutContent({
 
   const activeLabel = NAV_SECTIONS.flatMap((s) => s.items).find(
     (item) => item.path === "/dashboard" ? location === "/dashboard" : location.startsWith(item.path)
-  )?.label ?? "SubSignal";
+  )?.label ?? "SubRoast";
 
   return (
     <>
@@ -214,7 +214,7 @@ function DashboardLayoutContent({
                     <Zap className="w-3.5 h-3.5 text-primary-foreground" />
                   </div>
                   <span className="font-bold tracking-tight text-sidebar-foreground truncate text-sm">
-                    SubSignal
+                    SubRoast
                   </span>
                 </div>
               )}

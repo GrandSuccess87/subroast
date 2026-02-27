@@ -69,7 +69,7 @@ export default function HistoryPage() {
             </div>
             <h1 className="text-xl font-bold text-foreground">History</h1>
           </div>
-          <p className="text-sm text-muted-foreground ml-10.5">All posts sent through SubSignal.</p>
+          <p className="text-sm text-muted-foreground ml-10.5">All posts sent through SubRoast.</p>
         </div>
 
         {/* Stats */}

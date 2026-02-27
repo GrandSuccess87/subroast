@@ -1,4 +1,4 @@
-# SubSignal TODO
+# SubRoast TODO
 
 ## Database & Schema
 - [x] Reddit accounts table (tokens, scopes, status)
@@ -52,7 +52,7 @@
 - [x] Reconnect Reddit option
 
 ## Landing Page
-- [x] Headline: "SubSignal: Stop guessing on Reddit"
+- [x] Headline: "SubRoast: Stop guessing on Reddit"
 - [x] Target audience description
 - [x] CTA button: "Connect Reddit"
 - [x] Feature highlights section
@@ -152,3 +152,8 @@
 - [x] Update DM Campaigns card to reflect AI-personalized outreach
 - [x] Update Account Safety card to remove auto-pause language
 - [x] Update Smart Scheduling card to remove "Pick a time,"
+
+## Rebrand & Landing Redesign (v5.0)
+- [ ] Rename SubRoast → SubRoast across all files (title, sidebar, emails, onboarding, pricing, copy)
+- [ ] Landing page: asymmetric hero with product UI mockup on the right
+- [ ] Landing page: add "How it works in 3 steps" section

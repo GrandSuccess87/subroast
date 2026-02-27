@@ -36,7 +36,7 @@ export default function OnboardingChecklist() {
             <Sparkles className="w-4 h-4 text-primary" />
           </div>
           <div>
-            <p className="text-sm font-semibold text-foreground">Get started with SubSignal</p>
+            <p className="text-sm font-semibold text-foreground">Get started with SubRoast</p>
             <p className="text-xs text-muted-foreground mt-0.5">
               {data.completedCount} of {data.totalCount} steps complete
             </p>

@@ -1,12 +1,12 @@
 /**
- * SubSignal Stripe product & price definitions.
+ * SubRoast Stripe product & price definitions.
  * Price IDs are created dynamically on first use via ensurePrices().
  * Store them in env or hardcode after first run in production.
  */
 
 export const PLANS = {
   starter: {
-    name: "SubSignal Starter",
+    name: "SubRoast Starter",
     description: "1 campaign · 5 posts/day · 25 DMs/day · AI roast",
     priceUsd: 1900, // $19.00 in cents
     interval: "month" as const,
@@ -21,7 +21,7 @@ export const PLANS = {
     ],
   },
   growth: {
-    name: "SubSignal Growth",
+    name: "SubRoast Growth",
     description: "Unlimited campaigns · Priority lead sync · DM templates",
     priceUsd: 3900, // $39.00 in cents
     interval: "month" as const,

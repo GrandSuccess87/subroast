@@ -95,7 +95,7 @@ export default function Pricing() {
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back
         </Button>
-        <span className="text-sm text-muted-foreground">SubSignal Pricing</span>
+        <span className="text-sm text-muted-foreground">SubRoast Pricing</span>
       </div>
 
       <div className="max-w-5xl mx-auto px-6 py-16">

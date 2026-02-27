@@ -88,7 +88,7 @@ export const subscriptionRouter = router({
       );
 
       // Create price on-the-fly (idempotent via lookup_key)
-      const lookupKey = `subsignal_${input.plan}_monthly`;
+      const lookupKey = `subroast_${input.plan}_monthly`;
       let priceId: string;
 
       try {

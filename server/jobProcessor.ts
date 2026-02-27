@@ -1,5 +1,5 @@
 /**
- * Background job processor for SubSignal.
+ * Background job processor for SubRoast.
  * Runs on a polling interval to:
  * 1. Process pending scheduled posts
  * 2. Process pending DM recipients

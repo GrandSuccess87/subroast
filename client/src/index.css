@@ -45,7 +45,7 @@
 
 :root {
   --radius: 0.5rem;
-  /* SubSignal: Dark theme with green accent */
+  /* SubRoast: Dark theme with green accent */
   --background: oklch(0.10 0.005 240);
   --foreground: oklch(0.93 0.005 240);
   --card: oklch(0.14 0.005 240);

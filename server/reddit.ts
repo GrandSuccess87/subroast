@@ -91,7 +91,7 @@ export async function getRedditMe(accessToken: string): Promise<RedditMeResponse
   const response = await axios.get<RedditMeResponse>(`${REDDIT_OAUTH_BASE}/api/v1/me`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      "User-Agent": "SubSignal/1.0 by SubSignalApp",
+      "User-Agent": "SubRoast/1.0 by SubRoastApp",
     },
   });
   return response.data;
@@ -117,7 +117,7 @@ export async function submitRedditPost(
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        "User-Agent": "SubSignal/1.0 by SubSignalApp",
+        "User-Agent": "SubRoast/1.0 by SubRoastApp",
         "Content-Type": "application/x-www-form-urlencoded",
       },
     }
@@ -153,7 +153,7 @@ export async function sendRedditDM(
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        "User-Agent": "SubSignal/1.0 by SubSignalApp",
+        "User-Agent": "SubRoast/1.0 by SubRoastApp",
         "Content-Type": "application/x-www-form-urlencoded",
       },
     }

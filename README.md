@@ -1,15 +1,15 @@
-# SubSignal
+# SubRoast
 
-**SubSignal: Stop guessing on Reddit.**
+**SubRoast: Stop guessing on Reddit.**
 
-SubSignal helps indie SaaS founders draft smarter Reddit posts and DMs, get AI feedback and roasts, then automatically post/send while respecting Reddit's rate limits.
+SubRoast helps indie SaaS founders draft smarter Reddit posts and DMs, get AI feedback and roasts, then automatically post/send while respecting Reddit's rate limits.
 
 ---
 
 ## Features
 
 - **AI Draft & Roast** — Paste your post or DM, get a structured review (clarity, subreddit fit, promo risk), a brutal roast, and an improved version
-- **Smart Scheduling** — Pick a date/time, SubSignal auto-posts at the right moment (max 5/day, 30-min cooldown)
+- **Smart Scheduling** — Pick a date/time, SubRoast auto-posts at the right moment (max 5/day, 30-min cooldown)
 - **Rate-Limited DM Campaigns** — Upload a username list, send DMs at 5/hour with 2–10 min randomized delays (max 25/day)
 - **Safety Guardrails** — Auto-pause after 3 failures, warnings at 80% daily limit
 - **Post History & Insights** — Track all posts with status and Reddit engagement tips
@@ -28,7 +28,7 @@ SubSignal helps indie SaaS founders draft smarter Reddit posts and DMs, get AI f
 
 ```bash
 git clone <repo>
-cd subsignal
+cd subroast
 pnpm install
 ```
 
@@ -44,7 +44,7 @@ Required variables:
 
 ```env
 # Database
-DATABASE_URL=mysql://user:password@host:3306/subsignal
+DATABASE_URL=mysql://user:password@host:3306/subroast
 
 # Auth (Manus OAuth)
 JWT_SECRET=your-jwt-secret
@@ -79,7 +79,7 @@ Open [http://localhost:3000](http://localhost:3000).
 1. Go to [https://www.reddit.com/prefs/apps](https://www.reddit.com/prefs/apps)
 2. Scroll to the bottom and click **"create another app..."**
 3. Fill in:
-   - **Name**: SubSignal (or any name)
+   - **Name**: SubRoast (or any name)
    - **Type**: Select **"web app"**
    - **Description**: Optional
    - **About URL**: Your website URL (optional)
@@ -103,7 +103,7 @@ REDDIT_REDIRECT_URI=http://localhost:3000/api/reddit/callback
 
 ### Required Reddit Scopes
 
-SubSignal requests these OAuth scopes:
+SubRoast requests these OAuth scopes:
 - `identity` — Read your Reddit username
 - `submit` — Post to subreddits
 - `privatemessages` — Send direct messages
@@ -120,7 +120,7 @@ For Vercel deployment:
 
 ## Rate Limits
 
-SubSignal enforces these limits to keep your account safe:
+SubRoast enforces these limits to keep your account safe:
 
 | Action | Limit |
 |--------|-------|

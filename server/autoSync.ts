@@ -79,7 +79,7 @@ async function searchRedditPosts(
     const url = `https://www.reddit.com/r/${subreddit}/search.json?q=${query}&restrict_sr=1&sort=new&limit=${limit}&t=week`;
     const res = await fetch(url, {
       headers: {
-        "User-Agent": "SubSignal/1.0 (subreddit monitoring bot)",
+        "User-Agent": "SubRoast/1.0 (subreddit monitoring bot)",
         Accept: "application/json",
       },
     });
@@ -173,7 +173,7 @@ async function syncCampaign(campaign: {
   if (newLeads > 0) {
     const origin = typeof globalThis !== "undefined" && (globalThis as Record<string, unknown>).__appOrigin
       ? String((globalThis as Record<string, unknown>).__appOrigin)
-      : "https://subsignal.manus.space";
+      : "https://subroast.manus.space";
     notifyNewLeads({
       campaignName: campaign.name,
       newLeadsCount: newLeads,

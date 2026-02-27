@@ -1,9 +1,9 @@
 /**
- * Email notification helpers for SubSignal.
+ * Email notification helpers for SubRoast.
  *
  * Uses the Manus built-in notification service (notifyOwner) to send
  * owner-facing alerts. For per-user notifications, we use the same
- * service since SubSignal is a single-owner SaaS tool.
+ * service since SubRoast is a single-owner SaaS tool.
  *
  * Two notification types:
  * 1. New leads digest — sent when syncLeads finds new leads for a campaign
@@ -34,7 +34,7 @@ export async function notifyNewLeads(params: {
 
   await notifyOwner({
     title: `🎯 ${params.newLeadsCount} new ${plural} found — ${params.campaignName}`,
-    content: `SubSignal found **${params.newLeadsCount} new ${plural}** for your campaign **"${params.campaignName}"**.
+    content: `SubRoast found **${params.newLeadsCount} new ${plural}** for your campaign **"${params.campaignName}"**.
 
 Total leads in this campaign: ${params.totalLeadsCount}
 
@@ -44,10 +44,10 @@ Total leads in this campaign: ${params.totalLeadsCount}
 3. Click "Generate DM" to create personalized outreach
 4. Queue or send directly
 
-[Open SubSignal → DM Campaigns](${params.appUrl}/dm-campaigns)
+[Open SubRoast → DM Campaigns](${params.appUrl}/dm-campaigns)
 
 ---
-*SubSignal monitors Reddit so you don't have to. Leads are scored Strong / Partial / Lowest based on keyword match.*`,
+*SubRoast monitors Reddit so you don't have to. Leads are scored Strong / Partial / Lowest based on keyword match.*`,
   }).catch((err) => {
     console.warn("[Notifications] Failed to send new leads notification:", err);
   });
@@ -90,10 +90,10 @@ export async function sendTrialReminders(): Promise<void> {
       const daysLeft = Math.ceil(hoursLeft / 24);
 
       await notifyOwner({
-        title: `⏰ Your SubSignal trial ends in ${daysLeft} day${daysLeft !== 1 ? "s" : ""}`,
+        title: `⏰ Your SubRoast trial ends in ${daysLeft} day${daysLeft !== 1 ? "s" : ""}`,
         content: `Hi ${user.name ?? "there"},
 
-Your **${TRIAL_DAYS}-day free trial** of SubSignal ends in approximately **${hoursLeft} hours**.
+Your **${TRIAL_DAYS}-day free trial** of SubRoast ends in approximately **${hoursLeft} hours**.
 
 After your trial ends, you'll lose access to:
 - Outreach campaign monitoring
@@ -114,7 +114,7 @@ After your trial ends, you'll lose access to:
 
 You can cancel anytime. No long-term commitment.
 
-[Upgrade Now → SubSignal Pricing](/pricing)
+[Upgrade Now → SubRoast Pricing](/pricing)
 
 ---
 *You're receiving this because you started a free trial. To cancel before being charged, simply don't upgrade.*`,
