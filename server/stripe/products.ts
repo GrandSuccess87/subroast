@@ -23,7 +23,7 @@ export const PLANS = {
   growth: {
     name: "SubSignal Growth",
     description: "Unlimited campaigns · Priority lead sync · DM templates",
-    priceUsd: 4900, // $49.00 in cents
+    priceUsd: 3900, // $39.00 in cents
     interval: "month" as const,
     campaignLimit: Infinity,
     features: [

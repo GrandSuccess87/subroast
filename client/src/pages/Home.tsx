@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useEffect } from "react";
 import { useLocation } from "wouter";
+import { DashboardLayoutSkeleton } from "@/components/DashboardLayoutSkeleton";
 
 const FEATURES = [
   {
@@ -69,6 +70,10 @@ export default function Home() {
       setLocation("/dashboard");
     }
   }, [isAuthenticated, loading, setLocation]);
+
+  // While auth state is resolving, show the dashboard skeleton so that
+  // authenticated users never see the landing page flash before redirect.
+  if (loading) return <DashboardLayoutSkeleton />;
 
   return (
     <div className="min-h-screen bg-background text-foreground">

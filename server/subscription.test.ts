@@ -11,7 +11,7 @@ describe("PLANS config", () => {
   it("starter plan has correct price and trial days", async () => {
     const { PLANS, TRIAL_DAYS, TRIAL_REMINDER_DAY } = await import("./stripe/products");
     expect(PLANS.starter.priceUsd).toBe(1900); // $19.00 in cents
-    expect(PLANS.growth.priceUsd).toBe(4900);  // $49.00 in cents
+    expect(PLANS.growth.priceUsd).toBe(3900);  // $39.00 in cents
     expect(TRIAL_DAYS).toBe(7);
     expect(TRIAL_REMINDER_DAY).toBe(6);
   });

@@ -124,3 +124,9 @@
 - [x] Background job: auto-sync Starter campaigns twice daily (8am + 8pm EST), staggered with 500ms delay between campaigns
 - [x] Background job: auto-sync Growth campaigns every 4 hours, staggered with 500ms delay between campaigns
 - [x] Pricing page: add sync frequency as a plan differentiator (2x/day vs 6x/day)
+
+## UX Polish & Pricing (v4.3)
+- [x] Pricing page: restructure Growth features (Everything in Starter first, then Unlimited campaigns, then 6x sync), remove redundant posts/DMs lines
+- [x] Pricing page: lower Growth price from $49 to $39/mo
+- [x] Stripe products.ts: update Growth price to $39
+- [x] Fix login flash: show loading skeleton while auth state resolves instead of flashing Sign In page
