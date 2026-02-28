@@ -157,3 +157,18 @@
 - [ ] Rename SubRoast → SubRoast across all files (title, sidebar, emails, onboarding, pricing, copy)
 - [ ] Landing page: asymmetric hero with product UI mockup on the right
 - [ ] Landing page: add "How it works in 3 steps" section
+
+## Lead Card Simplification & New Actions (v5.1)
+- [x] LeadCard: remove pipeline stage selector buttons (New/Replied/Interested/Converted/Skip)
+- [x] LeadCard: remove Sentiment score bar, keep only Fit + Urgency (2-column grid)
+- [x] LeadCard: remove LeadHeatBadge (On Fire/Hot/Warm/Cold) — too noisy
+- [x] LeadCard: hide MatchBadge for "lowest" score — only show Strong/Partial
+- [x] LeadCard: hide IntentBadge for venting/unknown — only show Hiring/Buying/Seeking Advice
+- [x] LeadCard: add clipboard copy icon next to "View DM draft" toggle
+- [x] LeadCard: add "Draft Comment" button to generate public comment reply
+- [x] LeadCard: add "Cancel Queue" button for queued leads (reverts to dm_generated)
+- [x] DB schema: add commentDraft column to outreach_leads table
+- [x] tRPC: cancelQueuedLead procedure — reverts queued lead to dm_generated
+- [x] tRPC: generateComment procedure — AI writes public comment draft (no pitch)
+- [x] Sign-in modal: already shows "Sign in to SubRoast" (confirmed no SubSignal references)
+- [x] All 69 tests passing, TypeScript clean

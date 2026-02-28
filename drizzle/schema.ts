@@ -213,6 +213,7 @@ export const outreachLeads = mysqlTable("outreach_leads", {
   intentType: mysqlEnum("intentType", ["hiring", "buying", "seeking_advice", "venting", "unknown"]).default("unknown"),
   dmDraft: text("dmDraft"),                       // AI-generated DM draft
   roastReplyDraft: text("roastReplyDraft"),        // Roast & Reply — contextual PM draft
+  commentDraft: text("commentDraft"),              // AI-generated public comment draft
   // Pipeline stage
   pipelineStage: mysqlEnum("pipelineStage", ["new", "replied", "interested", "converted", "skipped"]).default("new").notNull(),
   status: mysqlEnum("status", ["new", "dm_generated", "queued", "sent", "skipped", "failed"]).default("new").notNull(),

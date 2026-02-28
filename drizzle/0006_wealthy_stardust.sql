@@ -1,0 +1,1 @@
+ALTER TABLE `outreach_leads` ADD `commentDraft` text;

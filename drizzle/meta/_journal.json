@@ -43,6 +43,13 @@
       "when": 1772257422499,
       "tag": "0005_rare_celestials",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1772259786357,
+      "tag": "0006_wealthy_stardust",
+      "breakpoints": true
     }
   ]
 }

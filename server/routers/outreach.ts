@@ -602,4 +602,93 @@ Return JSON with this EXACT structure:
       }
       return { success: true };
     }),
+
+  // ── Cancel Queued Lead ────────────────────────────────────────────────────
+
+  cancelQueuedLead: protectedProcedure
+    .input(z.object({ leadId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const leads = await getOutreachLeadsByUserId(ctx.user.id);
+      const lead = leads.find((l) => l.id === input.leadId);
+      if (!lead) throw new TRPCError({ code: "NOT_FOUND" });
+      if (lead.status !== "queued") {
+        throw new TRPCError({ code: "PRECONDITION_FAILED", message: "Lead is not queued" });
+      }
+      // Revert to dm_generated so the user can review/re-queue
+      await updateOutreachLeadStatus(input.leadId, "dm_generated");
+      return { success: true };
+    }),
+
+  // ── Generate Public Comment Draft ─────────────────────────────────────────
+
+  generateComment: protectedProcedure
+    .input(z.object({ leadId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const leads = await getOutreachLeadsByUserId(ctx.user.id);
+      const lead = leads.find((l) => l.id === input.leadId);
+      if (!lead) throw new TRPCError({ code: "NOT_FOUND" });
+
+      // Fetch campaign for context
+      const campaign = await getOutreachCampaignById(lead.campaignId);
+      if (!campaign) throw new TRPCError({ code: "NOT_FOUND" });
+
+      const systemPrompt = `You are an expert Reddit community builder and indie founder.
+Your job is to write a helpful, genuine public comment reply that builds karma and subtly demonstrates expertise.
+NEVER pitch directly. Sound like a real person helping, not a marketer.`;
+
+      const userPrompt = `Post title: "${lead.postTitle}"
+Post body: "${lead.postBody?.slice(0, 800) ?? ""}"
+Author: u/${lead.authorUsername}
+Subreddit: r/${lead.subreddit}
+
+Offering context: ${campaign.offering}
+
+Write a public comment (under 100 words) that:
+1. Directly addresses the poster's question or problem
+2. Provides genuine value or insight
+3. Naturally positions you as someone who understands this space
+4. Does NOT mention your product by name or pitch anything
+5. Ends with an open question to encourage engagement
+
+Return JSON: { "commentDraft": "string" }`;
+
+      const response = await invokeLLM({
+        messages: [
+          { role: "system" as const, content: systemPrompt },
+          { role: "user" as const, content: userPrompt },
+        ],
+        response_format: {
+          type: "json_schema",
+          json_schema: {
+            name: "comment_draft",
+            strict: true,
+            schema: {
+              type: "object",
+              properties: {
+                commentDraft: { type: "string" },
+              },
+              required: ["commentDraft"],
+              additionalProperties: false,
+            },
+          },
+        },
+      });
+
+      const raw = response.choices[0]?.message?.content;
+      if (!raw) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "AI returned no content" });
+      const content = typeof raw === "string" ? raw : JSON.stringify(raw);
+      const parsed = JSON.parse(content) as { commentDraft: string };
+
+      // Persist comment draft to DB
+      const db = await getDb();
+      if (db) {
+        const { outreachLeads: leadsTable } = await import("../../drizzle/schema");
+        await db
+          .update(leadsTable)
+          .set({ commentDraft: parsed.commentDraft })
+          .where(eq(leadsTable.id, input.leadId));
+      }
+
+      return { success: true, commentDraft: parsed.commentDraft };
+    }),
 });
