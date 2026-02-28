@@ -461,4 +461,145 @@ Return JSON: { "dm": "the DM message text" }`;
       await updateOutreachLeadStatus(input.leadId, "dm_generated", { dmDraft: input.dmDraft });
       return { success: true };
     }),
+
+  // ── Lead Roast Engine ─────────────────────────────────────────────────────
+
+  roastLead: protectedProcedure
+    .input(z.object({ leadId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const leads = await getOutreachLeadsByUserId(ctx.user.id);
+      const lead = leads.find((l) => l.id === input.leadId);
+      if (!lead) throw new TRPCError({ code: "NOT_FOUND" });
+
+      const campaign = await getOutreachCampaignById(lead.campaignId);
+      if (!campaign || campaign.userId !== ctx.user.id) throw new TRPCError({ code: "NOT_FOUND" });
+
+      const systemPrompt = `You are SubRoast's Lead Roast Engine — an AI that evaluates Reddit posts as sales leads.
+You score leads on three dimensions and generate a contextual outreach message.
+Always respond with valid JSON matching the exact schema.`;
+
+      const userPrompt = `Evaluate this Reddit post as a sales lead for the following offering:
+
+OFFERING: ${campaign.offering}
+${campaign.websiteUrl ? `WEBSITE: ${campaign.websiteUrl}` : ""}
+
+REDDIT POST:
+Subreddit: r/${lead.subreddit}
+Author: u/${lead.authorUsername}
+Title: "${lead.postTitle}"
+Body: "${(lead.postBody || "").slice(0, 800)}"
+
+Score this lead on:
+1. fitScore (0-100): How well does this person's problem match the offering? 100 = perfect match, 0 = completely irrelevant.
+2. urgencyScore (0-100): How actively are they seeking a solution RIGHT NOW? 100 = urgent need stated explicitly, 0 = casual mention.
+3. sentimentScore (0-100): How frustrated/pained are they? 100 = very frustrated and ready to pay, 0 = neutral observation.
+
+Based on the scores, classify leadHeat:
+- "on_fire" if average score >= 80
+- "hot" if average score >= 60
+- "warm" if average score >= 40
+- "cold" if average score < 40
+
+Classify intentType as one of: "hiring", "buying", "seeking_advice", "venting", "unknown"
+
+Write a roastInsight: a single punchy sentence explaining WHY this lead is or isn't worth pursuing (e.g. "Actively evaluating tools, budget confirmed, decision-maker posting directly" or "Just venting, no purchase intent detected").
+
+Write a roastReplyDraft: a contextual DM (under 120 words) that references their specific pain point and naturally introduces the offering. Sound like a real founder, not a bot.
+
+Return JSON with this EXACT structure:
+{
+  "fitScore": number,
+  "urgencyScore": number,
+  "sentimentScore": number,
+  "leadHeat": "cold" | "warm" | "hot" | "on_fire",
+  "intentType": "hiring" | "buying" | "seeking_advice" | "venting" | "unknown",
+  "roastInsight": "string",
+  "roastReplyDraft": "string"
+}`;
+
+      const response = await invokeLLM({
+        messages: [
+          { role: "system" as const, content: systemPrompt },
+          { role: "user" as const, content: userPrompt },
+        ],
+        response_format: {
+          type: "json_schema",
+          json_schema: {
+            name: "lead_roast",
+            strict: true,
+            schema: {
+              type: "object",
+              properties: {
+                fitScore: { type: "number" },
+                urgencyScore: { type: "number" },
+                sentimentScore: { type: "number" },
+                leadHeat: { type: "string", enum: ["cold", "warm", "hot", "on_fire"] },
+                intentType: { type: "string", enum: ["hiring", "buying", "seeking_advice", "venting", "unknown"] },
+                roastInsight: { type: "string" },
+                roastReplyDraft: { type: "string" },
+              },
+              required: ["fitScore", "urgencyScore", "sentimentScore", "leadHeat", "intentType", "roastInsight", "roastReplyDraft"],
+              additionalProperties: false,
+            },
+          },
+        },
+      });
+
+      const raw = response.choices[0]?.message?.content;
+      if (!raw) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "AI returned no content" });
+      const content = typeof raw === "string" ? raw : JSON.stringify(raw);
+      const parsed = JSON.parse(content) as {
+        fitScore: number;
+        urgencyScore: number;
+        sentimentScore: number;
+        leadHeat: "cold" | "warm" | "hot" | "on_fire";
+        intentType: "hiring" | "buying" | "seeking_advice" | "venting" | "unknown";
+        roastInsight: string;
+        roastReplyDraft: string;
+      };
+
+      // Persist scores to DB
+      const db = await getDb();
+      if (db) {
+        const { outreachLeads: leadsTable } = await import("../../drizzle/schema");
+        await db
+          .update(leadsTable)
+          .set({
+            fitScore: parsed.fitScore,
+            urgencyScore: parsed.urgencyScore,
+            sentimentScore: parsed.sentimentScore,
+            leadHeat: parsed.leadHeat,
+            intentType: parsed.intentType,
+            roastInsight: parsed.roastInsight,
+            roastReplyDraft: parsed.roastReplyDraft,
+          })
+          .where(eq(leadsTable.id, input.leadId));
+      }
+
+      return { success: true, ...parsed };
+    }),
+
+  // ── Pipeline Stage Update ─────────────────────────────────────────────────
+
+  updatePipelineStage: protectedProcedure
+    .input(
+      z.object({
+        leadId: z.number(),
+        stage: z.enum(["new", "replied", "interested", "converted", "skipped"]),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const leads = await getOutreachLeadsByUserId(ctx.user.id);
+      const lead = leads.find((l) => l.id === input.leadId);
+      if (!lead) throw new TRPCError({ code: "NOT_FOUND" });
+      const db = await getDb();
+      if (db) {
+        const { outreachLeads: leadsTable } = await import("../../drizzle/schema");
+        await db
+          .update(leadsTable)
+          .set({ pipelineStage: input.stage })
+          .where(eq(leadsTable.id, input.leadId));
+      }
+      return { success: true };
+    }),
 });

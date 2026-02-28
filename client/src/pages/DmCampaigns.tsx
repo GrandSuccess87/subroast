@@ -12,6 +12,7 @@ import {
   ChevronRight,
   Clock,
   ExternalLink,
+  Flame,
   Inbox,
   Loader2,
   Pause,
@@ -23,6 +24,7 @@ import {
   Sparkles,
   Target,
   Trash2,
+  TrendingUp,
   X,
   Zap,
 } from "lucide-react";
@@ -86,7 +88,73 @@ type Lead = {
   dmDraft?: string | null;
   status: "new" | "dm_generated" | "queued" | "sent" | "skipped" | "failed";
   discoveredAt: number;
+  // Roast Engine fields
+  fitScore?: number | null;
+  urgencyScore?: number | null;
+  sentimentScore?: number | null;
+  leadHeat?: "cold" | "warm" | "hot" | "on_fire" | null;
+  intentType?: "hiring" | "buying" | "seeking_advice" | "venting" | "unknown" | null;
+  roastInsight?: string | null;
+  roastReplyDraft?: string | null;
+  pipelineStage?: "new" | "replied" | "interested" | "converted" | "skipped" | null;
 };
+
+// ─── Roast Engine UI helpers ──────────────────────────────────────────────────
+
+function ScoreBar({ label, value, color }: { label: string; value: number; color: string }) {
+  return (
+    <div className="space-y-0.5">
+      <div className="flex items-center justify-between">
+        <span className="text-[9px] text-muted-foreground uppercase tracking-wide">{label}</span>
+        <span className="text-[10px] font-bold text-foreground">{value}</span>
+      </div>
+      <div className="h-1 rounded-full bg-muted/50 overflow-hidden">
+        <div
+          className={`h-full rounded-full transition-all ${color}`}
+          style={{ width: `${value}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function LeadHeatBadge({ heat }: { heat: "cold" | "warm" | "hot" | "on_fire" }) {
+  const cfg = {
+    on_fire: { label: "On Fire", color: "bg-red-500/15 text-red-400 border-red-500/20", icon: <Flame className="w-2.5 h-2.5" /> },
+    hot: { label: "Hot", color: "bg-orange-400/15 text-orange-400 border-orange-400/20", icon: <TrendingUp className="w-2.5 h-2.5" /> },
+    warm: { label: "Warm", color: "bg-amber-400/15 text-amber-400 border-amber-400/20", icon: <TrendingUp className="w-2.5 h-2.5" /> },
+    cold: { label: "Cold", color: "bg-blue-400/15 text-blue-400 border-blue-400/20", icon: <TrendingUp className="w-2.5 h-2.5" /> },
+  };
+  const { label, color, icon } = cfg[heat];
+  return (
+    <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-semibold border ${color}`}>
+      {icon}{label}
+    </span>
+  );
+}
+
+function IntentBadge({ intent }: { intent: string }) {
+  const labels: Record<string, string> = {
+    hiring: "Hiring",
+    buying: "Buying",
+    seeking_advice: "Seeking Advice",
+    venting: "Venting",
+    unknown: "Unknown",
+  };
+  return (
+    <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium border bg-muted/40 text-muted-foreground border-border">
+      {labels[intent] ?? intent}
+    </span>
+  );
+}
+
+const PIPELINE_STAGES = [
+  { value: "new", label: "New" },
+  { value: "replied", label: "Replied" },
+  { value: "interested", label: "Interested" },
+  { value: "converted", label: "Converted" },
+  { value: "skipped", label: "Skip" },
+] as const;
 
 function MatchBadge({ score }: { score: "strong" | "partial" | "lowest" }) {
   const cfg = {
@@ -384,27 +452,37 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
   );
 }
 
-function LeadCard({ lead, onGenerateDm, onSkip, onQueue, onUpdateDraft }: {
+function LeadCard({ lead, onGenerateDm, onSkip, onQueue, onUpdateDraft, onRoast, onUpdatePipeline }: {
   lead: Lead;
   onGenerateDm: (id: number) => void;
   onSkip: (id: number) => void;
   onQueue: (id: number) => void;
   onUpdateDraft: (id: number, draft: string) => void;
+  onRoast: (id: number) => void;
+  onUpdatePipeline: (id: number, stage: "new" | "replied" | "interested" | "converted" | "skipped") => void;
 }) {
   const [expanded, setExpanded] = useState(false);
   const [editingDraft, setEditingDraft] = useState(false);
   const [draftText, setDraftText] = useState(lead.dmDraft ?? "");
+  const [showRoastReply, setShowRoastReply] = useState(false);
 
+  const isRoasted = lead.fitScore != null;
   const isActionable = lead.status === "new" || lead.status === "dm_generated";
+  const avgScore = isRoasted
+    ? Math.round(((lead.fitScore ?? 0) + (lead.urgencyScore ?? 0) + (lead.sentimentScore ?? 0)) / 3)
+    : null;
 
   return (
     <Card className={`bg-card border-border transition-all ${lead.status === "skipped" ? "opacity-40" : ""}`}>
-      <CardContent className="p-4">
+      <CardContent className="p-4 space-y-3">
+        {/* ── Header row ── */}
         <div className="flex items-start gap-3">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap mb-1.5">
               <span className="text-xs font-medium text-muted-foreground">r/{lead.subreddit}</span>
               <MatchBadge score={lead.matchScore} />
+              {lead.leadHeat && <LeadHeatBadge heat={lead.leadHeat} />}
+              {lead.intentType && lead.intentType !== "unknown" && <IntentBadge intent={lead.intentType} />}
               {lead.status === "queued" && (
                 <span className="text-[10px] px-1.5 py-0.5 rounded border bg-blue-400/10 text-blue-400 border-blue-400/20">Queued</span>
               )}
@@ -436,85 +514,170 @@ function LeadCard({ lead, onGenerateDm, onSkip, onQueue, onUpdateDraft }: {
             <p className="text-xs text-muted-foreground mt-1">
               u/{lead.authorUsername} · {new Date(lead.discoveredAt).toLocaleDateString()}
             </p>
+          </div>
 
-            {lead.dmDraft && (
-              <div className="mt-3">
-                <button
-                  onClick={() => setExpanded(!expanded)}
-                  className="text-[11px] text-primary hover:text-primary/80 flex items-center gap-1"
-                >
-                  <Bot className="w-3 h-3" />
-                  {expanded ? "Hide DM draft" : "View DM draft"}
-                </button>
-                {expanded && (
-                  <div className="mt-2 space-y-2">
-                    {editingDraft ? (
-                      <div className="space-y-2">
-                        <Textarea
-                          value={draftText}
-                          onChange={(e) => setDraftText(e.target.value)}
-                          className="min-h-[100px] resize-none bg-muted/40 border-border text-xs"
-                        />
-                        <div className="flex gap-2">
-                          <Button
-                            size="sm"
-                            onClick={() => { onUpdateDraft(lead.id, draftText); setEditingDraft(false); }}
-                            className="h-6 px-2 text-[10px] bg-primary text-primary-foreground"
-                          >
-                            Save
-                          </Button>
-                          <Button size="sm" variant="ghost" onClick={() => setEditingDraft(false)} className="h-6 px-2 text-[10px]">Cancel</Button>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="p-3 rounded-lg bg-muted/30 border border-border relative group">
-                        <p className="text-xs text-foreground/80 leading-relaxed whitespace-pre-wrap">{lead.dmDraft}</p>
-                        <button
-                          onClick={() => { setDraftText(lead.dmDraft ?? ""); setEditingDraft(true); }}
-                          className="absolute top-2 right-2 text-[10px] text-muted-foreground hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity"
-                        >
-                          Edit
-                        </button>
-                      </div>
-                    )}
+          {/* ── Avg score pill ── */}
+          {avgScore != null && (
+            <div className={`shrink-0 w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold border ${
+              avgScore >= 80 ? "bg-red-500/10 text-red-400 border-red-500/20" :
+              avgScore >= 60 ? "bg-orange-400/10 text-orange-400 border-orange-400/20" :
+              avgScore >= 40 ? "bg-amber-400/10 text-amber-400 border-amber-400/20" :
+              "bg-blue-400/10 text-blue-400 border-blue-400/20"
+            }`}>
+              {avgScore}
+            </div>
+          )}
+        </div>
+
+        {/* ── Roast scores ── */}
+        {isRoasted && (
+          <div className="grid grid-cols-3 gap-3 p-3 rounded-lg bg-muted/20 border border-border">
+            <ScoreBar label="Fit" value={lead.fitScore!} color="bg-primary" />
+            <ScoreBar label="Urgency" value={lead.urgencyScore!} color="bg-orange-400" />
+            <ScoreBar label="Sentiment" value={lead.sentimentScore!} color="bg-violet-400" />
+          </div>
+        )}
+
+        {/* ── Roast insight ── */}
+        {lead.roastInsight && (
+          <div className="flex items-start gap-2 p-2.5 rounded-lg bg-primary/5 border border-primary/15">
+            <Sparkles className="w-3 h-3 text-primary shrink-0 mt-0.5" />
+            <p className="text-[11px] text-foreground/80 leading-relaxed">{lead.roastInsight}</p>
+          </div>
+        )}
+
+        {/* ── Roast reply draft ── */}
+        {lead.roastReplyDraft && (
+          <div className="mt-1">
+            <button
+              onClick={() => setShowRoastReply(!showRoastReply)}
+              className="text-[11px] text-primary hover:text-primary/80 flex items-center gap-1"
+            >
+              <Bot className="w-3 h-3" />
+              {showRoastReply ? "Hide Roast & Reply draft" : "View Roast & Reply draft"}
+            </button>
+            {showRoastReply && (
+              <div className="mt-2 p-3 rounded-lg bg-muted/30 border border-border">
+                <p className="text-xs text-foreground/80 leading-relaxed whitespace-pre-wrap">{lead.roastReplyDraft}</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── DM draft ── */}
+        {lead.dmDraft && (
+          <div className="mt-1">
+            <button
+              onClick={() => setExpanded(!expanded)}
+              className="text-[11px] text-primary hover:text-primary/80 flex items-center gap-1"
+            >
+              <Bot className="w-3 h-3" />
+              {expanded ? "Hide DM draft" : "View DM draft"}
+            </button>
+            {expanded && (
+              <div className="mt-2 space-y-2">
+                {editingDraft ? (
+                  <div className="space-y-2">
+                    <Textarea
+                      value={draftText}
+                      onChange={(e) => setDraftText(e.target.value)}
+                      className="min-h-[100px] resize-none bg-muted/40 border-border text-xs"
+                    />
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        onClick={() => { onUpdateDraft(lead.id, draftText); setEditingDraft(false); }}
+                        className="h-6 px-2 text-[10px] bg-primary text-primary-foreground"
+                      >
+                        Save
+                      </Button>
+                      <Button size="sm" variant="ghost" onClick={() => setEditingDraft(false)} className="h-6 px-2 text-[10px]">Cancel</Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="p-3 rounded-lg bg-muted/30 border border-border relative group">
+                    <p className="text-xs text-foreground/80 leading-relaxed whitespace-pre-wrap">{lead.dmDraft}</p>
+                    <button
+                      onClick={() => { setDraftText(lead.dmDraft ?? ""); setEditingDraft(true); }}
+                      className="absolute top-2 right-2 text-[10px] text-muted-foreground hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      Edit
+                    </button>
                   </div>
                 )}
               </div>
             )}
           </div>
+        )}
 
+        {/* ── Action row ── */}
+        <div className="flex items-center gap-2 flex-wrap pt-1 border-t border-border/50">
+          {/* Roast & Reply */}
+          {!isRoasted && isActionable && (
+            <Button
+              size="sm"
+              onClick={() => onRoast(lead.id)}
+              className="h-7 px-2.5 text-[10px] bg-primary text-primary-foreground hover:bg-primary/90 gap-1"
+            >
+              <Flame className="w-3 h-3" />
+              Roast & Score
+            </Button>
+          )}
+
+          {/* Generate / Queue DM */}
           {isActionable && (
-            <div className="flex flex-col gap-1.5 shrink-0">
-              {!lead.dmDraft ? (
-                <Button
-                  size="sm"
-                  onClick={() => onGenerateDm(lead.id)}
-                  className="h-7 px-2 text-[10px] bg-primary text-primary-foreground hover:bg-primary/90 gap-1"
-                >
-                  <Sparkles className="w-3 h-3" />
-                  Draft DM
-                </Button>
-              ) : (
-                <Button
-                  size="sm"
-                  onClick={() => onQueue(lead.id)}
-                  className="h-7 px-2 text-[10px] bg-primary text-primary-foreground hover:bg-primary/90 gap-1"
-                >
-                  <Send className="w-3 h-3" />
-                  Queue
-                </Button>
-              )}
+            !lead.dmDraft ? (
               <Button
                 size="sm"
-                variant="ghost"
-                onClick={() => onSkip(lead.id)}
-                className="h-7 px-2 text-[10px] text-muted-foreground hover:text-foreground gap-1"
+                onClick={() => onGenerateDm(lead.id)}
+                variant="outline"
+                className="h-7 px-2.5 text-[10px] border-border gap-1"
               >
-                <SkipForward className="w-3 h-3" />
-                Skip
+                <Sparkles className="w-3 h-3" />
+                Draft DM
               </Button>
-            </div>
+            ) : (
+              <Button
+                size="sm"
+                onClick={() => onQueue(lead.id)}
+                variant="outline"
+                className="h-7 px-2.5 text-[10px] border-border gap-1"
+              >
+                <Send className="w-3 h-3" />
+                Queue DM
+              </Button>
+            )
           )}
+
+          {/* Skip */}
+          {isActionable && (
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => onSkip(lead.id)}
+              className="h-7 px-2 text-[10px] text-muted-foreground hover:text-foreground gap-1"
+            >
+              <SkipForward className="w-3 h-3" />
+              Skip
+            </Button>
+          )}
+
+          {/* Pipeline stage selector */}
+          <div className="ml-auto flex items-center gap-1">
+            {PIPELINE_STAGES.map((s) => (
+              <button
+                key={s.value}
+                onClick={() => onUpdatePipeline(lead.id, s.value)}
+                className={`text-[9px] px-1.5 py-0.5 rounded border transition-all ${
+                  (lead.pipelineStage ?? "new") === s.value
+                    ? "bg-primary/15 text-primary border-primary/30 font-semibold"
+                    : "bg-muted/30 text-muted-foreground border-border hover:border-border/80"
+                }`}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
         </div>
       </CardContent>
     </Card>
@@ -562,6 +725,19 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
       toast.success("Draft updated");
       utils.outreach.getLeads.invalidate({ campaignId: campaign.id });
     },
+    onError: (err) => toast.error(err.message),
+  });
+
+  const roastLead = trpc.outreach.roastLead.useMutation({
+    onSuccess: () => {
+      toast.success("Lead roasted and scored!");
+      utils.outreach.getLeads.invalidate({ campaignId: campaign.id });
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
+  const updatePipeline = trpc.outreach.updatePipelineStage.useMutation({
+    onSuccess: () => utils.outreach.getLeads.invalidate({ campaignId: campaign.id }),
     onError: (err) => toast.error(err.message),
   });
 
@@ -706,6 +882,8 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
               onSkip={(id) => skipLead.mutate({ leadId: id })}
               onQueue={(id) => queueLead.mutate({ leadId: id })}
               onUpdateDraft={(id, draft) => updateDraft.mutate({ leadId: id, dmDraft: draft })}
+              onRoast={(id) => roastLead.mutate({ leadId: id })}
+              onUpdatePipeline={(id, stage) => updatePipeline.mutate({ leadId: id, stage })}
             />
           ))}
         </div>

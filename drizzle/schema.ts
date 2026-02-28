@@ -200,9 +200,21 @@ export const outreachLeads = mysqlTable("outreach_leads", {
   postTitle: text("postTitle").notNull(),
   postBody: text("postBody"),
   authorUsername: varchar("authorUsername", { length: 64 }).notNull(),
+  upvotes: int("upvotes").default(0).notNull(),
+  commentCount: int("commentCount").default(0).notNull(),
   matchScore: mysqlEnum("matchScore", ["strong", "partial", "lowest"]).default("partial").notNull(),
   matchedKeywords: text("matchedKeywords"),       // JSON array
+  // Lead Roast Engine scores (0-100)
+  fitScore: int("fitScore"),                      // semantic alignment with user's offering
+  urgencyScore: int("urgencyScore"),              // how actively seeking a solution
+  sentimentScore: int("sentimentScore"),          // pain level / willingness to pay
+  leadHeat: mysqlEnum("leadHeat", ["cold", "warm", "hot", "on_fire"]),  // combined heat indicator
+  roastInsight: text("roastInsight"),             // AI one-liner: "Why this lead is hot"
+  intentType: mysqlEnum("intentType", ["hiring", "buying", "seeking_advice", "venting", "unknown"]).default("unknown"),
   dmDraft: text("dmDraft"),                       // AI-generated DM draft
+  roastReplyDraft: text("roastReplyDraft"),        // Roast & Reply — contextual PM draft
+  // Pipeline stage
+  pipelineStage: mysqlEnum("pipelineStage", ["new", "replied", "interested", "converted", "skipped"]).default("new").notNull(),
   status: mysqlEnum("status", ["new", "dm_generated", "queued", "sent", "skipped", "failed"]).default("new").notNull(),
   sentAt: bigint("sentAt", { mode: "number" }),
   errorMessage: text("errorMessage"),
