@@ -6,7 +6,6 @@ import OnboardingChecklist from "@/components/OnboardingChecklist";
 import {
   AlertTriangle,
   ArrowRight,
-  CalendarClock,
   CheckCircle2,
   History,
   MessageSquare,
@@ -21,11 +20,9 @@ export default function Dashboard() {
 
   const { data: account } = trpc.reddit.getAccount.useQuery();
   const { data: rateLimits } = trpc.reddit.getRateLimitStatus.useQuery();
-  const { data: scheduledPosts } = trpc.schedule.list.useQuery();
   const { data: campaigns } = trpc.dm.listCampaigns.useQuery();
   const { data: history } = trpc.history.list.useQuery();
 
-  const pendingPosts = scheduledPosts?.filter((p) => p.status === "pending").length ?? 0;
   const activeCampaigns = campaigns?.filter((c) => c.status === "active").length ?? 0;
   const totalPosted = history?.filter((h) => h.status === "posted").length ?? 0;
 
@@ -49,14 +46,6 @@ export default function Dashboard() {
       warn: rateLimits?.dmWarning ?? false,
     },
     {
-      label: "Scheduled",
-      value: pendingPosts,
-      icon: CalendarClock,
-      color: "text-blue-400",
-      bg: "bg-blue-400/10",
-      warn: false,
-    },
-    {
       label: "Total posted",
       value: totalPosted,
       icon: History,
@@ -75,15 +64,6 @@ export default function Dashboard() {
       color: "text-primary",
       bg: "bg-primary/10",
       hoverBorder: "hover:border-primary/30",
-    },
-    {
-      title: "Schedule a Post",
-      desc: "Pick a time, we'll auto-post it",
-      icon: CalendarClock,
-      href: "/dashboard/schedule",
-      color: "text-blue-400",
-      bg: "bg-blue-400/10",
-      hoverBorder: "hover:border-blue-400/30",
     },
     {
       title: "DM Campaign",

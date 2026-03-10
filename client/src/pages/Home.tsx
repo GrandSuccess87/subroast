@@ -4,7 +4,6 @@ import {
   AlertTriangle,
   ArrowRight,
   BarChart2,
-  CalendarClock,
   CheckCircle2,
   Flame,
   MessageSquare,
@@ -25,13 +24,6 @@ const FEATURES = [
     desc: "Get a brutally honest review, a roast, and an improved version of your post — all in one click.",
     color: "text-primary",
     bg: "bg-primary/10",
-  },
-  {
-    icon: CalendarClock,
-    title: "Smart Scheduling",
-    desc: "SubRoast auto-posts at the right moment with 30-min cooldowns and 5/day limits.",
-    color: "text-blue-400",
-    bg: "bg-blue-400/10",
   },
   {
     icon: MessageSquare,
@@ -83,15 +75,6 @@ const HOW_IT_WORKS = [
   },
   {
     step: "02",
-    icon: CalendarClock,
-    title: "Schedule it automatically",
-    desc: "SubRoast picks the optimal posting time, enforces cooldowns, and posts on your behalf — no manual timing needed.",
-    color: "text-blue-400",
-    bg: "bg-blue-400/10",
-    border: "border-blue-400/20",
-  },
-  {
-    step: "03",
     icon: Search,
     title: "Find leads & send DMs",
     desc: "AI monitors your target subreddits 24/7, scores each post by relevance, and drafts a personalized DM for every prospect it finds.",
@@ -253,7 +236,7 @@ export default function Home() {
               </h1>
 
               <p className="text-lg text-muted-foreground max-w-lg mb-8 leading-relaxed mx-auto lg:mx-0">
-                SubRoast gives every post an AI roast, a virality score, and a rewrite — then schedules it at the perfect time and finds leads while you sleep.
+                SubRoast gives every post an AI roast, a virality score, and a rewrite — then finds warm leads and drafts personalized DMs while you sleep.
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 mb-8">
@@ -305,11 +288,11 @@ export default function Home() {
             <p className="text-xs font-semibold tracking-widest text-primary uppercase mb-2">Simple by design</p>
             <h2 className="text-3xl font-bold mb-3">How SubRoast works</h2>
             <p className="text-muted-foreground text-sm max-w-md mx-auto">
-              Three steps from blank draft to scheduled post to warm leads in your inbox.
+              Two steps from blank draft to warm leads in your inbox.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto relative">
+          <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto relative">
             {/* Connector line (desktop only) */}
             <div className="hidden md:block absolute top-10 left-[calc(16.67%+1rem)] right-[calc(16.67%+1rem)] h-px bg-gradient-to-r from-primary/30 via-blue-400/30 to-purple-400/30" />
 

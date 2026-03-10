@@ -172,3 +172,14 @@
 - [x] tRPC: generateComment procedure — AI writes public comment draft (no pitch)
 - [x] Sign-in modal: already shows "Sign in to SubRoast" (confirmed no SubSignal references)
 - [x] All 69 tests passing, TypeScript clean
+
+## Schedule Post Removal & Homepage Copy (v5.2)
+- [x] Sidebar: remove "Schedule Post" nav item from Compose section
+- [x] Dashboard quick actions: remove "Schedule a Post" card
+- [x] Dashboard stats grid: remove "Scheduled" stat card
+- [x] Dashboard: remove trpc.schedule.list.useQuery and pendingPosts variable
+- [x] Homepage hero subtext: remove "schedules it at the perfect time" language
+- [x] Homepage features grid: remove "Smart Scheduling" feature card
+- [x] Homepage How It Works: remove Step 02 "Schedule it automatically", renumber to 2 steps
+- [x] Homepage How It Works: update subtitle from "Three steps" to "Two steps"
+- [x] Homepage How It Works: change grid from 3-col to 2-col
