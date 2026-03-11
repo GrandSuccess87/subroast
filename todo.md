@@ -196,3 +196,12 @@
 - [x] Send failure: saves draft, surfaces error message to user
 - [x] DmCampaigns.tsx toast updated: "DM sent!" / "queued" / "draft saved" based on result
 - [x] TypeScript clean, 69 tests passing
+
+## Onboarding Copy Fix + Send DM Button + Smart Post Scheduler (v5.5)
+- [x] Fix onboarding checklist step 1 copy: "post scheduling" → "post drafting"
+- [x] LeadCard: add "Send DM" button for leads with status dm_generated (fires immediate send)
+- [x] Draft & Roast: add "Post Now at Optimal Time" button that uses AI to pick best viral window
+- [x] Server: add postNow tRPC procedure — AI picks optimal time for subreddit, checks rate limits, fires post or schedules it
+- [x] AI optimal timing: factor in subreddit peak hours, day of week, post type (question/story/resource)
+- [x] Rate limit enforcement: respect 5 posts/day, 30min cooldown between posts
+- [x] UI feedback: show "Posting now..." / "Scheduled for X:XXpm EST" / "Rate limited — try again in Xmin"

@@ -8,8 +8,10 @@ import { trpc } from "@/lib/trpc";
 import {
   CheckCircle2,
   ClipboardCopy,
+  Clock,
   Flame,
   Loader2,
+  Rocket,
   Sparkles,
   TrendingUp,
   XCircle,
@@ -106,12 +108,16 @@ function ViralityGauge({ score }: { score: number }) {
   );
 }
 
+type PostNowResult = { action: "posted" | "scheduled"; postUrl: string | null; scheduledAt: number | null; reasoning: string; message: string };
+
 export default function DraftRoast() {
   const [, setLocation] = useLocation();
   const [content, setContent] = useState("");
   const [subreddit, setSubreddit] = useState("");
+  const [title, setTitle] = useState("");
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [activeTab, setActiveTab] = useState<"review" | "roast" | "improved">("review");
+  const [postResult, setPostResult] = useState<PostNowResult | null>(null);
 
   const analyzeMutation = trpc.roast.analyze.useMutation({
     onSuccess: (data: AnalysisResult) => {
@@ -123,6 +129,27 @@ export default function DraftRoast() {
       toast.error(err.message);
     },
   });
+
+  const postNowMutation = trpc.schedule.postNow.useMutation({
+    onSuccess: (data) => {
+      setPostResult(data);
+      if (data.action === "posted") {
+        toast.success("Posted to Reddit!");
+      } else {
+        toast.success(data.message);
+      }
+    },
+    onError: (err: { message: string }) => {
+      toast.error(err.message);
+    },
+  });
+
+  const handlePostNow = () => {
+    const postTitle = title.trim() || content.trim().split("\n")[0].slice(0, 200);
+    if (!postTitle) { toast.error("Add a title for your post"); return; }
+    if (!subreddit.trim()) { toast.error("Enter a subreddit"); return; }
+    postNowMutation.mutate({ subreddit: subreddit.trim(), title: postTitle, body: content.trim() || undefined });
+  };
 
   const handleAnalyze = () => {
     if (!content.trim()) {
@@ -173,6 +200,16 @@ export default function DraftRoast() {
                     />
                   </div>
                 </div>
+
+                <div className="space-y-1.5">
+                  <Label className="text-xs text-muted-foreground">Post title (for posting — optional if using first line)</Label>
+                  <Input
+                    placeholder="My SaaS hit $1K MRR — here's what worked"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="bg-muted/40 border-border text-foreground placeholder:text-muted-foreground/50"
+                  />
+                </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs text-muted-foreground">Post or DM content</Label>
                   <Textarea
@@ -203,15 +240,51 @@ export default function DraftRoast() {
               </CardContent>
             </Card>
 
-            {/* Schedule shortcut */}
-            {result && (
-              <button
-                onClick={() => setLocation("/dashboard/schedule")}
-                className="w-full text-left p-3 rounded-lg bg-primary/5 border border-primary/20 hover:bg-primary/10 transition-colors"
-              >
-                <p className="text-xs font-medium text-primary">Ready to post?</p>
-                <p className="text-xs text-muted-foreground mt-0.5">Schedule this post to auto-publish →</p>
-              </button>
+            {/* Post at Optimal Time */}
+            <Button
+              onClick={handlePostNow}
+              disabled={postNowMutation.isPending || !content.trim()}
+              variant="outline"
+              className="w-full border-primary/40 text-primary hover:bg-primary/10 gap-2"
+            >
+              {postNowMutation.isPending ? (
+                <><Loader2 className="w-4 h-4 animate-spin" /> Finding optimal time...</>
+              ) : (
+                <><Rocket className="w-4 h-4" /> Post at Optimal Time</>
+              )}
+            </Button>
+
+            {/* Post result feedback */}
+            {postResult && (
+              <div className={`p-3 rounded-lg border text-xs ${
+                postResult.action === "posted"
+                  ? "bg-primary/5 border-primary/20"
+                  : "bg-blue-400/5 border-blue-400/20"
+              }`}>
+                <div className="flex items-center gap-2 mb-1">
+                  {postResult.action === "posted" ? (
+                    <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
+                  ) : (
+                    <Clock className="w-3.5 h-3.5 text-blue-400" />
+                  )}
+                  <p className={`font-medium ${
+                    postResult.action === "posted" ? "text-primary" : "text-blue-400"
+                  }`}>
+                    {postResult.action === "posted" ? "Posted!" : "Scheduled"}
+                  </p>
+                </div>
+                <p className="text-muted-foreground">{postResult.message}</p>
+                {postResult.postUrl && (
+                  <a
+                    href={postResult.postUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline mt-1 block"
+                  >
+                    View on Reddit →
+                  </a>
+                )}
+              </div>
             )}
           </div>
 

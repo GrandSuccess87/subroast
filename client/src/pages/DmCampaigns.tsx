@@ -435,9 +435,10 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
   );
 }
 
-function LeadCard({ lead, onGenerateDm, onSkip, onQueue, onCancelQueue, onUpdateDraft, onRoast, onGenerateComment }: {
+function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue, onUpdateDraft, onRoast, onGenerateComment }: {
   lead: Lead;
   onGenerateDm: (id: number) => void;
+  onSendDm: (id: number) => void;
   onSkip: (id: number) => void;
   onQueue: (id: number) => void;
   onCancelQueue: (id: number) => void;
@@ -630,16 +631,15 @@ function LeadCard({ lead, onGenerateDm, onSkip, onQueue, onCancelQueue, onUpdate
             </Button>
           )}
 
-          {/* Queue DM */}
+          {/* Send DM immediately */}
           {lead.status === "dm_generated" && lead.dmDraft && (
             <Button
               size="sm"
-              onClick={() => onQueue(lead.id)}
-              variant="outline"
-              className="h-7 px-2.5 text-[10px] border-border gap-1"
+              onClick={() => onSendDm(lead.id)}
+              className="h-7 px-2.5 text-[10px] bg-primary text-primary-foreground hover:bg-primary/90 gap-1"
             >
               <Send className="w-3 h-3" />
-              Queue DM
+              Send DM
             </Button>
           )}
 
@@ -760,6 +760,20 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
   const generateComment = trpc.outreach.generateComment.useMutation({
     onSuccess: () => {
       toast.success("Comment draft ready!");
+      utils.outreach.getLeads.invalidate({ campaignId: campaign.id });
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
+  const sendDm = trpc.outreach.sendDm.useMutation({
+    onSuccess: (data) => {
+      if (data.sent) {
+        toast.success("DM sent!");
+      } else if (data.queued) {
+        toast.success("Rate limit reached — DM queued for delivery shortly");
+      } else {
+        toast.info("Draft saved");
+      }
       utils.outreach.getLeads.invalidate({ campaignId: campaign.id });
     },
     onError: (err) => toast.error(err.message),
@@ -903,6 +917,7 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
               key={lead.id}
               lead={lead as Lead}
               onGenerateDm={(id) => generateDm.mutate({ leadId: id })}
+              onSendDm={(id) => sendDm.mutate({ leadId: id })}
               onSkip={(id) => skipLead.mutate({ leadId: id })}
               onQueue={(id) => queueLead.mutate({ leadId: id })}
               onCancelQueue={(id) => cancelQueue.mutate({ leadId: id })}

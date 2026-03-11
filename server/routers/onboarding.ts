@@ -47,7 +47,7 @@ export const onboardingRouter = router({
       {
         id: "reddit_connected",
         label: "Connect your Reddit account",
-        description: "Link Reddit to enable post scheduling and DM sending",
+        description: "Link Reddit to enable post drafting and DM sending",
         href: "/settings",
         completed: redditConnected,
       },

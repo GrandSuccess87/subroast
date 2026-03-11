@@ -244,6 +244,166 @@ const scheduleRouter = router({
       await cancelScheduledPost(input.id, ctx.user.id);
       return { success: true };
     }),
+
+  // ── Smart Post: AI picks optimal viral time, fires immediately or schedules ──
+  postNow: protectedProcedure
+    .input(
+      z.object({
+        subreddit: z.string().min(1).max(128),
+        title: z.string().min(1).max(300),
+        body: z.string().max(40000).optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const account = await getRedditAccountByUserId(ctx.user.id);
+      if (!account) {
+        throw new TRPCError({ code: "PRECONDITION_FAILED", message: "Connect your Reddit account first" });
+      }
+      if (account.isPaused) {
+        throw new TRPCError({ code: "PRECONDITION_FAILED", message: `Account is paused: ${account.pauseReason}` });
+      }
+
+      // ── Ask AI for the optimal posting window ─────────────────────────────────────
+      const now = new Date();
+      const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+      const currentDay = dayNames[now.getUTCDay()];
+      const currentHourUTC = now.getUTCHours();
+
+      const timingPrompt = `You are a Reddit growth expert. Given the subreddit r/${input.subreddit} and a post titled "${input.title.slice(0, 120)}", determine the single best UTC hour to post for maximum virality.
+
+Current UTC time: ${currentHourUTC}:00 on ${currentDay}.
+
+Consider: peak activity windows for the subreddit type, day-of-week patterns, time zones of the likely audience, and Reddit's general peak hours (typically 8-10am EST = 13-15 UTC, and 6-9pm EST = 23-02 UTC).
+
+Return JSON: { "best_utc_hour": 14, "day_offset": 0, "reasoning": "brief explanation" }
+- best_utc_hour: 0-23 (UTC hour to post)
+- day_offset: 0 = today, 1 = tomorrow (use 1 if today's window has already passed)
+- reasoning: 1 sentence`;
+
+      let bestUtcHour = 14; // default: 2pm UTC (9am EST)
+      let dayOffset = 0;
+      let reasoning = "Default peak window (9am EST)";
+
+      try {
+        const aiResp = await invokeLLM({
+          messages: [
+            { role: "system" as const, content: "You are a Reddit growth expert. Always respond with valid JSON." },
+            { role: "user" as const, content: timingPrompt },
+          ],
+          response_format: {
+            type: "json_schema",
+            json_schema: {
+              name: "optimal_timing",
+              strict: true,
+              schema: {
+                type: "object",
+                properties: {
+                  best_utc_hour: { type: "integer" },
+                  day_offset: { type: "integer" },
+                  reasoning: { type: "string" },
+                },
+                required: ["best_utc_hour", "day_offset", "reasoning"],
+                additionalProperties: false,
+              },
+            },
+          },
+        });
+        const raw = aiResp.choices[0]?.message?.content;
+        if (raw) {
+          const parsed = JSON.parse(typeof raw === "string" ? raw : JSON.stringify(raw)) as {
+            best_utc_hour: number;
+            day_offset: number;
+            reasoning: string;
+          };
+          bestUtcHour = Math.max(0, Math.min(23, parsed.best_utc_hour));
+          dayOffset = parsed.day_offset === 1 ? 1 : 0;
+          reasoning = parsed.reasoning;
+        }
+      } catch {
+        // AI timing failed — fall back to default
+      }
+
+      // ── Compute scheduled timestamp ───────────────────────────────────────────────────────
+      const target = new Date(now);
+      target.setUTCDate(target.getUTCDate() + dayOffset);
+      target.setUTCHours(bestUtcHour, 0, 0, 0);
+
+      // If target is in the past (same day, window already passed), push to tomorrow
+      if (target.getTime() <= now.getTime()) {
+        target.setUTCDate(target.getUTCDate() + 1);
+      }
+
+      const scheduledAt = target.getTime();
+      const minutesUntilPost = Math.round((scheduledAt - now.getTime()) / 60000);
+      const isImmediate = minutesUntilPost <= 10; // within 10 min = fire now
+
+      // ── Check rate limits ─────────────────────────────────────────────────────────────────────
+      const { checkCanPost: canPostCheck } = await import("./rateLimiter");
+      const { allowed, reason: rateLimitReason } = await canPostCheck(account.id, ctx.user.id);
+
+      if (isImmediate && allowed) {
+        // Fire immediately
+        let accessToken = account.accessToken;
+        const nowMs = Date.now();
+        if (account.tokenExpiresAt - nowMs < 5 * 60 * 1000) {
+          const tokens = await refreshRedditToken(account.refreshToken);
+          accessToken = tokens.access_token;
+          const db = await getDb();
+          if (db) {
+            const { redditAccounts: raTable } = await import("../drizzle/schema");
+            await db.update(raTable).set({ accessToken, tokenExpiresAt: nowMs + tokens.expires_in * 1000 }).where(eq(raTable.id, account.id));
+          }
+        }
+
+        const { postId, postUrl } = await submitRedditPost(accessToken, input.subreddit, input.title, input.body ?? "");
+        await incrementPostCount(account.id);
+        await createPostHistory({
+          userId: ctx.user.id,
+          redditAccountId: account.id,
+          subreddit: input.subreddit,
+          title: input.title,
+          body: input.body,
+          redditPostId: postId,
+          redditPostUrl: postUrl,
+          postedAt: nowMs,
+        });
+        return {
+          action: "posted" as const,
+          postUrl,
+          scheduledAt: null,
+          reasoning,
+          message: `Posted immediately to r/${input.subreddit}!`,
+        };
+      }
+
+      // Schedule for optimal time
+      if (!allowed && isImmediate) {
+        // Rate limited right now — schedule for optimal window instead
+      }
+
+      await createScheduledPost({
+        userId: ctx.user.id,
+        redditAccountId: account.id,
+        subreddit: input.subreddit,
+        title: input.title,
+        body: input.body,
+        scheduledAt,
+      });
+
+      const scheduledDate = new Date(scheduledAt);
+      const timeStr = scheduledDate.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/New_York", timeZoneName: "short" });
+      const dayStr = dayOffset === 0 ? "today" : "tomorrow";
+
+      return {
+        action: "scheduled" as const,
+        postUrl: null,
+        scheduledAt,
+        reasoning,
+        message: isImmediate && !allowed
+          ? `Rate limited — scheduled for ${timeStr} ${dayStr} (${rateLimitReason})`
+          : `Scheduled for ${timeStr} ${dayStr} — ${reasoning}`,
+      };
+    }),
 });
 
 // ─── DM Campaigns Router ──────────────────────────────────────────────────────

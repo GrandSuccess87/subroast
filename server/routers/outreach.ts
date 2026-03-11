@@ -502,6 +502,45 @@ Return JSON: { "dm": "the DM message text" }`;
       return { success: true };
     }),
 
+  // ── Send Existing DM Draft Immediately ──────────────────────────────────────
+
+  sendDm: protectedProcedure
+    .input(z.object({ leadId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const leads = await getOutreachLeadsByUserId(ctx.user.id);
+      const lead = leads.find((l) => l.id === input.leadId);
+      if (!lead) throw new TRPCError({ code: "NOT_FOUND" });
+      if (!lead.dmDraft) throw new TRPCError({ code: "PRECONDITION_FAILED", message: "No DM draft to send" });
+      if (lead.status === "sent") throw new TRPCError({ code: "PRECONDITION_FAILED", message: "Already sent" });
+
+      const redditAccount = await getRedditAccountByUserId(ctx.user.id);
+      if (!redditAccount || redditAccount.isPaused) {
+        throw new TRPCError({ code: "PRECONDITION_FAILED", message: "Connect your Reddit account in Settings first" });
+      }
+
+      const { allowed, reason: rateLimitReason } = await checkCanDm(redditAccount.id, ctx.user.id);
+      if (!allowed) {
+        // Auto-queue instead of throwing
+        await updateOutreachLeadStatus(input.leadId, "queued");
+        return { success: true, sent: false, queued: true, reason: rateLimitReason ?? "rate_limited" };
+      }
+
+      try {
+        const accessToken = await getValidRedditToken(redditAccount);
+        const campaign = await getOutreachCampaignById(lead.campaignId);
+        const subject = `Re: ${lead.postTitle}`.slice(0, 100);
+        await sendRedditDM(accessToken, lead.authorUsername, subject, lead.dmDraft);
+        const now = Date.now();
+        await updateOutreachLeadStatus(input.leadId, "sent", { sentAt: now });
+        await incrementDmCount(redditAccount.id);
+        void campaign; // suppress unused warning
+        return { success: true, sent: true, queued: false, reason: null };
+      } catch (sendErr: unknown) {
+        const errMsg = sendErr instanceof Error ? sendErr.message : String(sendErr);
+        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: `Send failed: ${errMsg}` });
+      }
+    }),
+
   updateDmDraft: protectedProcedure
     .input(z.object({ leadId: z.number(), dmDraft: z.string().min(1).max(2000) }))
     .mutation(async ({ ctx, input }) => {
