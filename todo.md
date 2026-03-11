@@ -183,3 +183,8 @@
 - [x] Homepage How It Works: remove Step 02 "Schedule it automatically", renumber to 2 steps
 - [x] Homepage How It Works: update subtitle from "Three steps" to "Two steps"
 - [x] Homepage How It Works: change grid from 3-col to 2-col
+
+## DM Prompt Overhaul (v5.3)
+- [x] Rewrite generateDm system prompt: no product mentions, no pitching, conversation-first
+- [x] Rewrite generateDm user prompt: reference specific post details, share insight, end with follow-up questions, 180 word limit
+- [x] Campaign offering field now used as sender context only (not pitched in the DM)

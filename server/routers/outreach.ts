@@ -372,25 +372,29 @@ Rules:
       const campaign = await getOutreachCampaignById(lead.campaignId);
       if (!campaign || campaign.userId !== ctx.user.id) throw new TRPCError({ code: "NOT_FOUND" });
 
-      const systemPrompt = `You are a Reddit DM expert who writes genuine, helpful outreach messages for indie SaaS founders.
-Your DMs are conversational, non-spammy, and reference the specific Reddit post.
+      const systemPrompt = `You are an expert at writing genuine, human Reddit DMs that start real conversations.
+You write like a thoughtful person who actually read the post — not a marketer, not a bot.
+Your messages are warm, specific, and curious. They add value or share a relevant insight before asking anything.
+NEVER mention any product, tool, app, or service. Never pitch. Never promote. Never include links.
+The goal is to open a conversation, not close a sale.
 ${campaign.aiPromptInstructions ? `Additional instructions: ${campaign.aiPromptInstructions}` : ""}`;
 
-      const userPrompt = `Write a Reddit DM to u/${lead.authorUsername} who posted in r/${lead.subreddit}:
+      const userPrompt = `Write a Reddit DM to u/${lead.authorUsername} who posted in r/${lead.subreddit}.
 
 Post title: "${lead.postTitle}"
-Post body: "${(lead.postBody || "").slice(0, 500)}"
+Post body: "${(lead.postBody || "").slice(0, 600)}"
 
-Our offering: ${campaign.offering}
-${campaign.websiteUrl ? `Website: ${campaign.websiteUrl}` : ""}
+Context about the sender (use to inform tone and relevance, but DO NOT mention any product, tool, or service):
+${campaign.offering}
 
 Rules:
-- Start with a genuine reference to their specific post (not generic)
-- Be helpful, not salesy
-- Mention your product naturally as a potential solution
-- Keep it under 150 words
-- No subject line needed (this is a DM body)
-- Sound like a real person, not a bot
+- Open by referencing something specific from their post — a detail, a struggle, a question they raised
+- Share a genuine insight, observation, or relevant experience that adds value to what they shared
+- Be curious — end with 1-2 natural follow-up questions that invite them to keep talking
+- NO pitching, NO product mentions, NO links, NO CTAs
+- Under 180 words
+- No subject line (this is a DM body)
+- Write like a real person texting, not a LinkedIn recruiter
 
 Return JSON: { "dm": "the DM message text" }`;
 
