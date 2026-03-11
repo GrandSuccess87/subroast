@@ -137,6 +137,35 @@ export async function submitRedditPost(
   };
 }
 
+export async function postRedditComment(
+  accessToken: string,
+  thingId: string, // fullname of the post, e.g. "t3_abc123"
+  text: string
+): Promise<{ commentId: string }> {
+  const response = await axios.post(
+    `${REDDIT_OAUTH_BASE}/api/comment`,
+    new URLSearchParams({
+      thing_id: thingId,
+      text,
+      return_rtjson: "false",
+    }),
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "User-Agent": "SubRoast/1.0 by SubRoastApp",
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    }
+  );
+
+  const json = response.data?.json;
+  if (json?.errors && json.errors.length > 0) {
+    throw new Error(`Reddit comment error: ${json.errors.map((e: string[]) => e.join(": ")).join(", ")}`);
+  }
+  const commentId: string = json?.data?.things?.[0]?.data?.id ?? "";
+  return { commentId };
+}
+
 export async function sendRedditDM(
   accessToken: string,
   toUsername: string,

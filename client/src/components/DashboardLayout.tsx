@@ -159,6 +159,11 @@ function DashboardLayoutContent({
     refetchInterval: 5 * 60_000,
   });
 
+  const { data: scheduledPosts } = trpc.schedule.list.useQuery(undefined, {
+    refetchInterval: 60_000,
+  });
+  const pendingPostCount = scheduledPosts?.filter((p) => p.status === "pending").length ?? 0;
+
   const postsUsed = rateLimits?.postsToday ?? 0;
   const postsMax = rateLimits?.maxPostsPerDay ?? 5;
   const dmsUsed = rateLimits?.dmsToday ?? 0;
@@ -248,7 +253,15 @@ function DashboardLayoutContent({
                         >
                           <item.icon className={`h-4 w-4 ${isActive ? "text-primary" : ""}`} />
                           <span>{item.label}</span>
-                          {isActive && !isCollapsed && (
+                          {item.path === "/dashboard/schedule" && pendingPostCount > 0 && !isCollapsed && (
+                            <span className="ml-auto text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-primary/15 text-primary shrink-0">
+                              {pendingPostCount}
+                            </span>
+                          )}
+                          {isActive && !isCollapsed && item.path !== "/dashboard/schedule" && (
+                            <span className="ml-auto w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
+                          )}
+                          {isActive && !isCollapsed && item.path === "/dashboard/schedule" && pendingPostCount === 0 && (
                             <span className="ml-auto w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
                           )}
                         </SidebarMenuButton>

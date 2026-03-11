@@ -101,6 +101,8 @@ type Lead = {
   roastInsight?: string | null;
   roastReplyDraft?: string | null;
   pipelineStage?: "new" | "replied" | "interested" | "converted" | "skipped" | null;
+  commentDraft?: string | null;
+  commentSentAt?: number | null;
 };
 
 // ─── Roast Engine UI helpers ──────────────────────────────────────────────────
@@ -468,7 +470,7 @@ function ProgressSteps({ steps, currentStep }: { steps: string[]; currentStep: n
   );
 }
 
-function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue, onUpdateDraft, onRoast, onGenerateComment }: {
+function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue, onUpdateDraft, onRoast, onGenerateComment, onSendComment }: {
   lead: Lead;
   onGenerateDm: (id: number) => void;
   onSendDm: (id: number) => void;
@@ -478,6 +480,7 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
   onUpdateDraft: (id: number, draft: string) => void;
   onRoast: (id: number) => void;
   onGenerateComment: (id: number) => void;
+  onSendComment: (id: number) => void;
 }) {
   const [expandedDm, setExpandedDm] = useState(false);
   const [expandedComment, setExpandedComment] = useState(false);
@@ -487,13 +490,16 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
   const [copiedComment, setCopiedComment] = useState(false);
   const [roastStep, setRoastStep] = useState<number | null>(null);
   const [dmStep, setDmStep] = useState<number | null>(null);
+  const [commentStep, setCommentStep] = useState<number | null>(null);
   const roastTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const dmTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const commentTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Cleanup timers on unmount
   useEffect(() => () => {
     if (roastTimerRef.current) clearInterval(roastTimerRef.current);
     if (dmTimerRef.current) clearInterval(dmTimerRef.current);
+    if (commentTimerRef.current) clearInterval(commentTimerRef.current);
   }, []);
 
   const startRoastProgress = () => {
@@ -514,6 +520,16 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
       if (step >= 2) { clearInterval(dmTimerRef.current!); dmTimerRef.current = null; }
       setDmStep(step);
     }, 2500);
+  };
+
+  const startCommentProgress = () => {
+    setCommentStep(0);
+    let step = 0;
+    commentTimerRef.current = setInterval(() => {
+      step++;
+      if (step >= 2) { clearInterval(commentTimerRef.current!); commentTimerRef.current = null; }
+      setCommentStep(step);
+    }, 2200);
   };
 
   const isRoasted = lead.fitScore != null;
@@ -733,17 +749,38 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
             </Button>
           )}
 
-          {/* Generate Comment */}
+          {/* Draft / Send Comment */}
           {isActionable && (
-            <Button
-              size="sm"
-              onClick={() => onGenerateComment(lead.id)}
-              variant="outline"
-              className="h-7 px-2.5 text-[10px] border-border gap-1"
-            >
-              <MessageSquare className="w-3 h-3" />
-              Draft Comment
-            </Button>
+            lead.commentDraft && !lead.commentSentAt ? (
+              <Button
+                size="sm"
+                onClick={() => onSendComment(lead.id)}
+                variant="outline"
+                className="h-7 px-2.5 text-[10px] border-primary/40 text-primary hover:bg-primary/10 gap-1"
+              >
+                <Send className="w-3 h-3" />
+                Send Comment
+              </Button>
+            ) : lead.commentSentAt ? (
+              <span className="text-[10px] text-primary flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3" /> Comment sent
+              </span>
+            ) : commentStep !== null ? (
+              <ProgressSteps
+                steps={["Reading post", "Drafting comment", "Done"]}
+                currentStep={commentStep}
+              />
+            ) : (
+              <Button
+                size="sm"
+                onClick={() => { startCommentProgress(); onGenerateComment(lead.id); }}
+                variant="outline"
+                className="h-7 px-2.5 text-[10px] border-border gap-1"
+              >
+                <MessageSquare className="w-3 h-3" />
+                Draft Comment
+              </Button>
+            )
           )}
 
           {/* Skip */}
@@ -851,6 +888,14 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
       } else {
         toast.info("Draft saved");
       }
+      utils.outreach.getLeads.invalidate({ campaignId: campaign.id });
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
+  const sendComment = trpc.outreach.sendComment.useMutation({
+    onSuccess: () => {
+      toast.success("Comment posted to Reddit!");
       utils.outreach.getLeads.invalidate({ campaignId: campaign.id });
     },
     onError: (err) => toast.error(err.message),
@@ -1001,6 +1046,7 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
               onUpdateDraft={(id, draft) => updateDraft.mutate({ leadId: id, dmDraft: draft })}
               onRoast={(id) => roastLead.mutate({ leadId: id })}
               onGenerateComment={(id) => generateComment.mutate({ leadId: id })}
+              onSendComment={(id) => sendComment.mutate({ leadId: id })}
             />
           ))}
         </div>

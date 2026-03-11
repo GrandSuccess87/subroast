@@ -708,6 +708,50 @@ Return JSON with this EXACT structure:
       return { success: true };
     }),
 
+  // ── Send Comment to Reddit Thread ──────────────────────────────────────────
+
+  sendComment: protectedProcedure
+    .input(z.object({ leadId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const leads = await getOutreachLeadsByUserId(ctx.user.id);
+      const lead = leads.find((l) => l.id === input.leadId);
+      if (!lead) throw new TRPCError({ code: "NOT_FOUND" });
+      if (!lead.commentDraft) throw new TRPCError({ code: "PRECONDITION_FAILED", message: "Generate a comment draft first" });
+
+      const redditAccount = await getRedditAccountByUserId(ctx.user.id);
+      if (!redditAccount || redditAccount.isPaused) {
+        throw new TRPCError({ code: "PRECONDITION_FAILED", message: "Connect your Reddit account in Settings first" });
+      }
+
+      const accessToken = await getValidRedditToken(redditAccount);
+
+      // Build the Reddit post fullname (t3_<id>) from the URL or stored ID
+      // lead.redditPostId is the bare ID (e.g. "abc123"), fullname is "t3_abc123"
+      const thingId = lead.redditPostId.startsWith("t3_")
+        ? lead.redditPostId
+        : `t3_${lead.redditPostId}`;
+
+      try {
+        const { postRedditComment } = await import("../reddit");
+        await postRedditComment(accessToken, thingId, lead.commentDraft);
+
+        // Mark comment as sent in DB
+        const db = await getDb();
+        if (db) {
+          const { outreachLeads: leadsTable } = await import("../../drizzle/schema");
+          await db
+            .update(leadsTable)
+            .set({ commentSentAt: Date.now() } as any)
+            .where(eq(leadsTable.id, input.leadId));
+        }
+
+        return { success: true, sent: true };
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
+        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: `Comment failed: ${msg}` });
+      }
+    }),
+
   // ── Generate Public Comment Draft ─────────────────────────────────────────
 
   generateComment: protectedProcedure

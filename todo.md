@@ -212,3 +212,9 @@
 - [ ] Register /scheduled route in App.tsx
 - [ ] Add animated step progress bar to Roast & Score flow: "Analyzing post..." → "Scoring fit & urgency..." → "Done"
 - [ ] Add animated step progress bar to Generate DM flow: "Reading post..." → "Crafting personalized DM..." → "Done"
+
+## Sidebar Badge + Comment Flow (v5.7)
+- [x] Add pending post count badge to Scheduled Posts sidebar nav item
+- [x] Add animated progress indicator to Draft Comment flow
+- [x] Change "Draft Comment" button to "Send Comment" once commentDraft exists
+- [x] Add sendComment tRPC procedure to post comment to Reddit thread
