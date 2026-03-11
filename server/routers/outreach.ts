@@ -14,9 +14,30 @@ import {
   updateOutreachLeadStatus,
   upsertOutreachLead,
   getDb,
+  getRedditAccountByUserId,
+  incrementDmCount,
 } from "../db";
+import { checkCanDm } from "../rateLimiter";
+import { refreshRedditToken, sendRedditDM } from "../reddit";
 import { users } from "../../drizzle/schema";
 import { eq } from "drizzle-orm";
+
+async function getValidRedditToken(account: {
+  id: number;
+  accessToken: string;
+  refreshToken: string;
+  tokenExpiresAt: number;
+}): Promise<string> {
+  const { updateRedditAccountTokens } = await import("../db");
+  const now = Date.now();
+  if (account.tokenExpiresAt - now < 5 * 60 * 1000) {
+    const tokens = await refreshRedditToken(account.refreshToken);
+    const newExpiry = now + tokens.expires_in * 1000;
+    await updateRedditAccountTokens(account.id, tokens.access_token, newExpiry);
+    return tokens.access_token;
+  }
+  return account.accessToken;
+}
 
 // ─── Reddit Public Search ─────────────────────────────────────────────────────
 
@@ -423,14 +444,39 @@ Return JSON: { "dm": "the DM message text" }`;
       const content = typeof raw === "string" ? raw : JSON.stringify(raw);
       const parsed = JSON.parse(content) as { dm: string };
 
+      // Save draft first so it's never lost
       await updateOutreachLeadStatus(input.leadId, "dm_generated", { dmDraft: parsed.dm });
 
-      // If auto_send mode, queue it
-      if (campaign.reviewMode === "auto_send") {
-        await updateOutreachLeadStatus(input.leadId, "queued");
+      // ── Attempt immediate send ──────────────────────────────────────────────
+      const redditAccount = await getRedditAccountByUserId(ctx.user.id);
+
+      if (!redditAccount || redditAccount.isPaused) {
+        // No Reddit account connected — save draft for manual review
+        return { success: true, dm: parsed.dm, sent: false, queued: false, reason: "no_reddit_account" };
       }
 
-      return { success: true, dm: parsed.dm, autoQueued: campaign.reviewMode === "auto_send" };
+      const { allowed, reason: rateLimitReason } = await checkCanDm(redditAccount.id, ctx.user.id);
+
+      if (!allowed) {
+        // Rate limit hit — queue for background delivery
+        await updateOutreachLeadStatus(input.leadId, "queued");
+        return { success: true, dm: parsed.dm, sent: false, queued: true, reason: rateLimitReason ?? "rate_limited" };
+      }
+
+      // Send immediately
+      try {
+        const accessToken = await getValidRedditToken(redditAccount);
+        const subject = `Re: ${lead.postTitle}`.slice(0, 100);
+        await sendRedditDM(accessToken, lead.authorUsername, subject, parsed.dm);
+        const now = Date.now();
+        await updateOutreachLeadStatus(input.leadId, "sent", { sentAt: now });
+        await incrementDmCount(redditAccount.id);
+        return { success: true, dm: parsed.dm, sent: true, queued: false, reason: null };
+      } catch (sendErr: unknown) {
+        const errMsg = sendErr instanceof Error ? sendErr.message : String(sendErr);
+        // Send failed — keep draft, surface error to user
+        return { success: true, dm: parsed.dm, sent: false, queued: false, reason: `send_failed: ${errMsg}` };
+      }
     }),
 
   // ── Lead Actions ───────────────────────────────────────────────────────────

@@ -188,3 +188,11 @@
 - [x] Rewrite generateDm system prompt: no product mentions, no pitching, conversation-first
 - [x] Rewrite generateDm user prompt: reference specific post details, share insight, end with follow-up questions, 180 word limit
 - [x] Campaign offering field now used as sender context only (not pitched in the DM)
+
+## Immediate DM Send (v5.4)
+- [x] generateDm now attempts immediate send after AI generation (no queue delay)
+- [x] Rate limit check inline: if limit hit, falls back to queue automatically
+- [x] No Reddit account connected: saves draft, returns reason "no_reddit_account"
+- [x] Send failure: saves draft, surfaces error message to user
+- [x] DmCampaigns.tsx toast updated: "DM sent!" / "queued" / "draft saved" based on result
+- [x] TypeScript clean, 69 tests passing

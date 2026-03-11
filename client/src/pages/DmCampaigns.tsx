@@ -704,7 +704,17 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
 
   const generateDm = trpc.outreach.generateDm.useMutation({
     onSuccess: (data) => {
-      toast.success(data.autoQueued ? "DM drafted and queued!" : "DM draft ready — review it below");
+      if (data.sent) {
+        toast.success("DM sent!");
+      } else if (data.queued) {
+        toast.success("Rate limit reached — DM queued for delivery shortly");
+      } else if (data.reason === "no_reddit_account") {
+        toast.info("Draft saved — connect Reddit in Settings to send");
+      } else if (data.reason?.startsWith("send_failed")) {
+        toast.error(`Draft saved, but send failed: ${data.reason.replace("send_failed: ", "")}`);
+      } else {
+        toast.success("DM draft ready — review it below");
+      }
       utils.outreach.getLeads.invalidate({ campaignId: campaign.id });
     },
     onError: (err) => toast.error(err.message),
