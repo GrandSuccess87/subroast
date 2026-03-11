@@ -32,7 +32,7 @@ import {
   XCircle,
   Zap,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLocation } from "wouter";
 import { toast } from "sonner";
 
@@ -435,6 +435,39 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
   );
 }
 
+// ─── Animated step progress indicator ───────────────────────────────────────
+function ProgressSteps({ steps, currentStep }: { steps: string[]; currentStep: number }) {
+  return (
+    <div className="flex items-center gap-1.5 py-0.5">
+      {steps.map((label, i) => {
+        const done = i < currentStep;
+        const active = i === currentStep;
+        return (
+          <div key={i} className="flex items-center gap-1">
+            <div className={`flex items-center gap-1 text-[10px] transition-all duration-300 ${
+              done ? "text-primary" : active ? "text-foreground" : "text-muted-foreground/40"
+            }`}>
+              {done ? (
+                <CheckCircle2 className="w-3 h-3 text-primary shrink-0" />
+              ) : active ? (
+                <Loader2 className="w-3 h-3 animate-spin shrink-0" />
+              ) : (
+                <div className="w-3 h-3 rounded-full border border-muted-foreground/30 shrink-0" />
+              )}
+              <span className={active ? "font-medium" : ""}>{label}</span>
+            </div>
+            {i < steps.length - 1 && (
+              <div className={`w-3 h-px transition-all duration-500 ${
+                done ? "bg-primary" : "bg-border"
+              }`} />
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue, onUpdateDraft, onRoast, onGenerateComment }: {
   lead: Lead;
   onGenerateDm: (id: number) => void;
@@ -452,6 +485,36 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
   const [draftText, setDraftText] = useState(lead.dmDraft ?? "");
   const [copiedDm, setCopiedDm] = useState(false);
   const [copiedComment, setCopiedComment] = useState(false);
+  const [roastStep, setRoastStep] = useState<number | null>(null);
+  const [dmStep, setDmStep] = useState<number | null>(null);
+  const roastTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const dmTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Cleanup timers on unmount
+  useEffect(() => () => {
+    if (roastTimerRef.current) clearInterval(roastTimerRef.current);
+    if (dmTimerRef.current) clearInterval(dmTimerRef.current);
+  }, []);
+
+  const startRoastProgress = () => {
+    setRoastStep(0);
+    let step = 0;
+    roastTimerRef.current = setInterval(() => {
+      step++;
+      if (step >= 2) { clearInterval(roastTimerRef.current!); roastTimerRef.current = null; }
+      setRoastStep(step);
+    }, 2200);
+  };
+
+  const startDmProgress = () => {
+    setDmStep(0);
+    let step = 0;
+    dmTimerRef.current = setInterval(() => {
+      step++;
+      if (step >= 2) { clearInterval(dmTimerRef.current!); dmTimerRef.current = null; }
+      setDmStep(step);
+    }, 2500);
+  };
 
   const isRoasted = lead.fitScore != null;
   const isActionable = lead.status === "new" || lead.status === "dm_generated";
@@ -606,29 +669,43 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
 
         {/* ── Action row ── */}
         <div className="flex items-center gap-2 flex-wrap pt-1 border-t border-border/50">
-          {/* Roast & Score */}
+          {/* Analyze Lead (was Roast & Score) */}
           {!isRoasted && isActionable && (
-            <Button
-              size="sm"
-              onClick={() => onRoast(lead.id)}
-              className="h-7 px-2.5 text-[10px] bg-primary text-primary-foreground hover:bg-primary/90 gap-1"
-            >
-              <Flame className="w-3 h-3" />
-              Roast & Score
-            </Button>
+            roastStep !== null ? (
+              <ProgressSteps
+                steps={["Reading post", "Scoring fit & urgency", "Done"]}
+                currentStep={roastStep}
+              />
+            ) : (
+              <Button
+                size="sm"
+                onClick={() => { startRoastProgress(); onRoast(lead.id); }}
+                className="h-7 px-2.5 text-[10px] bg-primary text-primary-foreground hover:bg-primary/90 gap-1"
+              >
+                <TrendingUp className="w-3 h-3" />
+                Analyze Lead
+              </Button>
+            )
           )}
 
           {/* Draft DM */}
           {isActionable && !lead.dmDraft && (
-            <Button
-              size="sm"
-              onClick={() => onGenerateDm(lead.id)}
-              variant="outline"
-              className="h-7 px-2.5 text-[10px] border-border gap-1"
-            >
-              <Sparkles className="w-3 h-3" />
-              Draft DM
-            </Button>
+            dmStep !== null ? (
+              <ProgressSteps
+                steps={["Reading post", "Crafting personalized DM", "Done"]}
+                currentStep={dmStep}
+              />
+            ) : (
+              <Button
+                size="sm"
+                onClick={() => { startDmProgress(); onGenerateDm(lead.id); }}
+                variant="outline"
+                className="h-7 px-2.5 text-[10px] border-border gap-1"
+              >
+                <Sparkles className="w-3 h-3" />
+                Draft DM
+              </Button>
+            )
           )}
 
           {/* Send DM immediately */}

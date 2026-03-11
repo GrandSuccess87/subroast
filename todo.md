@@ -205,3 +205,10 @@
 - [x] AI optimal timing: factor in subreddit peak hours, day of week, post type (question/story/resource)
 - [x] Rate limit enforcement: respect 5 posts/day, 30min cooldown between posts
 - [x] UI feedback: show "Posting now..." / "Scheduled for X:XXpm EST" / "Rate limited — try again in Xmin"
+
+## Scheduled Posts Page + Progress Indicators (v5.6)
+- [ ] Create ScheduledPosts.tsx page — list all scheduled posts with time, subreddit, title, status, cancel button
+- [ ] Add "Scheduled Posts" nav item to DashboardLayout sidebar under COMPOSE section
+- [ ] Register /scheduled route in App.tsx
+- [ ] Add animated step progress bar to Roast & Score flow: "Analyzing post..." → "Scoring fit & urgency..." → "Done"
+- [ ] Add animated step progress bar to Generate DM flow: "Reading post..." → "Crafting personalized DM..." → "Done"

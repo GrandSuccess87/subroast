@@ -61,6 +61,7 @@ const NAV_SECTIONS: NavSection[] = [
     title: "Compose",
     items: [
       { icon: Sparkles, label: "Draft & Roast", path: "/dashboard/roast" },
+      { icon: CalendarClock, label: "Scheduled Posts", path: "/dashboard/schedule" },
     ],
   },
   {
