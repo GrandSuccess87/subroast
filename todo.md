@@ -218,3 +218,6 @@
 - [x] Add animated progress indicator to Draft Comment flow
 - [x] Change "Draft Comment" button to "Send Comment" once commentDraft exists
 - [x] Add sendComment tRPC procedure to post comment to Reddit thread
+
+## New Signup Email Notification (v5.8)
+- [x] Send email to tessa.anderson@blackvectorhorizon.solutions on new user signup
