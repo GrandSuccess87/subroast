@@ -61,7 +61,7 @@ export function registerStripeWebhook(app: Express) {
                 .set({
                   stripeCustomerId: customerId,
                   stripeSubscriptionId: subscriptionId ?? undefined,
-                  plan: "trial",
+                  plan: planKey, // set to actual plan (growth/starter) so UI shows correct state
                   subscriptionStatus: "trialing",
                   trialStartAt: now,
                   trialEndsAt: trialEnd,
@@ -73,6 +73,7 @@ export function registerStripeWebhook(app: Express) {
             break;
           }
 
+          case "customer.subscription.created":
           case "customer.subscription.updated": {
             const sub = event.data.object as import("stripe").Stripe.Subscription;
             const customerId = sub.customer as string;
@@ -91,16 +92,23 @@ export function registerStripeWebhook(app: Express) {
                   ? status
                   : "none" as const;
 
+              // For trialing status, set plan to the actual plan key (growth/starter) so UI knows which plan
+              // For active status, also set to planKey
+              // For canceled/past_due, set to "none"
+              const newPlan = (status === "active" || status === "trialing") ? planKey : "none";
+              const trialEndMs = sub.trial_end ? sub.trial_end * 1000 : null;
+
               await db
                 .update(users)
                 .set({
                   stripeSubscriptionId: sub.id,
-                  plan: status === "active" ? planKey : status === "trialing" ? "trial" : "none",
+                  plan: newPlan,
                   subscriptionStatus: mappedStatus,
+                  ...(trialEndMs ? { trialEndsAt: trialEndMs } : {}),
                 })
                 .where(eq(users.stripeCustomerId, customerId));
 
-              console.log(`[Webhook] Subscription updated for customer ${customerId}: ${status}`);
+              console.log(`[Webhook] Subscription ${event.type} for customer ${customerId}: ${status} plan=${newPlan}`);
             }
             break;
           }

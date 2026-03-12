@@ -20,10 +20,7 @@ const PLANS = [
     bgColor: "bg-green-500/5",
     features: [
       "1 outreach campaign",
-      "5 posts per day",
-      "25 DMs per day",
       "AI Draft & Roast with virality score",
-      "AI auto-scheduling",
       "Lead discovery via Reddit search",
       "Lead sync: 2x daily",
       "AI-generated personalized DMs",
@@ -46,6 +43,7 @@ const PLANS = [
       "Everything in Starter",
       "Unlimited outreach campaigns",
       "Lead sync: every 4 hours (6x daily)",
+      "AI auto-scheduling (coming soon)",
       "DM template library (coming soon)",
       "Advanced analytics (coming soon)",
     ],

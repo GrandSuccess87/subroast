@@ -306,6 +306,30 @@ Rules:
       if (!c || c.userId !== ctx.user.id) throw new TRPCError({ code: "NOT_FOUND" });
       if (c.status !== "active") throw new TRPCError({ code: "PRECONDITION_FAILED", message: "Campaign is not active" });
 
+      // ── Daily sync limit ──────────────────────────────────────────────────────
+      // Get user plan to determine limit (growth = 6/day, others = 2/day)
+      const db = await getDb();
+      if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+      const userRows = await db.select({ plan: users.plan }).from(users).where(eq(users.id, ctx.user.id)).limit(1);
+      const userPlan = userRows[0]?.plan ?? "none";
+      const dailyLimit = userPlan === "growth" ? 6 : 2;
+
+      const nowMs = Date.now();
+      const todayUtcStart = new Date();
+      todayUtcStart.setUTCHours(0, 0, 0, 0);
+      const todayStartMs = todayUtcStart.getTime();
+
+      // Reset counter if it's a new UTC day
+      const lastResetAt = c.dailySyncsResetAt ?? 0;
+      const syncsUsed = lastResetAt < todayStartMs ? 0 : (c.dailySyncsUsed ?? 0);
+
+      if (syncsUsed >= dailyLimit) {
+        throw new TRPCError({
+          code: "TOO_MANY_REQUESTS",
+          message: `Daily sync limit reached (${dailyLimit}x per day on your plan). Resets at midnight UTC.`,
+        });
+      }
+
       const subreddits = JSON.parse(c.subreddits) as string[];
       const keywords = JSON.parse(c.keywords) as string[];
 
@@ -341,11 +365,13 @@ Rules:
         }
       }
 
-      // Update campaign lastSyncAt and leadsFound
+      // Update campaign lastSyncAt, leadsFound, and daily sync counter
       const updatedLeadsFound = c.leadsFound + newLeads;
       await updateOutreachCampaign(input.campaignId, {
-        lastSyncAt: Date.now(),
+        lastSyncAt: nowMs,
         leadsFound: updatedLeadsFound,
+        dailySyncsUsed: syncsUsed + 1,
+        dailySyncsResetAt: lastResetAt < todayStartMs ? todayStartMs : lastResetAt,
       });
 
       // Send email notification for new leads
@@ -384,6 +410,29 @@ Rules:
       ...l,
       matchedKeywords: l.matchedKeywords ? (JSON.parse(l.matchedKeywords) as string[]) : [],
     }));
+  }),
+
+  /** Returns daily sync usage across all campaigns for the current user */
+  getSyncStats: protectedProcedure.query(async ({ ctx }) => {
+    const campaigns = await getOutreachCampaignsByUserId(ctx.user.id);
+    const db = await getDb();
+    if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+    const userRows = await db.select({ plan: users.plan }).from(users).where(eq(users.id, ctx.user.id)).limit(1);
+    const userPlan = userRows[0]?.plan ?? "none";
+    const dailyLimit = userPlan === "growth" ? 6 : 2;
+
+    const todayUtcStart = new Date();
+    todayUtcStart.setUTCHours(0, 0, 0, 0);
+    const todayStartMs = todayUtcStart.getTime();
+
+    // Sum syncs used today across all campaigns
+    const syncsToday = campaigns.reduce((sum, c) => {
+      const lastResetAt = c.dailySyncsResetAt ?? 0;
+      const used = lastResetAt < todayStartMs ? 0 : (c.dailySyncsUsed ?? 0);
+      return sum + used;
+    }, 0);
+
+    return { syncsToday, dailyLimit, userPlan };
   }),
 
   // ── AI DM Generation ───────────────────────────────────────────────────────

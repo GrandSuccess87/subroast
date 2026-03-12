@@ -1221,8 +1221,8 @@ export default function DmCampaigns() {
               </p>
             </div>
             {!showNewForm && (() => {
-              const isGrowth = subStatus?.plan === "growth";
-              const atLimit = !isGrowth && campaigns.length >= 1;
+              // campaignLimit is null for growth (unlimited), 1 for starter/trial
+              const atLimit = subStatus?.campaignLimit !== null && campaigns.length >= (subStatus?.campaignLimit ?? 1);
               if (atLimit) return null;
               return (
                 <Button onClick={() => setShowNewForm(true)} size="sm" className="gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 shrink-0">
@@ -1233,8 +1233,8 @@ export default function DmCampaigns() {
             })()}
           </div>
           {!showNewForm && (() => {
-            const isGrowth = subStatus?.plan === "growth";
-            const atLimit = !isGrowth && campaigns.length >= 1;
+            // campaignLimit is null for growth (unlimited), 1 for starter/trial
+            const atLimit = subStatus?.campaignLimit !== null && campaigns.length >= (subStatus?.campaignLimit ?? 1);
             if (!atLimit) return null;
             return (
               <div className="flex items-center gap-3 p-3 rounded-lg border border-amber-500/20 bg-amber-500/5">

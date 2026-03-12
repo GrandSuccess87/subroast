@@ -183,6 +183,8 @@ export const outreachCampaigns = mysqlTable("outreach_campaigns", {
   lastSyncAt: bigint("lastSyncAt", { mode: "number" }),
   leadsFound: int("leadsFound").default(0).notNull(),
   dmsSent: int("dmsSent").default(0).notNull(),
+  dailySyncsUsed: int("dailySyncsUsed").default(0).notNull(),   // resets each UTC day
+  dailySyncsResetAt: bigint("dailySyncsResetAt", { mode: "number" }), // unix ms of last reset
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });

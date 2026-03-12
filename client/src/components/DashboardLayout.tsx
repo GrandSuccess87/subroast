@@ -155,6 +155,10 @@ function DashboardLayoutContent({
     refetchInterval: 60_000,
   });
 
+  const { data: syncStats } = trpc.outreach.getSyncStats.useQuery(undefined, {
+    refetchInterval: 60_000,
+  });
+
   const { data: subStatus } = trpc.subscription.getStatus.useQuery(undefined, {
     refetchInterval: 5 * 60_000,
   });
@@ -290,6 +294,28 @@ function DashboardLayoutContent({
                     />
                   </div>
                 </div>
+                {syncStats && (
+                  <div>
+                    <div className="flex justify-between text-[11px] mb-1">
+                      <span className="text-sidebar-foreground/50">Syncs today</span>
+                      <span className={`font-medium ${
+                        syncStats.syncsToday >= syncStats.dailyLimit
+                          ? "text-amber-400"
+                          : "text-sidebar-foreground"
+                      }`}>
+                        {syncStats.syncsToday}/{syncStats.dailyLimit}
+                      </span>
+                    </div>
+                    <div className="h-1 rounded-full bg-sidebar-border overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all ${
+                          syncStats.syncsToday >= syncStats.dailyLimit ? "bg-amber-400" : "bg-primary"
+                        }`}
+                        style={{ width: `${Math.min(Math.round((syncStats.syncsToday / syncStats.dailyLimit) * 100), 100)}%` }}
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}
