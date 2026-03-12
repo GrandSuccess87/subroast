@@ -549,19 +549,6 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
   return (
     <Card className={`bg-card border-border transition-all ${lead.status === "skipped" ? "opacity-40" : ""}`}>
       <CardContent className="p-4 space-y-3">
-        {/* ── Chain progress bar — pinned at top when chaining ── */}
-        {isChaining && (
-          <div className="pb-1 border-b border-border/50">
-            <ProgressSteps
-              steps={["Reading", "Scoring", "Crafting DM", "DM ready", "Commenting", "Done"]}
-              currentStep={
-                roastStep !== null ? roastStep
-                : dmStep !== null ? dmStep + 2
-                : (commentStep ?? 0) + 4
-              }
-            />
-          </div>
-        )}
         {/* ── Header row ── */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap mb-1.5">
@@ -599,6 +586,20 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
           <p className="text-xs text-muted-foreground mt-1">
             u/{lead.authorUsername} · {new Date(lead.discoveredAt).toLocaleDateString()}
           </p>
+
+          {/* ── Chain progress bar — sits just below username/date when chaining ── */}
+          {isChaining && (
+            <div className="mt-2">
+              <ProgressSteps
+                steps={["Reading", "Scoring", "Crafting DM", "DM ready", "Commenting", "Done"]}
+                currentStep={
+                  roastStep !== null ? roastStep
+                  : dmStep !== null ? dmStep + 2
+                  : (commentStep ?? 0) + 4
+                }
+              />
+            </div>
+          )}
         </div>
 
         {/* ── Roast scores (Fit + Urgency only) ── */}
