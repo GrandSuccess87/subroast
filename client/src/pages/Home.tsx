@@ -900,70 +900,20 @@ export default function Home() {
 
             {/* Right: steps */}
             <div>
-              {[
-                {
-                  n: "I",
-                  title: "Roast your post",
-                  body: "Paste your draft. Receive a clarity score, a subreddit fit score, a virality score, a roast, and a rewritten version. Publish only when the numbers say you're ready.",
-                },
-                {
-                  n: "II",
-                  title: "Find leads & send outreach",
-                  body: "SubRoast monitors your target subreddits around the clock, scores each post by relevance, and drafts a personalized message for every prospect it identifies.",
-                },
-              ].map((step, i) => {
-                const ref = useFadeUp(i * 150);
-                return (
-                  <div
-                    key={step.n}
-                    ref={ref}
-                    className="fade-up grid grid-cols-[40px_1fr] gap-8 py-10"
-                    style={{
-                      borderBottom:
-                        i < 1 ? "0.5px solid oklch(0.16 0.004 280)" : "none",
-                    }}
-                  >
-                    <div
-                      style={{
-                        fontFamily: "var(--font-display)",
-                        fontSize: "1.5rem",
-                        fontWeight: 300,
-                        fontStyle: "italic",
-                        color: "oklch(0.72 0.12 75 / 0.4)",
-                        lineHeight: 1,
-                        paddingTop: "0.15rem",
-                      }}
-                    >
-                      {step.n}
-                    </div>
-                    <div>
-                      <h3
-                        style={{
-                          fontFamily: "var(--font-display)",
-                          fontSize: "1.35rem",
-                          fontWeight: 400,
-                          color: "oklch(0.93 0.010 80)",
-                          marginBottom: "0.75rem",
-                          lineHeight: 1.2,
-                        }}
-                      >
-                        {step.title}
-                      </h3>
-                      <p
-                        style={{
-                          fontFamily: "var(--font-sans)",
-                          fontSize: "0.875rem",
-                          fontWeight: 300,
-                          color: "oklch(0.50 0.006 80)",
-                          lineHeight: 1.75,
-                        }}
-                      >
-                        {step.body}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
+              <ProcessStep
+                n="I"
+                title="Roast your post"
+                body="Paste your draft. Receive a clarity score, a subreddit fit score, a virality score, a roast, and a rewritten version. Publish only when the numbers say you're ready."
+                hasBorder
+                delay={0}
+              />
+              <ProcessStep
+                n="II"
+                title="Find leads & send outreach"
+                body="SubRoast monitors your target subreddits around the clock, scores each post by relevance, and drafts a personalized message for every prospect it identifies."
+                hasBorder={false}
+                delay={150}
+              />
             </div>
           </div>
         </div>
@@ -1044,6 +994,69 @@ export default function Home() {
           </p>
         </div>
       </footer>
+    </div>
+  );
+}
+
+/* ── Process step (extracted to avoid hook-in-loop) ── */
+function ProcessStep({
+  n,
+  title,
+  body,
+  hasBorder,
+  delay = 0,
+}: {
+  n: string;
+  title: string;
+  body: string;
+  hasBorder: boolean;
+  delay?: number;
+}) {
+  const ref = useFadeUp(delay);
+  return (
+    <div
+      ref={ref}
+      className="fade-up grid grid-cols-[40px_1fr] gap-8 py-10"
+      style={{ borderBottom: hasBorder ? "0.5px solid oklch(0.16 0.004 280)" : "none" }}
+    >
+      <div
+        style={{
+          fontFamily: "var(--font-display)",
+          fontSize: "1.5rem",
+          fontWeight: 300,
+          fontStyle: "italic",
+          color: "oklch(0.72 0.12 75 / 0.4)",
+          lineHeight: 1,
+          paddingTop: "0.15rem",
+        }}
+      >
+        {n}
+      </div>
+      <div>
+        <h3
+          style={{
+            fontFamily: "var(--font-display)",
+            fontSize: "1.35rem",
+            fontWeight: 400,
+            color: "oklch(0.93 0.010 80)",
+            marginBottom: "0.75rem",
+            lineHeight: 1.2,
+          }}
+        >
+          {title}
+        </h3>
+        <p
+          style={{
+            fontFamily: "var(--font-sans)",
+            fontSize: "0.875rem",
+            fontWeight: 300,
+            color: "oklch(0.50 0.006 80)",
+            lineHeight: 1.75,
+          }}
+        >
+          {body}
+        </p>
+      </div>
     </div>
   );
 }
