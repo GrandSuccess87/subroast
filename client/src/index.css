@@ -157,4 +157,23 @@
   .btn-primary-glow {
     box-shadow: 0 0 16px oklch(0.65 0.19 145 / 0.3);
   }
+
+  /* Mobile typography scaling — bump up tiny text on small screens */
+  @media (max-width: 639px) {
+    /* Lead card and campaign text */
+    .text-\[10px\] { font-size: 11px !important; }
+    .text-\[11px\] { font-size: 12px !important; }
+    .text-\[10px\].uppercase { font-size: 10px !important; } /* keep labels small */
+    /* Body text */
+    .text-xs { font-size: 0.8rem !important; line-height: 1.4rem !important; }
+    /* Card titles and section headers */
+    .text-sm { font-size: 0.875rem !important; }
+    /* Page headings */
+    .text-base { font-size: 1rem !important; }
+    .text-lg { font-size: 1.125rem !important; }
+    /* Buttons — ensure tap targets are readable */
+    button, [role="button"] {
+      min-height: 36px;
+    }
+  }
 }

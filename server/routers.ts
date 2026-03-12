@@ -69,7 +69,12 @@ Return a JSON object with this EXACT structure:
     "tip": "One specific, actionable tip to increase virality"
   },
   "roast": "3-5 witty lines like a Redditor would say, separated by newlines",
+  "improved_title": "A compelling Reddit post title for the improved draft (max 300 chars)",
   "improved_draft": "Full rewritten version of the post/DM that would perform better on Reddit",
+  "improved_virality": {
+    "score": 78,
+    "tip": "What still could push this even higher"
+  },
   "recommended_subreddit": "The single best subreddit to post this in (without r/ prefix), based on the content and target audience",
   "subreddit_reasoning": "One sentence explaining why this subreddit is the best fit"
 }
@@ -110,11 +115,21 @@ For the virality score (1-100), consider: does the title ask a question (+15), i
                   additionalProperties: false,
                 },
                 roast: { type: "string" },
+                improved_title: { type: "string", description: "Compelling Reddit post title for the improved draft" },
                 improved_draft: { type: "string" },
+                improved_virality: {
+                  type: "object",
+                  properties: {
+                    score: { type: "integer", description: "Virality score 1-100 for the improved draft" },
+                    tip: { type: "string", description: "What could push this even higher" },
+                  },
+                  required: ["score", "tip"],
+                  additionalProperties: false,
+                },
                 recommended_subreddit: { type: "string", description: "Best subreddit without r/ prefix" },
                 subreddit_reasoning: { type: "string", description: "One sentence explaining the subreddit choice" },
               },
-              required: ["review", "virality", "roast", "improved_draft", "recommended_subreddit", "subreddit_reasoning"],
+              required: ["review", "virality", "roast", "improved_title", "improved_draft", "improved_virality", "recommended_subreddit", "subreddit_reasoning"],
               additionalProperties: false,
             },
           },
@@ -138,7 +153,12 @@ For the virality score (1-100), consider: does the title ask a question (+15), i
             tip: string;
           };
           roast: string;
+          improved_title: string;
           improved_draft: string;
+          improved_virality: {
+            score: number;
+            tip: string;
+          };
           recommended_subreddit: string;
           subreddit_reasoning: string;
         };

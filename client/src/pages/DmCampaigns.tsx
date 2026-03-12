@@ -470,7 +470,7 @@ function ProgressSteps({ steps, currentStep }: { steps: string[]; currentStep: n
   );
 }
 
-function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue, onUpdateDraft, onRoast, onGenerateComment, onSendComment, onMarkContacted }: {
+function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue, onUpdateDraft, onRoast, onGenerateComment, onSendComment, onMarkContacted, onReDraftDm }: {
   lead: Lead;
   onGenerateDm: (id: number) => void;
   onSendDm: (id: number) => void;
@@ -482,6 +482,7 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
   onGenerateComment: (id: number) => void;
   onSendComment: (id: number) => void;
   onMarkContacted: (id: number) => void;
+  onReDraftDm: (id: number) => void;
 }) {
   const [expandedDm, setExpandedDm] = useState(false);
   const [expandedComment, setExpandedComment] = useState(false);
@@ -613,19 +614,29 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
                 <Bot className="w-3 h-3" />
                 {expandedDm ? "Hide DM draft" : "View DM draft"}
               </button>
-              {/* Copy & Open DM — inline in DM section */}
-              <Button
-                size="sm"
-                onClick={() => {
-                  navigator.clipboard.writeText(lead.dmDraft!);
-                  window.open(`https://www.reddit.com/user/${lead.authorUsername}`, "_blank");
-                  toast.success("DM copied! Opening Reddit profile to send manually.");
-                }}
-                className="h-6 px-2 text-[10px] bg-primary text-primary-foreground hover:bg-primary/90 gap-1"
-              >
-                <Clipboard className="w-3 h-3" />
-                Copy & Open
-              </Button>
+              <div className="flex items-center gap-1.5">
+                {/* Re-draft */}
+                <button
+                  onClick={() => { startDmProgress(); onReDraftDm(lead.id); }}
+                  className="text-[10px] text-muted-foreground hover:text-primary transition-colors"
+                  title="Regenerate DM draft"
+                >
+                  Re-draft
+                </button>
+                {/* Copy & Open DM — inline in DM section */}
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    navigator.clipboard.writeText(lead.dmDraft!);
+                    window.open(`https://www.reddit.com/user/${lead.authorUsername}`, "_blank");
+                    toast.success("DM copied! Opening Reddit profile to send manually.");
+                  }}
+                  className="h-6 px-2 text-[10px] bg-primary text-primary-foreground hover:bg-primary/90 gap-1"
+                >
+                  <Clipboard className="w-3 h-3" />
+                  Copy & Open
+                </Button>
+              </div>
             </div>
             {expandedDm && (
               <div className="p-3 space-y-2">
@@ -705,8 +716,31 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
 
         {/* ── Action row ── */}
         <div className="flex items-center gap-2 flex-wrap pt-1 border-t border-border/50">
-          {/* Analyze Lead (was Roast & Score) */}
-          {!isRoasted && isActionable && (
+          {/* Analyze & Draft — combined single button when neither is done yet */}
+          {!isRoasted && isActionable && !lead.dmDraft && (
+            (roastStep !== null || dmStep !== null) ? (
+              <ProgressSteps
+                steps={["Reading post", "Scoring lead", "Crafting DM", "Done"]}
+                currentStep={roastStep !== null ? roastStep : (dmStep ?? 0) + 1}
+              />
+            ) : (
+              <Button
+                size="sm"
+                onClick={() => {
+                  startRoastProgress();
+                  onRoast(lead.id);
+                  // DM generation starts after roast completes via onSuccess chain in parent
+                }}
+                className="h-7 px-2.5 text-[10px] bg-primary text-primary-foreground hover:bg-primary/90 gap-1"
+              >
+                <Sparkles className="w-3 h-3" />
+                Analyze & Draft
+              </Button>
+            )
+          )}
+
+          {/* Analyze only — if DM already exists */}
+          {!isRoasted && isActionable && lead.dmDraft && (
             roastStep !== null ? (
               <ProgressSteps
                 steps={["Reading post", "Scoring fit & urgency", "Done"]}
@@ -716,7 +750,8 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
               <Button
                 size="sm"
                 onClick={() => { startRoastProgress(); onRoast(lead.id); }}
-                className="h-7 px-2.5 text-[10px] bg-primary text-primary-foreground hover:bg-primary/90 gap-1"
+                variant="outline"
+                className="h-7 px-2.5 text-[10px] border-border gap-1"
               >
                 <TrendingUp className="w-3 h-3" />
                 Analyze Lead
@@ -724,8 +759,8 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
             )
           )}
 
-          {/* Draft DM */}
-          {isActionable && !lead.dmDraft && (
+          {/* Draft DM only — if already roasted but no DM yet */}
+          {isRoasted && isActionable && !lead.dmDraft && (
             dmStep !== null ? (
               <ProgressSteps
                 steps={["Reading post", "Crafting personalized DM", "Done"]}
@@ -1055,6 +1090,7 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
               onGenerateComment={(id) => generateComment.mutate({ leadId: id })}
               onSendComment={(id) => sendComment.mutate({ leadId: id })}
               onMarkContacted={(id) => markContacted.mutate({ leadId: id, stage: "replied" })}
+              onReDraftDm={(id) => generateDm.mutate({ leadId: id })}
             />
           ))}
         </div>

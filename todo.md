@@ -232,3 +232,10 @@
 - [ ] Onboarding: mark Reddit step as coming soon
 - [ ] LeadCard: replace Send DM/Comment with Copy & Open, add Mark as Contacted
 - [ ] Draft & Roast: add Ready to Post panel with AI subreddit + Copy & Open
+
+## v5.11 Features
+- [ ] Add Re-draft button for existing DM drafts in LeadCard
+- [ ] Combine Analyze Lead + Draft DM into single "Analyze & Draft" button
+- [ ] Add title field to Draft & Roast optimized post output
+- [ ] Fix virality score update when switching to Improved tab
+- [x] Increase text size on mobile across key pages

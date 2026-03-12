@@ -32,7 +32,12 @@ type AnalysisResult = {
     tip: string;
   };
   roast: string;
+  improved_title: string;
   improved_draft: string;
+  improved_virality: {
+    score: number;
+    tip: string;
+  };
   recommended_subreddit: string;
   subreddit_reasoning: string;
 };
@@ -254,16 +259,20 @@ export default function DraftRoast() {
 
             {result && (
               <div className="space-y-3">
-                {/* Virality Score — always visible at top */}
+                {/* Virality Score — updates when switching to Improved tab */}
                 <Card className="bg-card border-border overflow-hidden">
                   <div className="flex items-center gap-4 p-4">
-                    <ViralityGauge score={result.virality.score} />
+                    <ViralityGauge score={activeTab === "improved" ? result.improved_virality.score : result.virality.score} />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-1.5 mb-1.5">
                         <TrendingUp className="w-3.5 h-3.5 text-primary" />
-                        <p className="text-xs font-semibold text-foreground uppercase tracking-wide">Virality Tip</p>
+                        <p className="text-xs font-semibold text-foreground uppercase tracking-wide">
+                          {activeTab === "improved" ? "Improved Score" : "Virality Tip"}
+                        </p>
                       </div>
-                      <p className="text-xs text-muted-foreground leading-relaxed">{result.virality.tip}</p>
+                      <p className="text-xs text-muted-foreground leading-relaxed">
+                        {activeTab === "improved" ? result.improved_virality.tip : result.virality.tip}
+                      </p>
                       <div className="flex items-center gap-1.5 mt-2">
                         <Zap className="w-3 h-3 text-amber-400" />
                         <p className="text-[10px] text-muted-foreground/70">Apply the tip, then re-analyze for a higher score</p>
@@ -360,15 +369,30 @@ export default function DraftRoast() {
                         <Button
                           size="sm"
                           variant="ghost"
-                          onClick={() => copyToClipboard(result.improved_draft)}
+                          onClick={() => copyToClipboard(`${result.improved_title}\n\n${result.improved_draft}`)}
                           className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground"
                         >
                           <ClipboardCopy className="w-3.5 h-3.5 mr-1" />
-                          Copy
+                          Copy all
                         </Button>
                       </div>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="space-y-3">
+                      {/* Suggested title */}
+                      <div className="p-3 rounded-lg bg-primary/5 border border-primary/20">
+                        <p className="text-[10px] text-primary/70 uppercase tracking-wide font-semibold mb-1">Suggested Title</p>
+                        <div className="flex items-start justify-between gap-2">
+                          <p className="text-sm font-medium text-foreground leading-snug flex-1">{result.improved_title}</p>
+                          <button
+                            onClick={() => copyToClipboard(result.improved_title)}
+                            className="text-muted-foreground hover:text-foreground transition-colors shrink-0 mt-0.5"
+                            title="Copy title"
+                          >
+                            <ClipboardCopy className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                      {/* Body */}
                       <div className="p-4 rounded-lg bg-muted/30 border border-border">
                         <p className="text-sm text-foreground/90 leading-relaxed whitespace-pre-wrap">
                           {result.improved_draft}
@@ -397,19 +421,25 @@ export default function DraftRoast() {
                         <p className="text-[11px] text-muted-foreground mt-0.5 leading-relaxed">{result.subreddit_reasoning}</p>
                       </div>
                     </div>
-                    <div className="p-3 rounded-lg bg-muted/20 border border-border">
-                      <p className="text-xs text-muted-foreground mb-1 font-medium">Post content (improved draft)</p>
-                      <p className="text-xs text-foreground/80 leading-relaxed line-clamp-3 whitespace-pre-wrap">
-                        {result.improved_draft}
-                      </p>
+                    <div className="p-3 rounded-lg bg-muted/20 border border-border space-y-2">
+                      <div>
+                        <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wide mb-0.5">Title</p>
+                        <p className="text-xs font-semibold text-foreground leading-snug">{result.improved_title}</p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wide mb-0.5">Body</p>
+                        <p className="text-xs text-foreground/80 leading-relaxed line-clamp-3 whitespace-pre-wrap">
+                          {result.improved_draft}
+                        </p>
+                      </div>
                     </div>
                     <Button
                       className="w-full gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
                       onClick={() => {
                         const sub = result.recommended_subreddit;
-                        navigator.clipboard.writeText(result.improved_draft);
+                        navigator.clipboard.writeText(`${result.improved_title}\n\n${result.improved_draft}`);
                         window.open(`https://www.reddit.com/r/${sub}/submit`, "_blank");
-                        toast.success(`Post copied! Opening r/${sub} to submit.`);
+                        toast.success(`Title + post copied! Opening r/${sub} to submit.`);
                       }}
                     >
                       <ClipboardCopy className="w-4 h-4" />
