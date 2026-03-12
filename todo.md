@@ -333,3 +333,14 @@
 - [x] Apply luxury tokens to DashboardLayout sidebar (obsidian surface, gold active state, hairline borders)
 - [x] Apply Cormorant Garamond to dashboard "Hey [Name]" greeting and section headings
 - [x] Apply JetBrains Mono to all stat numbers in dashboard
+
+## Visual Differentiation from PRSPERA (v5.29)
+- [x] Shift accent from champagne gold to platinum/silver (oklch 0.75 0.04 220)
+- [x] Warm background from pure obsidian to dark warm grey (oklch 0.09 0.008 60)
+- [x] Update all accent references in index.css (primary, ring, sidebar-primary, chart-1, btn glow)
+- [x] Update landing page: all gold accent references to platinum
+- [x] Update dashboard: active state, progress bars, badges to platinum
+- [x] Add thin horizontal rule ABOVE section eyebrows (not below headlines)
+- [x] Increase letter-spacing on uppercase labels to 0.3em+
+- [x] Generate new logo: replace green with platinum/silver tones
+- [x] Upload new logo to CDN and update DashboardLayout + index.html favicon reference

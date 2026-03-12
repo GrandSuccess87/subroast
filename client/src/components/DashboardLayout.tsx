@@ -221,7 +221,7 @@ function DashboardLayoutContent({
               {!isCollapsed && (
                 <div className="flex items-center gap-2 min-w-0">
                   <img
-                    src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663208942813/BEbgHhBeLfKnEwiD.png"
+                    src="https://d2xsxph8kpxj0f.cloudfront.net/310519663208942813/D6eMQgvSZZr9tsyS9zVhzn/subroast-logo-debossed_490a86ef.png"
                     alt="SubRoast"
                     className="w-6 h-6 rounded-md shrink-0 object-cover"
                   />
@@ -293,7 +293,7 @@ function DashboardLayoutContent({
                   <div className="overflow-hidden" style={{ height: '0.5px', background: 'oklch(0.20 0.004 280)' }}>
                     <div
                       className="h-full transition-all"
-                      style={{ width: `${Math.max(leadsPct, 2)}%`, background: 'oklch(0.72 0.12 75 / 0.7)', borderRadius: 0 }}
+                      style={{ width: `${Math.max(leadsPct, 2)}%`, background: 'oklch(0.75 0.04 220 / 0.7)', borderRadius: 0 }}
                     />
                   </div>
                 </div>
@@ -303,7 +303,7 @@ function DashboardLayoutContent({
                       <span className="text-sidebar-foreground/50">Syncs today</span>
                       <span className={`font-medium ${
                         syncStats.syncsToday >= syncStats.dailyLimit
-                          ? "text-amber-400"
+                          ? "text-orange-400"
                           : "text-sidebar-foreground"
                       }`}>
                         {syncStats.syncsToday}/{syncStats.dailyLimit}
@@ -312,7 +312,7 @@ function DashboardLayoutContent({
                     <div className="overflow-hidden" style={{ height: '0.5px', background: 'oklch(0.20 0.004 280)' }}>
                       <div
                         className="h-full transition-all"
-                        style={{ width: `${Math.min(Math.round((syncStats.syncsToday / syncStats.dailyLimit) * 100), 100)}%`, background: syncStats.syncsToday >= syncStats.dailyLimit ? 'oklch(0.65 0.18 65)' : 'oklch(0.72 0.12 75 / 0.7)', borderRadius: 0 }}
+                        style={{ width: `${Math.min(Math.round((syncStats.syncsToday / syncStats.dailyLimit) * 100), 100)}%`, background: syncStats.syncsToday >= syncStats.dailyLimit ? 'oklch(0.65 0.18 45)' : 'oklch(0.75 0.04 220 / 0.7)', borderRadius: 0 }}
                       />
                     </div>
                   </div>
