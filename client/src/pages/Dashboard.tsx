@@ -85,20 +85,14 @@ export default function Dashboard() {
           <p className="text-sm text-muted-foreground mt-1">Here's your Reddit activity overview.</p>
         </div>
 
-        {/* Reddit not connected */}
+        {/* Reddit API coming soon badge */}
         {!account && (
-          <div
-            className="flex items-start gap-3 p-4 rounded-xl bg-amber-500/5 border border-amber-500/20 cursor-pointer hover:bg-amber-500/10 transition-colors"
-            onClick={() => setLocation("/dashboard/settings")}
-          >
-            <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-            <div className="flex-1">
-              <p className="text-sm font-medium text-amber-300">Reddit not connected</p>
-              <p className="text-xs text-amber-300/60 mt-0.5">
-                Connect your Reddit account in Settings to start posting and sending DMs.
-              </p>
-            </div>
-            <ArrowRight className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+          <div className="flex items-center gap-3 p-3 rounded-xl bg-muted/40 border border-border">
+            <div className="w-2 h-2 rounded-full bg-primary/60 shrink-0" />
+            <p className="text-xs text-muted-foreground">
+              <span className="font-medium text-foreground">Reddit direct posting coming soon.</span>{" "}
+              Use Copy &amp; Open to send DMs and comments manually in the meantime.
+            </p>
           </div>
         )}
 

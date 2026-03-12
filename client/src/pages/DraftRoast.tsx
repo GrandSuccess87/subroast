@@ -8,7 +8,6 @@ import { trpc } from "@/lib/trpc";
 import {
   CheckCircle2,
   ClipboardCopy,
-  Clock,
   Flame,
   Loader2,
   Rocket,
@@ -110,7 +109,8 @@ function ViralityGauge({ score }: { score: number }) {
   );
 }
 
-type PostNowResult = { action: "posted" | "scheduled"; postUrl: string | null; scheduledAt: number | null; reasoning: string; message: string };
+// PostNowResult type — kept for when Reddit API is re-enabled (see REDDIT_INTEGRATION.md)
+// type PostNowResult = { action: "posted" | "scheduled"; postUrl: string | null; scheduledAt: number | null; reasoning: string; message: string };
 
 export default function DraftRoast() {
   const [, setLocation] = useLocation();
@@ -119,7 +119,6 @@ export default function DraftRoast() {
   const [title, setTitle] = useState("");
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [activeTab, setActiveTab] = useState<"review" | "roast" | "improved">("review");
-  const [postResult, setPostResult] = useState<PostNowResult | null>(null);
 
   const analyzeMutation = trpc.roast.analyze.useMutation({
     onSuccess: (data: AnalysisResult) => {
@@ -132,26 +131,10 @@ export default function DraftRoast() {
     },
   });
 
-  const postNowMutation = trpc.schedule.postNow.useMutation({
-    onSuccess: (data) => {
-      setPostResult(data);
-      if (data.action === "posted") {
-        toast.success("Posted to Reddit!");
-      } else {
-        toast.success(data.message);
-      }
-    },
-    onError: (err: { message: string }) => {
-      toast.error(err.message);
-    },
-  });
-
-  const handlePostNow = () => {
-    const postTitle = title.trim() || content.trim().split("\n")[0].slice(0, 200);
-    if (!postTitle) { toast.error("Add a title for your post"); return; }
-    if (!subreddit.trim()) { toast.error("Enter a subreddit"); return; }
-    postNowMutation.mutate({ subreddit: subreddit.trim(), title: postTitle, body: content.trim() || undefined });
-  };
+  // COMMENTED OUT: Post at Optimal Time + handlePostNow — requires Reddit API approval
+  // Re-enable when Reddit API is approved. See REDDIT_INTEGRATION.md for full details.
+  // const postNowMutation = trpc.schedule.postNow.useMutation({ ... });
+  // const handlePostNow = () => { ... };
 
   const handleAnalyze = () => {
     if (!content.trim()) {
@@ -242,52 +225,7 @@ export default function DraftRoast() {
               </CardContent>
             </Card>
 
-            {/* Post at Optimal Time */}
-            <Button
-              onClick={handlePostNow}
-              disabled={postNowMutation.isPending || !content.trim()}
-              variant="outline"
-              className="w-full border-primary/40 text-primary hover:bg-primary/10 gap-2"
-            >
-              {postNowMutation.isPending ? (
-                <><Loader2 className="w-4 h-4 animate-spin" /> Finding optimal time...</>
-              ) : (
-                <><Rocket className="w-4 h-4" /> Post at Optimal Time</>
-              )}
-            </Button>
-
-            {/* Post result feedback */}
-            {postResult && (
-              <div className={`p-3 rounded-lg border text-xs ${
-                postResult.action === "posted"
-                  ? "bg-primary/5 border-primary/20"
-                  : "bg-blue-400/5 border-blue-400/20"
-              }`}>
-                <div className="flex items-center gap-2 mb-1">
-                  {postResult.action === "posted" ? (
-                    <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
-                  ) : (
-                    <Clock className="w-3.5 h-3.5 text-blue-400" />
-                  )}
-                  <p className={`font-medium ${
-                    postResult.action === "posted" ? "text-primary" : "text-blue-400"
-                  }`}>
-                    {postResult.action === "posted" ? "Posted!" : "Scheduled"}
-                  </p>
-                </div>
-                <p className="text-muted-foreground">{postResult.message}</p>
-                {postResult.postUrl && (
-                  <a
-                    href={postResult.postUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-primary hover:underline mt-1 block"
-                  >
-                    View on Reddit →
-                  </a>
-                )}
-              </div>
-            )}
+            {/* POST AT OPTIMAL TIME — commented out, requires Reddit API approval (see REDDIT_INTEGRATION.md) */}
           </div>
 
           {/* Results panel */}

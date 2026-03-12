@@ -604,8 +604,8 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
 
         {/* ── DM draft ── */}
         {lead.dmDraft && (
-          <div>
-            <div className="flex items-center gap-2">
+          <div className="rounded-lg border border-border bg-muted/20 overflow-hidden">
+            <div className="flex items-center justify-between px-3 py-2 border-b border-border/50">
               <button
                 onClick={() => setExpandedDm(!expandedDm)}
                 className="text-[11px] text-primary hover:text-primary/80 flex items-center gap-1"
@@ -613,16 +613,22 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
                 <Bot className="w-3 h-3" />
                 {expandedDm ? "Hide DM draft" : "View DM draft"}
               </button>
-              <button
-                onClick={() => copyToClipboard(lead.dmDraft!, "dm")}
-                className="text-muted-foreground hover:text-foreground transition-colors"
-                title="Copy DM to clipboard"
+              {/* Copy & Open DM — inline in DM section */}
+              <Button
+                size="sm"
+                onClick={() => {
+                  navigator.clipboard.writeText(lead.dmDraft!);
+                  window.open(`https://www.reddit.com/user/${lead.authorUsername}`, "_blank");
+                  toast.success("DM copied! Opening Reddit profile to send manually.");
+                }}
+                className="h-6 px-2 text-[10px] bg-primary text-primary-foreground hover:bg-primary/90 gap-1"
               >
-                {copiedDm ? <ClipboardCheck className="w-3 h-3 text-primary" /> : <Clipboard className="w-3 h-3" />}
-              </button>
+                <Clipboard className="w-3 h-3" />
+                Copy & Open
+              </Button>
             </div>
             {expandedDm && (
-              <div className="mt-2 space-y-2">
+              <div className="p-3 space-y-2">
                 {editingDraft ? (
                   <div className="space-y-2">
                     <Textarea
@@ -642,11 +648,11 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
                     </div>
                   </div>
                 ) : (
-                  <div className="p-3 rounded-lg bg-muted/30 border border-border relative group">
+                  <div className="relative group">
                     <p className="text-xs text-foreground/80 leading-relaxed whitespace-pre-wrap">{lead.dmDraft}</p>
                     <button
                       onClick={() => { setDraftText(lead.dmDraft ?? ""); setEditingDraft(true); }}
-                      className="absolute top-2 right-2 text-[10px] text-muted-foreground hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute top-0 right-0 text-[10px] text-muted-foreground hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                       Edit
                     </button>
@@ -659,8 +665,8 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
 
         {/* ── Comment draft ── */}
         {(lead as any).commentDraft && (
-          <div>
-            <div className="flex items-center gap-2">
+          <div className="rounded-lg border border-border bg-muted/20 overflow-hidden">
+            <div className="flex items-center justify-between px-3 py-2 border-b border-border/50">
               <button
                 onClick={() => setExpandedComment(!expandedComment)}
                 className="text-[11px] text-primary hover:text-primary/80 flex items-center gap-1"
@@ -668,16 +674,29 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
                 <MessageSquare className="w-3 h-3" />
                 {expandedComment ? "Hide comment draft" : "View comment draft"}
               </button>
-              <button
-                onClick={() => copyToClipboard((lead as any).commentDraft, "comment")}
-                className="text-muted-foreground hover:text-foreground transition-colors"
-                title="Copy comment to clipboard"
-              >
-                {copiedComment ? <ClipboardCheck className="w-3 h-3 text-primary" /> : <Clipboard className="w-3 h-3" />}
-              </button>
+              {/* Copy & Open Comment — inline in comment section */}
+              {!lead.commentSentAt ? (
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    navigator.clipboard.writeText((lead as any).commentDraft!);
+                    window.open(lead.redditPostUrl, "_blank");
+                    toast.success("Comment copied! Opening post to paste manually.");
+                  }}
+                  variant="outline"
+                  className="h-6 px-2 text-[10px] border-primary/40 text-primary hover:bg-primary/10 gap-1"
+                >
+                  <Clipboard className="w-3 h-3" />
+                  Copy & Open
+                </Button>
+              ) : (
+                <span className="text-[10px] text-primary flex items-center gap-1">
+                  <CheckCircle2 className="w-3 h-3" /> Sent
+                </span>
+              )}
             </div>
             {expandedComment && (
-              <div className="mt-2 p-3 rounded-lg bg-muted/30 border border-border">
+              <div className="p-3">
                 <p className="text-xs text-foreground/80 leading-relaxed whitespace-pre-wrap">{(lead as any).commentDraft}</p>
               </div>
             )}
@@ -725,43 +744,9 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
             )
           )}
 
-          {/* Copy & Open DM (replaces Send DM while Reddit API pending) */}
-          {lead.status === "dm_generated" && lead.dmDraft && (
-            <Button
-              size="sm"
-              onClick={() => {
-                navigator.clipboard.writeText(lead.dmDraft!);
-                window.open(`https://www.reddit.com/user/${lead.authorUsername}`, "_blank");
-                toast.success("DM copied! Opening Reddit profile to send manually.");
-              }}
-              className="h-7 px-2.5 text-[10px] bg-primary text-primary-foreground hover:bg-primary/90 gap-1"
-            >
-              <Clipboard className="w-3 h-3" />
-              Copy & Open
-            </Button>
-          )}
-
-          {/* Draft / Copy & Open Comment (replaces Send Comment while Reddit API pending) */}
+          {/* Draft Comment (Copy & Open is now inline in the comment draft section above) */}
           {isActionable && (
-            lead.commentDraft && !lead.commentSentAt ? (
-              <Button
-                size="sm"
-                onClick={() => {
-                  navigator.clipboard.writeText(lead.commentDraft!);
-                  window.open(lead.redditPostUrl, "_blank");
-                  toast.success("Comment copied! Opening post to paste manually.");
-                }}
-                variant="outline"
-                className="h-7 px-2.5 text-[10px] border-primary/40 text-primary hover:bg-primary/10 gap-1"
-              >
-                <Clipboard className="w-3 h-3" />
-                Copy & Open
-              </Button>
-            ) : lead.commentSentAt ? (
-              <span className="text-[10px] text-primary flex items-center gap-1">
-                <CheckCircle2 className="w-3 h-3" /> Comment sent
-              </span>
-            ) : commentStep !== null ? (
+            lead.commentDraft ? null : commentStep !== null ? (
               <ProgressSteps
                 steps={["Reading post", "Drafting comment", "Done"]}
                 currentStep={commentStep}

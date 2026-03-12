@@ -68,7 +68,14 @@ In `client/src/pages/DmCampaigns.tsx`:
 
 ### Step 5 — Re-enable Post at Optimal Time
 
-In `client/src/pages/DraftRoast.tsx`, the "Post at Optimal Time" button currently shows a "coming soon" state. Remove the disabled flag — it calls `trpc.schedule.postNow` which is fully implemented.
+In `client/src/pages/DraftRoast.tsx` (removed in v5.10):
+- Uncomment `postNowMutation` (search for `COMMENTED OUT: Post at Optimal Time`)
+- Uncomment `PostNowResult` type (line ~113)
+- Restore the button JSX between the Analyze card and the Results panel
+- Restore the `postResult` state: `const [postResult, setPostResult] = useState<PostNowResult | null>(null);`
+- Re-add `Clock` to the lucide-react imports
+
+The server-side `schedule.postNow` procedure in `server/routers.ts` is fully intact — no server changes needed.
 
 ### Step 6 — Re-enable rate limit display in Settings
 
