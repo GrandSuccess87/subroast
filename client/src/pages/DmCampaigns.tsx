@@ -591,7 +591,7 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
           {isChaining && (
             <div className="mt-2">
               <ProgressSteps
-                steps={["Reading", "Scoring", "Crafting DM", "DM ready", "Commenting", "Done"]}
+                steps={["Reading", "Scoring", "Crafting DM", "DM ready", "Comment", "Done"]}
                 currentStep={
                   roastStep !== null ? roastStep
                   : dmStep !== null ? dmStep + 2
@@ -626,8 +626,8 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
           </div>
         )}
 
-        {/* ── DM draft — hidden while chain is still running ── */}
-        {lead.dmDraft && !isChaining && (
+        {/* ── DM draft — show when DM ready step reached (dmStep >= 1) or comment phase started ── */}
+        {lead.dmDraft && (!isChaining || (dmStep !== null && dmStep >= 1) || commentStep !== null) && (
           <div className="rounded-lg border border-border bg-muted/20 overflow-hidden">
             <div className="flex items-center justify-between px-3 py-2 border-b border-border/50">
               <button
@@ -701,16 +701,16 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
           </div>
         )}
 
-        {/* ── Comment draft loading skeleton ── */}
-        {!(lead as any).commentDraft && commentStep !== null && (
+        {/* ── Comment draft loading skeleton — only while comment phase is in progress ── */}
+        {!(lead as any).commentDraft && commentStep !== null && commentStep < 2 && (
           <div className="rounded-lg border border-border bg-muted/20 px-3 py-2 flex items-center gap-2 text-[11px] text-muted-foreground">
             <Loader2 className="w-3 h-3 animate-spin text-primary shrink-0" />
             Loading comment draft...
           </div>
         )}
 
-        {/* ── Comment draft ── */}
-        {(lead as any).commentDraft && (
+        {/* ── Comment draft — show only when Done step reached (commentStep >= 2) or chain complete ── */}
+        {(lead as any).commentDraft && (!isChaining || (commentStep !== null && commentStep >= 2)) && (
           <div className="rounded-lg border border-border bg-muted/20 overflow-hidden">
             <div className="flex items-center justify-between px-3 py-2 border-b border-border/50">
               <button
@@ -769,7 +769,7 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
           {!isRoasted && isActionable && !lead.dmDraft && !isChaining && (
             (roastStep !== null || dmStep !== null || commentStep !== null) ? (
               <ProgressSteps
-                steps={["Reading", "Scoring", "Crafting DM", "DM ready", "Commenting", "Done"]}
+                steps={["Reading", "Scoring", "Crafting DM", "DM ready", "Comment", "Done"]}
                 currentStep={
                   roastStep !== null ? roastStep
                   : dmStep !== null ? dmStep + 2
