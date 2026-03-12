@@ -52,12 +52,13 @@
 
   /* ── SubRoast Editorial Dark Palette ──
      Background: deep charcoal with a cool-blue tint (near-black)
-     Accent: signal green — high-chroma, WCAG AAA on dark bg
-     Text: warm off-white headline, cool mid-grey body
+     Accent: electric amber/gold — warm, high-contrast, WCAG AAA on dark bg
+       oklch(0.78 0.18 65) ≈ a rich golden amber
+     Text: near-white headline, cool mid-grey body
   */
 
   /* Backgrounds */
-  --background:        oklch(0.09 0.006 250);   /* #0c0e12 — deepest charcoal */
+  --background:        oklch(0.09 0.006 250);   /* deepest charcoal */
   --card:              oklch(0.13 0.006 250);   /* slightly lifted card surface */
   --popover:           oklch(0.13 0.006 250);
   --sidebar:           oklch(0.11 0.006 250);   /* sidebar: between bg and card */
@@ -68,9 +69,9 @@
   --popover-foreground: oklch(0.95 0.004 240);
   --sidebar-foreground: oklch(0.95 0.004 240);
 
-  /* Primary — Signal Green (WCAG AAA on --background) */
-  --primary:           oklch(0.68 0.20 145);    /* vivid green */
-  --primary-foreground: oklch(0.09 0.006 250);  /* dark bg text on green button */
+  /* Primary — Electric Amber / Signal Gold (WCAG AAA on --background) */
+  --primary:           oklch(0.78 0.18 65);     /* warm amber-gold */
+  --primary-foreground: oklch(0.09 0.006 250);  /* dark text on amber button */
 
   /* Secondary / muted surfaces */
   --secondary:         oklch(0.17 0.006 250);
@@ -87,20 +88,20 @@
   /* Borders & inputs */
   --border:            oklch(0.23 0.006 250);
   --input:             oklch(0.23 0.006 250);
-  --ring:              oklch(0.68 0.20 145);
+  --ring:              oklch(0.78 0.18 65);
 
   /* Sidebar specifics */
-  --sidebar-primary:           oklch(0.68 0.20 145);
+  --sidebar-primary:           oklch(0.78 0.18 65);
   --sidebar-primary-foreground: oklch(0.09 0.006 250);
   --sidebar-accent:            oklch(0.17 0.006 250);
   --sidebar-accent-foreground: oklch(0.95 0.004 240);
   --sidebar-border:            oklch(0.20 0.006 250);
-  --sidebar-ring:              oklch(0.68 0.20 145);
+  --sidebar-ring:              oklch(0.78 0.18 65);
 
   /* Charts */
-  --chart-1: oklch(0.68 0.20 145);
+  --chart-1: oklch(0.78 0.18 65);
   --chart-2: oklch(0.62 0.16 200);
-  --chart-3: oklch(0.72 0.16 60);
+  --chart-3: oklch(0.72 0.16 140);
   --chart-4: oklch(0.55 0.22 25);
   --chart-5: oklch(0.65 0.18 300);
 }
@@ -122,18 +123,13 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* ── Typography scale ── */
+  /* ── Typography utilities ── */
   .font-display {
     font-family: var(--font-display);
   }
 
   .font-mono {
     font-family: var(--font-mono);
-  }
-
-  /* Headings use display font by default on landing page */
-  h1, h2, h3 {
-    font-family: var(--font-sans); /* dashboard keeps sans; landing overrides */
   }
 
   button:not(:disabled),
@@ -191,25 +187,12 @@
     padding: 0.5rem 0.75rem 0.25rem;
   }
 
-  /* Signal green glow on primary buttons */
+  /* Amber glow on primary buttons */
   .btn-primary-glow {
-    box-shadow: 0 0 20px oklch(0.68 0.20 145 / 0.35);
+    box-shadow: 0 0 20px oklch(0.78 0.18 65 / 0.30);
   }
 
   /* ── Landing page specific ── */
-
-  /* Noise texture overlay for depth */
-  .noise-overlay {
-    position: relative;
-  }
-  .noise-overlay::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 1;
-  }
 
   /* Editorial headline — Playfair Display */
   .headline-display {
@@ -228,30 +211,16 @@
     text-transform: uppercase;
   }
 
-  /* Thin horizontal rule with green gradient */
-  .rule-green {
+  /* Thin horizontal rule with amber gradient */
+  .rule-amber {
     border: none;
     height: 1px;
     background: linear-gradient(90deg,
       transparent 0%,
-      oklch(0.68 0.20 145 / 0.6) 40%,
-      oklch(0.68 0.20 145 / 0.6) 60%,
+      oklch(0.78 0.18 65 / 0.6) 40%,
+      oklch(0.78 0.18 65 / 0.6) 60%,
       transparent 100%
     );
-  }
-
-  /* Scroll-driven scale animation for hero */
-  @supports (animation-timeline: scroll()) {
-    .hero-scale {
-      animation: heroZoom linear both;
-      animation-timeline: scroll(root block);
-      animation-range: 0% 40%;
-    }
-
-    @keyframes heroZoom {
-      from { transform: scale(1); }
-      to   { transform: scale(1.08); }
-    }
   }
 
   /* Fade-in-up for section entries */
@@ -263,6 +232,23 @@
   .fade-up.visible {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  /* Video section play button */
+  .play-btn {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: oklch(0.78 0.18 65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 32px oklch(0.78 0.18 65 / 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .play-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 48px oklch(0.78 0.18 65 / 0.55);
   }
 
   /* Mobile typography scaling */

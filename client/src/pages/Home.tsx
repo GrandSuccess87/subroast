@@ -7,13 +7,14 @@ import {
   CheckCircle2,
   Flame,
   MessageSquare,
+  Play,
   Search,
   Shield,
   Sparkles,
   TrendingUp,
   Zap,
 } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from "@/components/DashboardLayoutSkeleton";
 
@@ -30,7 +31,7 @@ function useFadeUp() {
           obs.disconnect();
         }
       },
-      { threshold: 0.12 }
+      { threshold: 0.1 }
     );
     obs.observe(el);
     return () => obs.disconnect();
@@ -47,7 +48,7 @@ function ProductMockup() {
         className="absolute -inset-6 rounded-3xl"
         style={{
           background:
-            "radial-gradient(ellipse at center, oklch(0.68 0.20 145 / 0.12) 0%, transparent 70%)",
+            "radial-gradient(ellipse at center, oklch(0.78 0.18 65 / 0.12) 0%, transparent 70%)",
         }}
       />
       <div className="relative rounded-2xl border border-border bg-card shadow-2xl overflow-hidden">
@@ -102,10 +103,10 @@ function ProductMockup() {
           </div>
 
           {/* Roast */}
-          <div className="rounded-lg bg-amber-500/5 border border-amber-500/20 p-3">
+          <div className="rounded-lg bg-primary/5 border border-primary/20 p-3">
             <div className="flex items-center gap-1.5 mb-1.5">
-              <Flame className="w-3.5 h-3.5 text-amber-400" />
-              <span className="text-xs font-semibold text-amber-300">AI Roast</span>
+              <Flame className="w-3.5 h-3.5 text-primary" />
+              <span className="text-xs font-semibold text-primary">AI Roast</span>
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">
               "This reads like a press release. Redditors don't want to 'provide feedback' — they
@@ -114,7 +115,7 @@ function ProductMockup() {
           </div>
 
           {/* Tip */}
-          <div className="rounded-lg bg-primary/5 border border-primary/20 p-3">
+          <div className="rounded-lg bg-muted/30 border border-border/40 p-3">
             <div className="flex items-center gap-1.5 mb-1">
               <TrendingUp className="w-3.5 h-3.5 text-primary" />
               <span className="text-xs font-semibold text-primary">Virality tip</span>
@@ -127,7 +128,8 @@ function ProductMockup() {
       </div>
 
       {/* Floating badge */}
-      <div className="absolute -bottom-3 -right-3 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary text-primary-foreground text-xs font-semibold shadow-lg shadow-primary/30">
+      <div className="absolute -bottom-3 -right-3 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary text-primary-foreground text-xs font-semibold shadow-lg"
+        style={{ boxShadow: "0 4px 20px oklch(0.78 0.18 65 / 0.4)" }}>
         <Zap className="w-3 h-3" />
         Score improved +18 pts
       </div>
@@ -191,7 +193,7 @@ function FeatureCard({
   return (
     <div
       ref={ref}
-      className="fade-up p-5 rounded-xl bg-card border border-border hover:border-primary/30 transition-all"
+      className="fade-up p-5 rounded-xl bg-card border border-border hover:border-primary/40 transition-all"
     >
       <div className={`w-9 h-9 rounded-lg ${bg} flex items-center justify-center mb-3`}>
         <Icon className={`w-4.5 h-4.5 ${color}`} />
@@ -202,7 +204,137 @@ function FeatureCard({
   );
 }
 
-/* ── Safety section (needs its own component for hook) ── */
+/* ── Demo Video Section ── */
+function VideoSection() {
+  const ref = useFadeUp();
+  const [playing, setPlaying] = useState(false);
+
+  // Replace VIDEO_URL with your actual Loom/YouTube embed URL when ready
+  // For now we show a polished placeholder that accepts a real URL
+  const VIDEO_EMBED_URL = ""; // e.g. "https://www.loom.com/embed/YOUR_ID" or "https://www.youtube.com/embed/YOUR_ID"
+
+  return (
+    <section className="py-20 border-b border-border/40">
+      <div className="container">
+        <div ref={ref} className="fade-up text-center mb-10">
+          <p
+            className="label-mono text-primary mb-3"
+            style={{ fontFamily: "var(--font-mono)" }}
+          >
+            See it in action
+          </p>
+          <h2
+            className="text-4xl font-bold mb-3"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
+            From blank draft to warm leads
+            <br />
+            <em className="not-italic text-primary">in under 60 seconds</em>
+          </h2>
+          <p className="text-muted-foreground text-sm max-w-md mx-auto">
+            Watch how SubRoast analyzes a Reddit post, scores it, generates a personalized DM,
+            and queues it — all in one click.
+          </p>
+        </div>
+
+        {/* Video frame */}
+        <div className="relative max-w-3xl mx-auto">
+          {/* Ambient glow behind video */}
+          <div
+            className="absolute -inset-4 rounded-3xl pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(ellipse at center, oklch(0.78 0.18 65 / 0.08) 0%, transparent 70%)",
+            }}
+          />
+
+          <div className="relative rounded-2xl border border-border overflow-hidden bg-card shadow-2xl aspect-video">
+            {VIDEO_EMBED_URL && playing ? (
+              <iframe
+                src={VIDEO_EMBED_URL + "?autoplay=1"}
+                className="w-full h-full"
+                allow="autoplay; fullscreen"
+                allowFullScreen
+                title="SubRoast product demo"
+              />
+            ) : (
+              /* Placeholder / poster */
+              <div className="w-full h-full flex flex-col items-center justify-center relative">
+                {/* Dark grid background */}
+                <div
+                  className="absolute inset-0 opacity-[0.03]"
+                  style={{
+                    backgroundImage: `linear-gradient(oklch(0.78 0.18 65) 1px, transparent 1px), linear-gradient(90deg, oklch(0.78 0.18 65) 1px, transparent 1px)`,
+                    backgroundSize: "32px 32px",
+                  }}
+                />
+
+                {/* Fake timeline / progress bar at bottom */}
+                <div className="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-background/80 to-transparent flex items-center px-5 gap-3">
+                  <div className="flex-1 h-1 rounded-full bg-border overflow-hidden">
+                    <div className="h-full w-1/3 rounded-full bg-primary opacity-60" />
+                  </div>
+                  <span
+                    className="text-[10px] text-muted-foreground shrink-0"
+                    style={{ fontFamily: "var(--font-mono)" }}
+                  >
+                    0:42 / 1:58
+                  </span>
+                </div>
+
+                {/* Step labels */}
+                <div className="absolute top-5 left-5 right-5 flex items-center gap-2 flex-wrap">
+                  {["Reading post", "Scoring lead", "Crafting DM", "DM ready", "Done"].map(
+                    (label, i) => (
+                      <span
+                        key={label}
+                        className={`text-[10px] px-2 py-0.5 rounded-full border ${
+                          i < 3
+                            ? "bg-primary/15 border-primary/30 text-primary"
+                            : "bg-muted/40 border-border/40 text-muted-foreground"
+                        }`}
+                        style={{ fontFamily: "var(--font-mono)" }}
+                      >
+                        {label}
+                      </span>
+                    )
+                  )}
+                </div>
+
+                {/* Play button */}
+                <button
+                  onClick={() => VIDEO_EMBED_URL ? setPlaying(true) : undefined}
+                  className="play-btn relative z-10"
+                  aria-label="Play demo video"
+                  title={VIDEO_EMBED_URL ? "Play demo" : "Demo video coming soon"}
+                >
+                  <Play className="w-7 h-7 text-primary-foreground fill-current ml-1" />
+                </button>
+
+                {!VIDEO_EMBED_URL && (
+                  <p
+                    className="mt-4 text-xs text-muted-foreground relative z-10"
+                    style={{ fontFamily: "var(--font-mono)" }}
+                  >
+                    Demo video coming soon
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Caption */}
+          <p className="text-center text-xs text-muted-foreground mt-4"
+            style={{ fontFamily: "var(--font-mono)" }}>
+            The full 6-step AI chain: Reading → Scoring → Crafting DM → DM ready → Comment → Done
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Safety section ── */
 function SafetySection() {
   const ref = useFadeUp();
   const SAFETY_ITEMS = [
@@ -298,8 +430,8 @@ const FEATURES = [
     icon: Shield,
     title: "Account Safety",
     desc: "Warnings at 80% daily limit. Your Reddit account stays safe.",
-    color: "text-amber-400",
-    bg: "bg-amber-400/10",
+    color: "text-blue-400",
+    bg: "bg-blue-400/10",
   },
   {
     icon: BarChart2,
@@ -394,22 +526,16 @@ export default function Home() {
             </span>
           </div>
           <div className="flex items-center gap-5">
-            <a
-              href="#how-it-works"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:block"
-            >
+            <a href="#demo" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:block">
+              Demo
+            </a>
+            <a href="#how-it-works" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:block">
               How it works
             </a>
-            <a
-              href="#features"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:block"
-            >
+            <a href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:block">
               Features
             </a>
-            <a
-              href="/pricing"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:block"
-            >
+            <a href="/pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:block">
               Pricing
             </a>
             <a
@@ -431,7 +557,7 @@ export default function Home() {
         <div
           className="absolute inset-0 opacity-[0.025]"
           style={{
-            backgroundImage: `linear-gradient(oklch(0.68 0.20 145) 1px, transparent 1px), linear-gradient(90deg, oklch(0.68 0.20 145) 1px, transparent 1px)`,
+            backgroundImage: `linear-gradient(oklch(0.78 0.18 65) 1px, transparent 1px), linear-gradient(90deg, oklch(0.78 0.18 65) 1px, transparent 1px)`,
             backgroundSize: "48px 48px",
           }}
         />
@@ -440,7 +566,7 @@ export default function Home() {
           className="absolute -top-20 -left-20 w-[600px] h-[500px] pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse at top left, oklch(0.68 0.20 145 / 0.09) 0%, transparent 65%)",
+              "radial-gradient(ellipse at top left, oklch(0.78 0.18 65 / 0.08) 0%, transparent 65%)",
           }}
         />
         {/* Bottom-right glow */}
@@ -448,7 +574,7 @@ export default function Home() {
           className="absolute bottom-0 right-0 w-[400px] h-[400px] pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse at bottom right, oklch(0.62 0.16 200 / 0.06) 0%, transparent 65%)",
+              "radial-gradient(ellipse at bottom right, oklch(0.62 0.16 200 / 0.05) 0%, transparent 65%)",
           }}
         />
 
@@ -459,17 +585,11 @@ export default function Home() {
             <div ref={heroRef} className="text-center lg:text-left">
               {/* Eyebrow label */}
               <div className="inline-flex items-center gap-2 mb-6">
-                <span
-                  className="label-mono text-primary"
-                  style={{ fontFamily: "var(--font-mono)" }}
-                >
+                <span className="label-mono text-primary" style={{ fontFamily: "var(--font-mono)" }}>
                   AI Reddit Coach
                 </span>
                 <span className="w-px h-3 bg-border" />
-                <span
-                  className="label-mono text-muted-foreground"
-                  style={{ fontFamily: "var(--font-mono)" }}
-                >
+                <span className="label-mono text-muted-foreground" style={{ fontFamily: "var(--font-mono)" }}>
                   for indie SaaS founders
                 </span>
               </div>
@@ -502,10 +622,11 @@ export default function Home() {
                   <ArrowRight className="w-4 h-4" />
                 </a>
                 <a
-                  href="#how-it-works"
+                  href="#demo"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg border border-border text-foreground/70 font-medium text-sm hover:text-foreground hover:border-primary/40 transition-all"
                 >
-                  See how it works
+                  <Play className="w-3.5 h-3.5" />
+                  Watch demo
                 </a>
               </div>
 
@@ -514,11 +635,7 @@ export default function Home() {
                 {[
                   { icon: CheckCircle2, text: "No credit card required", color: "text-primary" },
                   { icon: CheckCircle2, text: "Cancel anytime", color: "text-primary" },
-                  {
-                    icon: AlertTriangle,
-                    text: "Account safety built in",
-                    color: "text-amber-400",
-                  },
+                  { icon: AlertTriangle, text: "Account safety built in", color: "text-amber-400" },
                 ].map(({ icon: Icon, text, color }) => (
                   <div key={text} className="flex items-center gap-1.5 text-xs text-muted-foreground">
                     <Icon className={`w-3.5 h-3.5 ${color} shrink-0`} />
@@ -538,9 +655,7 @@ export default function Home() {
         {/* Bottom fade */}
         <div
           className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none"
-          style={{
-            background: "linear-gradient(to bottom, transparent, oklch(0.09 0.006 250))",
-          }}
+          style={{ background: "linear-gradient(to bottom, transparent, oklch(0.09 0.006 250))" }}
         />
       </section>
 
@@ -555,16 +670,10 @@ export default function Home() {
               { value: "7 days", label: "Free trial" },
             ].map(({ value, label }) => (
               <div key={label}>
-                <div
-                  className="text-2xl font-bold text-primary"
-                  style={{ fontFamily: "var(--font-mono)" }}
-                >
+                <div className="text-2xl font-bold text-primary" style={{ fontFamily: "var(--font-mono)" }}>
                   {value}
                 </div>
-                <div
-                  className="text-xs text-muted-foreground mt-0.5 uppercase tracking-widest"
-                  style={{ fontFamily: "var(--font-mono)" }}
-                >
+                <div className="text-xs text-muted-foreground mt-0.5 uppercase tracking-widest" style={{ fontFamily: "var(--font-mono)" }}>
                   {label}
                 </div>
               </div>
@@ -573,20 +682,19 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── DEMO VIDEO ── */}
+      <div id="demo">
+        <VideoSection />
+      </div>
+
       {/* ── HOW IT WORKS ── */}
       <section id="how-it-works" className="py-20 border-b border-border/40">
         <div className="container">
           <div className="text-center mb-14">
-            <p
-              className="label-mono text-primary mb-3"
-              style={{ fontFamily: "var(--font-mono)" }}
-            >
+            <p className="label-mono text-primary mb-3" style={{ fontFamily: "var(--font-mono)" }}>
               Simple by design
             </p>
-            <h2
-              className="text-4xl font-bold mb-3"
-              style={{ fontFamily: "var(--font-display)" }}
-            >
+            <h2 className="text-4xl font-bold mb-3" style={{ fontFamily: "var(--font-display)" }}>
               How SubRoast works
             </h2>
             <p className="text-muted-foreground text-sm max-w-md mx-auto">
@@ -595,13 +703,9 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto relative">
-            {/* Connector */}
             <div
               className="hidden md:block absolute top-10 left-[calc(16.67%+1rem)] right-[calc(16.67%+1rem)] h-px"
-              style={{
-                background:
-                  "linear-gradient(90deg, oklch(0.68 0.20 145 / 0.3), oklch(0.62 0.16 200 / 0.3))",
-              }}
+              style={{ background: "linear-gradient(90deg, oklch(0.78 0.18 65 / 0.3), oklch(0.62 0.16 200 / 0.3))" }}
             />
             {HOW_IT_WORKS.map((step) => (
               <StepCard key={step.step} {...step} />
@@ -614,16 +718,10 @@ export default function Home() {
       <section id="features" className="py-20 border-b border-border/40 bg-card/20">
         <div className="container">
           <div className="text-center mb-12">
-            <p
-              className="label-mono text-primary mb-3"
-              style={{ fontFamily: "var(--font-mono)" }}
-            >
+            <p className="label-mono text-primary mb-3" style={{ fontFamily: "var(--font-mono)" }}>
               Full toolkit
             </p>
-            <h2
-              className="text-4xl font-bold mb-2"
-              style={{ fontFamily: "var(--font-display)" }}
-            >
+            <h2 className="text-4xl font-bold mb-2" style={{ fontFamily: "var(--font-display)" }}>
               Everything you need to win on Reddit
             </h2>
             <p className="text-muted-foreground text-sm">Without getting banned.</p>
@@ -654,9 +752,7 @@ export default function Home() {
             <span style={{ fontFamily: "var(--font-display)" }}>SubRoast</span>
           </div>
           <div className="flex items-center gap-4">
-            <a href="/pricing" className="hover:text-foreground transition-colors">
-              Pricing
-            </a>
+            <a href="/pricing" className="hover:text-foreground transition-colors">Pricing</a>
             <span>Built for indie SaaS founders</span>
           </div>
         </div>

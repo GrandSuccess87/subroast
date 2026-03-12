@@ -267,3 +267,55 @@
 - [x] Apply font-display and font-mono CSS variables throughout design system
 - [x] Rebuild Home.tsx landing page with scroll-driven hero, editorial sections, feature showcase, pricing CTA
 - [x] Add scroll-linked scale animation for hero media (IBEX-style zoom on scroll)
+
+## Design Identity & Brand System (v5.27)
+- [x] Choose new accent color (away from green) — warm amber/gold or electric indigo or signal orange
+- [x] Update all OKLCH color tokens in index.css: background, accent, primary, muted, borders
+- [x] Update btn-primary-glow, ring, sidebar-primary, chart-1 to match new accent
+- [x] Verify WCAG AA contrast for body text (muted-foreground on card bg)
+- [x] Verify WCAG AAA contrast for headlines and accent on dark background
+- [x] Apply new accent color consistently across dashboard (active sidebar item, progress bars, badges)
+- [x] Update landing page CTAs, stat bar values, eyebrow labels to use new accent
+
+## Landing Page — Demo Video Section (v5.27)
+- [x] Add "See it in action" video section between the stat bar and "How it works"
+- [x] Embed a Loom/YouTube walkthrough video (or placeholder with play button)
+- [x] Style video container with editorial dark frame, ambient glow behind it
+- [x] Add caption: "From blank draft to warm leads in under 60 seconds"
+- [x] Make video section responsive (full-width on mobile, max-w-3xl centered on desktop)
+
+## Landing Page — Social Proof Strip (v5.28)
+- [ ] Add horizontal social proof strip between hero and stat bar
+- [ ] Show founder quote / X testimonial from first paying user
+- [ ] Add "Built by founders, for founders" tagline with avatar
+- [ ] Style with subtle border, italic serif quote in Playfair Display
+
+## Landing Page — OG Image (v5.28)
+- [ ] Generate a 1200×630 dark editorial OG image with product mockup + headline
+- [ ] Replace current logo-only og:image in index.html
+- [ ] Update twitter:image meta tag to match
+
+## Dashboard Typography (v5.28)
+- [ ] Apply Playfair Display to dashboard "Hey [Name]" greeting heading
+- [ ] Apply Playfair Display to section headings: "Quick actions", "Get started with SubRoast"
+- [ ] Apply JetBrains Mono to stat numbers (80 leads, 36 DMs drafted, etc.)
+- [ ] Apply JetBrains Mono to rate limit counters in sidebar Activity widget
+
+## Scrutiny Layer — Anti-Spam (v5.29)
+- [ ] Add spam-risk score to AI roast output (0-100, factors: self-promo density, link count, keyword stuffing)
+- [ ] Show spam-risk badge on Draft & Roast page (green/amber/red)
+- [ ] Add "Too salesy?" warning when spam-risk > 60
+- [ ] Block DM send if DM draft contains direct product link or pricing mention
+
+## Roast Report Visualizer (v5.30)
+- [ ] Add radar/spider chart to Draft & Roast page showing all 5 scores (Clarity, Fit, Virality, Spam Risk, Urgency)
+- [ ] Use JetBrains Mono for axis labels, accent color for filled area
+- [ ] Add "Score history" mini-chart showing improvement across re-drafts
+
+## Event Tracking for Churn Analytics (v5.31)
+- [ ] Track campaign_created event (userId, plan, campaignName)
+- [ ] Track lead_synced event (userId, campaignId, newLeadCount)
+- [ ] Track dm_drafted event (userId, leadId, fitScore)
+- [ ] Track dm_copied event (userId, leadId) — proxy for actual send
+- [ ] Track post_roasted event (userId, viralityScore, clarityScore)
+- [ ] Send events to Umami custom events API
