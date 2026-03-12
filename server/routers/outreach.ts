@@ -56,7 +56,7 @@ async function searchRedditPosts(
 }>> {
   try {
     const query = encodeURIComponent(keyword);
-    const url = `https://www.reddit.com/r/${subreddit}/search.json?q=${query}&restrict_sr=1&sort=new&limit=${limit}&t=week`;
+    const url = `https://www.reddit.com/r/${subreddit}/search.json?q=${query}&restrict_sr=1&sort=new&limit=${limit}&t=month`;
     const res = await fetch(url, {
       headers: {
         "User-Agent": "SubRoast/1.0 (subreddit monitoring bot)",
@@ -365,13 +365,16 @@ Rules:
         }
       }
 
-      // Update campaign lastSyncAt, leadsFound, and daily sync counter
+      // Update campaign lastSyncAt and leadsFound
+      // Only increment the daily sync counter when new leads are actually found
       const updatedLeadsFound = c.leadsFound + newLeads;
       await updateOutreachCampaign(input.campaignId, {
         lastSyncAt: nowMs,
         leadsFound: updatedLeadsFound,
-        dailySyncsUsed: syncsUsed + 1,
-        dailySyncsResetAt: lastResetAt < todayStartMs ? todayStartMs : lastResetAt,
+        ...(newLeads > 0 ? {
+          dailySyncsUsed: syncsUsed + 1,
+          dailySyncsResetAt: lastResetAt < todayStartMs ? todayStartMs : lastResetAt,
+        } : {}),
       });
 
       // Send email notification for new leads

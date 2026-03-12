@@ -1,0 +1,21 @@
+{
+  "query": "SELECT COUNT(*) as total, MIN(redditPostId) as sample_id FROM outreach_leads; SELECT redditPostId FROM outreach_leads LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute SELECT COUNT(*) as total, MIN(redditPostId) as sample_id FROM outreach_leads; SELECT redditPostId FROM outreach_leads LIMIT 5;",
+  "rows": [
+    {
+      "total": "80",
+      "sample_id": "1rb7b5f"
+    }
+  ],
+  "messages": [
+    "redditPostId",
+    "1rb7b5f",
+    "1rc26sf",
+    "1rcob8j",
+    "1rd36t1",
+    "1rdl4vr"
+  ],
+  "stdout": "total\tsample_id\n80\t1rb7b5f\nredditPostId\n1rb7b5f\n1rc26sf\n1rcob8j\n1rd36t1\n1rdl4vr\n",
+  "stderr": "",
+  "execution_time_ms": 59
+}
