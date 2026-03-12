@@ -6,6 +6,7 @@ import {
   mysqlTable,
   text,
   timestamp,
+  uniqueIndex,
   varchar,
 } from "drizzle-orm/mysql-core";
 
@@ -222,7 +223,9 @@ export const outreachLeads = mysqlTable("outreach_leads", {
   discoveredAt: bigint("discoveredAt", { mode: "number" }).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
+}, (t) => ({
+  uqCampaignPost: uniqueIndex("uq_campaign_post").on(t.campaignId, t.redditPostId),
+}));
 
 export type OutreachLead = typeof outreachLeads.$inferSelect;
 export type InsertOutreachLead = typeof outreachLeads.$inferInsert;

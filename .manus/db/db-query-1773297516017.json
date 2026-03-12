@@ -1,0 +1,9 @@
+{
+  "query": "DELETE ol1 FROM outreach_leads ol1 INNER JOIN outreach_leads ol2 WHERE ol1.id < ol2.id AND ol1.campaignId = ol2.campaignId AND ol1.redditPostId = ol2.redditPostId;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute DELETE ol1 FROM outreach_leads ol1 INNER JOIN outreach_leads ol2 WHERE ol1.id < ol2.id AND ol1.campaignId = ol2.campaignId AND ol1.redditPostId = ol2.redditPostId;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 61
+}

@@ -311,12 +311,17 @@ Rules:
 
       let newLeads = 0;
 
+      // Fetch existing post IDs for this campaign to detect truly new leads
+      const existingLeads = await getOutreachLeadsByCampaignId(input.campaignId);
+      const existingPostIds = new Set(existingLeads.map((l) => l.redditPostId));
+
       for (const sub of subreddits.slice(0, 5)) { // limit to 5 subreddits per sync
         for (const kw of keywords.slice(0, 3)) { // limit to 3 keywords per subreddit
-          const posts = await searchRedditPosts(sub, kw, 5);
+          const posts = await searchRedditPosts(sub, kw, 10);
           for (const post of posts) {
             if (post.author === "[deleted]" || post.author === "AutoModerator") continue;
             const { score, matchedKeywords } = scoreMatch(post.title, post.body, keywords);
+            const isNew = !existingPostIds.has(post.id);
             await upsertOutreachLead({
               campaignId: input.campaignId,
               userId: ctx.user.id,
@@ -331,7 +336,7 @@ Rules:
               status: "new",
               discoveredAt: Date.now(),
             });
-            newLeads++;
+            if (isNew) newLeads++;
           }
         }
       }

@@ -898,22 +898,24 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
 
   const generateDm = trpc.outreach.generateDm.useMutation({
     onSuccess: (data, variables) => {
-      if (data.sent) {
-        toast.success("DM sent!");
-      } else if (data.queued) {
-        toast.success("Rate limit reached — DM queued for delivery shortly");
-      } else if (data.reason === "no_reddit_account") {
-        toast.info("Draft saved — connect Reddit in Settings to send");
-      } else if (data.reason?.startsWith("send_failed")) {
-        toast.error(`Draft saved, but send failed: ${data.reason.replace("send_failed: ", "")}`);
-      } else {
-        toast.success("DM drafted — generating comment...");
+      const isChaining = chainLeadIdRef.current === variables.leadId;
+      if (!isChaining) {
+        // Only show toasts when not in chain mode (manual DM generation)
+        if (data.sent) {
+          toast.success("DM sent!");
+        } else if (data.queued) {
+          toast.success("Rate limit reached — DM queued for delivery shortly");
+        } else if (data.reason?.startsWith("send_failed")) {
+          toast.error(`Draft saved, but send failed: ${data.reason.replace("send_failed: ", "")}`);
+        } else {
+          toast.success("DM drafted!");
+        }
       }
+      // Suppress no_reddit_account toast entirely during chain — progress bar shows status
       utils.outreach.getLeads.invalidate({ campaignId: campaign.id });
       // Auto-chain: if this was triggered by Analyze & Draft, continue to comment generation
-      const chainId = chainLeadIdRef.current;
-      if (chainId !== null && chainId === variables.leadId) {
-        generateComment.mutate({ leadId: chainId });
+      if (isChaining) {
+        generateComment.mutate({ leadId: variables.leadId });
         // Keep chainLeadIdRef set so comment generation knows it's in chain
       }
     },
@@ -947,7 +949,7 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
       // Auto-chain: if this was triggered by Analyze & Draft, continue to DM generation
       const chainId = chainLeadIdRef.current;
       if (chainId !== null && chainId === variables.leadId) {
-        toast.success("Lead analyzed — drafting DM...");
+        // Suppress intermediate toast during chain — progress bar shows status
         generateDm.mutate({ leadId: chainId });
       } else {
         toast.success("Lead analyzed!");
@@ -1173,6 +1175,7 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
 export default function DmCampaigns() {
   const [showNewForm, setShowNewForm] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
+  const [, navigate] = useLocation();
 
   const utils = trpc.useUtils();
   const { data: campaigns = [], isLoading } = trpc.outreach.listCampaigns.useQuery();
@@ -1216,12 +1219,31 @@ export default function DmCampaigns() {
               Monitor subreddits for leads, AI-draft personalized DMs, and send with rate-limited safety.
             </p>
           </div>
-          {!showNewForm && (
-            <Button onClick={() => setShowNewForm(true)} size="sm" className="gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90">
-              <Plus className="w-4 h-4" />
-              New Campaign
-            </Button>
-          )}
+          {!showNewForm && (() => {
+            const isGrowth = subStatus?.plan === "growth";
+            const atLimit = !isGrowth && campaigns.length >= 1;
+            if (atLimit) {
+              return (
+                <div className="flex flex-col items-end gap-1.5">
+                  <Button
+                    onClick={() => navigate("/pricing")}
+                    size="sm"
+                    className="gap-1.5 bg-amber-500 text-white hover:bg-amber-400"
+                  >
+                    <Zap className="w-3.5 h-3.5" />
+                    Upgrade for more
+                  </Button>
+                  <span className="text-[10px] text-muted-foreground">1 campaign on Starter</span>
+                </div>
+              );
+            }
+            return (
+              <Button onClick={() => setShowNewForm(true)} size="sm" className="gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90">
+                <Plus className="w-4 h-4" />
+                New Campaign
+              </Button>
+            );
+          })()}
         </div>
 
         {showNewForm && (
