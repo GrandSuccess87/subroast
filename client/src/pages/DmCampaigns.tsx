@@ -470,7 +470,7 @@ function ProgressSteps({ steps, currentStep }: { steps: string[]; currentStep: n
   );
 }
 
-function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue, onUpdateDraft, onRoast, onGenerateComment, onSendComment, onMarkContacted, onReDraftDm }: {
+function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue, onUpdateDraft, onRoast, onGenerateComment, onSendComment, onMarkContacted, onReDraftDm, isChaining }: {
   lead: Lead;
   onGenerateDm: (id: number) => void;
   onSendDm: (id: number) => void;
@@ -483,6 +483,7 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
   onSendComment: (id: number) => void;
   onMarkContacted: (id: number) => void;
   onReDraftDm: (id: number) => void;
+  isChaining: boolean;
 }) {
   const [expandedDm, setExpandedDm] = useState(false);
   const [expandedComment, setExpandedComment] = useState(false);
@@ -603,6 +604,14 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
           </div>
         )}
 
+        {/* ── DM draft loading skeleton ── */}
+        {!lead.dmDraft && dmStep !== null && (
+          <div className="rounded-lg border border-border bg-muted/20 px-3 py-2 flex items-center gap-2 text-[11px] text-muted-foreground">
+            <Loader2 className="w-3 h-3 animate-spin text-primary shrink-0" />
+            Loading DM draft...
+          </div>
+        )}
+
         {/* ── DM draft ── */}
         {lead.dmDraft && (
           <div className="rounded-lg border border-border bg-muted/20 overflow-hidden">
@@ -614,12 +623,13 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
                 <Bot className="w-3 h-3" />
                 {expandedDm ? "Hide DM draft" : "View DM draft"}
               </button>
-              <div className="flex items-center gap-1.5">
+              <div className="flex flex-col items-end gap-1 sm:flex-row sm:items-center sm:gap-1.5">
                 {/* Re-draft DM */}
                 <Button
                   size="sm"
                   variant="outline"
                   onClick={() => { startDmProgress(); onReDraftDm(lead.id); }}
+                  disabled={isChaining}
                   className="h-6 px-2 text-[10px] border-border text-muted-foreground hover:text-primary hover:border-primary/40 gap-1"
                   title="Regenerate DM draft"
                 >
@@ -677,6 +687,14 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
           </div>
         )}
 
+        {/* ── Comment draft loading skeleton ── */}
+        {!(lead as any).commentDraft && commentStep !== null && (
+          <div className="rounded-lg border border-border bg-muted/20 px-3 py-2 flex items-center gap-2 text-[11px] text-muted-foreground">
+            <Loader2 className="w-3 h-3 animate-spin text-primary shrink-0" />
+            Loading comment draft...
+          </div>
+        )}
+
         {/* ── Comment draft ── */}
         {(lead as any).commentDraft && (
           <div className="rounded-lg border border-border bg-muted/20 overflow-hidden">
@@ -688,12 +706,13 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
                 <MessageSquare className="w-3 h-3" />
                 {expandedComment ? "Hide comment draft" : "View comment draft"}
               </button>
-              <div className="flex items-center gap-1.5">
+              <div className="flex flex-col items-end gap-1 sm:flex-row sm:items-center sm:gap-1.5">
                 {/* Re-draft Comment */}
                 <Button
                   size="sm"
                   variant="outline"
                   onClick={() => { startCommentProgress(); onGenerateComment(lead.id); }}
+                  disabled={isChaining}
                   className="h-6 px-2 text-[10px] border-border text-muted-foreground hover:text-primary hover:border-primary/40 gap-1"
                   title="Regenerate comment draft"
                 >
@@ -733,11 +752,15 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
         {/* ── Action row ── */}
         <div className="flex items-center gap-2 flex-wrap pt-1 border-t border-border/50">
           {/* Analyze & Draft — combined single button when neither is done yet */}
-          {!isRoasted && isActionable && !lead.dmDraft && (
-            (roastStep !== null || dmStep !== null) ? (
+          {!isRoasted && isActionable && !lead.dmDraft && !isChaining && (
+            (roastStep !== null || dmStep !== null || commentStep !== null) ? (
               <ProgressSteps
-                steps={["Reading post", "Scoring lead", "Crafting DM", "Done"]}
-                currentStep={roastStep !== null ? roastStep : (dmStep ?? 0) + 1}
+                steps={["Reading post", "Scoring lead", "Crafting DM", "DM ready", "Drafting comment", "Done"]}
+                currentStep={
+                  roastStep !== null ? roastStep
+                  : dmStep !== null ? dmStep + 2
+                  : (commentStep ?? 0) + 4
+                }
               />
             ) : (
               <Button
@@ -745,7 +768,6 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
                 onClick={() => {
                   startRoastProgress();
                   onRoast(lead.id);
-                  // DM generation starts after roast completes via onSuccess chain in parent
                 }}
                 className="h-7 px-2.5 text-[10px] bg-primary text-primary-foreground hover:bg-primary/90 gap-1"
               >
@@ -753,6 +775,18 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
                 Analyze & Draft
               </Button>
             )
+          )}
+
+          {/* Full chain in progress — show unified 6-step bar */}
+          {isChaining && (
+            <ProgressSteps
+              steps={["Reading post", "Scoring lead", "Crafting DM", "DM ready", "Drafting comment", "Done"]}
+              currentStep={
+                roastStep !== null ? roastStep
+                : dmStep !== null ? dmStep + 2
+                : (commentStep ?? 0) + 4
+              }
+            />
           )}
 
           {/* Analyze only — if DM already exists */}
@@ -776,7 +810,7 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
           )}
 
           {/* Draft DM only — if already roasted but no DM yet */}
-          {isRoasted && isActionable && !lead.dmDraft && (
+          {isRoasted && isActionable && !lead.dmDraft && !isChaining && (
             dmStep !== null ? (
               <ProgressSteps
                 steps={["Reading post", "Crafting personalized DM", "Done"]}
@@ -795,8 +829,8 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
             )
           )}
 
-          {/* Draft Comment (Copy & Open is now inline in the comment draft section above) */}
-          {isActionable && (
+          {/* Draft Comment — only show when not chaining */}
+          {isActionable && !isChaining && (
             lead.commentDraft ? null : commentStep !== null ? (
               <ProgressSteps
                 steps={["Reading post", "Drafting comment", "Done"]}
@@ -1128,6 +1162,7 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
               onSendComment={(id) => sendComment.mutate({ leadId: id })}
               onMarkContacted={(id) => markContacted.mutate({ leadId: id, stage: "replied" })}
               onReDraftDm={(id) => generateDm.mutate({ leadId: id })}
+              isChaining={chainLeadIdRef.current === lead.id}
             />
           ))}
         </div>

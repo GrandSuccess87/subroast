@@ -244,3 +244,10 @@
 - [x] Auto-chain: roastLead onSuccess triggers generateDm, generateDm onSuccess triggers generateComment
 - [x] Style Re-draft as a proper visible button (not plain text link) in DM section
 - [x] Add Re-draft button to comment section
+
+## v5.13 UX Fixes
+- [x] Hide Draft DM / Draft Comment action buttons while chain is processing
+- [x] Show "Loading DM draft..." skeleton instead of View DM draft link during lag
+- [x] Show "Loading comment draft..." skeleton instead of View comment draft link during lag
+- [x] Fix Copy & Open + Re-draft overflow on mobile — stack vertically or shrink
+- [x] Extend progress bar to 6 steps: Reading post → Scoring lead → Crafting DM → DM ready → Drafting comment → Done
