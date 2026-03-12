@@ -25,18 +25,47 @@ import {
   users,
 } from "../drizzle/schema";
 
+import { createPool as mysqlCreatePool, Pool } from "mysql2";
+
 let _db: ReturnType<typeof drizzle> | null = null;
+let _pool: Pool | null = null;
+
+function createPool() {
+  if (!process.env.DATABASE_URL) return null;
+  const pool = mysqlCreatePool({
+    uri: process.env.DATABASE_URL,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0,
+    enableKeepAlive: true,
+    keepAliveInitialDelay: 10000,
+  });
+  pool.on("connection", () => console.log("[Database] New connection established"));
+  return pool;
+}
 
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
-      _db = drizzle(process.env.DATABASE_URL);
+      if (!_pool) _pool = createPool();
+      if (_pool) _db = drizzle(_pool);
     } catch (error) {
       console.warn("[Database] Failed to connect:", error);
       _db = null;
+      _pool = null;
     }
   }
   return _db;
+}
+
+// Reset pool on ECONNRESET so next call to getDb() creates a fresh pool
+export function resetDbPool() {
+  console.warn("[Database] Resetting connection pool");
+  _db = null;
+  if (_pool) {
+    _pool.end(() => {});
+    _pool = null;
+  }
 }
 
 // ─── Users ───────────────────────────────────────────────────────────────────

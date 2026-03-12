@@ -18,6 +18,7 @@ import {
   incrementDmCount,
   incrementPostCount,
   incrementRedditAccountFailures,
+  resetDbPool,
   updateDmCampaignCounts,
   updateDmCampaignStatus,
   updateDmRecipientStatus,
@@ -213,6 +214,11 @@ export function startJobProcessor() {
       await runAutoSync();
     } catch (err) {
       console.error("[Jobs] Processor error:", err);
+      // Reset DB pool on connection errors so next run gets a fresh connection
+      const errMsg = err instanceof Error ? err.message : String(err);
+      if (errMsg.includes("ECONNRESET") || errMsg.includes("ECONNREFUSED") || errMsg.includes("ETIMEDOUT")) {
+        resetDbPool();
+      }
     }
   };
 
