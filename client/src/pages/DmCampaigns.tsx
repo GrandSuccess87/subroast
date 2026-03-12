@@ -549,6 +549,19 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
   return (
     <Card className={`bg-card border-border transition-all ${lead.status === "skipped" ? "opacity-40" : ""}`}>
       <CardContent className="p-4 space-y-3">
+        {/* ── Chain progress bar — pinned at top when chaining ── */}
+        {isChaining && (
+          <div className="pb-1 border-b border-border/50">
+            <ProgressSteps
+              steps={["Reading", "Scoring", "Crafting DM", "DM ready", "Commenting", "Done"]}
+              currentStep={
+                roastStep !== null ? roastStep
+                : dmStep !== null ? dmStep + 2
+                : (commentStep ?? 0) + 4
+              }
+            />
+          </div>
+        )}
         {/* ── Header row ── */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap mb-1.5">
@@ -755,7 +768,7 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
           {!isRoasted && isActionable && !lead.dmDraft && !isChaining && (
             (roastStep !== null || dmStep !== null || commentStep !== null) ? (
               <ProgressSteps
-                steps={["Reading post", "Scoring lead", "Crafting DM", "DM ready", "Drafting comment", "Done"]}
+                steps={["Reading", "Scoring", "Crafting DM", "DM ready", "Commenting", "Done"]}
                 currentStep={
                   roastStep !== null ? roastStep
                   : dmStep !== null ? dmStep + 2
@@ -777,23 +790,13 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
             )
           )}
 
-          {/* Full chain in progress — show unified 6-step bar */}
-          {isChaining && (
-            <ProgressSteps
-              steps={["Reading post", "Scoring lead", "Crafting DM", "DM ready", "Drafting comment", "Done"]}
-              currentStep={
-                roastStep !== null ? roastStep
-                : dmStep !== null ? dmStep + 2
-                : (commentStep ?? 0) + 4
-              }
-            />
-          )}
+          {/* Full chain in progress — progress bar is now pinned at top of card */}
 
           {/* Analyze only — if DM already exists */}
           {!isRoasted && isActionable && lead.dmDraft && (
             roastStep !== null ? (
               <ProgressSteps
-                steps={["Reading post", "Scoring fit & urgency", "Done"]}
+                steps={["Reading", "Scoring", "Done"]}
                 currentStep={roastStep}
               />
             ) : (
@@ -813,7 +816,7 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
           {isRoasted && isActionable && !lead.dmDraft && !isChaining && (
             dmStep !== null ? (
               <ProgressSteps
-                steps={["Reading post", "Crafting personalized DM", "Done"]}
+                steps={["Reading", "Crafting DM", "Done"]}
                 currentStep={dmStep}
               />
             ) : (
@@ -829,24 +832,14 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
             )
           )}
 
-          {/* Draft Comment — only show when not chaining */}
-          {isActionable && !isChaining && (
-            lead.commentDraft ? null : commentStep !== null ? (
+          {/* Draft Comment standalone — only show when not chaining and no DM draft yet (standalone comment progress) */}
+          {isActionable && !isChaining && !lead.dmDraft && (
+            (lead as any).commentDraft ? null : commentStep !== null ? (
               <ProgressSteps
-                steps={["Reading post", "Drafting comment", "Done"]}
+                steps={["Reading", "Commenting", "Done"]}
                 currentStep={commentStep}
               />
-            ) : (
-              <Button
-                size="sm"
-                onClick={() => { startCommentProgress(); onGenerateComment(lead.id); }}
-                variant="outline"
-                className="h-7 px-2.5 text-[10px] border-border gap-1"
-              >
-                <MessageSquare className="w-3 h-3" />
-                Draft Comment
-              </Button>
-            )
+            ) : null
           )}
 
           {/* Mark as Contacted */}
