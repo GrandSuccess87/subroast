@@ -22,7 +22,22 @@ async function getOrCreateStripeCustomer(
   const user = userRows[0];
   if (!user) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
 
-  if (user.stripeCustomerId) return user.stripeCustomerId;
+  if (user.stripeCustomerId) {
+    // Verify the customer still exists in the current Stripe mode (live vs test keys can differ)
+    try {
+      await stripe.customers.retrieve(user.stripeCustomerId);
+      return user.stripeCustomerId;
+    } catch (err: unknown) {
+      // Customer not found in current mode (e.g. switched from live to test keys) — create a new one
+      const isNotFound = err instanceof Error && err.message.includes("No such customer");
+      if (isNotFound) {
+        console.warn(`[Stripe] Stale customer ID ${user.stripeCustomerId} — clearing and creating new one`);
+        await db.update(users).set({ stripeCustomerId: null }).where(eq(users.id, userId));
+      } else {
+        throw err; // re-throw unexpected errors
+      }
+    }
+  }
 
   const customer = await stripe.customers.create({
     email: email ?? undefined,
