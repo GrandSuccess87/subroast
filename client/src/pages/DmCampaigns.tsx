@@ -615,14 +615,17 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
                 {expandedDm ? "Hide DM draft" : "View DM draft"}
               </button>
               <div className="flex items-center gap-1.5">
-                {/* Re-draft */}
-                <button
+                {/* Re-draft DM */}
+                <Button
+                  size="sm"
+                  variant="outline"
                   onClick={() => { startDmProgress(); onReDraftDm(lead.id); }}
-                  className="text-[10px] text-muted-foreground hover:text-primary transition-colors"
+                  className="h-6 px-2 text-[10px] border-border text-muted-foreground hover:text-primary hover:border-primary/40 gap-1"
                   title="Regenerate DM draft"
                 >
+                  <RefreshCw className="w-2.5 h-2.5" />
                   Re-draft
-                </button>
+                </Button>
                 {/* Copy & Open DM — inline in DM section */}
                 <Button
                   size="sm"
@@ -685,26 +688,39 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
                 <MessageSquare className="w-3 h-3" />
                 {expandedComment ? "Hide comment draft" : "View comment draft"}
               </button>
-              {/* Copy & Open Comment — inline in comment section */}
-              {!lead.commentSentAt ? (
+              <div className="flex items-center gap-1.5">
+                {/* Re-draft Comment */}
                 <Button
                   size="sm"
-                  onClick={() => {
-                    navigator.clipboard.writeText((lead as any).commentDraft!);
-                    window.open(lead.redditPostUrl, "_blank");
-                    toast.success("Comment copied! Opening post to paste manually.");
-                  }}
                   variant="outline"
-                  className="h-6 px-2 text-[10px] border-primary/40 text-primary hover:bg-primary/10 gap-1"
+                  onClick={() => { startCommentProgress(); onGenerateComment(lead.id); }}
+                  className="h-6 px-2 text-[10px] border-border text-muted-foreground hover:text-primary hover:border-primary/40 gap-1"
+                  title="Regenerate comment draft"
                 >
-                  <Clipboard className="w-3 h-3" />
-                  Copy & Open
+                  <RefreshCw className="w-2.5 h-2.5" />
+                  Re-draft
                 </Button>
-              ) : (
-                <span className="text-[10px] text-primary flex items-center gap-1">
-                  <CheckCircle2 className="w-3 h-3" /> Sent
-                </span>
-              )}
+                {/* Copy & Open Comment — inline in comment section */}
+                {!lead.commentSentAt ? (
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      navigator.clipboard.writeText((lead as any).commentDraft!);
+                      window.open(lead.redditPostUrl, "_blank");
+                      toast.success("Comment copied! Opening post to paste manually.");
+                    }}
+                    variant="outline"
+                    className="h-6 px-2 text-[10px] border-primary/40 text-primary hover:bg-primary/10 gap-1"
+                  >
+                    <Clipboard className="w-3 h-3" />
+                    Copy & Open
+                  </Button>
+                ) : (
+                  <span className="text-[10px] text-primary flex items-center gap-1">
+                    <CheckCircle2 className="w-3 h-3" /> Sent
+                  </span>
+                )}
+              </div>
             </div>
             {expandedComment && (
               <div className="p-3">
@@ -838,6 +854,8 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
 function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () => void }) {
   const utils = trpc.useUtils();
   const [activeFilter, setActiveFilter] = useState<"all" | "new" | "dm_generated" | "queued" | "sent" | "skipped">("all");
+  // Tracks which lead is mid-chain (Analyze → DM → Comment) so each onSuccess knows what to fire next
+  const chainLeadIdRef = useRef<number | null>(null);
 
   const { data: leads = [], isLoading: leadsLoading } = trpc.outreach.getLeads.useQuery({ campaignId: campaign.id });
 
@@ -851,7 +869,7 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
   });
 
   const generateDm = trpc.outreach.generateDm.useMutation({
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       if (data.sent) {
         toast.success("DM sent!");
       } else if (data.queued) {
@@ -861,9 +879,15 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
       } else if (data.reason?.startsWith("send_failed")) {
         toast.error(`Draft saved, but send failed: ${data.reason.replace("send_failed: ", "")}`);
       } else {
-        toast.success("DM draft ready — review it below");
+        toast.success("DM drafted — generating comment...");
       }
       utils.outreach.getLeads.invalidate({ campaignId: campaign.id });
+      // Auto-chain: if this was triggered by Analyze & Draft, continue to comment generation
+      const chainId = chainLeadIdRef.current;
+      if (chainId !== null && chainId === variables.leadId) {
+        generateComment.mutate({ leadId: chainId });
+        // Keep chainLeadIdRef set so comment generation knows it's in chain
+      }
     },
     onError: (err) => toast.error(err.message),
   });
@@ -890,9 +914,16 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
   });
 
   const roastLead = trpc.outreach.roastLead.useMutation({
-    onSuccess: () => {
-      toast.success("Lead roasted and scored!");
+    onSuccess: (_, variables) => {
       utils.outreach.getLeads.invalidate({ campaignId: campaign.id });
+      // Auto-chain: if this was triggered by Analyze & Draft, continue to DM generation
+      const chainId = chainLeadIdRef.current;
+      if (chainId !== null && chainId === variables.leadId) {
+        toast.success("Lead analyzed — drafting DM...");
+        generateDm.mutate({ leadId: chainId });
+      } else {
+        toast.success("Lead analyzed!");
+      }
     },
     onError: (err) => toast.error(err.message),
   });
@@ -906,8 +937,14 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
   });
 
   const generateComment = trpc.outreach.generateComment.useMutation({
-    onSuccess: () => {
-      toast.success("Comment draft ready!");
+    onSuccess: (_, variables) => {
+      // Clear chain ref when comment generation completes
+      if (chainLeadIdRef.current === variables.leadId) {
+        chainLeadIdRef.current = null;
+        toast.success("✅ All done — DM & comment drafted!");
+      } else {
+        toast.success("Comment draft ready!");
+      }
       utils.outreach.getLeads.invalidate({ campaignId: campaign.id });
     },
     onError: (err) => toast.error(err.message),
@@ -1086,7 +1123,7 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
               onQueue={(id) => queueLead.mutate({ leadId: id })}
               onCancelQueue={(id) => cancelQueue.mutate({ leadId: id })}
               onUpdateDraft={(id, draft) => updateDraft.mutate({ leadId: id, dmDraft: draft })}
-              onRoast={(id) => roastLead.mutate({ leadId: id })}
+              onRoast={(id) => { chainLeadIdRef.current = id; roastLead.mutate({ leadId: id }); }}
               onGenerateComment={(id) => generateComment.mutate({ leadId: id })}
               onSendComment={(id) => sendComment.mutate({ leadId: id })}
               onMarkContacted={(id) => markContacted.mutate({ leadId: id, stage: "replied" })}

@@ -239,3 +239,8 @@
 - [ ] Add title field to Draft & Roast optimized post output
 - [ ] Fix virality score update when switching to Improved tab
 - [x] Increase text size on mobile across key pages
+
+## v5.12 Auto-chain & Re-draft UX
+- [x] Auto-chain: roastLead onSuccess triggers generateDm, generateDm onSuccess triggers generateComment
+- [x] Style Re-draft as a proper visible button (not plain text link) in DM section
+- [x] Add Re-draft button to comment section
