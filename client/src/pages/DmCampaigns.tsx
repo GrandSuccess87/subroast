@@ -626,8 +626,8 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
           </div>
         )}
 
-        {/* ── DM draft ── */}
-        {lead.dmDraft && (
+        {/* ── DM draft — hidden while chain is still running ── */}
+        {lead.dmDraft && !isChaining && (
           <div className="rounded-lg border border-border bg-muted/20 overflow-hidden">
             <div className="flex items-center justify-between px-3 py-2 border-b border-border/50">
               <button

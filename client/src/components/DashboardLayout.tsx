@@ -165,10 +165,8 @@ function DashboardLayoutContent({
   const pendingPostCount = scheduledPosts?.filter((p) => p.status === "pending").length ?? 0;
 
   const totalLeads = allLeads?.length ?? 0;
-  const dmsDrafted = allLeads?.filter((l) => l.dmDraft).length ?? 0;
-  // Show progress toward a soft milestone (e.g. 50 leads, 25 DMs)
+  // Show progress toward a soft milestone of 50 leads
   const leadsPct = Math.min(Math.round((totalLeads / 50) * 100), 100);
-  const dmsPct = Math.min(Math.round((dmsDrafted / 25) * 100), 100);
 
   useEffect(() => {
     if (isCollapsed) setIsResizing(false);
@@ -289,18 +287,6 @@ function DashboardLayoutContent({
                     <div
                       className="h-full rounded-full transition-all bg-primary"
                       style={{ width: `${Math.max(leadsPct, 2)}%` }}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <div className="flex justify-between text-[11px] mb-1">
-                    <span className="text-sidebar-foreground/50">DMs drafted</span>
-                    <span className="font-medium text-sidebar-foreground">{dmsDrafted}</span>
-                  </div>
-                  <div className="h-1 rounded-full bg-sidebar-border overflow-hidden">
-                    <div
-                      className="h-full rounded-full transition-all bg-purple-400"
-                      style={{ width: `${Math.max(dmsPct, 2)}%` }}
                     />
                   </div>
                 </div>
