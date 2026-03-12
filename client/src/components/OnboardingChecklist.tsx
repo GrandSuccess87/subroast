@@ -1,5 +1,5 @@
 import { trpc } from "@/lib/trpc";
-import { CheckCircle2, Circle, ChevronRight, X, Sparkles } from "lucide-react";
+import { CheckCircle2, Circle, ChevronRight, Clock, X, Sparkles } from "lucide-react";
 import { useLocation } from "wouter";
 import { toast } from "sonner";
 
@@ -64,50 +64,60 @@ export default function OnboardingChecklist() {
 
       {/* Steps */}
       <div className="divide-y divide-border border-t border-border">
-        {data.steps.map((step) => (
-          <button
-            key={step.id}
-            onClick={() => !step.completed && navigate(step.href)}
-            disabled={step.completed}
-            className={`w-full flex items-center gap-3 px-5 py-3.5 text-left transition-colors ${
-              step.completed
-                ? "opacity-60 cursor-default"
-                : "hover:bg-muted/40 cursor-pointer"
-            }`}
-          >
-            {/* Icon */}
-            <div className="shrink-0">
-              {step.completed ? (
-                <CheckCircle2 className="w-5 h-5 text-primary" />
-              ) : (
-                <Circle className="w-5 h-5 text-muted-foreground/50" />
-              )}
-            </div>
+        {data.steps.map((step) => {
+          const isComingSoon = (step as { comingSoon?: boolean }).comingSoon;
+          return (
+            <button
+              key={step.id}
+              onClick={() => !step.completed && !isComingSoon && navigate(step.href)}
+              disabled={step.completed || isComingSoon}
+              className={`w-full flex items-center gap-3 px-5 py-3.5 text-left transition-colors ${
+                step.completed || isComingSoon
+                  ? "opacity-60 cursor-default"
+                  : "hover:bg-muted/40 cursor-pointer"
+              }`}
+            >
+              {/* Icon */}
+              <div className="shrink-0">
+                {step.completed ? (
+                  <CheckCircle2 className="w-5 h-5 text-primary" />
+                ) : isComingSoon ? (
+                  <Clock className="w-5 h-5 text-muted-foreground/50" />
+                ) : (
+                  <Circle className="w-5 h-5 text-muted-foreground/50" />
+                )}
+              </div>
 
-            {/* Text */}
-            <div className="flex-1 min-w-0">
-              <p
-                className={`text-sm font-medium ${
-                  step.completed
-                    ? "line-through text-muted-foreground"
-                    : "text-foreground"
-                }`}
-              >
-                {step.label}
-              </p>
-              {!step.completed && (
-                <p className="text-xs text-muted-foreground mt-0.5 truncate">
-                  {step.description}
-                </p>
-              )}
-            </div>
+              {/* Text */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <p
+                    className={`text-sm font-medium ${
+                      step.completed
+                        ? "line-through text-muted-foreground"
+                        : "text-foreground"
+                    }`}
+                  >
+                    {step.label}
+                  </p>
+                  {isComingSoon && (
+                    <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-amber-400/10 text-amber-400 border border-amber-400/20 font-medium shrink-0">Coming soon</span>
+                  )}
+                </div>
+                {!step.completed && (
+                  <p className="text-xs text-muted-foreground mt-0.5 truncate">
+                    {isComingSoon ? "Reddit API approval pending — full integration coming soon" : step.description}
+                  </p>
+                )}
+              </div>
 
-            {/* Arrow (only for incomplete steps) */}
-            {!step.completed && (
-              <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
-            )}
-          </button>
-        ))}
+              {/* Arrow (only for actionable incomplete steps) */}
+              {!step.completed && !isComingSoon && (
+                <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+              )}
+            </button>
+          );
+        })}
       </div>
     </div>
   );

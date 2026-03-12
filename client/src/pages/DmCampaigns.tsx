@@ -470,7 +470,7 @@ function ProgressSteps({ steps, currentStep }: { steps: string[]; currentStep: n
   );
 }
 
-function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue, onUpdateDraft, onRoast, onGenerateComment, onSendComment }: {
+function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue, onUpdateDraft, onRoast, onGenerateComment, onSendComment, onMarkContacted }: {
   lead: Lead;
   onGenerateDm: (id: number) => void;
   onSendDm: (id: number) => void;
@@ -481,6 +481,7 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
   onRoast: (id: number) => void;
   onGenerateComment: (id: number) => void;
   onSendComment: (id: number) => void;
+  onMarkContacted: (id: number) => void;
 }) {
   const [expandedDm, setExpandedDm] = useState(false);
   const [expandedComment, setExpandedComment] = useState(false);
@@ -724,42 +725,37 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
             )
           )}
 
-          {/* Send DM immediately */}
+          {/* Copy & Open DM (replaces Send DM while Reddit API pending) */}
           {lead.status === "dm_generated" && lead.dmDraft && (
             <Button
               size="sm"
-              onClick={() => onSendDm(lead.id)}
+              onClick={() => {
+                navigator.clipboard.writeText(lead.dmDraft!);
+                window.open(`https://www.reddit.com/user/${lead.authorUsername}`, "_blank");
+                toast.success("DM copied! Opening Reddit profile to send manually.");
+              }}
               className="h-7 px-2.5 text-[10px] bg-primary text-primary-foreground hover:bg-primary/90 gap-1"
             >
-              <Send className="w-3 h-3" />
-              Send DM
+              <Clipboard className="w-3 h-3" />
+              Copy & Open
             </Button>
           )}
 
-          {/* Cancel Queue */}
-          {lead.status === "queued" && (
-            <Button
-              size="sm"
-              onClick={() => onCancelQueue(lead.id)}
-              variant="outline"
-              className="h-7 px-2.5 text-[10px] border-border border-red-500/30 text-red-400 hover:bg-red-500/10 gap-1"
-            >
-              <XCircle className="w-3 h-3" />
-              Cancel Queue
-            </Button>
-          )}
-
-          {/* Draft / Send Comment */}
+          {/* Draft / Copy & Open Comment (replaces Send Comment while Reddit API pending) */}
           {isActionable && (
             lead.commentDraft && !lead.commentSentAt ? (
               <Button
                 size="sm"
-                onClick={() => onSendComment(lead.id)}
+                onClick={() => {
+                  navigator.clipboard.writeText(lead.commentDraft!);
+                  window.open(lead.redditPostUrl, "_blank");
+                  toast.success("Comment copied! Opening post to paste manually.");
+                }}
                 variant="outline"
                 className="h-7 px-2.5 text-[10px] border-primary/40 text-primary hover:bg-primary/10 gap-1"
               >
-                <Send className="w-3 h-3" />
-                Send Comment
+                <Clipboard className="w-3 h-3" />
+                Copy & Open
               </Button>
             ) : lead.commentSentAt ? (
               <span className="text-[10px] text-primary flex items-center gap-1">
@@ -783,8 +779,26 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
             )
           )}
 
+          {/* Mark as Contacted */}
+          {isActionable && lead.pipelineStage !== "replied" && (
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => onMarkContacted(lead.id)}
+              className="h-7 px-2.5 text-[10px] border-green-500/30 text-green-400 hover:bg-green-500/10 gap-1"
+            >
+              <CheckCircle2 className="w-3 h-3" />
+              Mark Contacted
+            </Button>
+          )}
+          {lead.pipelineStage === "replied" && (
+            <span className="text-[10px] text-green-400 flex items-center gap-1">
+              <CheckCircle2 className="w-3 h-3" /> Contacted
+            </span>
+          )}
+
           {/* Skip */}
-          {isActionable && (
+          {isActionable && lead.pipelineStage !== "replied" && (
             <Button
               size="sm"
               variant="ghost"
@@ -896,6 +910,14 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
   const sendComment = trpc.outreach.sendComment.useMutation({
     onSuccess: () => {
       toast.success("Comment posted to Reddit!");
+      utils.outreach.getLeads.invalidate({ campaignId: campaign.id });
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
+  const markContacted = trpc.outreach.updatePipelineStage.useMutation({
+    onSuccess: () => {
+      toast.success("Lead marked as contacted!");
       utils.outreach.getLeads.invalidate({ campaignId: campaign.id });
     },
     onError: (err) => toast.error(err.message),
@@ -1047,6 +1069,7 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
               onRoast={(id) => roastLead.mutate({ leadId: id })}
               onGenerateComment={(id) => generateComment.mutate({ leadId: id })}
               onSendComment={(id) => sendComment.mutate({ leadId: id })}
+              onMarkContacted={(id) => markContacted.mutate({ leadId: id, stage: "replied" })}
             />
           ))}
         </div>

@@ -69,7 +69,9 @@ Return a JSON object with this EXACT structure:
     "tip": "One specific, actionable tip to increase virality"
   },
   "roast": "3-5 witty lines like a Redditor would say, separated by newlines",
-  "improved_draft": "Full rewritten version of the post/DM that would perform better on Reddit"
+  "improved_draft": "Full rewritten version of the post/DM that would perform better on Reddit",
+  "recommended_subreddit": "The single best subreddit to post this in (without r/ prefix), based on the content and target audience",
+  "subreddit_reasoning": "One sentence explaining why this subreddit is the best fit"
 }
 
 For the virality score (1-100), consider: does the title ask a question (+15), is there an emotional hook (+10), is it specific/concrete (+10), does it fit the subreddit culture (+15), is there a story/narrative (+10), is there value for the reader (+15), is the length appropriate (+10), does it avoid overt self-promotion (+15). Sum these up for the score.`;
@@ -109,8 +111,10 @@ For the virality score (1-100), consider: does the title ask a question (+15), i
                 },
                 roast: { type: "string" },
                 improved_draft: { type: "string" },
+                recommended_subreddit: { type: "string", description: "Best subreddit without r/ prefix" },
+                subreddit_reasoning: { type: "string", description: "One sentence explaining the subreddit choice" },
               },
-              required: ["review", "virality", "roast", "improved_draft"],
+              required: ["review", "virality", "roast", "improved_draft", "recommended_subreddit", "subreddit_reasoning"],
               additionalProperties: false,
             },
           },
@@ -135,6 +139,8 @@ For the virality score (1-100), consider: does the title ask a question (+15), i
           };
           roast: string;
           improved_draft: string;
+          recommended_subreddit: string;
+          subreddit_reasoning: string;
         };
       } catch {
         throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Failed to parse AI response" });

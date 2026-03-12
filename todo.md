@@ -221,3 +221,14 @@
 
 ## New Signup Email Notification (v5.8)
 - [x] Send email to tessa.anderson@blackvectorhorizon.solutions on new user signup
+
+## Reddit Connect Onboarding (v5.9)
+- [ ] Ensure "Connect Reddit account" is a visible, tracked step in the onboarding checklist
+- [ ] End-to-end test Reddit OAuth connection flow
+
+## Manual Copy-Paste UX + Contacted Indicator (v5.9)
+- [ ] Write REDDIT_INTEGRATION.md documentation
+- [ ] Settings: hide Reddit connect, show coming soon badge, remove rate limits
+- [ ] Onboarding: mark Reddit step as coming soon
+- [ ] LeadCard: replace Send DM/Comment with Copy & Open, add Mark as Contacted
+- [ ] Draft & Roast: add Ready to Post panel with AI subreddit + Copy & Open

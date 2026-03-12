@@ -34,6 +34,8 @@ type AnalysisResult = {
   };
   roast: string;
   improved_draft: string;
+  recommended_subreddit: string;
+  subreddit_reasoning: string;
 };
 
 function ScoreBadge({ value, type }: { value: string; type: "positive" | "negative" }) {
@@ -437,6 +439,49 @@ export default function DraftRoast() {
                     </CardContent>
                   </Card>
                 )}
+
+                {/* ── Ready to Post panel ── */}
+                <Card className="bg-card border-primary/20 border">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                      <Rocket className="w-4 h-4 text-primary" />
+                      Ready to Post
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="flex items-start gap-3 p-3 rounded-lg bg-primary/5 border border-primary/15">
+                      <Sparkles className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-xs font-semibold text-foreground">AI recommends:</span>
+                          <span className="text-xs font-bold text-primary">r/{result.recommended_subreddit}</span>
+                        </div>
+                        <p className="text-[11px] text-muted-foreground mt-0.5 leading-relaxed">{result.subreddit_reasoning}</p>
+                      </div>
+                    </div>
+                    <div className="p-3 rounded-lg bg-muted/20 border border-border">
+                      <p className="text-xs text-muted-foreground mb-1 font-medium">Post content (improved draft)</p>
+                      <p className="text-xs text-foreground/80 leading-relaxed line-clamp-3 whitespace-pre-wrap">
+                        {result.improved_draft}
+                      </p>
+                    </div>
+                    <Button
+                      className="w-full gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
+                      onClick={() => {
+                        const sub = result.recommended_subreddit;
+                        navigator.clipboard.writeText(result.improved_draft);
+                        window.open(`https://www.reddit.com/r/${sub}/submit`, "_blank");
+                        toast.success(`Post copied! Opening r/${sub} to submit.`);
+                      }}
+                    >
+                      <ClipboardCopy className="w-4 h-4" />
+                      Copy & Open r/{result.recommended_subreddit}
+                    </Button>
+                    <p className="text-[10px] text-muted-foreground text-center">
+                      Copies your improved post to clipboard and opens the subreddit submission page
+                    </p>
+                  </CardContent>
+                </Card>
               </div>
             )}
           </div>

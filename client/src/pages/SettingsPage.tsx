@@ -68,154 +68,26 @@ export default function SettingsPage() {
             </div>
             <h1 className="text-xl font-bold text-foreground">Settings</h1>
           </div>
-          <p className="text-sm text-muted-foreground ml-10.5">Manage your Reddit connection and account limits.</p>
+          <p className="text-sm text-muted-foreground ml-10.5">Manage your account and billing settings.</p>
         </div>
 
-        {/* Reddit Connection */}
+        {/* Reddit Connection — Coming Soon */}
         <Card className="bg-card border-border">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-semibold flex items-center gap-2">
               <Zap className="w-4 h-4 text-primary" />
               Reddit Connection
+              <span className="ml-auto text-[10px] px-2 py-0.5 rounded-full bg-amber-400/10 text-amber-400 border border-amber-400/20 font-medium">Coming Soon</span>
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            {accountLoading ? (
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Loading...
-              </div>
-            ) : account ? (
-              <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 rounded-lg bg-primary/5 border border-primary/20">
-                  <div className="flex items-center gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-primary shrink-0" />
-                    <div>
-                      <p className="text-sm font-semibold text-foreground">u/{account.redditUsername}</p>
-                      <p className="text-xs text-muted-foreground">Scopes: submit, privatemessages, read</p>
-                    </div>
-                  </div>
-                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-primary/15 text-primary border border-primary/20 font-medium">Connected</span>
-                </div>
-
-                {account.isPaused && (
-                  <div className="flex items-start gap-3 p-3 rounded-lg bg-red-400/5 border border-red-400/20">
-                    <AlertTriangle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
-                    <div className="flex-1">
-                      <p className="text-sm font-medium text-red-300">Account auto-paused</p>
-                      <p className="text-xs text-red-400/70 mt-0.5">{account.pauseReason}</p>
-                    </div>
-                    <Button size="sm" variant="outline" className="shrink-0 border-red-400/30 text-red-400 hover:bg-red-400/10 h-7 text-xs" onClick={() => unpauseAccount.mutate()} disabled={unpauseAccount.isPending}>
-                      {unpauseAccount.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : <><RefreshCw className="w-3 h-3 mr-1" />Unpause</>}
-                    </Button>
-                  </div>
-                )}
-
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm" onClick={handleConnectReddit} className="gap-1.5 border-border text-muted-foreground hover:text-foreground">
-                    <RefreshCw className="w-3.5 h-3.5" />
-                    Reconnect
-                  </Button>
-                  <Button variant="outline" size="sm" onClick={() => disconnectReddit.mutate()} disabled={disconnectReddit.isPending} className="gap-1.5 border-red-400/20 text-red-400 hover:bg-red-400/10">
-                    {disconnectReddit.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <><Unlink className="w-3.5 h-3.5" />Disconnect</>}
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <div className="flex items-center gap-3 p-3 rounded-lg bg-amber-500/5 border border-amber-500/20">
-                  <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
-                  <div>
-                    <p className="text-sm font-medium text-foreground">No Reddit account connected</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">Connect your Reddit account to start posting and sending DMs.</p>
-                  </div>
-                </div>
-                <Button onClick={handleConnectReddit} className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
-                  <Zap className="w-4 h-4" />
-                  Connect Reddit Account
-                </Button>
-                <div className="text-xs text-muted-foreground space-y-1">
-                  <p className="font-medium text-foreground/60">Required permissions:</p>
-                  <ul className="space-y-0.5 ml-1">
-                    <li className="flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-muted-foreground/50 shrink-0" />submit — post to subreddits</li>
-                    <li className="flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-muted-foreground/50 shrink-0" />privatemessages — send DMs</li>
-                    <li className="flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-muted-foreground/50 shrink-0" />read — verify posts and check status</li>
-                  </ul>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Daily Limits */}
-        <Card className="bg-card border-border">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold flex items-center gap-2">
-              <Shield className="w-4 h-4 text-primary" />
-              Daily Limits
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-3">
-              <div className="p-4 rounded-xl border border-border bg-muted/20">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <Zap className="w-3.5 h-3.5 text-primary" />
-                  </div>
-                  <span className="text-sm font-medium text-foreground">Posts</span>
-                </div>
-                <div className="text-3xl font-bold text-foreground">5</div>
-                <div className="text-xs text-muted-foreground mt-0.5">per day</div>
-                {rateLimits && (
-                  <div className="mt-3 space-y-1">
-                    <div className="flex justify-between text-xs text-muted-foreground">
-                      <span>Used today</span>
-                      <span className="font-medium text-foreground">{rateLimits.postsToday}/5</span>
-                    </div>
-                    <div className="h-1 rounded-full bg-border overflow-hidden">
-                      <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${Math.min((rateLimits.postsToday / 5) * 100, 100)}%` }} />
-                    </div>
-                  </div>
-                )}
-              </div>
-              <div className="p-4 rounded-xl border border-border bg-muted/20">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-7 h-7 rounded-lg bg-purple-400/10 flex items-center justify-center">
-                    <MessageSquare className="w-3.5 h-3.5 text-purple-400" />
-                  </div>
-                  <span className="text-sm font-medium text-foreground">DMs</span>
-                </div>
-                <div className="text-3xl font-bold text-foreground">25</div>
-                <div className="text-xs text-muted-foreground mt-0.5">per day</div>
-                {rateLimits && (
-                  <div className="mt-3 space-y-1">
-                    <div className="flex justify-between text-xs text-muted-foreground">
-                      <span>Used today</span>
-                      <span className="font-medium text-foreground">{rateLimits.dmsToday}/25</span>
-                    </div>
-                    <div className="h-1 rounded-full bg-border overflow-hidden">
-                      <div className="h-full rounded-full bg-purple-400 transition-all" style={{ width: `${Math.min((rateLimits.dmsToday / 25) * 100, 100)}%` }} />
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="p-3 rounded-lg bg-muted/20 border border-border space-y-2">
-              <p className="text-xs font-semibold text-foreground/70 uppercase tracking-wide">Rate limit rules</p>
-              <div className="space-y-1.5 text-xs text-muted-foreground">
-                {[
-                  { icon: Clock, text: "30-minute cooldown between posts", color: "text-primary" },
-                  { icon: Clock, text: "Max 5 DMs per hour", color: "text-primary" },
-                  { icon: Clock, text: "2–10 minute randomized delays between DMs", color: "text-primary" },
-                  { icon: AlertTriangle, text: "Warning shown at 80% of daily limit", color: "text-amber-400" },
-                  { icon: Shield, text: "Account auto-pauses after 3 consecutive failures", color: "text-red-400" },
-                ].map(({ icon: Icon, text, color }) => (
-                  <div key={text} className="flex items-start gap-2">
-                    <Icon className={`w-3.5 h-3.5 mt-0.5 shrink-0 ${color}`} />
-                    <span>{text}</span>
-                  </div>
-                ))}
+          <CardContent>
+            <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/20 border border-border">
+              <Clock className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm font-medium text-foreground">Direct Reddit integration is pending API approval</p>
+                <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                  We've submitted our Reddit API application and are awaiting approval. In the meantime, SubRoast generates your DMs, comments, and posts — you copy and paste them directly on Reddit. Full one-click sending will be enabled once approved.
+                </p>
               </div>
             </div>
           </CardContent>

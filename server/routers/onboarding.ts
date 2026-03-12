@@ -50,6 +50,7 @@ export const onboardingRouter = router({
         description: "Link Reddit to enable post drafting and DM sending",
         href: "/settings",
         completed: redditConnected,
+        comingSoon: true, // REDDIT_CONNECT_DISABLED: remove this flag when Reddit API is approved
       },
       {
         id: "campaign_created",
