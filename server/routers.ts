@@ -33,6 +33,7 @@ import axios from "axios";
 import { outreachRouter } from "./routers/outreach";
 import { subscriptionRouter } from "./routers/subscription";
 import { onboardingRouter } from "./routers/onboarding";
+import { feedbackRouter } from "./routers/feedback";
 
 // ─── AI Roast Router ─────────────────────────────────────────────────────────
 
@@ -583,6 +584,7 @@ export const appRouter = router({
   outreach: outreachRouter,
   subscription: subscriptionRouter,
   onboarding: onboardingRouter,
+  feedback: feedbackRouter,
   history: historyRouter,
   settings: settingsRouter,
 });

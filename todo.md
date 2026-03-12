@@ -251,3 +251,12 @@
 - [x] Show "Loading comment draft..." skeleton instead of View comment draft link during lag
 - [x] Fix Copy & Open + Re-draft overflow on mobile — stack vertically or shrink
 - [x] Extend progress bar to 6 steps: Reading post → Scoring lead → Crafting DM → DM ready → Drafting comment → Done
+
+## Feedback Board (v5.25)
+- [x] DB schema: add feedback table (id, userId, type enum(feature/bug/other), title, body, status enum(open/planned/done), createdAt)
+- [x] tRPC: submitFeedback procedure (protected, any plan)
+- [x] tRPC: listFeedback procedure (public — all users can see the board)
+- [x] tRPC: adminUpdateFeedback procedure (admin only — update status)
+- [x] Feedback page: /feedback route with submit form + public board view
+- [x] Sidebar: add Feedback nav item under ACCOUNT section
+- [x] Register /feedback route in App.tsx

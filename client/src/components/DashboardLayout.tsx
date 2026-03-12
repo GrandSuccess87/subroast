@@ -29,6 +29,7 @@ import {
   LayoutDashboard,
   LogOut,
   MessageSquare,
+  MessageSquarePlus,
   PanelLeft,
   Settings,
   Sparkles,
@@ -80,6 +81,7 @@ const NAV_SECTIONS: NavSection[] = [
     title: "Account",
     items: [
       { icon: Settings, label: "Settings", path: "/dashboard/settings" },
+      { icon: MessageSquarePlus, label: "Feedback", path: "/dashboard/feedback" },
     ],
   },
 ];

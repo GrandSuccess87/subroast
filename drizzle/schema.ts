@@ -231,3 +231,19 @@ export const outreachLeads = mysqlTable("outreach_leads", {
 
 export type OutreachLead = typeof outreachLeads.$inferSelect;
 export type InsertOutreachLead = typeof outreachLeads.$inferInsert;
+
+// ─── Feedback Board ──────────────────────────────────────────────────────────
+export const feedback = mysqlTable("feedback", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  type: mysqlEnum("type", ["feature", "bug", "other"]).default("feature").notNull(),
+  title: varchar("title", { length: 200 }).notNull(),
+  body: text("body"),
+  status: mysqlEnum("status", ["open", "planned", "done"]).default("open").notNull(),
+  upvotes: int("upvotes").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Feedback = typeof feedback.$inferSelect;
+export type InsertFeedback = typeof feedback.$inferInsert;
