@@ -1207,41 +1207,50 @@ export default function DmCampaigns() {
   return (
     <DashboardLayout>
       <div className="max-w-4xl mx-auto space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <div className="flex items-center gap-2.5 mb-1">
-              <div className="w-8 h-8 rounded-lg bg-violet-400/10 flex items-center justify-center">
-                <Target className="w-4 h-4 text-violet-400" />
+        <div className="space-y-3">
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2.5 mb-1">
+                <div className="w-8 h-8 rounded-lg bg-violet-400/10 flex items-center justify-center shrink-0">
+                  <Target className="w-4 h-4 text-violet-400" />
+                </div>
+                <h1 className="text-xl font-bold text-foreground">DM Campaigns</h1>
               </div>
-              <h1 className="text-xl font-bold text-foreground">DM Campaigns</h1>
+              <p className="text-sm text-muted-foreground ml-10.5">
+                Monitor subreddits for leads, AI-draft personalized DMs, and send with rate-limited safety.
+              </p>
             </div>
-            <p className="text-sm text-muted-foreground ml-10.5">
-              Monitor subreddits for leads, AI-draft personalized DMs, and send with rate-limited safety.
-            </p>
+            {!showNewForm && (() => {
+              const isGrowth = subStatus?.plan === "growth";
+              const atLimit = !isGrowth && campaigns.length >= 1;
+              if (atLimit) return null;
+              return (
+                <Button onClick={() => setShowNewForm(true)} size="sm" className="gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 shrink-0">
+                  <Plus className="w-4 h-4" />
+                  New Campaign
+                </Button>
+              );
+            })()}
           </div>
           {!showNewForm && (() => {
             const isGrowth = subStatus?.plan === "growth";
             const atLimit = !isGrowth && campaigns.length >= 1;
-            if (atLimit) {
-              return (
-                <div className="flex flex-col items-end gap-1.5">
-                  <Button
-                    onClick={() => navigate("/pricing")}
-                    size="sm"
-                    className="gap-1.5 bg-amber-500 text-white hover:bg-amber-400"
-                  >
-                    <Zap className="w-3.5 h-3.5" />
-                    Upgrade for more
-                  </Button>
-                  <span className="text-[10px] text-muted-foreground">1 campaign on Starter</span>
-                </div>
-              );
-            }
+            if (!atLimit) return null;
             return (
-              <Button onClick={() => setShowNewForm(true)} size="sm" className="gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90">
-                <Plus className="w-4 h-4" />
-                New Campaign
-              </Button>
+              <div className="flex items-center gap-3 p-3 rounded-lg border border-amber-500/20 bg-amber-500/5">
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-amber-400">Starter plan — 1 campaign limit</p>
+                  <p className="text-xs text-muted-foreground">Upgrade to Growth for unlimited campaigns, priority sync, and DM templates.</p>
+                </div>
+                <Button
+                  onClick={() => navigate("/pricing")}
+                  size="sm"
+                  className="gap-1.5 bg-amber-500 text-white hover:bg-amber-400 shrink-0"
+                >
+                  <Zap className="w-3.5 h-3.5" />
+                  Upgrade
+                </Button>
+              </div>
             );
           })()}
         </div>

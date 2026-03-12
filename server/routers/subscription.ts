@@ -115,6 +115,7 @@ export const subscriptionRouter = router({
         throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Failed to create price" });
       }
 
+      // Use trial_period_days so Stripe calculates the end date itself and always shows the correct count
       const trialEndTimestamp = Math.floor(Date.now() / 1000) + TRIAL_DAYS * 24 * 60 * 60;
 
       // Stripe requires exactly one of: customer or customer_email (not both)
@@ -127,7 +128,7 @@ export const subscriptionRouter = router({
         mode: "subscription",
         line_items: [{ price: priceId, quantity: 1 }],
         subscription_data: {
-          trial_end: trialEndTimestamp,
+          trial_period_days: TRIAL_DAYS,
           metadata: {
             plan: input.plan,
             user_id: ctx.user.id.toString(),
