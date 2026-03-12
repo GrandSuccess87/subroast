@@ -35,18 +35,14 @@ export default function BillingSuccess() {
           <div className="space-y-2 text-sm text-muted-foreground">
             <div className="flex items-start gap-2">
               <span className="text-green-400 font-bold mt-0.5">1.</span>
-              <span>Connect your Reddit account in Settings</span>
-            </div>
-            <div className="flex items-start gap-2">
-              <span className="text-green-400 font-bold mt-0.5">2.</span>
               <span>Create your first outreach campaign in DM Campaigns</span>
             </div>
             <div className="flex items-start gap-2">
-              <span className="text-green-400 font-bold mt-0.5">3.</span>
+              <span className="text-green-400 font-bold mt-0.5">2.</span>
               <span>Hit "Sync Leads" to discover Reddit posts matching your keywords</span>
             </div>
             <div className="flex items-start gap-2">
-              <span className="text-green-400 font-bold mt-0.5">4.</span>
+              <span className="text-green-400 font-bold mt-0.5">3.</span>
               <span>Generate AI-personalized DMs and start outreach</span>
             </div>
           </div>
