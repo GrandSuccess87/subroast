@@ -260,3 +260,10 @@
 - [x] Feedback page: /feedback route with submit form + public board view
 - [x] Sidebar: add Feedback nav item under ACCOUNT section
 - [x] Register /feedback route in App.tsx
+
+## Design System Refresh + Landing Page Redesign (v5.26)
+- [x] Update CSS variables in index.css with refined OKLCH palette (deeper background, brighter accent, better contrast hierarchy)
+- [x] Add Playfair Display (serif display) + JetBrains Mono (data/mono) Google Fonts to index.html
+- [x] Apply font-display and font-mono CSS variables throughout design system
+- [x] Rebuild Home.tsx landing page with scroll-driven hero, editorial sections, feature showcase, pricing CTA
+- [x] Add scroll-linked scale animation for hero media (IBEX-style zoom on scroll)
