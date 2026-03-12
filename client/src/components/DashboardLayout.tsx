@@ -151,7 +151,7 @@ function DashboardLayoutContent({
   const sidebarRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
 
-  const { data: rateLimits } = trpc.reddit.getRateLimitStatus.useQuery(undefined, {
+  const { data: allLeads } = trpc.outreach.getAllLeads.useQuery(undefined, {
     refetchInterval: 60_000,
   });
 
@@ -164,12 +164,11 @@ function DashboardLayoutContent({
   });
   const pendingPostCount = scheduledPosts?.filter((p) => p.status === "pending").length ?? 0;
 
-  const postsUsed = rateLimits?.postsToday ?? 0;
-  const postsMax = rateLimits?.maxPostsPerDay ?? 5;
-  const dmsUsed = rateLimits?.dmsToday ?? 0;
-  const dmsMax = rateLimits?.maxDmsPerDay ?? 25;
-  const postPct = Math.round((postsUsed / postsMax) * 100);
-  const dmPct = Math.round((dmsUsed / dmsMax) * 100);
+  const totalLeads = allLeads?.length ?? 0;
+  const dmsDrafted = allLeads?.filter((l) => l.dmDraft).length ?? 0;
+  // Show progress toward a soft milestone (e.g. 50 leads, 25 DMs)
+  const leadsPct = Math.min(Math.round((totalLeads / 50) * 100), 100);
+  const dmsPct = Math.min(Math.round((dmsDrafted / 25) * 100), 100);
 
   useEffect(() => {
     if (isCollapsed) setIsResizing(false);
@@ -273,39 +272,35 @@ function DashboardLayoutContent({
             ))}
           </SidebarContent>
 
-          {/* Usage widget */}
+          {/* Activity widget */}
           {!isCollapsed && (
             <div className="mx-3 mb-3 p-3 rounded-lg bg-sidebar-accent border border-sidebar-border">
               <div className="flex items-center gap-1.5 mb-2.5">
                 <BarChart2 className="w-3.5 h-3.5 text-primary" />
-                <span className="text-[11px] font-semibold text-sidebar-foreground">Today's Usage</span>
+                <span className="text-[11px] font-semibold text-sidebar-foreground">Activity</span>
               </div>
               <div className="space-y-2">
                 <div>
                   <div className="flex justify-between text-[11px] mb-1">
-                    <span className="text-sidebar-foreground/50">Posts</span>
-                    <span className={`font-medium ${postPct >= 80 ? "text-amber-400" : "text-sidebar-foreground"}`}>
-                      {postsUsed}/{postsMax}
-                    </span>
+                    <span className="text-sidebar-foreground/50">Leads found</span>
+                    <span className="font-medium text-sidebar-foreground">{totalLeads}</span>
                   </div>
                   <div className="h-1 rounded-full bg-sidebar-border overflow-hidden">
                     <div
-                      className={`h-full rounded-full transition-all ${postPct >= 80 ? "bg-amber-400" : "bg-primary"}`}
-                      style={{ width: `${Math.max(postPct, 2)}%` }}
+                      className="h-full rounded-full transition-all bg-primary"
+                      style={{ width: `${Math.max(leadsPct, 2)}%` }}
                     />
                   </div>
                 </div>
                 <div>
                   <div className="flex justify-between text-[11px] mb-1">
-                    <span className="text-sidebar-foreground/50">DMs</span>
-                    <span className={`font-medium ${dmPct >= 80 ? "text-amber-400" : "text-sidebar-foreground"}`}>
-                      {dmsUsed}/{dmsMax}
-                    </span>
+                    <span className="text-sidebar-foreground/50">DMs drafted</span>
+                    <span className="font-medium text-sidebar-foreground">{dmsDrafted}</span>
                   </div>
                   <div className="h-1 rounded-full bg-sidebar-border overflow-hidden">
                     <div
-                      className={`h-full rounded-full transition-all ${dmPct >= 80 ? "bg-amber-400" : "bg-primary"}`}
-                      style={{ width: `${Math.max(dmPct, 2)}%` }}
+                      className="h-full rounded-full transition-all bg-purple-400"
+                      style={{ width: `${Math.max(dmsPct, 2)}%` }}
                     />
                   </div>
                 </div>

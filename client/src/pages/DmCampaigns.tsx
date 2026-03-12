@@ -440,13 +440,13 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
 // ─── Animated step progress indicator ───────────────────────────────────────
 function ProgressSteps({ steps, currentStep }: { steps: string[]; currentStep: number }) {
   return (
-    <div className="flex items-center gap-1.5 py-0.5">
+    <div className="flex items-center gap-0.5 py-0.5 overflow-x-auto">
       {steps.map((label, i) => {
         const done = i < currentStep;
         const active = i === currentStep;
         return (
-          <div key={i} className="flex items-center gap-1">
-            <div className={`flex items-center gap-1 text-[10px] transition-all duration-300 ${
+          <div key={i} className="flex items-center gap-0.5">
+            <div className={`flex flex-col items-center gap-0.5 min-w-[36px] transition-all duration-300 ${
               done ? "text-primary" : active ? "text-foreground" : "text-muted-foreground/40"
             }`}>
               {done ? (
@@ -456,10 +456,10 @@ function ProgressSteps({ steps, currentStep }: { steps: string[]; currentStep: n
               ) : (
                 <div className="w-3 h-3 rounded-full border border-muted-foreground/30 shrink-0" />
               )}
-              <span className={active ? "font-medium" : ""}>{label}</span>
+              <span className={`text-[9px] leading-tight text-center ${active ? "font-medium" : ""}`}>{label}</span>
             </div>
             {i < steps.length - 1 && (
-              <div className={`w-3 h-px transition-all duration-500 ${
+              <div className={`w-2 h-px mb-3 transition-all duration-500 shrink-0 ${
                 done ? "bg-primary" : "bg-border"
               }`} />
             )}
@@ -1081,16 +1081,21 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
 
       <div className={`flex items-center gap-2 p-2.5 rounded-lg border text-xs ${
         campaign.reviewMode === "auto_send"
-          ? "bg-amber-400/5 border-amber-400/20 text-amber-300"
+          ? "bg-muted/30 border-border text-muted-foreground"
           : "bg-primary/5 border-primary/20 text-primary"
       }`}>
         {campaign.reviewMode === "auto_send" ? <Zap className="w-3.5 h-3.5" /> : <CheckCircle2 className="w-3.5 h-3.5" />}
         <span className="font-medium">{campaign.reviewMode === "auto_send" ? "Auto-Send mode" : "Review First mode"}</span>
         <span className="text-muted-foreground">
           {campaign.reviewMode === "auto_send"
-            ? "— DMs are queued automatically after AI generation"
+            ? "— You review each DM before it's sent"
             : "— You review each DM before it's sent"}
         </span>
+        {campaign.reviewMode === "auto_send" && (
+          <span className="ml-auto shrink-0 text-[9px] font-semibold px-1.5 py-0.5 rounded border bg-muted/60 text-muted-foreground border-border">
+            Coming soon
+          </span>
+        )}
       </div>
 
       <div>

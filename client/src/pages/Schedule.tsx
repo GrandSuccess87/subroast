@@ -16,7 +16,7 @@ import {
   Sparkles,
   Trash2,
   X,
-} from "lucide-react";
+} from "lucide-react"; // AlertTriangle kept for rate limit warnings
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -193,11 +193,14 @@ export default function Schedule() {
           </div>
         )}
 
-        {/* No Reddit account */}
+        {/* No Reddit account — coming soon */}
         {!account && (
-          <div className="flex items-center gap-3 p-4 rounded-xl bg-amber-500/5 border border-amber-500/20">
-            <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
-            <p className="text-sm text-amber-300">Connect your Reddit account in Settings to schedule posts.</p>
+          <div className="flex items-center gap-3 p-3 rounded-xl bg-muted/40 border border-border">
+            <div className="w-2 h-2 rounded-full bg-primary/60 shrink-0" />
+            <p className="text-xs text-muted-foreground">
+              <span className="font-medium text-foreground">Reddit direct posting coming soon.</span>{" "}
+              Reddit API approval is pending — scheduling will be enabled automatically once approved.
+            </p>
           </div>
         )}
 
