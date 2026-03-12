@@ -41,69 +41,75 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* ── Typography families ── */
-  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  /* ── Typography ── */
+  --font-display: 'Cormorant Garamond', 'Garamond', 'Times New Roman', serif;
   --font-sans: 'Inter', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 }
 
 :root {
-  --radius: 0.5rem;
-
-  /* ── SubRoast Editorial Dark Palette ──
-     Background: deep charcoal with a cool-blue tint (near-black)
-     Accent: electric amber/gold — warm, high-contrast, WCAG AAA on dark bg
-       oklch(0.78 0.18 65) ≈ a rich golden amber
-     Text: near-white headline, cool mid-grey body
+  /* ── Ultra-Luxury Obsidian Palette ──
+     Inspired by Rolls-Royce, Loro Piana, The Row
+     Background:  deep obsidian with a barely-perceptible warm undertone
+     Accent:      champagne gold — restrained, metallic, never garish
+     Text:        warm off-white (aged vellum) → cool mid-grey
+     Borders:     hairline, near-invisible
   */
+  --radius: 0.125rem; /* 2px — nearly square, luxury precision */
 
   /* Backgrounds */
-  --background:        oklch(0.09 0.006 250);   /* deepest charcoal */
-  --card:              oklch(0.13 0.006 250);   /* slightly lifted card surface */
-  --popover:           oklch(0.13 0.006 250);
-  --sidebar:           oklch(0.11 0.006 250);   /* sidebar: between bg and card */
+  --background:        oklch(0.07 0.004 280);   /* deep obsidian */
+  --card:              oklch(0.10 0.004 280);   /* lifted obsidian surface */
+  --popover:           oklch(0.10 0.004 280);
+  --sidebar:           oklch(0.085 0.004 280);  /* sidebar: between bg and card */
 
-  /* Foregrounds */
-  --foreground:        oklch(0.95 0.004 240);   /* near-white headline text */
-  --card-foreground:   oklch(0.95 0.004 240);
-  --popover-foreground: oklch(0.95 0.004 240);
-  --sidebar-foreground: oklch(0.95 0.004 240);
+  /* Foregrounds — warm off-white, aged vellum */
+  --foreground:        oklch(0.93 0.010 80);    /* warm off-white headline */
+  --card-foreground:   oklch(0.93 0.010 80);
+  --popover-foreground: oklch(0.93 0.010 80);
+  --sidebar-foreground: oklch(0.93 0.010 80);
 
-  /* Primary — Electric Amber / Signal Gold (WCAG AAA on --background) */
-  --primary:           oklch(0.78 0.18 65);     /* warm amber-gold */
-  --primary-foreground: oklch(0.09 0.006 250);  /* dark text on amber button */
+  /* Primary — Champagne Gold (WCAG AAA on obsidian) */
+  --primary:           oklch(0.72 0.12 75);     /* champagne gold */
+  --primary-foreground: oklch(0.07 0.004 280);  /* obsidian on gold */
 
-  /* Secondary / muted surfaces */
-  --secondary:         oklch(0.17 0.006 250);
-  --secondary-foreground: oklch(0.82 0.004 240);
-  --muted:             oklch(0.17 0.006 250);
-  --muted-foreground:  oklch(0.55 0.004 240);   /* WCAG AA on card bg */
-  --accent:            oklch(0.19 0.006 250);
-  --accent-foreground: oklch(0.95 0.004 240);
+  /* Secondary / muted */
+  --secondary:         oklch(0.14 0.004 280);
+  --secondary-foreground: oklch(0.80 0.008 80);
+  --muted:             oklch(0.14 0.004 280);
+  --muted-foreground:  oklch(0.50 0.006 80);    /* aged parchment grey */
+  --accent:            oklch(0.14 0.004 280);
+  --accent-foreground: oklch(0.93 0.010 80);
 
   /* Semantic */
-  --destructive:       oklch(0.55 0.22 25);
-  --destructive-foreground: oklch(0.95 0 0);
+  --destructive:       oklch(0.50 0.20 25);
+  --destructive-foreground: oklch(0.93 0 0);
 
-  /* Borders & inputs */
-  --border:            oklch(0.23 0.006 250);
-  --input:             oklch(0.23 0.006 250);
-  --ring:              oklch(0.78 0.18 65);
+  /* Hairline borders */
+  --border:            oklch(0.20 0.004 280);   /* barely-there border */
+  --input:             oklch(0.20 0.004 280);
+  --ring:              oklch(0.72 0.12 75);     /* gold focus ring */
 
-  /* Sidebar specifics */
-  --sidebar-primary:           oklch(0.78 0.18 65);
-  --sidebar-primary-foreground: oklch(0.09 0.006 250);
-  --sidebar-accent:            oklch(0.17 0.006 250);
-  --sidebar-accent-foreground: oklch(0.95 0.004 240);
-  --sidebar-border:            oklch(0.20 0.006 250);
-  --sidebar-ring:              oklch(0.78 0.18 65);
+  /* Sidebar */
+  --sidebar-primary:           oklch(0.72 0.12 75);
+  --sidebar-primary-foreground: oklch(0.07 0.004 280);
+  --sidebar-accent:            oklch(0.14 0.004 280);
+  --sidebar-accent-foreground: oklch(0.93 0.010 80);
+  --sidebar-border:            oklch(0.16 0.004 280);
+  --sidebar-ring:              oklch(0.72 0.12 75);
 
   /* Charts */
-  --chart-1: oklch(0.78 0.18 65);
-  --chart-2: oklch(0.62 0.16 200);
-  --chart-3: oklch(0.72 0.16 140);
-  --chart-4: oklch(0.55 0.22 25);
-  --chart-5: oklch(0.65 0.18 300);
+  --chart-1: oklch(0.72 0.12 75);
+  --chart-2: oklch(0.60 0.10 200);
+  --chart-3: oklch(0.65 0.10 140);
+  --chart-4: oklch(0.50 0.18 25);
+  --chart-5: oklch(0.60 0.10 300);
+}
+
+/* ── Noise texture overlay (luxury materiality) ── */
+@keyframes noise-shift {
+  0%   { transform: translate(0, 0); }
+  100% { transform: translate(-10%, -10%); }
 }
 
 @layer base {
@@ -119,11 +125,14 @@
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-sans);
+    font-weight: 300;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Subtle noise texture for materiality */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
   }
 
-  /* ── Typography utilities ── */
   .font-display {
     font-family: var(--font-display);
   }
@@ -141,11 +150,11 @@
     @apply cursor-pointer;
   }
 
-  /* Custom scrollbar */
-  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  /* Refined scrollbar */
+  ::-webkit-scrollbar { width: 3px; height: 3px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: oklch(0.28 0 0); border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: oklch(0.35 0 0); }
+  ::-webkit-scrollbar-thumb { background: oklch(0.25 0 0); border-radius: 0; }
+  ::-webkit-scrollbar-thumb:hover { background: oklch(0.72 0.12 75 / 0.5); }
 }
 
 @layer components {
@@ -153,8 +162,8 @@
     width: 100%;
     margin-left: auto;
     margin-right: auto;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
 
   .flex {
@@ -163,105 +172,148 @@
   }
 
   @media (min-width: 640px) {
-    .container {
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
-    }
+    .container { padding-left: 2rem; padding-right: 2rem; }
   }
 
   @media (min-width: 1024px) {
-    .container {
-      padding-left: 2rem;
-      padding-right: 2rem;
-      max-width: 1280px;
-    }
+    .container { padding-left: 3rem; padding-right: 3rem; max-width: 1320px; }
   }
 
-  /* Nav section label */
-  .nav-section-label {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: oklch(0.45 0 0);
-    padding: 0.5rem 0.75rem 0.25rem;
-  }
+  /* ── Luxury typography utilities ── */
 
-  /* Amber glow on primary buttons */
-  .btn-primary-glow {
-    box-shadow: 0 0 20px oklch(0.78 0.18 65 / 0.30);
-  }
-
-  /* ── Landing page specific ── */
-
-  /* Editorial headline — Playfair Display */
-  .headline-display {
+  /* Cormorant Garamond display — the hero voice */
+  .display-xl {
     font-family: var(--font-display);
-    font-weight: 700;
+    font-size: clamp(3.5rem, 8vw, 6rem);
+    font-weight: 300;
+    font-style: italic;
     letter-spacing: -0.02em;
+    line-height: 1.05;
+    color: oklch(0.93 0.010 80);
+  }
+
+  .display-lg {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 300;
+    font-style: italic;
+    letter-spacing: -0.015em;
     line-height: 1.1;
+    color: oklch(0.93 0.010 80);
   }
 
-  /* Mono data label */
-  .label-mono {
+  .display-md {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    color: oklch(0.93 0.010 80);
+  }
+
+  /* Mono eyebrow label */
+  .eyebrow {
     font-family: var(--font-mono);
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.08em;
+    font-size: 0.6875rem;
+    font-weight: 300;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
+    color: oklch(0.72 0.12 75);
   }
 
-  /* Thin horizontal rule with amber gradient */
-  .rule-amber {
+  /* Hairline gold rule */
+  .rule-gold {
     border: none;
-    height: 1px;
-    background: linear-gradient(90deg,
-      transparent 0%,
-      oklch(0.78 0.18 65 / 0.6) 40%,
-      oklch(0.78 0.18 65 / 0.6) 60%,
-      transparent 100%
-    );
+    height: 0.5px;
+    background: oklch(0.72 0.12 75 / 0.5);
+    width: 100%;
   }
 
-  /* Fade-in-up for section entries */
+  /* Luxury card — no radius, hairline border, no shadow */
+  .card-luxury {
+    background: oklch(0.10 0.004 280);
+    border: 0.5px solid oklch(0.22 0.004 280);
+    border-radius: 0;
+  }
+
+  /* Luxury button — outlined, no fill */
+  .btn-luxury {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 2rem;
+    border: 0.5px solid oklch(0.72 0.12 75 / 0.6);
+    color: oklch(0.72 0.12 75);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: transparent;
+    transition: background 0.4s ease, border-color 0.4s ease, color 0.4s ease;
+    text-decoration: none;
+  }
+  .btn-luxury:hover {
+    background: oklch(0.72 0.12 75 / 0.06);
+    border-color: oklch(0.72 0.12 75 / 0.9);
+  }
+
+  /* Luxury primary button — gold fill, used sparingly */
+  .btn-luxury-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 2.5rem;
+    background: oklch(0.72 0.12 75);
+    color: oklch(0.07 0.004 280);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    border: none;
+    transition: background 0.4s ease, transform 0.4s ease;
+    text-decoration: none;
+  }
+  .btn-luxury-primary:hover {
+    background: oklch(0.78 0.12 75);
+    transform: translateY(-1px);
+  }
+
+  /* Fade-in-up — slow, deliberate */
   .fade-up {
     opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+    transform: translateY(20px);
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .fade-up.visible {
     opacity: 1;
     transform: translateY(0);
   }
 
-  /* Video section play button */
-  .play-btn {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background: oklch(0.78 0.18 65);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 0 32px oklch(0.78 0.18 65 / 0.4);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  .play-btn:hover {
-    transform: scale(1.08);
-    box-shadow: 0 0 48px oklch(0.78 0.18 65 / 0.55);
+  /* Staggered delay utilities */
+  .delay-100 { transition-delay: 0.1s; }
+  .delay-200 { transition-delay: 0.2s; }
+  .delay-300 { transition-delay: 0.3s; }
+  .delay-400 { transition-delay: 0.4s; }
+  .delay-500 { transition-delay: 0.5s; }
+
+  /* Nav section label */
+  .nav-section-label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: oklch(0.35 0 0);
+    padding: 0.5rem 0.75rem 0.25rem;
   }
 
   /* Mobile typography scaling */
   @media (max-width: 639px) {
-    .text-\[10px\] { font-size: 11px !important; }
-    .text-\[11px\] { font-size: 12px !important; }
-    .text-\[10px\].uppercase { font-size: 10px !important; }
     .text-xs { font-size: 0.8rem !important; line-height: 1.4rem !important; }
     .text-sm { font-size: 0.875rem !important; }
-    .text-base { font-size: 1rem !important; }
-    .text-lg { font-size: 1.125rem !important; }
-    button, [role="button"] {
-      min-height: 36px;
-    }
+    button, [role="button"] { min-height: 36px; }
   }
 }

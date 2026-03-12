@@ -225,7 +225,7 @@ function DashboardLayoutContent({
                     alt="SubRoast"
                     className="w-6 h-6 rounded-md shrink-0 object-cover"
                   />
-                  <span className="font-bold tracking-tight text-sidebar-foreground truncate text-sm">
+                  <span style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontWeight: 400, fontSize: '1rem', letterSpacing: '0.01em' }} className="text-sidebar-foreground truncate">
                     SubRoast
                   </span>
                 </div>
@@ -252,7 +252,8 @@ function DashboardLayoutContent({
                           isActive={isActive}
                           onClick={() => setLocation(item.path)}
                           tooltip={item.label}
-                          className="h-9 font-normal transition-all"
+                          className="h-9 transition-all"
+                          style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', fontWeight: 300, letterSpacing: '0.08em' }}
                         >
                           <item.icon className={`h-4 w-4 ${isActive ? "text-primary" : ""}`} />
                           <span>{item.label}</span>
@@ -278,10 +279,10 @@ function DashboardLayoutContent({
 
           {/* Activity widget */}
           {!isCollapsed && (
-            <div className="mx-3 mb-3 p-3 rounded-lg bg-sidebar-accent border border-sidebar-border">
+            <div className="mx-3 mb-3 p-3 bg-sidebar-accent" style={{ border: '0.5px solid oklch(0.18 0.004 280)', borderRadius: 0 }}>
               <div className="flex items-center gap-1.5 mb-2.5">
                 <BarChart2 className="w-3.5 h-3.5 text-primary" />
-                <span className="text-[11px] font-semibold text-sidebar-foreground">Activity</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', fontWeight: 300, letterSpacing: '0.14em', textTransform: 'uppercase' }} className="text-sidebar-foreground/70">Activity</span>
               </div>
               <div className="space-y-2">
                 <div>
@@ -289,10 +290,10 @@ function DashboardLayoutContent({
                     <span className="text-sidebar-foreground/50">Leads found</span>
                     <span className="font-medium text-sidebar-foreground">{totalLeads}</span>
                   </div>
-                  <div className="h-1 rounded-full bg-sidebar-border overflow-hidden">
+                  <div className="overflow-hidden" style={{ height: '0.5px', background: 'oklch(0.20 0.004 280)' }}>
                     <div
-                      className="h-full rounded-full transition-all bg-primary"
-                      style={{ width: `${Math.max(leadsPct, 2)}%` }}
+                      className="h-full transition-all"
+                      style={{ width: `${Math.max(leadsPct, 2)}%`, background: 'oklch(0.72 0.12 75 / 0.7)', borderRadius: 0 }}
                     />
                   </div>
                 </div>
@@ -308,12 +309,10 @@ function DashboardLayoutContent({
                         {syncStats.syncsToday}/{syncStats.dailyLimit}
                       </span>
                     </div>
-                    <div className="h-1 rounded-full bg-sidebar-border overflow-hidden">
+                    <div className="overflow-hidden" style={{ height: '0.5px', background: 'oklch(0.20 0.004 280)' }}>
                       <div
-                        className={`h-full rounded-full transition-all ${
-                          syncStats.syncsToday >= syncStats.dailyLimit ? "bg-amber-400" : "bg-primary"
-                        }`}
-                        style={{ width: `${Math.min(Math.round((syncStats.syncsToday / syncStats.dailyLimit) * 100), 100)}%` }}
+                        className="h-full transition-all"
+                        style={{ width: `${Math.min(Math.round((syncStats.syncsToday / syncStats.dailyLimit) * 100), 100)}%`, background: syncStats.syncsToday >= syncStats.dailyLimit ? 'oklch(0.65 0.18 65)' : 'oklch(0.72 0.12 75 / 0.7)', borderRadius: 0 }}
                       />
                     </div>
                   </div>
@@ -323,7 +322,7 @@ function DashboardLayoutContent({
           )}
 
           {/* User footer */}
-          <SidebarFooter className="p-3 border-t border-sidebar-border">
+          <SidebarFooter className="p-3" style={{ borderTop: '0.5px solid oklch(0.16 0.004 280)' }}>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button className="flex items-center gap-2.5 rounded-lg px-1 py-1.5 hover:bg-sidebar-accent/60 transition-colors w-full text-left focus:outline-none">
@@ -334,9 +333,9 @@ function DashboardLayoutContent({
                   </Avatar>
                   {!isCollapsed && (
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-medium truncate text-sidebar-foreground">{user?.name ?? "User"}</p>
+                      <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', fontWeight: 300 }} className="truncate text-sidebar-foreground">{user?.name ?? "User"}</p>
                       {user?.email && (
-                        <p className="text-[11px] text-sidebar-foreground/40 truncate">{user.email}</p>
+                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.06em' }} className="text-sidebar-foreground/30 truncate">{user.email}</p>
                       )}
                     </div>
                   )}

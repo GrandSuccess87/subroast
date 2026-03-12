@@ -319,3 +319,17 @@
 - [ ] Track dm_copied event (userId, leadId) — proxy for actual send
 - [ ] Track post_roasted event (userId, viralityScore, clarityScore)
 - [ ] Send events to Umami custom events API
+
+## Ultra-Luxury Redesign — Rolls-Royce / Loro Piana (v5.28)
+- [x] Load Cormorant Garamond (display italic) from Google Fonts in index.html
+- [x] Update index.css: obsidian bg, champagne gold accent, warm off-white text, hairline borders
+- [x] Remove all border-radius from cards (0px or max 2px)
+- [x] Replace all drop shadows with subtle inner borders and surface noise texture
+- [x] Rebuild Home.tsx: luxury hero with 80px+ italic Cormorant headline, 1px gold rule, vast negative space
+- [x] Landing page: product mockup styled as a printed intelligence report (not a UI screenshot)
+- [x] Landing page: video section with luxury dark frame, gold play button
+- [x] Landing page: all section padding 120px+ vertical
+- [x] Landing page: buttons minimal — outlined or text-only except single primary CTA
+- [x] Apply luxury tokens to DashboardLayout sidebar (obsidian surface, gold active state, hairline borders)
+- [x] Apply Cormorant Garamond to dashboard "Hey [Name]" greeting and section headings
+- [x] Apply JetBrains Mono to all stat numbers in dashboard

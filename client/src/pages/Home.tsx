@@ -1,29 +1,16 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
-import {
-  AlertTriangle,
-  ArrowRight,
-  BarChart2,
-  CheckCircle2,
-  Flame,
-  MessageSquare,
-  Play,
-  Search,
-  Shield,
-  Sparkles,
-  TrendingUp,
-  Zap,
-} from "lucide-react";
+import { DashboardLayoutSkeleton } from "@/components/DashboardLayoutSkeleton";
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
-import { DashboardLayoutSkeleton } from "@/components/DashboardLayoutSkeleton";
 
-/* ── Intersection-observer fade-up hook ── */
-function useFadeUp() {
+/* ── Intersection-observer fade-up ── */
+function useFadeUp(delay = 0) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    if (delay) el.style.transitionDelay = `${delay}ms`;
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -31,269 +18,445 @@ function useFadeUp() {
           obs.disconnect();
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.08 }
     );
     obs.observe(el);
     return () => obs.disconnect();
-  }, []);
+  }, [delay]);
   return ref;
 }
 
-/* ── Product mockup ── */
-function ProductMockup() {
+/* ── Intelligence Report Mockup ── */
+function ReportMockup() {
   return (
-    <div className="relative w-full max-w-[420px] mx-auto lg:mx-0">
-      {/* Ambient glow */}
+    <div className="relative w-full max-w-[400px] mx-auto lg:mx-0 lg:ml-auto">
+      {/* Faint gold aura */}
       <div
-        className="absolute -inset-6 rounded-3xl"
+        className="absolute -inset-8 pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse at center, oklch(0.78 0.18 65 / 0.12) 0%, transparent 70%)",
+            "radial-gradient(ellipse 60% 50% at 50% 50%, oklch(0.72 0.12 75 / 0.07) 0%, transparent 70%)",
         }}
       />
-      <div className="relative rounded-2xl border border-border bg-card shadow-2xl overflow-hidden">
-        {/* Traffic-light bar */}
-        <div className="flex items-center gap-1.5 px-4 py-3 border-b border-border bg-muted/30">
-          <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
-          <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
-          <div className="w-2.5 h-2.5 rounded-full bg-green-500/60" />
-          <span
-            className="ml-2 text-[11px] text-muted-foreground"
-            style={{ fontFamily: "var(--font-mono)" }}
-          >
-            subroast.com / analyze
-          </span>
-        </div>
 
-        <div className="p-5 space-y-4">
-          {/* Draft snippet */}
-          <div className="rounded-lg bg-muted/40 border border-border/50 p-3">
-            <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3">
-              "Just launched my SaaS tool for tracking Reddit mentions. Would love feedback from
-              r/SaaS — has anyone found a good workflow for this?"
-            </p>
-          </div>
-
-          {/* Score row */}
-          <div className="grid grid-cols-3 gap-2">
-            {[
-              { label: "Clarity", value: 74, color: "text-blue-400", bar: "bg-blue-400" },
-              { label: "Fit", value: 81, color: "text-primary", bar: "bg-primary" },
-              { label: "Virality", value: 68, color: "text-cyan-400", bar: "bg-cyan-400" },
-            ].map((s) => (
-              <div
-                key={s.label}
-                className="rounded-lg bg-muted/30 border border-border/40 p-2.5 text-center"
-              >
-                <div
-                  className={`text-xl font-bold ${s.color}`}
-                  style={{ fontFamily: "var(--font-mono)" }}
-                >
-                  {s.value}
-                </div>
-                <div className="text-[10px] text-muted-foreground mt-0.5">{s.label}</div>
-                <div className="mt-1.5 h-1 rounded-full bg-muted overflow-hidden">
-                  <div
-                    className={`h-full rounded-full ${s.bar}`}
-                    style={{ width: `${s.value}%` }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Roast */}
-          <div className="rounded-lg bg-primary/5 border border-primary/20 p-3">
-            <div className="flex items-center gap-1.5 mb-1.5">
-              <Flame className="w-3.5 h-3.5 text-primary" />
-              <span className="text-xs font-semibold text-primary">AI Roast</span>
-            </div>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              "This reads like a press release. Redditors don't want to 'provide feedback' — they
-              want to solve a problem. Lead with the pain, not the product."
-            </p>
-          </div>
-
-          {/* Tip */}
-          <div className="rounded-lg bg-muted/30 border border-border/40 p-3">
-            <div className="flex items-center gap-1.5 mb-1">
-              <TrendingUp className="w-3.5 h-3.5 text-primary" />
-              <span className="text-xs font-semibold text-primary">Virality tip</span>
-            </div>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              Open with a question. Posts that start with "Has anyone…" get 2.4× more comments.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Floating badge */}
-      <div className="absolute -bottom-3 -right-3 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary text-primary-foreground text-xs font-semibold shadow-lg"
-        style={{ boxShadow: "0 4px 20px oklch(0.78 0.18 65 / 0.4)" }}>
-        <Zap className="w-3 h-3" />
-        Score improved +18 pts
-      </div>
-    </div>
-  );
-}
-
-/* ── Step card ── */
-function StepCard({
-  step,
-  icon: Icon,
-  title,
-  desc,
-  color,
-  bg,
-  border,
-}: {
-  step: string;
-  icon: React.ElementType;
-  title: string;
-  desc: string;
-  color: string;
-  bg: string;
-  border: string;
-}) {
-  const ref = useFadeUp();
-  return (
-    <div ref={ref} className={`fade-up relative rounded-2xl border ${border} bg-card p-6`}>
-      <div className="flex items-center justify-between mb-4">
-        <div className={`w-10 h-10 rounded-xl ${bg} flex items-center justify-center`}>
-          <Icon className={`w-5 h-5 ${color}`} />
-        </div>
-        <span
-          className={`text-3xl font-black ${color} opacity-20`}
-          style={{ fontFamily: "var(--font-mono)" }}
+      {/* Report document */}
+      <div
+        className="relative"
+        style={{
+          background: "oklch(0.10 0.004 280)",
+          border: "0.5px solid oklch(0.22 0.004 280)",
+        }}
+      >
+        {/* Report header */}
+        <div
+          className="px-7 pt-7 pb-5"
+          style={{ borderBottom: "0.5px solid oklch(0.18 0.004 280)" }}
         >
-          {step}
-        </span>
+          <div className="flex items-start justify-between mb-4">
+            <div>
+              <p
+                className="eyebrow mb-1"
+                style={{ color: "oklch(0.72 0.12 75)", fontSize: "0.6rem" }}
+              >
+                SubRoast Intelligence
+              </p>
+              <p
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "0.6rem",
+                  color: "oklch(0.38 0 0)",
+                  letterSpacing: "0.1em",
+                }}
+              >
+                POST ANALYSIS REPORT
+              </p>
+            </div>
+            <div
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.55rem",
+                color: "oklch(0.35 0 0)",
+                textAlign: "right",
+                letterSpacing: "0.08em",
+              }}
+            >
+              <div>REF-2024-0312</div>
+              <div>r/SaaS</div>
+            </div>
+          </div>
+
+          {/* Title */}
+          <p
+            style={{
+              fontFamily: "var(--font-display)",
+              fontSize: "1.05rem",
+              fontWeight: 400,
+              color: "oklch(0.93 0.010 80)",
+              lineHeight: 1.3,
+            }}
+          >
+            "Just launched my SaaS tool for tracking Reddit mentions…"
+          </p>
+        </div>
+
+        {/* Score grid */}
+        <div
+          className="grid grid-cols-3"
+          style={{ borderBottom: "0.5px solid oklch(0.18 0.004 280)" }}
+        >
+          {[
+            { label: "Clarity", value: "74", sub: "Moderate" },
+            { label: "Fit", value: "81", sub: "Strong" },
+            { label: "Virality", value: "68", sub: "Fair" },
+          ].map((s, i) => (
+            <div
+              key={s.label}
+              className="px-5 py-4 text-center"
+              style={{
+                borderRight: i < 2 ? "0.5px solid oklch(0.18 0.004 280)" : "none",
+              }}
+            >
+              <div
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "1.75rem",
+                  fontWeight: 300,
+                  color: "oklch(0.72 0.12 75)",
+                  lineHeight: 1,
+                }}
+              >
+                {s.value}
+              </div>
+              <div
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "0.55rem",
+                  color: "oklch(0.50 0.006 80)",
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  marginTop: "0.35rem",
+                }}
+              >
+                {s.label}
+              </div>
+              <div
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "0.5rem",
+                  color: "oklch(0.38 0 0)",
+                  letterSpacing: "0.08em",
+                  marginTop: "0.15rem",
+                }}
+              >
+                {s.sub}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Assessment */}
+        <div
+          className="px-7 py-5"
+          style={{ borderBottom: "0.5px solid oklch(0.18 0.004 280)" }}
+        >
+          <p
+            className="eyebrow mb-3"
+            style={{ fontSize: "0.58rem", color: "oklch(0.72 0.12 75 / 0.7)" }}
+          >
+            Assessment
+          </p>
+          <p
+            style={{
+              fontFamily: "var(--font-sans)",
+              fontSize: "0.75rem",
+              fontWeight: 300,
+              color: "oklch(0.55 0.006 80)",
+              lineHeight: 1.65,
+            }}
+          >
+            This draft reads as promotional rather than conversational. Reddit's
+            highest-performing posts lead with a problem, not a product. Recommend
+            restructuring the opening to surface the pain point first.
+          </p>
+        </div>
+
+        {/* Improved draft */}
+        <div
+          className="px-7 py-5"
+          style={{ borderBottom: "0.5px solid oklch(0.18 0.004 280)" }}
+        >
+          <p
+            className="eyebrow mb-3"
+            style={{ fontSize: "0.58rem", color: "oklch(0.72 0.12 75 / 0.7)" }}
+          >
+            Recommended Draft
+          </p>
+          <p
+            style={{
+              fontFamily: "var(--font-sans)",
+              fontSize: "0.75rem",
+              fontWeight: 300,
+              color: "oklch(0.72 0.006 80)",
+              lineHeight: 1.65,
+              fontStyle: "italic",
+            }}
+          >
+            "Has anyone found a reliable way to track when your product gets mentioned
+            on Reddit? I built something for this after spending 3 hours manually
+            searching…"
+          </p>
+        </div>
+
+        {/* Virality tip */}
+        <div className="px-7 py-5">
+          <div className="flex items-start gap-3">
+            <div
+              style={{
+                width: "1px",
+                alignSelf: "stretch",
+                background: "oklch(0.72 0.12 75 / 0.4)",
+                flexShrink: 0,
+              }}
+            />
+            <div>
+              <p
+                className="eyebrow mb-1.5"
+                style={{ fontSize: "0.58rem", color: "oklch(0.72 0.12 75 / 0.7)" }}
+              >
+                Virality Recommendation
+              </p>
+              <p
+                style={{
+                  fontFamily: "var(--font-sans)",
+                  fontSize: "0.7rem",
+                  fontWeight: 300,
+                  color: "oklch(0.50 0.006 80)",
+                  lineHeight: 1.6,
+                }}
+              >
+                Posts opening with "Has anyone…" receive 2.4× more comments on
+                r/SaaS. Optimal posting window: Tuesday–Thursday, 9–11am EST.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
-      <h3 className="font-bold text-base mb-2">{title}</h3>
-      <p className="text-sm text-muted-foreground leading-relaxed">{desc}</p>
+
+      {/* Score improved badge */}
+      <div
+        className="absolute -bottom-3 -right-3 px-3 py-1.5"
+        style={{
+          background: "oklch(0.72 0.12 75)",
+          fontFamily: "var(--font-mono)",
+          fontSize: "0.6rem",
+          fontWeight: 400,
+          letterSpacing: "0.12em",
+          textTransform: "uppercase",
+          color: "oklch(0.07 0.004 280)",
+        }}
+      >
+        +18 pts after revision
+      </div>
     </div>
   );
 }
 
-/* ── Feature card ── */
-function FeatureCard({
-  icon: Icon,
+/* ── Luxury section divider ── */
+function Divider() {
+  return (
+    <div className="flex items-center gap-6 py-2">
+      <div className="flex-1 rule-gold" />
+      <div
+        style={{
+          width: "4px",
+          height: "4px",
+          background: "oklch(0.72 0.12 75 / 0.5)",
+          transform: "rotate(45deg)",
+          flexShrink: 0,
+        }}
+      />
+      <div className="flex-1 rule-gold" />
+    </div>
+  );
+}
+
+/* ── Feature row ── */
+function FeatureRow({
+  number,
   title,
   desc,
-  color,
-  bg,
+  delay = 0,
 }: {
-  icon: React.ElementType;
+  number: string;
   title: string;
   desc: string;
-  color: string;
-  bg: string;
+  delay?: number;
 }) {
-  const ref = useFadeUp();
+  const ref = useFadeUp(delay);
   return (
     <div
       ref={ref}
-      className="fade-up p-5 rounded-xl bg-card border border-border hover:border-primary/40 transition-all"
+      className="fade-up grid md:grid-cols-[80px_1fr_2fr] gap-6 md:gap-10 py-10"
+      style={{ borderBottom: "0.5px solid oklch(0.16 0.004 280)" }}
     >
-      <div className={`w-9 h-9 rounded-lg ${bg} flex items-center justify-center mb-3`}>
-        <Icon className={`w-4.5 h-4.5 ${color}`} />
+      <div
+        style={{
+          fontFamily: "var(--font-mono)",
+          fontSize: "0.6rem",
+          fontWeight: 300,
+          letterSpacing: "0.18em",
+          color: "oklch(0.72 0.12 75 / 0.5)",
+          paddingTop: "0.2rem",
+        }}
+      >
+        {number}
       </div>
-      <h3 className="font-semibold text-sm mb-1.5">{title}</h3>
-      <p className="text-xs text-muted-foreground leading-relaxed">{desc}</p>
+      <div
+        style={{
+          fontFamily: "var(--font-display)",
+          fontSize: "1.35rem",
+          fontWeight: 400,
+          color: "oklch(0.93 0.010 80)",
+          lineHeight: 1.2,
+        }}
+      >
+        {title}
+      </div>
+      <div
+        style={{
+          fontFamily: "var(--font-sans)",
+          fontSize: "0.875rem",
+          fontWeight: 300,
+          color: "oklch(0.50 0.006 80)",
+          lineHeight: 1.75,
+        }}
+      >
+        {desc}
+      </div>
     </div>
   );
 }
 
-/* ── Demo Video Section ── */
+/* ── Video Section ── */
 function VideoSection() {
   const ref = useFadeUp();
   const [playing, setPlaying] = useState(false);
-
-  // Replace VIDEO_URL with your actual Loom/YouTube embed URL when ready
-  // For now we show a polished placeholder that accepts a real URL
-  const VIDEO_EMBED_URL = ""; // e.g. "https://www.loom.com/embed/YOUR_ID" or "https://www.youtube.com/embed/YOUR_ID"
+  const VIDEO_EMBED_URL = ""; // Drop your Loom/YouTube embed URL here
 
   return (
-    <section className="py-20 border-b border-border/40">
+    <section
+      id="demo"
+      style={{
+        paddingTop: "clamp(5rem, 10vw, 9rem)",
+        paddingBottom: "clamp(5rem, 10vw, 9rem)",
+        borderBottom: "0.5px solid oklch(0.16 0.004 280)",
+      }}
+    >
       <div className="container">
-        <div ref={ref} className="fade-up text-center mb-10">
-          <p
-            className="label-mono text-primary mb-3"
-            style={{ fontFamily: "var(--font-mono)" }}
-          >
-            See it in action
-          </p>
-          <h2
-            className="text-4xl font-bold mb-3"
-            style={{ fontFamily: "var(--font-display)" }}
-          >
+        <div ref={ref} className="fade-up mb-16 max-w-xl">
+          <p className="eyebrow mb-5">In practice</p>
+          <h2 className="display-lg mb-6">
             From blank draft to warm leads
-            <br />
-            <em className="not-italic text-primary">in under 60 seconds</em>
           </h2>
-          <p className="text-muted-foreground text-sm max-w-md mx-auto">
-            Watch how SubRoast analyzes a Reddit post, scores it, generates a personalized DM,
-            and queues it — all in one click.
+          <div className="rule-gold mb-6" style={{ width: "3rem" }} />
+          <p
+            style={{
+              fontFamily: "var(--font-sans)",
+              fontSize: "0.9375rem",
+              fontWeight: 300,
+              color: "oklch(0.50 0.006 80)",
+              lineHeight: 1.75,
+            }}
+          >
+            Watch the complete six-step intelligence chain — from post analysis
+            to personalized outreach — executed in under sixty seconds.
           </p>
         </div>
 
         {/* Video frame */}
-        <div className="relative max-w-3xl mx-auto">
-          {/* Ambient glow behind video */}
+        <div className="relative max-w-4xl">
+          {/* Ambient glow */}
           <div
-            className="absolute -inset-4 rounded-3xl pointer-events-none"
+            className="absolute -inset-6 pointer-events-none"
             style={{
               background:
-                "radial-gradient(ellipse at center, oklch(0.78 0.18 65 / 0.08) 0%, transparent 70%)",
+                "radial-gradient(ellipse 70% 60% at 50% 50%, oklch(0.72 0.12 75 / 0.05) 0%, transparent 70%)",
             }}
           />
 
-          <div className="relative rounded-2xl border border-border overflow-hidden bg-card shadow-2xl aspect-video">
+          <div
+            className="relative overflow-hidden"
+            style={{
+              background: "oklch(0.10 0.004 280)",
+              border: "0.5px solid oklch(0.22 0.004 280)",
+              aspectRatio: "16/9",
+            }}
+          >
             {VIDEO_EMBED_URL && playing ? (
               <iframe
                 src={VIDEO_EMBED_URL + "?autoplay=1"}
                 className="w-full h-full"
                 allow="autoplay; fullscreen"
                 allowFullScreen
-                title="SubRoast product demo"
+                title="SubRoast product walkthrough"
               />
             ) : (
-              /* Placeholder / poster */
               <div className="w-full h-full flex flex-col items-center justify-center relative">
-                {/* Dark grid background */}
+                {/* Subtle grid */}
                 <div
-                  className="absolute inset-0 opacity-[0.03]"
+                  className="absolute inset-0 opacity-[0.04]"
                   style={{
-                    backgroundImage: `linear-gradient(oklch(0.78 0.18 65) 1px, transparent 1px), linear-gradient(90deg, oklch(0.78 0.18 65) 1px, transparent 1px)`,
-                    backgroundSize: "32px 32px",
+                    backgroundImage: `linear-gradient(oklch(0.72 0.12 75) 0.5px, transparent 0.5px), linear-gradient(90deg, oklch(0.72 0.12 75) 0.5px, transparent 0.5px)`,
+                    backgroundSize: "48px 48px",
                   }}
                 />
 
-                {/* Fake timeline / progress bar at bottom */}
-                <div className="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-background/80 to-transparent flex items-center px-5 gap-3">
-                  <div className="flex-1 h-1 rounded-full bg-border overflow-hidden">
-                    <div className="h-full w-1/3 rounded-full bg-primary opacity-60" />
+                {/* Progress bar at bottom */}
+                <div
+                  className="absolute bottom-0 left-0 right-0 flex items-center gap-4 px-8 py-4"
+                  style={{ borderTop: "0.5px solid oklch(0.18 0.004 280)" }}
+                >
+                  <div
+                    className="flex-1 overflow-hidden"
+                    style={{ height: "0.5px", background: "oklch(0.20 0.004 280)" }}
+                  >
+                    <div
+                      style={{
+                        height: "100%",
+                        width: "35%",
+                        background: "oklch(0.72 0.12 75 / 0.6)",
+                      }}
+                    />
                   </div>
                   <span
-                    className="text-[10px] text-muted-foreground shrink-0"
-                    style={{ fontFamily: "var(--font-mono)" }}
+                    style={{
+                      fontFamily: "var(--font-mono)",
+                      fontSize: "0.55rem",
+                      color: "oklch(0.35 0 0)",
+                      letterSpacing: "0.1em",
+                      flexShrink: 0,
+                    }}
                   >
                     0:42 / 1:58
                   </span>
                 </div>
 
                 {/* Step labels */}
-                <div className="absolute top-5 left-5 right-5 flex items-center gap-2 flex-wrap">
-                  {["Reading post", "Scoring lead", "Crafting DM", "DM ready", "Done"].map(
+                <div className="absolute top-6 left-8 right-8 flex items-center gap-2 flex-wrap">
+                  {["Reading post", "Scoring lead", "Crafting DM", "DM ready", "Comment", "Done"].map(
                     (label, i) => (
                       <span
                         key={label}
-                        className={`text-[10px] px-2 py-0.5 rounded-full border ${
-                          i < 3
-                            ? "bg-primary/15 border-primary/30 text-primary"
-                            : "bg-muted/40 border-border/40 text-muted-foreground"
-                        }`}
-                        style={{ fontFamily: "var(--font-mono)" }}
+                        style={{
+                          fontFamily: "var(--font-mono)",
+                          fontSize: "0.55rem",
+                          letterSpacing: "0.12em",
+                          textTransform: "uppercase",
+                          padding: "0.2rem 0.6rem",
+                          border: `0.5px solid ${i < 3 ? "oklch(0.72 0.12 75 / 0.4)" : "oklch(0.20 0.004 280)"}`,
+                          color: i < 3 ? "oklch(0.72 0.12 75 / 0.8)" : "oklch(0.35 0 0)",
+                          background: i < 3 ? "oklch(0.72 0.12 75 / 0.05)" : "transparent",
+                        }}
                       >
                         {label}
                       </span>
@@ -304,19 +467,43 @@ function VideoSection() {
                 {/* Play button */}
                 <button
                   onClick={() => VIDEO_EMBED_URL ? setPlaying(true) : undefined}
-                  className="play-btn relative z-10"
-                  aria-label="Play demo video"
-                  title={VIDEO_EMBED_URL ? "Play demo" : "Demo video coming soon"}
+                  className="relative z-10 flex items-center justify-center"
+                  style={{
+                    width: "72px",
+                    height: "72px",
+                    border: "0.5px solid oklch(0.72 0.12 75 / 0.5)",
+                    background: "oklch(0.72 0.12 75 / 0.08)",
+                    transition: "background 0.4s ease, border-color 0.4s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLButtonElement).style.background = "oklch(0.72 0.12 75 / 0.15)";
+                    (e.currentTarget as HTMLButtonElement).style.borderColor = "oklch(0.72 0.12 75 / 0.8)";
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLButtonElement).style.background = "oklch(0.72 0.12 75 / 0.08)";
+                    (e.currentTarget as HTMLButtonElement).style.borderColor = "oklch(0.72 0.12 75 / 0.5)";
+                  }}
+                  aria-label="Play demo"
+                  title={VIDEO_EMBED_URL ? "Play walkthrough" : "Demo coming soon"}
                 >
-                  <Play className="w-7 h-7 text-primary-foreground fill-current ml-1" />
+                  {/* Play triangle */}
+                  <svg width="18" height="20" viewBox="0 0 18 20" fill="none">
+                    <path d="M1 1L17 10L1 19V1Z" fill="oklch(0.72 0.12 75)" stroke="none" />
+                  </svg>
                 </button>
 
                 {!VIDEO_EMBED_URL && (
                   <p
-                    className="mt-4 text-xs text-muted-foreground relative z-10"
-                    style={{ fontFamily: "var(--font-mono)" }}
+                    className="mt-5 relative z-10"
+                    style={{
+                      fontFamily: "var(--font-mono)",
+                      fontSize: "0.6rem",
+                      color: "oklch(0.35 0 0)",
+                      letterSpacing: "0.12em",
+                      textTransform: "uppercase",
+                    }}
                   >
-                    Demo video coming soon
+                    Walkthrough available shortly
                   </p>
                 )}
               </div>
@@ -324,9 +511,17 @@ function VideoSection() {
           </div>
 
           {/* Caption */}
-          <p className="text-center text-xs text-muted-foreground mt-4"
-            style={{ fontFamily: "var(--font-mono)" }}>
-            The full 6-step AI chain: Reading → Scoring → Crafting DM → DM ready → Comment → Done
+          <p
+            className="mt-5"
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.6rem",
+              color: "oklch(0.35 0 0)",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+            }}
+          >
+            Six-step intelligence chain — Reading · Scoring · Drafting · Queuing · Comment · Complete
           </p>
         </div>
       </div>
@@ -334,171 +529,82 @@ function VideoSection() {
   );
 }
 
-/* ── Safety section ── */
-function SafetySection() {
+/* ── Stat bar ── */
+function StatBar() {
   const ref = useFadeUp();
-  const SAFETY_ITEMS = [
-    "Max 5 posts/day with 30-min cooldown",
-    "Max 25 DMs/day at 5/hour",
-    "2–10 min randomized delays between DMs",
-    "Alerts you after repeated failures so you stay in control",
-    "Warning at 80% of daily limit",
+  const STATS = [
+    { value: "6", label: "Step AI chain" },
+    { value: "25", label: "DMs per day" },
+    { value: "1–100", label: "Virality score" },
+    { value: "7", label: "Day free trial" },
   ];
   return (
-    <section className="py-20 border-b border-border/40">
-      <div className="container max-w-2xl mx-auto text-center">
-        <div ref={ref} className="fade-up">
-          <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-5">
-            <Shield className="w-5 h-5 text-primary" />
-          </div>
-          <h2
-            className="text-3xl font-bold mb-3"
-            style={{ fontFamily: "var(--font-display)" }}
-          >
-            Rate limiting built in
-          </h2>
-          <p className="text-base text-muted-foreground mb-8 leading-relaxed">
-            SubRoast enforces Reddit's unwritten rules automatically so you never have to think
-            about it.
-          </p>
-          <div className="grid sm:grid-cols-2 gap-3 text-left max-w-lg mx-auto">
-            {SAFETY_ITEMS.map((item) => (
-              <div key={item} className="flex items-start gap-2.5 text-sm text-muted-foreground">
-                <CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                {item}
+    <section
+      style={{
+        borderTop: "0.5px solid oklch(0.16 0.004 280)",
+        borderBottom: "0.5px solid oklch(0.16 0.004 280)",
+        background: "oklch(0.085 0.004 280)",
+      }}
+    >
+      <div className="container">
+        <div ref={ref} className="fade-up grid grid-cols-2 md:grid-cols-4">
+          {STATS.map((s, i) => (
+            <div
+              key={s.label}
+              className="py-8 text-center"
+              style={{
+                borderRight:
+                  i < STATS.length - 1 ? "0.5px solid oklch(0.16 0.004 280)" : "none",
+              }}
+            >
+              <div
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "clamp(1.75rem, 3vw, 2.5rem)",
+                  fontWeight: 300,
+                  color: "oklch(0.72 0.12 75)",
+                  lineHeight: 1,
+                }}
+              >
+                {s.value}
               </div>
-            ))}
-          </div>
+              <div
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "0.58rem",
+                  color: "oklch(0.38 0 0)",
+                  letterSpacing: "0.16em",
+                  textTransform: "uppercase",
+                  marginTop: "0.5rem",
+                }}
+              >
+                {s.label}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
   );
 }
 
-/* ── Bottom CTA section ── */
-function CtaSection() {
-  const ref = useFadeUp();
-  return (
-    <section className="py-24 bg-card/20">
-      <div ref={ref} className="fade-up container text-center">
-        <div
-          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium mb-6"
-          style={{ fontFamily: "var(--font-mono)" }}
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-          7-day free trial — no credit card
-        </div>
-        <h2
-          className="text-4xl sm:text-5xl font-bold mb-4"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
-          Ready to post smarter?
-        </h2>
-        <p className="text-muted-foreground text-sm mb-8 max-w-sm mx-auto leading-relaxed">
-          Connect your Reddit account and get your first AI roast in under 2 minutes.
-        </p>
-        <a
-          href={getLoginUrl()}
-          className="inline-flex items-center gap-2 px-8 py-4 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition-all btn-primary-glow hover:-translate-y-0.5"
-        >
-          <Zap className="w-4 h-4" />
-          Start free trial
-          <ArrowRight className="w-4 h-4" />
-        </a>
-      </div>
-    </section>
-  );
-}
-
-/* ── Data ── */
-const FEATURES = [
-  {
-    icon: Sparkles,
-    title: "AI Draft & Roast",
-    desc: "Get a brutally honest review, a roast, and an improved version of your post — all in one click.",
-    color: "text-primary",
-    bg: "bg-primary/10",
-  },
-  {
-    icon: MessageSquare,
-    title: "Personalized DM Generation",
-    desc: "AI writes a custom outreach message for each lead based on their actual Reddit post.",
-    color: "text-purple-400",
-    bg: "bg-purple-400/10",
-  },
-  {
-    icon: Shield,
-    title: "Account Safety",
-    desc: "Warnings at 80% daily limit. Your Reddit account stays safe.",
-    color: "text-blue-400",
-    bg: "bg-blue-400/10",
-  },
-  {
-    icon: BarChart2,
-    title: "History & Insights",
-    desc: "Track all posts with status, links, and Reddit engagement tips like 'questions get 2× comments'.",
-    color: "text-rose-400",
-    bg: "bg-rose-400/10",
-  },
-  {
-    icon: TrendingUp,
-    title: "Virality Score",
-    desc: "Get a 1–100 virality score on every post before you publish, with a specific tip to improve it.",
-    color: "text-cyan-400",
-    bg: "bg-cyan-400/10",
-  },
-];
-
-const HOW_IT_WORKS = [
-  {
-    step: "01",
-    icon: Flame,
-    title: "Roast your post",
-    desc: "Paste your draft and get an AI roast, a clarity score, a fit score, a virality score, and a rewritten version — before you ever hit submit.",
-    color: "text-primary",
-    bg: "bg-primary/10",
-    border: "border-primary/20",
-  },
-  {
-    step: "02",
-    icon: Search,
-    title: "Find leads & send DMs",
-    desc: "AI monitors your target subreddits 24/7, scores each post by relevance, and drafts a personalized DM for every prospect it finds.",
-    color: "text-purple-400",
-    bg: "bg-purple-400/10",
-    border: "border-purple-400/20",
-  },
-];
-
-/* ── Main component ── */
+/* ── Main ── */
 export default function Home() {
   const { isAuthenticated, loading } = useAuth();
   const [, setLocation] = useLocation();
   const heroRef = useRef<HTMLDivElement>(null);
 
+  // Redirect authenticated users
   useEffect(() => {
-    if (!loading && isAuthenticated) {
-      setLocation("/dashboard");
-    }
+    if (!loading && isAuthenticated) setLocation("/dashboard");
   }, [isAuthenticated, loading, setLocation]);
 
-  useEffect(() => {
-    document.title = "SubRoast — AI Reddit Growth Tool for Founders";
-    const desc = document.querySelector('meta[name="description"]');
-    if (desc)
-      desc.setAttribute(
-        "content",
-        "SubRoast scores your Reddit posts with AI, schedules them at peak times, and finds leads while you sleep. Built for indie SaaS founders."
-      );
-  }, []);
-
-  /* Subtle parallax for hero copy block */
+  // Subtle hero parallax
   useEffect(() => {
     const hero = heroRef.current;
     if (!hero) return;
     const onScroll = () => {
-      const y = window.scrollY;
-      hero.style.transform = `translateY(${y * 0.12}px)`;
+      hero.style.transform = `translateY(${window.scrollY * 0.08}px)`;
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -507,256 +613,568 @@ export default function Home() {
   if (loading) return <DashboardLayoutSkeleton />;
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-
+    <div
+      style={{
+        minHeight: "100svh",
+        background: "oklch(0.07 0.004 280)",
+        color: "oklch(0.93 0.010 80)",
+      }}
+    >
       {/* ── NAV ── */}
-      <nav className="border-b border-border/40 bg-background/85 backdrop-blur-md sticky top-0 z-50">
+      <nav
+        className="sticky top-0 z-50"
+        style={{
+          borderBottom: "0.5px solid oklch(0.16 0.004 280)",
+          background: "oklch(0.07 0.004 280 / 0.92)",
+          backdropFilter: "blur(16px)",
+        }}
+      >
         <div className="container flex items-center justify-between h-14">
-          <div className="flex items-center gap-2">
-            <img
-              src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663208942813/BEbgHhBeLfKnEwiD.png"
-              alt="SubRoast"
-              className="w-7 h-7 rounded-lg object-cover"
-            />
-            <span
-              className="font-bold text-sm tracking-tight"
-              style={{ fontFamily: "var(--font-display)" }}
-            >
-              SubRoast
-            </span>
+          {/* Wordmark */}
+          <a
+            href="/"
+            style={{
+              fontFamily: "var(--font-display)",
+              fontSize: "1.1rem",
+              fontWeight: 400,
+              fontStyle: "italic",
+              color: "oklch(0.93 0.010 80)",
+              textDecoration: "none",
+              letterSpacing: "0.01em",
+            }}
+          >
+            SubRoast
+          </a>
+
+          {/* Nav links */}
+          <div className="hidden md:flex items-center gap-8">
+            {[
+              { href: "#demo", label: "Walkthrough" },
+              { href: "#capabilities", label: "Capabilities" },
+              { href: "/pricing", label: "Pricing" },
+            ].map(({ href, label }) => (
+              <a
+                key={label}
+                href={href}
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "0.6rem",
+                  fontWeight: 300,
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                  color: "oklch(0.45 0 0)",
+                  textDecoration: "none",
+                  transition: "color 0.3s ease",
+                }}
+                onMouseEnter={(e) =>
+                  ((e.target as HTMLAnchorElement).style.color = "oklch(0.72 0.12 75)")
+                }
+                onMouseLeave={(e) =>
+                  ((e.target as HTMLAnchorElement).style.color = "oklch(0.45 0 0)")
+                }
+              >
+                {label}
+              </a>
+            ))}
           </div>
-          <div className="flex items-center gap-5">
-            <a href="#demo" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:block">
-              Demo
-            </a>
-            <a href="#how-it-works" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:block">
-              How it works
-            </a>
-            <a href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:block">
-              Features
-            </a>
-            <a href="/pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:block">
-              Pricing
-            </a>
-            <a
-              href={getLoginUrl()}
-              className="text-sm font-medium px-4 py-1.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors btn-primary-glow"
-            >
-              Sign in
-            </a>
-          </div>
+
+          {/* CTA */}
+          <a href={getLoginUrl()} className="btn-luxury">
+            Begin
+          </a>
         </div>
       </nav>
 
       {/* ── HERO ── */}
       <section
         className="relative overflow-hidden"
-        style={{ minHeight: "calc(100svh - 3.5rem)" }}
+        style={{
+          minHeight: "calc(100svh - 3.5rem)",
+          display: "flex",
+          alignItems: "center",
+        }}
       >
-        {/* Subtle grid */}
+        {/* Very subtle grid */}
         <div
-          className="absolute inset-0 opacity-[0.025]"
+          className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundImage: `linear-gradient(oklch(0.78 0.18 65) 1px, transparent 1px), linear-gradient(90deg, oklch(0.78 0.18 65) 1px, transparent 1px)`,
-            backgroundSize: "48px 48px",
-          }}
-        />
-        {/* Top-left glow */}
-        <div
-          className="absolute -top-20 -left-20 w-[600px] h-[500px] pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse at top left, oklch(0.78 0.18 65 / 0.08) 0%, transparent 65%)",
-          }}
-        />
-        {/* Bottom-right glow */}
-        <div
-          className="absolute bottom-0 right-0 w-[400px] h-[400px] pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse at bottom right, oklch(0.62 0.16 200 / 0.05) 0%, transparent 65%)",
+            backgroundImage: `linear-gradient(oklch(0.72 0.12 75 / 0.03) 0.5px, transparent 0.5px), linear-gradient(90deg, oklch(0.72 0.12 75 / 0.03) 0.5px, transparent 0.5px)`,
+            backgroundSize: "80px 80px",
           }}
         />
 
-        <div className="container relative py-16 pb-28 lg:py-24 lg:pb-24">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div className="container relative w-full">
+          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center py-24 lg:py-0">
 
             {/* Left: editorial copy */}
-            <div ref={heroRef} className="text-center lg:text-left">
-              {/* Eyebrow label */}
-              <div className="inline-flex items-center gap-2 mb-6">
-                <span className="label-mono text-primary" style={{ fontFamily: "var(--font-mono)" }}>
-                  AI Reddit Coach
-                </span>
-                <span className="w-px h-3 bg-border" />
-                <span className="label-mono text-muted-foreground" style={{ fontFamily: "var(--font-mono)" }}>
-                  for indie SaaS founders
-                </span>
-              </div>
+            <div ref={heroRef}>
+              {/* Eyebrow */}
+              <p className="eyebrow mb-8">
+                AI Intelligence for Reddit
+              </p>
 
               {/* Display headline */}
-              <h1
-                className="text-5xl sm:text-6xl lg:text-[4.25rem] font-bold tracking-tight leading-[1.08] mb-6"
-                style={{ fontFamily: "var(--font-display)" }}
-              >
+              <h1 className="display-xl mb-6">
                 Stop guessing.
                 <br />
-                <em className="not-italic text-primary">Start winning</em>
-                <br />
-                on Reddit.
+                <span style={{ color: "oklch(0.72 0.12 75)" }}>
+                  Start winning.
+                </span>
               </h1>
 
-              <p className="text-base sm:text-lg text-muted-foreground max-w-lg mb-8 leading-relaxed mx-auto lg:mx-0">
-                SubRoast gives every post an AI roast, a virality score, and a rewrite — then
-                finds warm leads and drafts personalized DMs while you sleep.
+              {/* Gold rule */}
+              <div
+                style={{
+                  width: "4rem",
+                  height: "0.5px",
+                  background: "oklch(0.72 0.12 75 / 0.6)",
+                  marginBottom: "2rem",
+                }}
+              />
+
+              {/* Body */}
+              <p
+                style={{
+                  fontFamily: "var(--font-sans)",
+                  fontSize: "1rem",
+                  fontWeight: 300,
+                  color: "oklch(0.50 0.006 80)",
+                  lineHeight: 1.8,
+                  maxWidth: "38ch",
+                  marginBottom: "3rem",
+                }}
+              >
+                SubRoast gives every Reddit post an AI roast, a virality score,
+                and a rewrite — then finds warm leads and drafts personalized
+                outreach while you sleep.
               </p>
 
               {/* CTAs */}
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 mb-8">
-                <a
-                  href={getLoginUrl()}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition-all btn-primary-glow hover:-translate-y-0.5"
-                >
-                  <Zap className="w-4 h-4" />
-                  Start free — 7 days on us
-                  <ArrowRight className="w-4 h-4" />
+              <div className="flex flex-col sm:flex-row items-start gap-4 mb-10">
+                <a href={getLoginUrl()} className="btn-luxury-primary">
+                  Begin free trial
                 </a>
-                <a
-                  href="#demo"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg border border-border text-foreground/70 font-medium text-sm hover:text-foreground hover:border-primary/40 transition-all"
-                >
-                  <Play className="w-3.5 h-3.5" />
-                  Watch demo
+                <a href="#demo" className="btn-luxury">
+                  View walkthrough
                 </a>
               </div>
 
-              {/* Trust signals */}
-              <div className="flex flex-wrap justify-center lg:justify-start gap-x-5 gap-y-2.5">
-                {[
-                  { icon: CheckCircle2, text: "No credit card required", color: "text-primary" },
-                  { icon: CheckCircle2, text: "Cancel anytime", color: "text-primary" },
-                  { icon: AlertTriangle, text: "Account safety built in", color: "text-amber-400" },
-                ].map(({ icon: Icon, text, color }) => (
-                  <div key={text} className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                    <Icon className={`w-3.5 h-3.5 ${color} shrink-0`} />
-                    {text}
-                  </div>
-                ))}
-              </div>
+              {/* Trust line */}
+              <p
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "0.6rem",
+                  color: "oklch(0.35 0 0)",
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                }}
+              >
+                Seven days complimentary · No card required · Cancel at any time
+              </p>
             </div>
 
-            {/* Right: product mockup */}
-            <div className="flex justify-center lg:justify-end">
-              <ProductMockup />
+            {/* Right: intelligence report mockup */}
+            <div className="hidden lg:flex justify-end">
+              <ReportMockup />
             </div>
           </div>
         </div>
 
         {/* Bottom fade */}
         <div
-          className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none"
-          style={{ background: "linear-gradient(to bottom, transparent, oklch(0.09 0.006 250))" }}
+          className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(to bottom, transparent, oklch(0.07 0.004 280))",
+          }}
         />
       </section>
 
       {/* ── STAT BAR ── */}
-      <section className="border-y border-border/40 bg-card/30">
-        <div className="container py-5">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
-            {[
-              { value: "6-step", label: "AI chain" },
-              { value: "25/day", label: "DM rate limit" },
-              { value: "1–100", label: "Virality score" },
-              { value: "7 days", label: "Free trial" },
-            ].map(({ value, label }) => (
-              <div key={label}>
-                <div className="text-2xl font-bold text-primary" style={{ fontFamily: "var(--font-mono)" }}>
-                  {value}
-                </div>
-                <div className="text-xs text-muted-foreground mt-0.5 uppercase tracking-widest" style={{ fontFamily: "var(--font-mono)" }}>
-                  {label}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <StatBar />
 
       {/* ── DEMO VIDEO ── */}
-      <div id="demo">
-        <VideoSection />
-      </div>
+      <VideoSection />
 
-      {/* ── HOW IT WORKS ── */}
-      <section id="how-it-works" className="py-20 border-b border-border/40">
+      {/* ── CAPABILITIES ── */}
+      <section
+        id="capabilities"
+        style={{
+          paddingTop: "clamp(5rem, 10vw, 9rem)",
+          paddingBottom: "clamp(5rem, 10vw, 9rem)",
+          borderBottom: "0.5px solid oklch(0.16 0.004 280)",
+        }}
+      >
         <div className="container">
-          <div className="text-center mb-14">
-            <p className="label-mono text-primary mb-3" style={{ fontFamily: "var(--font-mono)" }}>
-              Simple by design
-            </p>
-            <h2 className="text-4xl font-bold mb-3" style={{ fontFamily: "var(--font-display)" }}>
-              How SubRoast works
-            </h2>
-            <p className="text-muted-foreground text-sm max-w-md mx-auto">
-              Two steps from blank draft to warm leads in your inbox.
-            </p>
+          {/* Section header */}
+          <div className="grid lg:grid-cols-[1fr_2fr] gap-12 mb-16">
+            <div>
+              <p className="eyebrow mb-5">Capabilities</p>
+              <h2 className="display-md">
+                Everything required to win on Reddit
+              </h2>
+            </div>
+            <div className="flex items-end">
+              <p
+                style={{
+                  fontFamily: "var(--font-sans)",
+                  fontSize: "0.9375rem",
+                  fontWeight: 300,
+                  color: "oklch(0.45 0.006 80)",
+                  lineHeight: 1.75,
+                  maxWidth: "48ch",
+                }}
+              >
+                A complete intelligence suite — from post analysis to lead
+                generation to personalized outreach — designed for founders who
+                treat Reddit as a serious acquisition channel.
+              </p>
+            </div>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto relative">
-            <div
-              className="hidden md:block absolute top-10 left-[calc(16.67%+1rem)] right-[calc(16.67%+1rem)] h-px"
-              style={{ background: "linear-gradient(90deg, oklch(0.78 0.18 65 / 0.3), oklch(0.62 0.16 200 / 0.3))" }}
-            />
-            {HOW_IT_WORKS.map((step) => (
-              <StepCard key={step.step} {...step} />
-            ))}
-          </div>
+          <Divider />
+
+          {/* Feature rows */}
+          {[
+            {
+              number: "01",
+              title: "AI Draft & Roast",
+              desc: "Paste your draft and receive a structured analysis: clarity score, subreddit fit score, virality score, a brutally honest roast, and a fully rewritten version — all before you publish.",
+            },
+            {
+              number: "02",
+              title: "Lead Intelligence",
+              desc: "SubRoast monitors your target subreddits continuously, scoring each post by relevance and urgency. Only the highest-signal leads surface in your inbox.",
+            },
+            {
+              number: "03",
+              title: "Personalized Outreach",
+              desc: "For each lead, the AI reads the original post and drafts a message that references specific details — never a template, always a conversation starter.",
+            },
+            {
+              number: "04",
+              title: "Public Comment Drafting",
+              desc: "Beyond DMs, SubRoast drafts public comment replies that add genuine value to the thread — positioning you as a peer, not a promoter.",
+            },
+            {
+              number: "05",
+              title: "Account Safety",
+              desc: "Hard limits enforced automatically: five posts per day, twenty-five DMs per day, randomized delays between actions. You are alerted at eighty percent of any daily limit.",
+            },
+            {
+              number: "06",
+              title: "History & Performance",
+              desc: "Every post, DM, and comment is logged with status and engagement context. Track what works and refine your approach over time.",
+            },
+          ].map((f, i) => (
+            <FeatureRow key={f.number} {...f} delay={i * 80} />
+          ))}
         </div>
       </section>
 
-      {/* ── FEATURES ── */}
-      <section id="features" className="py-20 border-b border-border/40 bg-card/20">
+      {/* ── HOW IT WORKS ── */}
+      <section
+        style={{
+          paddingTop: "clamp(5rem, 10vw, 9rem)",
+          paddingBottom: "clamp(5rem, 10vw, 9rem)",
+          borderBottom: "0.5px solid oklch(0.16 0.004 280)",
+          background: "oklch(0.085 0.004 280)",
+        }}
+      >
         <div className="container">
-          <div className="text-center mb-12">
-            <p className="label-mono text-primary mb-3" style={{ fontFamily: "var(--font-mono)" }}>
-              Full toolkit
-            </p>
-            <h2 className="text-4xl font-bold mb-2" style={{ fontFamily: "var(--font-display)" }}>
-              Everything you need to win on Reddit
-            </h2>
-            <p className="text-muted-foreground text-sm">Without getting banned.</p>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
-            {FEATURES.map((f) => (
-              <FeatureCard key={f.title} {...f} />
-            ))}
+          <div className="grid lg:grid-cols-[1fr_2fr] gap-16 items-start">
+            {/* Left */}
+            <div>
+              <p className="eyebrow mb-5">Process</p>
+              <h2 className="display-md mb-6">
+                Two steps from draft to leads
+              </h2>
+              <div
+                style={{
+                  width: "3rem",
+                  height: "0.5px",
+                  background: "oklch(0.72 0.12 75 / 0.5)",
+                }}
+              />
+            </div>
+
+            {/* Right: steps */}
+            <div>
+              {[
+                {
+                  n: "I",
+                  title: "Roast your post",
+                  body: "Paste your draft. Receive a clarity score, a subreddit fit score, a virality score, a roast, and a rewritten version. Publish only when the numbers say you're ready.",
+                },
+                {
+                  n: "II",
+                  title: "Find leads & send outreach",
+                  body: "SubRoast monitors your target subreddits around the clock, scores each post by relevance, and drafts a personalized message for every prospect it identifies.",
+                },
+              ].map((step, i) => {
+                const ref = useFadeUp(i * 150);
+                return (
+                  <div
+                    key={step.n}
+                    ref={ref}
+                    className="fade-up grid grid-cols-[40px_1fr] gap-8 py-10"
+                    style={{
+                      borderBottom:
+                        i < 1 ? "0.5px solid oklch(0.16 0.004 280)" : "none",
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontFamily: "var(--font-display)",
+                        fontSize: "1.5rem",
+                        fontWeight: 300,
+                        fontStyle: "italic",
+                        color: "oklch(0.72 0.12 75 / 0.4)",
+                        lineHeight: 1,
+                        paddingTop: "0.15rem",
+                      }}
+                    >
+                      {step.n}
+                    </div>
+                    <div>
+                      <h3
+                        style={{
+                          fontFamily: "var(--font-display)",
+                          fontSize: "1.35rem",
+                          fontWeight: 400,
+                          color: "oklch(0.93 0.010 80)",
+                          marginBottom: "0.75rem",
+                          lineHeight: 1.2,
+                        }}
+                      >
+                        {step.title}
+                      </h3>
+                      <p
+                        style={{
+                          fontFamily: "var(--font-sans)",
+                          fontSize: "0.875rem",
+                          fontWeight: 300,
+                          color: "oklch(0.50 0.006 80)",
+                          lineHeight: 1.75,
+                        }}
+                      >
+                        {step.body}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
 
       {/* ── SAFETY ── */}
-      <SafetySection />
+      <section
+        style={{
+          paddingTop: "clamp(5rem, 10vw, 9rem)",
+          paddingBottom: "clamp(5rem, 10vw, 9rem)",
+          borderBottom: "0.5px solid oklch(0.16 0.004 280)",
+        }}
+      >
+        <div className="container max-w-3xl">
+          <SafetyBlock />
+        </div>
+      </section>
 
-      {/* ── BOTTOM CTA ── */}
+      {/* ── CTA ── */}
       <CtaSection />
 
       {/* ── FOOTER ── */}
-      <footer className="border-t border-border/40 py-6">
-        <div className="container flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <img
-              src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663208942813/BEbgHhBeLfKnEwiD.png"
-              alt="SubRoast"
-              className="w-5 h-5 rounded object-cover"
-            />
-            <span style={{ fontFamily: "var(--font-display)" }}>SubRoast</span>
+      <footer
+        style={{
+          borderTop: "0.5px solid oklch(0.16 0.004 280)",
+          padding: "2rem 0",
+        }}
+      >
+        <div className="container flex flex-col sm:flex-row items-center justify-between gap-4">
+          <span
+            style={{
+              fontFamily: "var(--font-display)",
+              fontSize: "0.9rem",
+              fontStyle: "italic",
+              color: "oklch(0.40 0 0)",
+            }}
+          >
+            SubRoast
+          </span>
+          <div className="flex items-center gap-6">
+            {[
+              { href: "/pricing", label: "Pricing" },
+              { href: "/feedback", label: "Feedback" },
+            ].map(({ href, label }) => (
+              <a
+                key={label}
+                href={href}
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "0.58rem",
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                  color: "oklch(0.35 0 0)",
+                  textDecoration: "none",
+                  transition: "color 0.3s ease",
+                }}
+                onMouseEnter={(e) =>
+                  ((e.target as HTMLAnchorElement).style.color = "oklch(0.72 0.12 75)")
+                }
+                onMouseLeave={(e) =>
+                  ((e.target as HTMLAnchorElement).style.color = "oklch(0.35 0 0)")
+                }
+              >
+                {label}
+              </a>
+            ))}
           </div>
-          <div className="flex items-center gap-4">
-            <a href="/pricing" className="hover:text-foreground transition-colors">Pricing</a>
-            <span>Built for indie SaaS founders</span>
-          </div>
+          <p
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.55rem",
+              color: "oklch(0.28 0 0)",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+            }}
+          >
+            Built for indie SaaS founders
+          </p>
         </div>
       </footer>
     </div>
+  );
+}
+
+/* ── Safety block (extracted to avoid hook-in-loop) ── */
+function SafetyBlock() {
+  const ref = useFadeUp();
+  return (
+    <div ref={ref} className="fade-up grid md:grid-cols-[1fr_2fr] gap-12 items-start">
+      <div>
+        <p className="eyebrow mb-5">Account safety</p>
+        <h2 className="display-md mb-4">
+          Rate limiting, built in
+        </h2>
+        <div
+          style={{
+            width: "3rem",
+            height: "0.5px",
+            background: "oklch(0.72 0.12 75 / 0.5)",
+          }}
+        />
+      </div>
+      <div>
+        <p
+          style={{
+            fontFamily: "var(--font-sans)",
+            fontSize: "0.9375rem",
+            fontWeight: 300,
+            color: "oklch(0.50 0.006 80)",
+            lineHeight: 1.75,
+            marginBottom: "2rem",
+          }}
+        >
+          SubRoast enforces Reddit's unwritten rules automatically. You never
+          need to think about limits — the system does.
+        </p>
+        <div className="grid sm:grid-cols-2 gap-x-8 gap-y-4">
+          {[
+            "Maximum five posts per day",
+            "Thirty-minute cooldown between posts",
+            "Maximum twenty-five DMs per day",
+            "Five DMs per hour maximum",
+            "Randomised two–ten minute delays",
+            "Alert at eighty percent of any limit",
+          ].map((item) => (
+            <div
+              key={item}
+              className="flex items-start gap-3"
+              style={{
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.8125rem",
+                fontWeight: 300,
+                color: "oklch(0.50 0.006 80)",
+                lineHeight: 1.6,
+              }}
+            >
+              <span
+                style={{
+                  width: "1px",
+                  height: "1rem",
+                  background: "oklch(0.72 0.12 75 / 0.4)",
+                  flexShrink: 0,
+                  marginTop: "0.15rem",
+                }}
+              />
+              {item}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── CTA section (extracted to avoid hook-in-loop) ── */
+function CtaSection() {
+  const ref = useFadeUp();
+  return (
+    <section
+      style={{
+        paddingTop: "clamp(6rem, 12vw, 11rem)",
+        paddingBottom: "clamp(6rem, 12vw, 11rem)",
+        background: "oklch(0.085 0.004 280)",
+        borderBottom: "0.5px solid oklch(0.16 0.004 280)",
+      }}
+    >
+      <div ref={ref} className="fade-up container text-center">
+        <p className="eyebrow mb-8 block">Ready to begin</p>
+        <h2 className="display-xl mb-6 mx-auto" style={{ maxWidth: "14ch" }}>
+          Post smarter.
+          <br />
+          <span style={{ color: "oklch(0.72 0.12 75)" }}>Grow faster.</span>
+        </h2>
+        <div
+          style={{
+            width: "3rem",
+            height: "0.5px",
+            background: "oklch(0.72 0.12 75 / 0.5)",
+            margin: "0 auto 2.5rem",
+          }}
+        />
+        <p
+          style={{
+            fontFamily: "var(--font-sans)",
+            fontSize: "0.9375rem",
+            fontWeight: 300,
+            color: "oklch(0.45 0.006 80)",
+            lineHeight: 1.75,
+            maxWidth: "36ch",
+            margin: "0 auto 3rem",
+          }}
+        >
+          Connect your Reddit account and receive your first AI analysis in
+          under two minutes.
+        </p>
+        <a href={getLoginUrl()} className="btn-luxury-primary">
+          Begin free trial — seven days
+        </a>
+        <p
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: "0.58rem",
+            color: "oklch(0.30 0 0)",
+            letterSpacing: "0.14em",
+            textTransform: "uppercase",
+            marginTop: "1.5rem",
+          }}
+        >
+          No credit card required · Cancel at any time
+        </p>
+      </div>
+    </section>
   );
 }
