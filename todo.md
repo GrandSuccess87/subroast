@@ -391,3 +391,15 @@
 - [x] DM Campaigns: mark AUTO-SEND option as "Coming soon" — disabled, pulsating badge, can't be selected
 - [ ] User spam reporting: "Mark as spam" button on lead cards — stores user flag in DB
 - [ ] AI training loop: user-flagged spam leads feed back into the scoreSpamRisk prompt as few-shot examples
+
+## Homepage Social Proof Strip (v5.40)
+- [x] Add social proof strip between hero and stats bar with quote from @zara_ferna94287
+- [x] Style as italic Cormorant serif pull-quote, X handle in JetBrains Mono, hairline border
+
+## Subreddit Health Monitor (v5.41)
+- [ ] Show warning badge on campaigns where >30% of synced leads score above 50 spam risk
+- [ ] Surface this on the campaign card and campaign detail header
+
+## User Spam Reporting + AI Training Loop (v5.42)
+- [ ] "Mark as spam" flag button on lead cards — stores user flag in DB
+- [ ] User-flagged spam leads feed back into scoreSpamRisk prompt as few-shot training examples

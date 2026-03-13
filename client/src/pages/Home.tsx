@@ -804,6 +804,94 @@ export default function Home() {
         />
       </section>
 
+      {/* ── SOCIAL PROOF STRIP ── */}
+      <section
+        style={{
+          borderTop: "0.5px solid oklch(0.18 0.007 60)",
+          borderBottom: "0.5px solid oklch(0.18 0.007 60)",
+          padding: "clamp(2.5rem, 5vw, 4rem) 0",
+          background: "oklch(0.07 0.006 60)",
+        }}
+      >
+        <div className="container">
+          <div
+            style={{
+              maxWidth: "52rem",
+              margin: "0 auto",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "1.25rem",
+              textAlign: "center",
+            }}
+          >
+            {/* Eyebrow */}
+            <p
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.6rem",
+                letterSpacing: "0.22em",
+                textTransform: "uppercase",
+                color: "oklch(0.55 0.006 80)",
+              }}
+            >
+              Early signal
+            </p>
+
+            {/* Quote */}
+            <blockquote
+              style={{
+                fontFamily: "var(--font-display)",
+                fontStyle: "italic",
+                fontSize: "clamp(1.35rem, 3vw, 1.85rem)",
+                fontWeight: 400,
+                color: "oklch(0.88 0.012 80)",
+                lineHeight: 1.45,
+                margin: 0,
+                padding: 0,
+                border: "none",
+              }}
+            >
+              &ldquo;Day six and already solving real pain points.&rdquo;
+            </blockquote>
+
+            {/* Attribution */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.6rem",
+              }}
+            >
+              {/* X logo */}
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 1200 1227"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                style={{ opacity: 0.4, flexShrink: 0 }}
+              >
+                <path
+                  d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z"
+                  fill="oklch(0.55 0.006 80)"
+                />
+              </svg>
+              <p
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "0.65rem",
+                  letterSpacing: "0.08em",
+                  color: "oklch(0.45 0.006 80)",
+                }}
+              >
+                @zara_ferna94287 &nbsp;&middot;&nbsp; responding to SubRoast&apos;s launch
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── STAT BAR ── */}
       <StatBar />
 
