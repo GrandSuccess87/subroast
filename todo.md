@@ -367,3 +367,11 @@
 - [x] Update og:image meta tag in index.html
 - [x] Update twitter:image meta tag in index.html
 - [x] Update og:type to "website" and add og:image:width/height tags
+
+## UI Fixes & Enhancements (v5.35)
+- [x] Fix login screen logo — replace old green flame logo with new debossed platinum logo mark
+- [x] Fix Draft & Roast mobile layout — stack input panel and results panel vertically on mobile (flex-col on small screens)
+- [x] Add back button to Feedback page — currently returns 404 when accessed from footer link
+- [x] Add copyright to footer in Home.tsx — "© 2026 SubRoast. All rights reserved."
+- [x] Add pulsating bullet animation for all "coming soon" feature indicators in dashboard and schedule pages
+- [x] Build roast report spider/radar chart — 5-axis chart (Clarity, Fit, Virality, Spam Risk, Urgency) on Draft & Roast page

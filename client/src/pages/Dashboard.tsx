@@ -115,15 +115,7 @@ export default function Dashboard() {
               marginBottom: "1.5rem",
             }}
           >
-            <div
-              style={{
-                width: "6px",
-                height: "6px",
-                background: IVORY_DIM,
-                borderRadius: "50%",
-                flexShrink: 0,
-              }}
-            />
+            <span className="coming-soon-dot" />
             <p style={{ fontSize: "0.8rem", color: MUTED, lineHeight: 1.5 }}>
               <span style={{ color: FOREGROUND, fontWeight: 500 }}>Reddit direct posting coming soon.</span>{" "}
               Use Copy &amp; Open to send DMs and comments manually in the meantime.

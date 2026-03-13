@@ -9,7 +9,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { MessageSquare, Bug, Lightbulb, ChevronUp, CheckCircle2, Clock } from "lucide-react";
+import { MessageSquare, Bug, Lightbulb, ChevronUp, CheckCircle2, Clock, ArrowLeft } from "lucide-react";
+import { Link } from "wouter";
 
 const FONT_DISPLAY = "Cormorant Garamond, Georgia, serif";
 const FONT_MONO = "JetBrains Mono, monospace";
@@ -90,6 +91,15 @@ export default function FeedbackPage() {
 
   return (
     <div style={{ maxWidth: "700px", margin: "0 auto", padding: "2.5rem 1.5rem" }}>
+
+      {/* Back navigation */}
+      <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.18em", textTransform: "uppercase", color: MUTED, textDecoration: "none", marginBottom: "2rem", transition: "color 0.2s" }}
+        onMouseEnter={(e) => ((e.target as HTMLElement).style.color = IVORY)}
+        onMouseLeave={(e) => ((e.target as HTMLElement).style.color = MUTED)}
+      >
+        <ArrowLeft size={11} />
+        Back to Home
+      </Link>
 
       {/* Header */}
       <div style={{ marginBottom: "2.5rem" }}>

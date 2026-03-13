@@ -1004,7 +1004,7 @@ export default function Home() {
               textTransform: "uppercase",
             }}
           >
-            Built for indie SaaS founders
+            &copy; {new Date().getFullYear()} SubRoast. All rights reserved.
           </p>
         </div>
       </footer>

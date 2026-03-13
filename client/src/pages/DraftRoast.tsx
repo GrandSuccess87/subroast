@@ -67,6 +67,91 @@ function ScorePill({ value, type }: { value: string; type: "positive" | "negativ
   );
 }
 
+
+// Map High/Medium/Low to 0-100 numeric values
+function scoreToNum(val: string, type: "positive" | "negative"): number {
+  if (type === "positive") {
+    if (val === "High") return 90;
+    if (val === "Medium") return 55;
+    return 20;
+  } else {
+    // negative: Low is good (high score), High is bad (low score)
+    if (val === "Low") return 90;
+    if (val === "Medium") return 55;
+    return 20;
+  }
+}
+
+function RadarChart({ result }: { result: AnalysisResult }) {
+  const size = 220;
+  const cx = size / 2;
+  const cy = size / 2;
+  const r = 80;
+  const axes = [
+    { label: "Clarity", value: scoreToNum(result.review.clarity, "positive") },
+    { label: "Sub Fit", value: scoreToNum(result.review.subreddit_fit, "positive") },
+    { label: "Virality", value: Math.max(1, Math.min(100, result.virality.score)) },
+    { label: "Safety", value: scoreToNum(result.review.promo_risk, "negative") },
+    { label: "Improved", value: Math.max(1, Math.min(100, result.improved_virality.score)) },
+  ];
+  const n = axes.length;
+  const angleStep = (2 * Math.PI) / n;
+  const startAngle = -Math.PI / 2;
+
+  const pt = (i: number, frac: number) => {
+    const angle = startAngle + i * angleStep;
+    return {
+      x: cx + r * frac * Math.cos(angle),
+      y: cy + r * frac * Math.sin(angle),
+    };
+  };
+
+  const rings = [0.25, 0.5, 0.75, 1.0];
+  const dataPoints = axes.map((ax, i) => pt(i, ax.value / 100));
+  const dataPath = dataPoints.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x.toFixed(2)} ${p.y.toFixed(2)}`).join(" ") + " Z";
+  const axisLines = axes.map((_, i) => { const end = pt(i, 1); return `M ${cx} ${cy} L ${end.x.toFixed(2)} ${end.y.toFixed(2)}`; });
+  const labelPositions = axes.map((ax, i) => { const p = pt(i, 1.32); return { ...p, label: ax.label, value: ax.value }; });
+
+  const IVORY_COLOR = "oklch(0.88 0.025 85)";
+  const MUTED_COLOR = "oklch(0.52 0.006 80)";
+  const BORDER_COLOR = "oklch(0.22 0.007 60)";
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem", padding: "1.25rem 1.5rem", borderTop: `0.5px solid ${BORDER_COLOR}` }}>
+      <p style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: MUTED_COLOR, marginBottom: "0.5rem" }}>
+        Intelligence Radar
+      </p>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ overflow: "visible" }}>
+        {rings.map((frac, ri) => {
+          const ringPts = axes.map((_, i) => pt(i, frac));
+          const ringPath = ringPts.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x.toFixed(2)} ${p.y.toFixed(2)}`).join(" ") + " Z";
+          return <path key={ri} d={ringPath} fill="none" stroke={BORDER_COLOR} strokeWidth="0.5" />;
+        })}
+        {axisLines.map((d, i) => (
+          <path key={i} d={d} stroke={BORDER_COLOR} strokeWidth="0.5" />
+        ))}
+        <path d={dataPath} fill="oklch(0.88 0.025 85 / 0.10)" stroke={IVORY_COLOR} strokeWidth="1.5" strokeLinejoin="round" />
+        {dataPoints.map((p, i) => (
+          <circle key={i} cx={p.x} cy={p.y} r="3" fill={IVORY_COLOR} />
+        ))}
+        {labelPositions.map((lp, i) => {
+          const anchor = lp.x < cx - 5 ? "end" : lp.x > cx + 5 ? "start" : "middle";
+          return (
+            <g key={i}>
+              <text x={lp.x} y={lp.y - 5} textAnchor={anchor} style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "7.5px", letterSpacing: "0.1em", fill: MUTED_COLOR, textTransform: "uppercase" }}>
+                {lp.label}
+              </text>
+              <text x={lp.x} y={lp.y + 7} textAnchor={anchor} style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "9px", fill: IVORY_COLOR }}>
+                {lp.value}
+              </text>
+            </g>
+          );
+        })}
+      </svg>
+    </div>
+  );
+}
+
 function ViralityGauge({ score }: { score: number }) {
   const clamped = Math.max(1, Math.min(100, score));
   const color =
@@ -183,7 +268,7 @@ export default function DraftRoast() {
           </p>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5px", alignItems: "start" }}>
+        <div className="draft-roast-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5px", alignItems: "start" }}>
 
           {/* Input panel */}
           <div style={{ border: `0.5px solid ${BORDER}`, background: SURFACE }}>
@@ -423,6 +508,7 @@ export default function DraftRoast() {
                         </div>
                       )}
                     </div>
+                    <RadarChart result={result} />
                   </div>
                 )}
 

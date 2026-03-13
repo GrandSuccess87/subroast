@@ -106,22 +106,78 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   if (!user) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-background">
-        <div className="flex flex-col items-center gap-8 p-8 max-w-md w-full">
-          <img
-            src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663208942813/BEbgHhBeLfKnEwiD.png"
-            alt="SubRoast"
-            className="w-10 h-10 rounded-xl object-cover"
-          />
-          <div className="flex flex-col items-center gap-3 text-center">
-            <h1 className="text-2xl font-semibold tracking-tight">Sign in to SubRoast</h1>
-            <p className="text-sm text-muted-foreground max-w-sm">
-              Connect your account to start drafting smarter Reddit posts.
-            </p>
+      <div
+        className="flex items-center justify-center min-h-screen"
+        style={{ background: 'oklch(0.09 0.008 60)' }}
+      >
+        {/* Ambient glow */}
+        <div style={{
+          position: 'fixed', inset: 0, pointerEvents: 'none',
+          background: 'radial-gradient(ellipse 60% 50% at 50% 30%, oklch(0.88 0.025 85 / 0.04) 0%, transparent 70%)'
+        }} />
+        <div className="flex flex-col items-center gap-10 p-10" style={{ maxWidth: 380, width: '100%', position: 'relative' }}>
+          {/* Debossed logo mark */}
+          <div style={{ position: 'relative' }}>
+            <img
+              src="https://d2xsxph8kpxj0f.cloudfront.net/310519663208942813/D6eMQgvSZZr9tsyS9zVhzn/subroast-logo-debossed_490a86ef.png"
+              alt="SubRoast"
+              style={{ width: 72, height: 72, objectFit: 'contain', filter: 'drop-shadow(0 0 12px oklch(0.88 0.025 85 / 0.15))' }}
+            />
           </div>
-          <Button onClick={() => { window.location.href = getLoginUrl(); }} size="lg" className="w-full">
-            Sign in
-          </Button>
+          {/* Wordmark */}
+          <div className="flex flex-col items-center gap-3 text-center">
+            <h1 style={{
+              fontFamily: '"Cormorant Garamond", serif',
+              fontStyle: 'italic',
+              fontWeight: 300,
+              fontSize: '2rem',
+              letterSpacing: '0.02em',
+              color: 'oklch(0.94 0.008 80)',
+              lineHeight: 1.1,
+              margin: 0,
+            }}>SubRoast</h1>
+            {/* Hairline rule */}
+            <div style={{ width: 40, height: '0.5px', background: 'oklch(0.88 0.025 85 / 0.4)', margin: '4px 0' }} />
+            <p style={{
+              fontFamily: '"JetBrains Mono", monospace',
+              fontSize: '0.65rem',
+              letterSpacing: '0.22em',
+              textTransform: 'uppercase',
+              color: 'oklch(0.52 0.006 80)',
+              margin: 0,
+            }}>Intelligence for Reddit founders</p>
+          </div>
+          {/* Sign in button */}
+          <button
+            onClick={() => { window.location.href = getLoginUrl(); }}
+            style={{
+              width: '100%',
+              padding: '14px 24px',
+              background: 'oklch(0.88 0.025 85)',
+              color: 'oklch(0.09 0.008 60)',
+              border: 'none',
+              borderRadius: 0,
+              fontFamily: '"JetBrains Mono", monospace',
+              fontSize: '0.7rem',
+              fontWeight: 500,
+              letterSpacing: '0.25em',
+              textTransform: 'uppercase',
+              cursor: 'pointer',
+              transition: 'opacity 0.2s',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
+            onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+          >
+            Sign In
+          </button>
+          <p style={{
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '0.72rem',
+            color: 'oklch(0.38 0.004 80)',
+            textAlign: 'center',
+            margin: 0,
+            lineHeight: 1.6,
+          }}>By signing in you agree to our Terms of Service<br />and Privacy Policy.</p>
         </div>
       </div>
     );

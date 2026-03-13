@@ -177,7 +177,7 @@ export default function Schedule() {
         {/* No Reddit account notice */}
         {!account && (
           <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.75rem 1rem", border: `0.5px solid ${BORDER}`, background: SURFACE, marginBottom: "1.5rem" }}>
-            <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: IVORY, flexShrink: 0 }} />
+            <span className="coming-soon-dot" />
             <p style={{ fontSize: "0.78rem", color: MUTED, lineHeight: 1.5 }}>
               <span style={{ color: FOREGROUND, fontWeight: 500 }}>Reddit direct posting coming soon.</span>{" "}
               Reddit API approval is pending — scheduling will be enabled automatically once approved.
