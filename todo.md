@@ -378,3 +378,6 @@
 
 ## Sidebar User Profile Footer (v5.36)
 - [x] Add user avatar initials, name, email, and logout button pinned to the bottom of the sidebar
+
+## Mobile Sidebar Footer Fix
+- [x] Fix sidebar footer (name/email/logout) not visible on mobile — sheet not filling full height
