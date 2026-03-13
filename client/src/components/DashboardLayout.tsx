@@ -325,11 +325,9 @@ function DashboardLayoutContent({
                 </SidebarMenu>
               </div>
             ))}
-          </SidebarContent>
-
-          {/* Activity widget */}
-          {!isCollapsed && (
-            <div className="mx-3 mb-3 p-3 bg-sidebar-accent" style={{ border: '0.5px solid oklch(0.18 0.004 280)', borderRadius: 0 }}>
+            {/* Activity widget */}
+            {!isCollapsed && (
+            <div className="mx-3 mb-3 mt-2 p-3 bg-sidebar-accent" style={{ border: '0.5px solid oklch(0.18 0.004 280)', borderRadius: 0 }}>
               <div className="flex items-center gap-1.5 mb-2.5">
                 <BarChart2 className="w-3.5 h-3.5 text-primary" />
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', fontWeight: 300, letterSpacing: '0.14em', textTransform: 'uppercase' }} className="text-sidebar-foreground/70">Activity</span>
@@ -370,6 +368,7 @@ function DashboardLayoutContent({
               </div>
             </div>
           )}
+          </SidebarContent>
 
           {/* User footer */}
           <SidebarFooter className="p-3" style={{ borderTop: '0.5px solid oklch(0.16 0.004 280)' }}>
