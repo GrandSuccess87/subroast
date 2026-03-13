@@ -360,3 +360,10 @@
 
 ## SEO Fixes (v5.33)
 - [x] Fix page title on / — must be 30–60 characters, set via document.title and <title> tag in index.html
+
+## OG / Social Sharing Image (v5.34)
+- [x] Generate 1200×630 OG image: dark editorial, Cormorant headline, ivory accent, debossed logo, product mockup
+- [x] Upload OG image to CDN
+- [x] Update og:image meta tag in index.html
+- [x] Update twitter:image meta tag in index.html
+- [x] Update og:type to "website" and add og:image:width/height tags
