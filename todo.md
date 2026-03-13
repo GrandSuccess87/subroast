@@ -403,3 +403,6 @@
 ## User Spam Reporting + AI Training Loop (v5.42)
 - [ ] "Mark as spam" flag button on lead cards — stores user flag in DB
 - [ ] User-flagged spam leads feed back into scoreSpamRisk prompt as few-shot training examples
+
+## Homepage Social Proof Strip — Second Quote (v5.41)
+- [x] Add @viberankdev quote to social proof strip, two quotes side-by-side on desktop, stacked on mobile

@@ -261,6 +261,25 @@ function ReportMockup() {
   );
 }
 
+/* ── X (Twitter) logo SVG ── */
+function XLogo() {
+  return (
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 1200 1227"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ opacity: 0.4, flexShrink: 0 }}
+    >
+      <path
+        d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z"
+        fill="oklch(0.55 0.006 80)"
+      />
+    </svg>
+  );
+}
+
 /* ── Luxury section divider ── */
 function Divider() {
   return (
@@ -814,79 +833,91 @@ export default function Home() {
         }}
       >
         <div className="container">
-          <div
+          {/* Eyebrow */}
+          <p
             style={{
-              maxWidth: "52rem",
-              margin: "0 auto",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: "1.25rem",
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.6rem",
+              letterSpacing: "0.22em",
+              textTransform: "uppercase",
+              color: "oklch(0.55 0.006 80)",
               textAlign: "center",
+              marginBottom: "2.5rem",
             }}
           >
-            {/* Eyebrow */}
-            <p
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "0.6rem",
-                letterSpacing: "0.22em",
-                textTransform: "uppercase",
-                color: "oklch(0.55 0.006 80)",
-              }}
-            >
-              Early signal
-            </p>
+            Early signal
+          </p>
 
-            {/* Quote */}
-            <blockquote
-              style={{
-                fontFamily: "var(--font-display)",
-                fontStyle: "italic",
-                fontSize: "clamp(1.35rem, 3vw, 1.85rem)",
-                fontWeight: 400,
-                color: "oklch(0.88 0.012 80)",
-                lineHeight: 1.45,
-                margin: 0,
-                padding: 0,
-                border: "none",
-              }}
-            >
-              &ldquo;Day six and already solving real pain points.&rdquo;
-            </blockquote>
-
-            {/* Attribution */}
+          {/* Two-column grid on desktop, stacked on mobile */}
+          <div
+            className="grid lg:grid-cols-2"
+            style={{ gap: "0", maxWidth: "72rem", margin: "0 auto" }}
+          >
+            {/* Quote 1 — @zara_ferna94287 */}
             <div
               style={{
                 display: "flex",
-                alignItems: "center",
-                gap: "0.6rem",
+                flexDirection: "column",
+                gap: "1.1rem",
+                padding: "clamp(1.5rem, 3vw, 2.5rem)",
+                borderRight: "0.5px solid oklch(0.18 0.007 60)",
+                borderBottom: "0.5px solid oklch(0.18 0.007 60)",
               }}
+              className="lg:border-b-0"
             >
-              {/* X logo */}
-              <svg
-                width="13"
-                height="13"
-                viewBox="0 0 1200 1227"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                style={{ opacity: 0.4, flexShrink: 0 }}
-              >
-                <path
-                  d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z"
-                  fill="oklch(0.55 0.006 80)"
-                />
-              </svg>
-              <p
+              <blockquote
                 style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: "0.65rem",
-                  letterSpacing: "0.08em",
-                  color: "oklch(0.45 0.006 80)",
+                  fontFamily: "var(--font-display)",
+                  fontStyle: "italic",
+                  fontSize: "clamp(1.1rem, 2.2vw, 1.45rem)",
+                  fontWeight: 400,
+                  color: "oklch(0.88 0.012 80)",
+                  lineHeight: 1.5,
+                  margin: 0,
+                  padding: 0,
+                  border: "none",
                 }}
               >
-                @zara_ferna94287 &nbsp;&middot;&nbsp; responding to SubRoast&apos;s launch
-              </p>
+                &ldquo;Day six and already solving real pain points.&rdquo;
+              </blockquote>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "auto" }}>
+                <XLogo />
+                <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.62rem", letterSpacing: "0.08em", color: "oklch(0.45 0.006 80)" }}>
+                  @zara_ferna94287 &nbsp;&middot;&nbsp; responding to SubRoast&apos;s launch
+                </p>
+              </div>
+            </div>
+
+            {/* Quote 2 — @viberankdev */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "1.1rem",
+                padding: "clamp(1.5rem, 3vw, 2.5rem)",
+              }}
+            >
+              <blockquote
+                style={{
+                  fontFamily: "var(--font-display)",
+                  fontStyle: "italic",
+                  fontSize: "clamp(1.1rem, 2.2vw, 1.45rem)",
+                  fontWeight: 400,
+                  color: "oklch(0.88 0.012 80)",
+                  lineHeight: 1.5,
+                  margin: 0,
+                  padding: 0,
+                  border: "none",
+                }}
+              >
+                &ldquo;Reddit moderation is tough — a pre-check tool is a great idea. Scoring warm leads sounds super useful for targeting.&rdquo;
+              </blockquote>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "auto" }}>
+                <XLogo />
+                <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.62rem", letterSpacing: "0.08em", color: "oklch(0.45 0.006 80)" }}>
+                  @viberankdev &nbsp;&middot;&nbsp; responding to SubRoast&apos;s launch
+                </p>
+              </div>
             </div>
           </div>
         </div>
