@@ -357,3 +357,6 @@
 - [x] Feedback.tsx — luxury feedback form, Cormorant headings, ivory accent on submit button
 - [x] BillingSuccess.tsx — luxury success state, Cormorant heading, editorial confirmation layout
 - [x] NotFound.tsx — luxury 404 page, Cormorant italic heading, editorial minimal layout
+
+## SEO Fixes (v5.33)
+- [x] Fix page title on / — must be 30–60 characters, set via document.title and <title> tag in index.html

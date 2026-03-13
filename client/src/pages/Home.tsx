@@ -594,6 +594,12 @@ export default function Home() {
   const [, setLocation] = useLocation();
   const heroRef = useRef<HTMLDivElement>(null);
 
+  // Set SEO-optimised page title (30–60 chars)
+  useEffect(() => {
+    document.title = "SubRoast — AI Reddit Growth Tool for Founders";
+    return () => { document.title = "SubRoast"; };
+  }, []);
+
   // Redirect authenticated users
   useEffect(() => {
     if (!loading && isAuthenticated) setLocation("/dashboard");
