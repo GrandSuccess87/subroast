@@ -70,7 +70,7 @@
   --sidebar-foreground: oklch(0.93 0.010 80);
 
   /* Primary — Platinum / Silver (WCAG AAA on warm charcoal) */
-  --primary:           oklch(0.82 0.008 240);    /* cool platinum silver */
+  --primary:           oklch(0.88 0.025 85);    /* cool platinum silver */
   --primary-foreground: oklch(0.09 0.008 60);   /* warm charcoal on platinum */
 
   /* Secondary / muted */
@@ -88,18 +88,18 @@
   /* Hairline borders */
   --border:            oklch(0.22 0.007 60);    /* barely-there warm border */
   --input:             oklch(0.22 0.007 60);
-  --ring:              oklch(0.82 0.008 240);    /* platinum focus ring */
+  --ring:              oklch(0.88 0.025 85);    /* platinum focus ring */
 
   /* Sidebar */
-  --sidebar-primary:           oklch(0.82 0.008 240);
+  --sidebar-primary:           oklch(0.88 0.025 85);
   --sidebar-primary-foreground: oklch(0.09 0.008 60);
   --sidebar-accent:            oklch(0.16 0.007 60);
   --sidebar-accent-foreground: oklch(0.93 0.010 80);
   --sidebar-border:            oklch(0.18 0.007 60);
-  --sidebar-ring:              oklch(0.82 0.008 240);
+  --sidebar-ring:              oklch(0.88 0.025 85);
 
   /* Charts */
-  --chart-1: oklch(0.82 0.008 240);
+  --chart-1: oklch(0.88 0.025 85);
   --chart-2: oklch(0.60 0.10 200);
   --chart-3: oklch(0.65 0.10 140);
   --chart-4: oklch(0.50 0.18 25);
@@ -154,7 +154,7 @@
   ::-webkit-scrollbar { width: 3px; height: 3px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: oklch(0.25 0 0); border-radius: 0; }
-  ::-webkit-scrollbar-thumb:hover { background: oklch(0.82 0.008 240 / 0.5); }
+  ::-webkit-scrollbar-thumb:hover { background: oklch(0.88 0.025 85 / 0.5); }
 }
 
 @layer components {
@@ -218,9 +218,9 @@
     font-weight: 300;
     letter-spacing: 0.32em;
     text-transform: uppercase;
-    color: oklch(0.82 0.008 240);
+    color: oklch(0.88 0.025 85);
     padding-top: 0.875rem;
-    border-top: 0.5px solid oklch(0.82 0.008 240 / 0.35);
+    border-top: 0.5px solid oklch(0.88 0.025 85 / 0.35);
     display: inline-block;
   }
 
@@ -228,7 +228,7 @@
   .rule-gold {
     border: none;
     height: 0.5px;
-    background: oklch(0.82 0.008 240 / 0.4);
+    background: oklch(0.88 0.025 85 / 0.4);
     width: 100%;
   }
 
@@ -245,8 +245,8 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.75rem 2rem;
-    border: 0.5px solid oklch(0.82 0.008 240 / 0.5);
-    color: oklch(0.82 0.008 240);
+    border: 0.5px solid oklch(0.88 0.025 85 / 0.5);
+    color: oklch(0.88 0.025 85);
     font-family: var(--font-mono);
     font-size: 0.6rem;
     font-weight: 300;
@@ -257,8 +257,8 @@
     text-decoration: none;
   }
   .btn-luxury:hover {
-    background: oklch(0.82 0.008 240 / 0.06);
-    border-color: oklch(0.82 0.008 240 / 0.9);
+    background: oklch(0.88 0.025 85 / 0.06);
+    border-color: oklch(0.88 0.025 85 / 0.9);
   }
 
   /* Luxury primary button — platinum fill, used sparingly */
@@ -267,7 +267,7 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.875rem 2.5rem;
-    background: oklch(0.82 0.008 240);
+    background: oklch(0.88 0.025 85);
     color: oklch(0.09 0.008 60);
     font-family: var(--font-mono);
     font-size: 0.6rem;
@@ -279,7 +279,7 @@
     text-decoration: none;
   }
   .btn-luxury-primary:hover {
-    background: oklch(0.88 0.006 240);
+    background: oklch(0.93 0.020 85);
     transform: translateY(-1px);
   }
 

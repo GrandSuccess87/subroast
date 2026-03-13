@@ -35,7 +35,7 @@ function ReportMockup() {
         className="absolute -inset-8 pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse 60% 50% at 50% 50%, oklch(0.82 0.008 240 / 0.07) 0%, transparent 70%)",
+            "radial-gradient(ellipse 60% 50% at 50% 50%, oklch(0.88 0.025 85 / 0.07) 0%, transparent 70%)",
         }}
       />
 
@@ -56,7 +56,7 @@ function ReportMockup() {
             <div>
               <p
                 className="eyebrow mb-1"
-                style={{ color: "oklch(0.82 0.008 240)", fontSize: "0.6rem" }}
+                style={{ color: "oklch(0.88 0.025 85)", fontSize: "0.6rem" }}
               >
                 SubRoast Intelligence
               </p>
@@ -121,7 +121,7 @@ function ReportMockup() {
                   fontFamily: "var(--font-mono)",
                   fontSize: "1.75rem",
                   fontWeight: 300,
-                  color: "oklch(0.82 0.008 240)",
+                  color: "oklch(0.88 0.025 85)",
                   lineHeight: 1,
                 }}
               >
@@ -161,7 +161,7 @@ function ReportMockup() {
         >
           <p
             className="eyebrow mb-3"
-            style={{ fontSize: "0.58rem", color: "oklch(0.82 0.008 240 / 0.7)" }}
+            style={{ fontSize: "0.58rem", color: "oklch(0.88 0.025 85 / 0.7)" }}
           >
             Assessment
           </p>
@@ -187,7 +187,7 @@ function ReportMockup() {
         >
           <p
             className="eyebrow mb-3"
-            style={{ fontSize: "0.58rem", color: "oklch(0.82 0.008 240 / 0.7)" }}
+            style={{ fontSize: "0.58rem", color: "oklch(0.88 0.025 85 / 0.7)" }}
           >
             Recommended Draft
           </p>
@@ -214,14 +214,14 @@ function ReportMockup() {
               style={{
                 width: "1px",
                 alignSelf: "stretch",
-                background: "oklch(0.82 0.008 240 / 0.4)",
+                background: "oklch(0.88 0.025 85 / 0.4)",
                 flexShrink: 0,
               }}
             />
             <div>
               <p
                 className="eyebrow mb-1.5"
-                style={{ fontSize: "0.58rem", color: "oklch(0.82 0.008 240 / 0.7)" }}
+                style={{ fontSize: "0.58rem", color: "oklch(0.88 0.025 85 / 0.7)" }}
               >
                 Virality Recommendation
               </p>
@@ -246,7 +246,7 @@ function ReportMockup() {
       <div
         className="absolute -bottom-3 -right-3 px-3 py-1.5"
         style={{
-          background: "oklch(0.82 0.008 240)",
+          background: "oklch(0.88 0.025 85)",
           fontFamily: "var(--font-mono)",
           fontSize: "0.6rem",
           fontWeight: 400,
@@ -270,7 +270,7 @@ function Divider() {
         style={{
           width: "4px",
           height: "4px",
-          background: "oklch(0.82 0.008 240 / 0.5)",
+          background: "oklch(0.88 0.025 85 / 0.5)",
           transform: "rotate(45deg)",
           flexShrink: 0,
         }}
@@ -305,7 +305,7 @@ function FeatureRow({
           fontSize: "0.6rem",
           fontWeight: 300,
           letterSpacing: "0.18em",
-          color: "oklch(0.82 0.008 240 / 0.5)",
+          color: "oklch(0.88 0.025 85 / 0.5)",
           paddingTop: "0.2rem",
         }}
       >
@@ -380,7 +380,7 @@ function VideoSection() {
             className="absolute -inset-6 pointer-events-none"
             style={{
               background:
-                "radial-gradient(ellipse 70% 60% at 50% 50%, oklch(0.82 0.008 240 / 0.05) 0%, transparent 70%)",
+                "radial-gradient(ellipse 70% 60% at 50% 50%, oklch(0.88 0.025 85 / 0.05) 0%, transparent 70%)",
             }}
           />
 
@@ -406,7 +406,7 @@ function VideoSection() {
                 <div
                   className="absolute inset-0 opacity-[0.04]"
                   style={{
-                    backgroundImage: `linear-gradient(oklch(0.82 0.008 240) 0.5px, transparent 0.5px), linear-gradient(90deg, oklch(0.82 0.008 240) 0.5px, transparent 0.5px)`,
+                    backgroundImage: `linear-gradient(oklch(0.88 0.025 85) 0.5px, transparent 0.5px), linear-gradient(90deg, oklch(0.88 0.025 85) 0.5px, transparent 0.5px)`,
                     backgroundSize: "48px 48px",
                   }}
                 />
@@ -424,7 +424,7 @@ function VideoSection() {
                       style={{
                         height: "100%",
                         width: "35%",
-                        background: "oklch(0.82 0.008 240 / 0.6)",
+                        background: "oklch(0.88 0.025 85 / 0.6)",
                       }}
                     />
                   </div>
@@ -453,9 +453,9 @@ function VideoSection() {
                           letterSpacing: "0.12em",
                           textTransform: "uppercase",
                           padding: "0.2rem 0.6rem",
-                          border: `0.5px solid ${i < 3 ? "oklch(0.82 0.008 240 / 0.4)" : "oklch(0.22 0.007 60)"}`,
-                          color: i < 3 ? "oklch(0.82 0.008 240 / 0.8)" : "oklch(0.35 0 0)",
-                          background: i < 3 ? "oklch(0.82 0.008 240 / 0.05)" : "transparent",
+                          border: `0.5px solid ${i < 3 ? "oklch(0.88 0.025 85 / 0.4)" : "oklch(0.22 0.007 60)"}`,
+                          color: i < 3 ? "oklch(0.88 0.025 85 / 0.8)" : "oklch(0.35 0 0)",
+                          background: i < 3 ? "oklch(0.88 0.025 85 / 0.05)" : "transparent",
                         }}
                       >
                         {label}
@@ -471,24 +471,24 @@ function VideoSection() {
                   style={{
                     width: "72px",
                     height: "72px",
-                    border: "0.5px solid oklch(0.82 0.008 240 / 0.5)",
-                    background: "oklch(0.82 0.008 240 / 0.08)",
+                    border: "0.5px solid oklch(0.88 0.025 85 / 0.5)",
+                    background: "oklch(0.88 0.025 85 / 0.08)",
                     transition: "background 0.4s ease, border-color 0.4s ease",
                   }}
                   onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLButtonElement).style.background = "oklch(0.82 0.008 240 / 0.15)";
-                    (e.currentTarget as HTMLButtonElement).style.borderColor = "oklch(0.82 0.008 240 / 0.8)";
+                    (e.currentTarget as HTMLButtonElement).style.background = "oklch(0.88 0.025 85 / 0.15)";
+                    (e.currentTarget as HTMLButtonElement).style.borderColor = "oklch(0.88 0.025 85 / 0.8)";
                   }}
                   onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLButtonElement).style.background = "oklch(0.82 0.008 240 / 0.08)";
-                    (e.currentTarget as HTMLButtonElement).style.borderColor = "oklch(0.82 0.008 240 / 0.5)";
+                    (e.currentTarget as HTMLButtonElement).style.background = "oklch(0.88 0.025 85 / 0.08)";
+                    (e.currentTarget as HTMLButtonElement).style.borderColor = "oklch(0.88 0.025 85 / 0.5)";
                   }}
                   aria-label="Play demo"
                   title={VIDEO_EMBED_URL ? "Play walkthrough" : "Demo coming soon"}
                 >
                   {/* Play triangle */}
                   <svg width="18" height="20" viewBox="0 0 18 20" fill="none">
-                    <path d="M1 1L17 10L1 19V1Z" fill="oklch(0.82 0.008 240)" stroke="none" />
+                    <path d="M1 1L17 10L1 19V1Z" fill="oklch(0.88 0.025 85)" stroke="none" />
                   </svg>
                 </button>
 
@@ -562,7 +562,7 @@ function StatBar() {
                   fontFamily: "var(--font-mono)",
                   fontSize: "clamp(1.75rem, 3vw, 2.5rem)",
                   fontWeight: 300,
-                  color: "oklch(0.82 0.008 240)",
+                  color: "oklch(0.88 0.025 85)",
                   lineHeight: 1,
                 }}
               >
@@ -675,7 +675,7 @@ export default function Home() {
                   transition: "color 0.3s ease",
                 }}
                 onMouseEnter={(e) =>
-                  ((e.target as HTMLAnchorElement).style.color = "oklch(0.82 0.008 240)")
+                  ((e.target as HTMLAnchorElement).style.color = "oklch(0.88 0.025 85)")
                 }
                 onMouseLeave={(e) =>
                   ((e.target as HTMLAnchorElement).style.color = "oklch(0.45 0 0)")
@@ -706,7 +706,7 @@ export default function Home() {
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundImage: `linear-gradient(oklch(0.82 0.008 240 / 0.03) 0.5px, transparent 0.5px), linear-gradient(90deg, oklch(0.82 0.008 240 / 0.03) 0.5px, transparent 0.5px)`,
+            backgroundImage: `linear-gradient(oklch(0.88 0.025 85 / 0.03) 0.5px, transparent 0.5px), linear-gradient(90deg, oklch(0.88 0.025 85 / 0.03) 0.5px, transparent 0.5px)`,
             backgroundSize: "80px 80px",
           }}
         />
@@ -725,7 +725,7 @@ export default function Home() {
               <h1 className="display-xl mb-6">
                 Stop guessing.
                 <br />
-                <span style={{ color: "oklch(0.82 0.008 240)" }}>
+                <span style={{ color: "oklch(0.88 0.025 85)" }}>
                   Start winning.
                 </span>
               </h1>
@@ -735,7 +735,7 @@ export default function Home() {
                 style={{
                   width: "4rem",
                   height: "0.5px",
-                  background: "oklch(0.82 0.008 240 / 0.6)",
+                  background: "oklch(0.88 0.025 85 / 0.6)",
                   marginBottom: "2rem",
                 }}
               />
@@ -901,7 +901,7 @@ export default function Home() {
                 style={{
                   width: "3rem",
                   height: "0.5px",
-                  background: "oklch(0.82 0.008 240 / 0.5)",
+                  background: "oklch(0.88 0.025 85 / 0.5)",
                 }}
               />
             </div>
@@ -979,7 +979,7 @@ export default function Home() {
                   transition: "color 0.3s ease",
                 }}
                 onMouseEnter={(e) =>
-                  ((e.target as HTMLAnchorElement).style.color = "oklch(0.82 0.008 240)")
+                  ((e.target as HTMLAnchorElement).style.color = "oklch(0.88 0.025 85)")
                 }
                 onMouseLeave={(e) =>
                   ((e.target as HTMLAnchorElement).style.color = "oklch(0.35 0 0)")
@@ -1033,7 +1033,7 @@ function ProcessStep({
           fontSize: "1.5rem",
           fontWeight: 300,
           fontStyle: "italic",
-          color: "oklch(0.82 0.008 240 / 0.4)",
+          color: "oklch(0.88 0.025 85 / 0.4)",
           lineHeight: 1,
           paddingTop: "0.15rem",
         }}
@@ -1083,7 +1083,7 @@ function SafetyBlock() {
           style={{
             width: "3rem",
             height: "0.5px",
-            background: "oklch(0.82 0.008 240 / 0.5)",
+            background: "oklch(0.88 0.025 85 / 0.5)",
           }}
         />
       </div>
@@ -1125,7 +1125,7 @@ function SafetyBlock() {
                 style={{
                   width: "1px",
                   height: "1rem",
-                  background: "oklch(0.82 0.008 240 / 0.4)",
+                  background: "oklch(0.88 0.025 85 / 0.4)",
                   flexShrink: 0,
                   marginTop: "0.15rem",
                 }}
@@ -1156,13 +1156,13 @@ function CtaSection() {
         <h2 className="display-xl mb-6 mx-auto" style={{ maxWidth: "14ch" }}>
           Post smarter.
           <br />
-          <span style={{ color: "oklch(0.82 0.008 240)" }}>Grow faster.</span>
+          <span style={{ color: "oklch(0.88 0.025 85)" }}>Grow faster.</span>
         </h2>
         <div
           style={{
             width: "3rem",
             height: "0.5px",
-            background: "oklch(0.82 0.008 240 / 0.5)",
+            background: "oklch(0.88 0.025 85 / 0.5)",
             margin: "0 auto 2.5rem",
           }}
         />

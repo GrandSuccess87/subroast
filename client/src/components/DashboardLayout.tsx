@@ -293,7 +293,7 @@ function DashboardLayoutContent({
                   <div className="overflow-hidden" style={{ height: '0.5px', background: 'oklch(0.20 0.004 280)' }}>
                     <div
                       className="h-full transition-all"
-                      style={{ width: `${Math.max(leadsPct, 2)}%`, background: 'oklch(0.82 0.008 240 / 0.7)', borderRadius: 0 }}
+                      style={{ width: `${Math.max(leadsPct, 2)}%`, background: 'oklch(0.88 0.025 85 / 0.7)', borderRadius: 0 }}
                     />
                   </div>
                 </div>
@@ -312,7 +312,7 @@ function DashboardLayoutContent({
                     <div className="overflow-hidden" style={{ height: '0.5px', background: 'oklch(0.20 0.004 280)' }}>
                       <div
                         className="h-full transition-all"
-                        style={{ width: `${Math.min(Math.round((syncStats.syncsToday / syncStats.dailyLimit) * 100), 100)}%`, background: syncStats.syncsToday >= syncStats.dailyLimit ? 'oklch(0.65 0.18 45)' : 'oklch(0.82 0.008 240 / 0.7)', borderRadius: 0 }}
+                        style={{ width: `${Math.min(Math.round((syncStats.syncsToday / syncStats.dailyLimit) * 100), 100)}%`, background: syncStats.syncsToday >= syncStats.dailyLimit ? 'oklch(0.65 0.18 45)' : 'oklch(0.88 0.025 85 / 0.7)', borderRadius: 0 }}
                       />
                     </div>
                   </div>
