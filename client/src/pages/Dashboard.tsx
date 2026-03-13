@@ -1,5 +1,4 @@
 import DashboardLayout from "@/components/DashboardLayout";
-import { Card, CardContent } from "@/components/ui/card";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import OnboardingChecklist from "@/components/OnboardingChecklist";
@@ -7,15 +6,22 @@ import {
   AlertTriangle,
   ArrowRight,
   CheckCircle2,
-  History,
   MessageSquare,
   Sparkles,
   Target,
   TrendingUp,
   Users,
-  Zap,
 } from "lucide-react";
 import { useLocation } from "wouter";
+
+const FONT_DISPLAY = "Cormorant Garamond, Georgia, serif";
+const FONT_MONO = "JetBrains Mono, monospace";
+const SURFACE = "oklch(0.12 0.007 60)";
+const BORDER = "oklch(0.22 0.007 60)";
+const IVORY = "oklch(0.88 0.025 85)";
+const IVORY_DIM = "oklch(0.88 0.025 85 / 0.5)";
+const FOREGROUND = "oklch(0.93 0.010 80)";
+const MUTED = "oklch(0.52 0.006 80)";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -32,50 +38,22 @@ export default function Dashboard() {
   const dmsDrafted = allLeads?.filter((l) => l.dmDraft).length ?? 0;
   const totalPosted = history?.filter((h) => h.status === "posted").length ?? 0;
 
-  // Plan limits
   const isStarter = !subStatus || subStatus.plan === "starter" || subStatus.plan === "trial";
-  const campaignLimit = isStarter ? 1 : null; // null = unlimited
-
+  const campaignLimit = isStarter ? 1 : null;
   const firstName = user?.name?.split(" ")[0] ?? "there";
 
   const STATS = [
-    {
-      label: "Leads found",
-      value: totalLeads,
-      icon: Users,
-      color: "text-primary",
-      bg: "bg-primary/10",
-      warn: false,
-      sub: null as string | null,
-    },
-    {
-      label: "DMs drafted",
-      value: dmsDrafted,
-      icon: MessageSquare,
-      color: "text-purple-400",
-      bg: "bg-purple-400/10",
-      warn: false,
-      sub: null as string | null,
-    },
-    {
-      label: "Posts published",
-      value: totalPosted,
-      icon: TrendingUp,
-      color: "text-emerald-400",
-      bg: "bg-emerald-400/10",
-      warn: false,
-      sub: null as string | null,
-    },
+    { label: "Leads Found", value: totalLeads, icon: Users },
+    { label: "DMs Drafted", value: dmsDrafted, icon: MessageSquare },
+    { label: "Posts Published", value: totalPosted, icon: TrendingUp },
     {
       label: "Campaigns",
       value: totalCampaigns,
       icon: Target,
-      color: campaignLimit !== null && totalCampaigns >= campaignLimit ? "text-amber-400" : "text-blue-400",
-      bg: campaignLimit !== null && totalCampaigns >= campaignLimit ? "bg-amber-400/10" : "bg-blue-400/10",
       warn: campaignLimit !== null && totalCampaigns >= campaignLimit,
       sub: campaignLimit !== null ? `${totalCampaigns}/${campaignLimit} on Starter` : null,
     },
-  ];
+  ] as Array<{ label: string; value: number; icon: React.ElementType; warn?: boolean; sub?: string | null }>;
 
   const QUICK_ACTIONS = [
     {
@@ -83,113 +61,282 @@ export default function Dashboard() {
       desc: "Get AI feedback on your next post",
       icon: Sparkles,
       href: "/dashboard/roast",
-      color: "text-primary",
-      bg: "bg-primary/10",
-      hoverBorder: "hover:border-primary/30",
     },
     {
       title: "DM Campaign",
       desc: "Send rate-limited outreach",
       icon: MessageSquare,
       href: "/dashboard/campaigns",
-      color: "text-purple-400",
-      bg: "bg-purple-400/10",
-      hoverBorder: "hover:border-purple-400/30",
     },
   ];
 
   return (
     <DashboardLayout>
-      <div className="max-w-4xl mx-auto space-y-6">
+      <div style={{ maxWidth: "860px", margin: "0 auto" }}>
+
         {/* Greeting */}
-        <div>
-          <h1 className="text-2xl font-bold text-foreground">Hey {firstName} 👋</h1>
-          <p className="text-sm text-muted-foreground mt-1">Here's your Reddit activity overview.</p>
+        <div style={{ marginBottom: "2.5rem" }}>
+          <h1
+            style={{
+              fontFamily: FONT_DISPLAY,
+              fontSize: "clamp(2rem, 4vw, 2.8rem)",
+              fontWeight: 300,
+              fontStyle: "italic",
+              color: FOREGROUND,
+              lineHeight: 1.1,
+              marginBottom: "0.4rem",
+            }}
+          >
+            Hey {firstName}
+          </h1>
+          <p
+            style={{
+              fontFamily: FONT_MONO,
+              fontSize: "0.65rem",
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: MUTED,
+            }}
+          >
+            Reddit activity overview
+          </p>
         </div>
 
-        {/* Reddit API coming soon badge */}
+        {/* Status banners */}
         {!account && (
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-muted/40 border border-border">
-            <div className="w-2 h-2 rounded-full bg-primary/60 shrink-0" />
-            <p className="text-xs text-muted-foreground">
-              <span className="font-medium text-foreground">Reddit direct posting coming soon.</span>{" "}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.75rem",
+              padding: "0.75rem 1rem",
+              border: `0.5px solid ${BORDER}`,
+              background: SURFACE,
+              marginBottom: "1.5rem",
+            }}
+          >
+            <div
+              style={{
+                width: "6px",
+                height: "6px",
+                background: IVORY_DIM,
+                borderRadius: "50%",
+                flexShrink: 0,
+              }}
+            />
+            <p style={{ fontSize: "0.8rem", color: MUTED, lineHeight: 1.5 }}>
+              <span style={{ color: FOREGROUND, fontWeight: 500 }}>Reddit direct posting coming soon.</span>{" "}
               Use Copy &amp; Open to send DMs and comments manually in the meantime.
             </p>
           </div>
         )}
 
-        {/* Reddit connected */}
         {account && !account.isPaused && (
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-primary/5 border border-primary/20">
-            <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
-            <p className="text-sm text-primary/90">
-              Connected as <span className="font-semibold">u/{account.redditUsername}</span>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.75rem",
+              padding: "0.75rem 1rem",
+              border: `0.5px solid oklch(0.88 0.025 85 / 0.25)`,
+              background: "oklch(0.88 0.025 85 / 0.04)",
+              marginBottom: "1.5rem",
+            }}
+          >
+            <CheckCircle2 size={14} color={IVORY} />
+            <p style={{ fontSize: "0.8rem", color: FOREGROUND }}>
+              Connected as <span style={{ color: IVORY }}>u/{account.redditUsername}</span>
             </p>
           </div>
         )}
 
         {account?.isPaused && (
-          <div className="flex items-start gap-3 p-4 rounded-xl bg-red-500/5 border border-red-500/20">
-            <AlertTriangle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+          <div
+            style={{
+              display: "flex",
+              alignItems: "flex-start",
+              gap: "0.75rem",
+              padding: "1rem",
+              border: "0.5px solid oklch(0.55 0.18 25 / 0.4)",
+              background: "oklch(0.55 0.18 25 / 0.05)",
+              marginBottom: "1.5rem",
+            }}
+          >
+            <AlertTriangle size={14} color="oklch(0.65 0.18 35)" style={{ flexShrink: 0, marginTop: "1px" }} />
             <div>
-              <p className="text-sm font-medium text-red-300">Account auto-paused</p>
-              <p className="text-xs text-red-300/60 mt-0.5">{account.pauseReason}</p>
+              <p style={{ fontSize: "0.82rem", color: "oklch(0.75 0.12 35)", fontWeight: 500 }}>Account auto-paused</p>
+              <p style={{ fontSize: "0.75rem", color: MUTED, marginTop: "0.2rem" }}>{account.pauseReason}</p>
             </div>
           </div>
         )}
 
-        {/* Campaign limit warning for Starter plan */}
         {campaignLimit !== null && totalCampaigns >= campaignLimit && (
-          <div className="flex items-center gap-2 p-3 rounded-lg bg-amber-500/5 border border-amber-500/20 text-sm text-amber-300">
-            <AlertTriangle className="w-4 h-4 shrink-0" />
-            <span>You’ve reached the {campaignLimit}-campaign limit on your current plan.{" "}
-              <button onClick={() => setLocation("/pricing")} className="underline underline-offset-2 hover:text-amber-200 transition-colors">Upgrade for unlimited campaigns</button>.
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.75rem",
+              padding: "0.75rem 1rem",
+              border: "0.5px solid oklch(0.75 0.15 65 / 0.3)",
+              background: "oklch(0.75 0.15 65 / 0.04)",
+              marginBottom: "1.5rem",
+              fontSize: "0.8rem",
+              color: "oklch(0.80 0.12 65)",
+            }}
+          >
+            <AlertTriangle size={13} style={{ flexShrink: 0 }} />
+            <span>
+              You've reached the {campaignLimit}-campaign limit on your current plan.{" "}
+              <button
+                onClick={() => setLocation("/pricing")}
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: IVORY,
+                  cursor: "pointer",
+                  textDecoration: "underline",
+                  textUnderlineOffset: "3px",
+                  fontSize: "inherit",
+                  fontFamily: "inherit",
+                  padding: 0,
+                }}
+              >
+                Upgrade for unlimited campaigns
+              </button>.
             </span>
           </div>
         )}
 
         {/* Stats grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          {STATS.map((stat) => (
-            <Card key={stat.label} className="bg-card border-border">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <div className={`w-8 h-8 rounded-lg ${stat.bg} flex items-center justify-center`}>
-                    <stat.icon className={`w-4 h-4 ${stat.color}`} />
-                  </div>
-                  {stat.warn && <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />}
-                </div>
-                <div className="text-xl font-bold text-foreground">{stat.value}</div>
-                <div className="text-xs text-muted-foreground mt-0.5">{stat.label}</div>
-                {stat.sub && (
-                  <div className="text-[10px] text-amber-400 mt-1">{stat.sub}</div>
-                )}
-              </CardContent>
-            </Card>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            border: `0.5px solid ${BORDER}`,
+            marginBottom: "2.5rem",
+          }}
+        >
+          {STATS.map((stat, i) => (
+            <div
+              key={stat.label}
+              style={{
+                padding: "1.5rem",
+                borderRight: i < STATS.length - 1 ? `0.5px solid ${BORDER}` : "none",
+                background: SURFACE,
+              }}
+            >
+              <p
+                style={{
+                  fontFamily: FONT_MONO,
+                  fontSize: "0.6rem",
+                  letterSpacing: "0.2em",
+                  textTransform: "uppercase",
+                  color: MUTED,
+                  marginBottom: "0.75rem",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.4rem",
+                }}
+              >
+                <stat.icon size={10} />
+                {stat.label}
+                {stat.warn && <AlertTriangle size={9} color="oklch(0.75 0.15 65)" />}
+              </p>
+              <p
+                style={{
+                  fontFamily: FONT_MONO,
+                  fontSize: "2rem",
+                  fontWeight: 400,
+                  color: FOREGROUND,
+                  lineHeight: 1,
+                  marginBottom: stat.sub ? "0.3rem" : 0,
+                }}
+              >
+                {stat.value}
+              </p>
+              {stat.sub && (
+                <p style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", color: "oklch(0.75 0.12 65)", letterSpacing: "0.08em" }}>
+                  {stat.sub}
+                </p>
+              )}
+            </div>
           ))}
         </div>
 
-        {/* Onboarding checklist — shown to new users until all steps complete or dismissed */}
+        {/* Onboarding checklist */}
         <OnboardingChecklist />
 
         {/* Quick actions */}
-        <div>
-          <h2 className="text-sm font-semibold text-foreground mb-3">Quick actions</h2>
-          <div className="grid sm:grid-cols-3 gap-3">
+        <div style={{ marginTop: "2.5rem" }}>
+          <p
+            style={{
+              fontFamily: FONT_MONO,
+              fontSize: "0.6rem",
+              letterSpacing: "0.28em",
+              textTransform: "uppercase",
+              color: MUTED,
+              marginBottom: "1rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.75rem",
+            }}
+          >
+            <span style={{ display: "inline-block", width: "1.5rem", height: "0.5px", background: BORDER }} />
+            Quick Actions
+          </p>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+              gap: "1px",
+              border: `0.5px solid ${BORDER}`,
+            }}
+          >
             {QUICK_ACTIONS.map((action) => (
               <button
                 key={action.title}
                 onClick={() => setLocation(action.href)}
-                className={`text-left p-4 rounded-xl bg-card border border-border ${action.hoverBorder} transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/20 group`}
+                style={{
+                  textAlign: "left",
+                  padding: "1.5rem",
+                  background: SURFACE,
+                  border: "none",
+                  cursor: "pointer",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.5rem",
+                  transition: "background 0.2s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "oklch(0.16 0.007 60)")}
+                onMouseLeave={(e) => (e.currentTarget.style.background = SURFACE)}
               >
-                <div className={`w-9 h-9 rounded-lg ${action.bg} flex items-center justify-center mb-3`}>
-                  <action.icon className={`w-4 h-4 ${action.color}`} />
-                </div>
-                <p className="text-sm font-semibold text-foreground">{action.title}</p>
-                <p className="text-xs text-muted-foreground mt-1">{action.desc}</p>
-                <div className={`flex items-center gap-1 mt-3 text-xs ${action.color} opacity-0 group-hover:opacity-100 transition-opacity`}>
-                  <span>Get started</span>
-                  <ArrowRight className="w-3 h-3" />
+                <action.icon size={16} color={IVORY_DIM} />
+                <p
+                  style={{
+                    fontFamily: FONT_DISPLAY,
+                    fontSize: "1.1rem",
+                    fontStyle: "italic",
+                    color: FOREGROUND,
+                    fontWeight: 400,
+                  }}
+                >
+                  {action.title}
+                </p>
+                <p style={{ fontSize: "0.75rem", color: MUTED, lineHeight: 1.5 }}>{action.desc}</p>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.3rem",
+                    fontFamily: FONT_MONO,
+                    fontSize: "0.6rem",
+                    letterSpacing: "0.12em",
+                    textTransform: "uppercase",
+                    color: IVORY_DIM,
+                    marginTop: "0.5rem",
+                  }}
+                >
+                  Open <ArrowRight size={10} />
                 </div>
               </button>
             ))}
@@ -199,19 +346,31 @@ export default function Dashboard() {
         {/* Active campaigns shortcut */}
         {totalCampaigns > 0 && (
           <div
-            className="flex items-center gap-3 p-4 rounded-xl bg-card border border-border cursor-pointer hover:border-purple-400/30 transition-colors"
             onClick={() => setLocation("/dashboard/campaigns")}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+              padding: "1.25rem 1.5rem",
+              border: `0.5px solid ${BORDER}`,
+              background: SURFACE,
+              cursor: "pointer",
+              marginTop: "1px",
+              transition: "background 0.2s",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "oklch(0.16 0.007 60)")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = SURFACE)}
           >
-            <div className="w-8 h-8 rounded-lg bg-purple-400/10 flex items-center justify-center shrink-0">
-              <MessageSquare className="w-4 h-4 text-purple-400" />
-            </div>
-            <div className="flex-1">
-              <p className="text-sm font-medium text-foreground">
+            <MessageSquare size={16} color={IVORY_DIM} style={{ flexShrink: 0 }} />
+            <div style={{ flex: 1 }}>
+              <p style={{ fontSize: "0.85rem", color: FOREGROUND, fontWeight: 500 }}>
                 {totalCampaigns} DM campaign{totalCampaigns !== 1 ? "s" : ""}
               </p>
-              <p className="text-xs text-muted-foreground">{totalLeads} leads found across all campaigns</p>
+              <p style={{ fontSize: "0.75rem", color: MUTED, marginTop: "0.15rem" }}>
+                {totalLeads} leads found across all campaigns
+              </p>
             </div>
-            <ArrowRight className="w-4 h-4 text-muted-foreground" />
+            <ArrowRight size={14} color={MUTED} />
           </div>
         )}
       </div>

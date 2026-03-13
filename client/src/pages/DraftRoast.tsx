@@ -1,9 +1,4 @@
 import DashboardLayout from "@/components/DashboardLayout";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
 import {
   CheckCircle2,
@@ -18,7 +13,17 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useLocation } from "wouter";
+
+const FONT_DISPLAY = "Cormorant Garamond, Georgia, serif";
+const FONT_MONO = "JetBrains Mono, monospace";
+const BG = "oklch(0.09 0.008 60)";
+const SURFACE = "oklch(0.12 0.007 60)";
+const SURFACE_RAISED = "oklch(0.14 0.007 60)";
+const BORDER = "oklch(0.22 0.007 60)";
+const IVORY = "oklch(0.88 0.025 85)";
+const IVORY_DIM = "oklch(0.88 0.025 85 / 0.5)";
+const FOREGROUND = "oklch(0.93 0.010 80)";
+const MUTED = "oklch(0.52 0.006 80)";
 
 type AnalysisResult = {
   review: {
@@ -27,98 +32,94 @@ type AnalysisResult = {
     promo_risk: "Low" | "Medium" | "High";
     explanation: string;
   };
-  virality: {
-    score: number;
-    tip: string;
-  };
+  virality: { score: number; tip: string };
   roast: string;
   improved_title: string;
   improved_draft: string;
-  improved_virality: {
-    score: number;
-    tip: string;
-  };
+  improved_virality: { score: number; tip: string };
   recommended_subreddit: string;
   subreddit_reasoning: string;
 };
 
-function ScoreBadge({ value, type }: { value: string; type: "positive" | "negative" }) {
+function ScorePill({ value, type }: { value: string; type: "positive" | "negative" }) {
   const isGood = type === "positive" ? value === "High" : value === "Low";
   const isMid = value === "Medium";
-  const color = isGood
-    ? "bg-primary/15 text-primary border-primary/20"
+  const color = isGood ? IVORY : isMid ? "oklch(0.78 0.14 65)" : "oklch(0.65 0.18 25)";
+  const borderColor = isGood
+    ? "oklch(0.88 0.025 85 / 0.4)"
     : isMid
-    ? "bg-amber-400/15 text-amber-400 border-amber-400/20"
-    : "bg-red-400/15 text-red-400 border-red-400/20";
+    ? "oklch(0.78 0.14 65 / 0.35)"
+    : "oklch(0.65 0.18 25 / 0.35)";
   return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold border ${color}`}>
+    <span
+      style={{
+        fontFamily: FONT_MONO,
+        fontSize: "0.6rem",
+        letterSpacing: "0.15em",
+        textTransform: "uppercase",
+        color,
+        border: `0.5px solid ${borderColor}`,
+        padding: "0.2rem 0.5rem",
+      }}
+    >
       {value}
     </span>
   );
 }
 
 function ViralityGauge({ score }: { score: number }) {
-  const clampedScore = Math.max(1, Math.min(100, score));
+  const clamped = Math.max(1, Math.min(100, score));
   const color =
-    clampedScore >= 70
-      ? "#10b981" // green
-      : clampedScore >= 40
-      ? "#f59e0b" // amber
-      : "#ef4444"; // red
-
+    clamped >= 70 ? IVORY : clamped >= 40 ? "oklch(0.78 0.14 65)" : "oklch(0.65 0.18 25)";
   const label =
-    clampedScore >= 70 ? "High Viral Potential" : clampedScore >= 40 ? "Moderate Potential" : "Low Potential";
-
-  // SVG arc gauge
+    clamped >= 70 ? "High Potential" : clamped >= 40 ? "Moderate" : "Low Potential";
   const radius = 42;
-  const circumference = Math.PI * radius; // half circle
-  const progress = (clampedScore / 100) * circumference;
+  const circumference = Math.PI * radius;
+  const progress = (clamped / 100) * circumference;
 
   return (
-    <div className="flex flex-col items-center gap-2">
-      <div className="relative w-28 h-16 overflow-hidden">
-        <svg width="112" height="64" viewBox="0 0 112 64" className="overflow-visible">
-          {/* Background arc */}
-          <path
-            d="M 14 56 A 42 42 0 0 1 98 56"
-            fill="none"
-            stroke="rgba(255,255,255,0.08)"
-            strokeWidth="8"
-            strokeLinecap="round"
-          />
-          {/* Progress arc */}
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem" }}>
+      <div style={{ position: "relative", width: "112px", height: "64px", overflow: "hidden" }}>
+        <svg width="112" height="64" viewBox="0 0 112 64" style={{ overflow: "visible" }}>
+          <path d="M 14 56 A 42 42 0 0 1 98 56" fill="none" stroke={BORDER} strokeWidth="6" strokeLinecap="butt" />
           <path
             d="M 14 56 A 42 42 0 0 1 98 56"
             fill="none"
             stroke={color}
-            strokeWidth="8"
-            strokeLinecap="round"
+            strokeWidth="6"
+            strokeLinecap="butt"
             strokeDasharray={`${progress} ${circumference}`}
             style={{ transition: "stroke-dasharray 0.8s ease" }}
           />
         </svg>
-        {/* Score number centered */}
-        <div className="absolute inset-0 flex items-end justify-center pb-0">
-          <span className="text-2xl font-black" style={{ color }}>
-            {clampedScore}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            display: "flex",
+            alignItems: "flex-end",
+            justifyContent: "center",
+            paddingBottom: "2px",
+          }}
+        >
+          <span style={{ fontFamily: FONT_MONO, fontSize: "1.6rem", fontWeight: 400, color, lineHeight: 1 }}>
+            {clamped}
           </span>
         </div>
       </div>
-      <div className="text-center">
-        <p className="text-[10px] font-semibold uppercase tracking-widest" style={{ color }}>
+      <div style={{ textAlign: "center" }}>
+        <p style={{ fontFamily: FONT_MONO, fontSize: "0.55rem", letterSpacing: "0.2em", textTransform: "uppercase", color }}>
           {label}
         </p>
-        <p className="text-[10px] text-muted-foreground mt-0.5">Virality Score</p>
+        <p style={{ fontFamily: FONT_MONO, fontSize: "0.55rem", color: MUTED, letterSpacing: "0.1em", marginTop: "0.15rem" }}>
+          Virality Score
+        </p>
       </div>
     </div>
   );
 }
 
-// PostNowResult type — kept for when Reddit API is re-enabled (see REDDIT_INTEGRATION.md)
-// type PostNowResult = { action: "posted" | "scheduled"; postUrl: string | null; scheduledAt: number | null; reasoning: string; message: string };
-
 export default function DraftRoast() {
-  const [, setLocation] = useLocation();
   const [content, setContent] = useState("");
   const [subreddit, setSubreddit] = useState("");
   const [title, setTitle] = useState("");
@@ -136,16 +137,8 @@ export default function DraftRoast() {
     },
   });
 
-  // COMMENTED OUT: Post at Optimal Time + handlePostNow — requires Reddit API approval
-  // Re-enable when Reddit API is approved. See REDDIT_INTEGRATION.md for full details.
-  // const postNowMutation = trpc.schedule.postNow.useMutation({ ... });
-  // const handlePostNow = () => { ... };
-
   const handleAnalyze = () => {
-    if (!content.trim()) {
-      toast.error("Please enter your post content");
-      return;
-    }
+    if (!content.trim()) { toast.error("Please enter your post content"); return; }
     analyzeMutation.mutate({ content, subreddit: subreddit.trim() || "general" });
   };
 
@@ -154,302 +147,388 @@ export default function DraftRoast() {
     toast.success("Copied to clipboard!");
   };
 
+  const inputStyle: React.CSSProperties = {
+    width: "100%",
+    background: SURFACE,
+    border: `0.5px solid ${BORDER}`,
+    color: FOREGROUND,
+    fontFamily: "Inter, sans-serif",
+    fontSize: "0.82rem",
+    padding: "0.6rem 0.75rem",
+    outline: "none",
+    boxSizing: "border-box",
+  };
+
   return (
     <DashboardLayout>
-      <div className="max-w-4xl mx-auto space-y-6">
+      <div style={{ maxWidth: "860px", margin: "0 auto" }}>
+
         {/* Header */}
-        <div>
-          <div className="flex items-center gap-2.5 mb-1">
-            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-primary" />
-            </div>
-            <h1 className="text-xl font-bold text-foreground">Draft & Roast</h1>
-          </div>
-          <p className="text-sm text-muted-foreground ml-10.5">
-            Paste your Reddit post or DM draft — get an AI review, virality score, roast, and improved version.
+        <div style={{ marginBottom: "2.5rem" }}>
+          <h1
+            style={{
+              fontFamily: FONT_DISPLAY,
+              fontSize: "clamp(1.8rem, 3.5vw, 2.5rem)",
+              fontWeight: 300,
+              fontStyle: "italic",
+              color: FOREGROUND,
+              lineHeight: 1.1,
+              marginBottom: "0.4rem",
+            }}
+          >
+            Draft & Roast
+          </h1>
+          <p style={{ fontFamily: FONT_MONO, fontSize: "0.65rem", letterSpacing: "0.12em", textTransform: "uppercase", color: MUTED }}>
+            AI review · virality score · roast · improved version
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-5">
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5px", alignItems: "start" }}>
+
           {/* Input panel */}
-          <div className="space-y-4">
-            <Card className="bg-card border-border">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-semibold text-foreground">Your draft</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-muted-foreground">Subreddit (optional)</Label>
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">r/</span>
-                    <Input
-                      placeholder="SaaS"
-                      value={subreddit}
-                      onChange={(e) => setSubreddit(e.target.value)}
-                      className="pl-7 bg-muted/40 border-border text-foreground placeholder:text-muted-foreground/50"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-muted-foreground">Post title (for posting — optional if using first line)</Label>
-                  <Input
-                    placeholder="My SaaS hit $1K MRR — here's what worked"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    className="bg-muted/40 border-border text-foreground placeholder:text-muted-foreground/50"
+          <div style={{ border: `0.5px solid ${BORDER}`, background: SURFACE }}>
+            <div style={{ padding: "1.25rem 1.5rem", borderBottom: `0.5px solid ${BORDER}` }}>
+              <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: MUTED }}>
+                Your Draft
+              </p>
+            </div>
+            <div style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+              {/* Subreddit */}
+              <div>
+                <label style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", letterSpacing: "0.15em", textTransform: "uppercase", color: MUTED, display: "block", marginBottom: "0.4rem" }}>
+                  Subreddit (optional)
+                </label>
+                <div style={{ position: "relative" }}>
+                  <span style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)", color: MUTED, fontSize: "0.82rem", fontFamily: FONT_MONO }}>r/</span>
+                  <input
+                    placeholder="SaaS"
+                    value={subreddit}
+                    onChange={(e) => setSubreddit(e.target.value)}
+                    style={{ ...inputStyle, paddingLeft: "2rem" }}
                   />
                 </div>
-                <div className="space-y-1.5">
-                  <Label className="text-xs text-muted-foreground">Post or DM content</Label>
-                  <Textarea
-                    placeholder="Paste your Reddit post or DM draft here..."
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                    className="min-h-[220px] resize-none bg-muted/40 border-border text-foreground placeholder:text-muted-foreground/50 text-sm leading-relaxed"
-                  />
-                  <p className="text-xs text-muted-foreground text-right">{content.length} chars</p>
-                </div>
-                <Button
-                  onClick={handleAnalyze}
-                  disabled={analyzeMutation.isPending || !content.trim()}
-                  className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold"
-                >
-                  {analyzeMutation.isPending ? (
-                    <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Analyzing...
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="w-4 h-4 mr-2" />
-                      Analyze & Roast
-                    </>
-                  )}
-                </Button>
-              </CardContent>
-            </Card>
+              </div>
 
-            {/* POST AT OPTIMAL TIME — commented out, requires Reddit API approval (see REDDIT_INTEGRATION.md) */}
+              {/* Title */}
+              <div>
+                <label style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", letterSpacing: "0.15em", textTransform: "uppercase", color: MUTED, display: "block", marginBottom: "0.4rem" }}>
+                  Post title (optional)
+                </label>
+                <input
+                  placeholder="My SaaS hit $1K MRR — here's what worked"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  style={inputStyle}
+                />
+              </div>
+
+              {/* Content */}
+              <div>
+                <label style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", letterSpacing: "0.15em", textTransform: "uppercase", color: MUTED, display: "block", marginBottom: "0.4rem" }}>
+                  Post or DM content
+                </label>
+                <textarea
+                  placeholder="Paste your Reddit post or DM draft here..."
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                  style={{ ...inputStyle, minHeight: "200px", resize: "vertical", lineHeight: 1.6 }}
+                />
+                <p style={{ fontFamily: FONT_MONO, fontSize: "0.55rem", color: MUTED, textAlign: "right", marginTop: "0.25rem", letterSpacing: "0.08em" }}>
+                  {content.length} chars
+                </p>
+              </div>
+
+              {/* Analyze button */}
+              <button
+                onClick={handleAnalyze}
+                disabled={analyzeMutation.isPending || !content.trim()}
+                style={{
+                  width: "100%",
+                  padding: "0.85rem",
+                  background: content.trim() && !analyzeMutation.isPending ? IVORY : SURFACE_RAISED,
+                  border: `0.5px solid ${content.trim() && !analyzeMutation.isPending ? IVORY : BORDER}`,
+                  color: content.trim() && !analyzeMutation.isPending ? BG : MUTED,
+                  fontFamily: FONT_MONO,
+                  fontSize: "0.65rem",
+                  letterSpacing: "0.22em",
+                  textTransform: "uppercase",
+                  cursor: analyzeMutation.isPending || !content.trim() ? "not-allowed" : "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "0.5rem",
+                  transition: "all 0.2s",
+                }}
+              >
+                {analyzeMutation.isPending ? (
+                  <><Loader2 size={12} style={{ animation: "spin 1s linear infinite" }} /> Analyzing...</>
+                ) : (
+                  <><Sparkles size={12} /> Analyze & Roast</>
+                )}
+              </button>
+            </div>
           </div>
 
           {/* Results panel */}
           <div>
             {!result && !analyzeMutation.isPending && (
-              <div className="h-full flex items-center justify-center rounded-xl border border-dashed border-border bg-card/50 min-h-[300px]">
-                <div className="text-center px-6">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3">
-                    <Sparkles className="w-6 h-6 text-primary/60" />
-                  </div>
-                  <p className="text-sm font-medium text-muted-foreground">AI analysis will appear here</p>
-                  <p className="text-xs text-muted-foreground/60 mt-1">Paste your draft and click Analyze</p>
-                </div>
+              <div
+                style={{
+                  border: `0.5px dashed ${BORDER}`,
+                  background: SURFACE,
+                  minHeight: "300px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexDirection: "column",
+                  gap: "0.75rem",
+                  padding: "2rem",
+                  textAlign: "center",
+                }}
+              >
+                <Sparkles size={24} color={IVORY_DIM} />
+                <p style={{ fontFamily: FONT_DISPLAY, fontSize: "1.1rem", fontStyle: "italic", color: MUTED }}>
+                  AI analysis will appear here
+                </p>
+                <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", color: MUTED, letterSpacing: "0.1em" }}>
+                  Paste your draft and click Analyze
+                </p>
               </div>
             )}
 
             {analyzeMutation.isPending && (
-              <div className="h-full flex items-center justify-center rounded-xl border border-border bg-card min-h-[300px]">
-                <div className="text-center">
-                  <Loader2 className="w-8 h-8 text-primary animate-spin mx-auto mb-3" />
-                  <p className="text-sm text-muted-foreground">Analyzing your draft...</p>
-                  <p className="text-xs text-muted-foreground/60 mt-1">Roasting incoming 🔥</p>
-                </div>
+              <div
+                style={{
+                  border: `0.5px solid ${BORDER}`,
+                  background: SURFACE,
+                  minHeight: "300px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexDirection: "column",
+                  gap: "0.75rem",
+                }}
+              >
+                <Loader2 size={24} color={IVORY_DIM} style={{ animation: "spin 1s linear infinite" }} />
+                <p style={{ fontFamily: FONT_DISPLAY, fontSize: "1.1rem", fontStyle: "italic", color: MUTED }}>
+                  Analyzing your draft...
+                </p>
+                <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", color: MUTED, letterSpacing: "0.1em" }}>
+                  Roast incoming
+                </p>
               </div>
             )}
 
             {result && (
-              <div className="space-y-3">
-                {/* Virality Score — updates when switching to Improved tab */}
-                <Card className="bg-card border-border overflow-hidden">
-                  <div className="flex items-center gap-4 p-4">
-                    <ViralityGauge score={activeTab === "improved" ? result.improved_virality.score : result.virality.score} />
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-1.5 mb-1.5">
-                        <TrendingUp className="w-3.5 h-3.5 text-primary" />
-                        <p className="text-xs font-semibold text-foreground uppercase tracking-wide">
-                          {activeTab === "improved" ? "Improved Score" : "Virality Tip"}
-                        </p>
-                      </div>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
-                        {activeTab === "improved" ? result.improved_virality.tip : result.virality.tip}
-                      </p>
-                      <div className="flex items-center gap-1.5 mt-2">
-                        <Zap className="w-3 h-3 text-amber-400" />
-                        <p className="text-[10px] text-muted-foreground/70">Apply the tip, then re-analyze for a higher score</p>
-                      </div>
-                    </div>
-                  </div>
-                </Card>
+              <div style={{ display: "flex", flexDirection: "column", gap: "1.5px" }}>
 
-                {/* Tab buttons */}
-                <div className="flex gap-1 p-1 rounded-lg bg-muted/40 border border-border">
-                  {(["review", "roast", "improved"] as const).map((tab) => (
+                {/* Virality score card */}
+                <div
+                  style={{
+                    border: `0.5px solid ${BORDER}`,
+                    background: SURFACE,
+                    padding: "1.25rem 1.5rem",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "1.5rem",
+                  }}
+                >
+                  <ViralityGauge score={activeTab === "improved" ? result.improved_virality.score : result.virality.score} />
+                  <div style={{ flex: 1 }}>
+                    <p style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", letterSpacing: "0.18em", textTransform: "uppercase", color: IVORY, marginBottom: "0.4rem", display: "flex", alignItems: "center", gap: "0.35rem" }}>
+                      <TrendingUp size={10} />
+                      {activeTab === "improved" ? "Improved Score" : "Virality Tip"}
+                    </p>
+                    <p style={{ fontSize: "0.78rem", color: FOREGROUND, lineHeight: 1.6 }}>
+                      {activeTab === "improved" ? result.improved_virality.tip : result.virality.tip}
+                    </p>
+                    <p style={{ fontFamily: FONT_MONO, fontSize: "0.55rem", color: MUTED, marginTop: "0.4rem", letterSpacing: "0.08em", display: "flex", alignItems: "center", gap: "0.3rem" }}>
+                      <Zap size={9} /> Apply the tip, then re-analyze for a higher score
+                    </p>
+                  </div>
+                </div>
+
+                {/* Tab bar */}
+                <div
+                  style={{
+                    display: "flex",
+                    border: `0.5px solid ${BORDER}`,
+                    background: SURFACE,
+                  }}
+                >
+                  {(["review", "roast", "improved"] as const).map((tab, i) => (
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
-                      className={`flex-1 py-1.5 px-3 rounded-md text-xs font-medium transition-all capitalize ${
-                        activeTab === tab
-                          ? "bg-card text-foreground shadow-sm border border-border"
-                          : "text-muted-foreground hover:text-foreground"
-                      }`}
+                      style={{
+                        flex: 1,
+                        padding: "0.65rem",
+                        background: activeTab === tab ? SURFACE_RAISED : "transparent",
+                        border: "none",
+                        borderRight: i < 2 ? `0.5px solid ${BORDER}` : "none",
+                        color: activeTab === tab ? FOREGROUND : MUTED,
+                        fontFamily: FONT_MONO,
+                        fontSize: "0.58rem",
+                        letterSpacing: "0.18em",
+                        textTransform: "uppercase",
+                        cursor: "pointer",
+                        transition: "all 0.15s",
+                      }}
                     >
-                      {tab === "review" ? "📊 Review" : tab === "roast" ? "🔥 Roast" : "✨ Improved"}
+                      {tab === "review" ? "Review" : tab === "roast" ? "Roast" : "Improved"}
                     </button>
                   ))}
                 </div>
 
                 {/* Review tab */}
                 {activeTab === "review" && (
-                  <Card className="bg-card border-border">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-sm font-semibold">Post Review</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="grid grid-cols-3 gap-3">
-                        <div className="text-center p-3 rounded-lg bg-muted/40 border border-border">
-                          <p className="text-[10px] text-muted-foreground mb-1.5 uppercase tracking-wide">Clarity</p>
-                          <ScoreBadge value={result.review.clarity} type="positive" />
-                        </div>
-                        <div className="text-center p-3 rounded-lg bg-muted/40 border border-border">
-                          <p className="text-[10px] text-muted-foreground mb-1.5 uppercase tracking-wide">Sub Fit</p>
-                          <ScoreBadge value={result.review.subreddit_fit} type="positive" />
-                        </div>
-                        <div className="text-center p-3 rounded-lg bg-muted/40 border border-border">
-                          <p className="text-[10px] text-muted-foreground mb-1.5 uppercase tracking-wide">Promo Risk</p>
-                          <ScoreBadge value={result.review.promo_risk} type="negative" />
-                        </div>
+                  <div style={{ border: `0.5px solid ${BORDER}`, background: SURFACE }}>
+                    <div style={{ padding: "1.25rem 1.5rem", borderBottom: `0.5px solid ${BORDER}` }}>
+                      <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: MUTED }}>
+                        Post Review
+                      </p>
+                    </div>
+                    <div style={{ padding: "1.25rem 1.5rem" }}>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "1.5px", marginBottom: "1.25rem", border: `0.5px solid ${BORDER}` }}>
+                        {[
+                          { label: "Clarity", value: result.review.clarity, type: "positive" as const },
+                          { label: "Sub Fit", value: result.review.subreddit_fit, type: "positive" as const },
+                          { label: "Promo Risk", value: result.review.promo_risk, type: "negative" as const },
+                        ].map((item, i) => (
+                          <div key={item.label} style={{ padding: "1rem", background: SURFACE_RAISED, borderRight: i < 2 ? `0.5px solid ${BORDER}` : "none", textAlign: "center" }}>
+                            <p style={{ fontFamily: FONT_MONO, fontSize: "0.55rem", letterSpacing: "0.18em", textTransform: "uppercase", color: MUTED, marginBottom: "0.5rem" }}>
+                              {item.label}
+                            </p>
+                            <ScorePill value={item.value} type={item.type} />
+                          </div>
+                        ))}
                       </div>
-                      <div className="p-3 rounded-lg bg-muted/30 border border-border">
-                        <p className="text-xs text-foreground/80 leading-relaxed">{result.review.explanation}</p>
-                      </div>
+                      <p style={{ fontSize: "0.8rem", color: FOREGROUND, lineHeight: 1.7, marginBottom: "1rem" }}>
+                        {result.review.explanation}
+                      </p>
                       {result.review.promo_risk === "High" && (
-                        <div className="flex items-start gap-2 p-3 rounded-lg bg-red-400/5 border border-red-400/20">
-                          <XCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
-                          <p className="text-xs text-red-300/80">High promo risk — Reddit may remove this post. Consider the improved version.</p>
+                        <div style={{ display: "flex", alignItems: "flex-start", gap: "0.6rem", padding: "0.75rem 1rem", border: "0.5px solid oklch(0.65 0.18 25 / 0.35)", background: "oklch(0.65 0.18 25 / 0.05)" }}>
+                          <XCircle size={13} color="oklch(0.65 0.18 25)" style={{ flexShrink: 0, marginTop: "1px" }} />
+                          <p style={{ fontSize: "0.75rem", color: "oklch(0.72 0.12 30)", lineHeight: 1.5 }}>
+                            High promo risk — Reddit may remove this post. Consider the improved version.
+                          </p>
                         </div>
                       )}
                       {result.review.promo_risk === "Low" && result.review.clarity === "High" && (
-                        <div className="flex items-start gap-2 p-3 rounded-lg bg-primary/5 border border-primary/20">
-                          <CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                          <p className="text-xs text-primary/80">Looks good! Low promo risk and high clarity.</p>
+                        <div style={{ display: "flex", alignItems: "flex-start", gap: "0.6rem", padding: "0.75rem 1rem", border: `0.5px solid oklch(0.88 0.025 85 / 0.25)`, background: "oklch(0.88 0.025 85 / 0.04)" }}>
+                          <CheckCircle2 size={13} color={IVORY} style={{ flexShrink: 0, marginTop: "1px" }} />
+                          <p style={{ fontSize: "0.75rem", color: IVORY, lineHeight: 1.5 }}>
+                            Looks good — low promo risk and high clarity.
+                          </p>
                         </div>
                       )}
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 )}
 
                 {/* Roast tab */}
                 {activeTab === "roast" && (
-                  <Card className="bg-card border-border">
-                    <CardHeader className="pb-3">
-                      <div className="flex items-center gap-2">
-                        <Flame className="w-4 h-4 text-orange-400" />
-                        <CardTitle className="text-sm font-semibold">The Roast</CardTitle>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="p-4 rounded-lg bg-orange-400/5 border border-orange-400/20">
-                        <p className="text-sm text-foreground/90 leading-relaxed whitespace-pre-line italic">
+                  <div style={{ border: `0.5px solid ${BORDER}`, background: SURFACE }}>
+                    <div style={{ padding: "1.25rem 1.5rem", borderBottom: `0.5px solid ${BORDER}`, display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                      <Flame size={13} color="oklch(0.72 0.18 45)" />
+                      <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: MUTED }}>
+                        The Roast
+                      </p>
+                    </div>
+                    <div style={{ padding: "1.5rem" }}>
+                      <div style={{ padding: "1.25rem", border: "0.5px solid oklch(0.72 0.18 45 / 0.25)", background: "oklch(0.72 0.18 45 / 0.04)", marginBottom: "0.75rem" }}>
+                        <p style={{ fontFamily: FONT_DISPLAY, fontSize: "1rem", fontStyle: "italic", color: FOREGROUND, lineHeight: 1.7 }}>
                           "{result.roast}"
                         </p>
                       </div>
-                      <p className="text-xs text-muted-foreground mt-3">
+                      <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", color: MUTED, letterSpacing: "0.08em" }}>
                         This is what a Redditor might say. Take it seriously — they will.
                       </p>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 )}
 
                 {/* Improved tab */}
                 {activeTab === "improved" && (
-                  <Card className="bg-card border-border">
-                    <CardHeader className="pb-3">
-                      <div className="flex items-center justify-between">
-                        <CardTitle className="text-sm font-semibold">Improved Draft</CardTitle>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => copyToClipboard(`${result.improved_title}\n\n${result.improved_draft}`)}
-                          className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground"
-                        >
-                          <ClipboardCopy className="w-3.5 h-3.5 mr-1" />
-                          Copy all
-                        </Button>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      {/* Suggested title */}
-                      <div className="p-3 rounded-lg bg-primary/5 border border-primary/20">
-                        <p className="text-[10px] text-primary/70 uppercase tracking-wide font-semibold mb-1">Suggested Title</p>
-                        <div className="flex items-start justify-between gap-2">
-                          <p className="text-sm font-medium text-foreground leading-snug flex-1">{result.improved_title}</p>
-                          <button
-                            onClick={() => copyToClipboard(result.improved_title)}
-                            className="text-muted-foreground hover:text-foreground transition-colors shrink-0 mt-0.5"
-                            title="Copy title"
-                          >
-                            <ClipboardCopy className="w-3.5 h-3.5" />
+                  <div style={{ border: `0.5px solid ${BORDER}`, background: SURFACE }}>
+                    <div style={{ padding: "1.25rem 1.5rem", borderBottom: `0.5px solid ${BORDER}`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                      <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: MUTED }}>
+                        Improved Draft
+                      </p>
+                      <button
+                        onClick={() => copyToClipboard(`${result.improved_title}\n\n${result.improved_draft}`)}
+                        style={{ background: "none", border: "none", color: MUTED, cursor: "pointer", display: "flex", alignItems: "center", gap: "0.3rem", fontFamily: FONT_MONO, fontSize: "0.55rem", letterSpacing: "0.1em", textTransform: "uppercase" }}
+                      >
+                        <ClipboardCopy size={10} /> Copy all
+                      </button>
+                    </div>
+                    <div style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
+                      <div style={{ padding: "1rem", border: `0.5px solid oklch(0.88 0.025 85 / 0.25)`, background: "oklch(0.88 0.025 85 / 0.04)" }}>
+                        <p style={{ fontFamily: FONT_MONO, fontSize: "0.55rem", letterSpacing: "0.18em", textTransform: "uppercase", color: IVORY, marginBottom: "0.4rem" }}>
+                          Suggested Title
+                        </p>
+                        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "0.5rem" }}>
+                          <p style={{ fontSize: "0.85rem", color: FOREGROUND, lineHeight: 1.5, flex: 1 }}>{result.improved_title}</p>
+                          <button onClick={() => copyToClipboard(result.improved_title)} style={{ background: "none", border: "none", color: MUTED, cursor: "pointer", flexShrink: 0 }}>
+                            <ClipboardCopy size={12} />
                           </button>
                         </div>
                       </div>
-                      {/* Body */}
-                      <div className="p-4 rounded-lg bg-muted/30 border border-border">
-                        <p className="text-sm text-foreground/90 leading-relaxed whitespace-pre-wrap">
-                          {result.improved_draft}
-                        </p>
+                      <div style={{ padding: "1rem", border: `0.5px solid ${BORDER}`, background: SURFACE_RAISED }}>
+                        <p style={{ fontSize: "0.8rem", color: FOREGROUND, lineHeight: 1.7, whiteSpace: "pre-wrap" }}>{result.improved_draft}</p>
                       </div>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 )}
 
-                {/* ── Ready to Post panel ── */}
-                <Card className="bg-card border-primary/20 border">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                      <Rocket className="w-4 h-4 text-primary" />
+                {/* Ready to Post */}
+                <div style={{ border: `0.5px solid oklch(0.88 0.025 85 / 0.3)`, background: SURFACE }}>
+                  <div style={{ padding: "1.25rem 1.5rem", borderBottom: `0.5px solid ${BORDER}`, display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <Rocket size={12} color={IVORY} />
+                    <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: IVORY }}>
                       Ready to Post
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <div className="flex items-start gap-3 p-3 rounded-lg bg-primary/5 border border-primary/15">
-                      <Sparkles className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-xs font-semibold text-foreground">AI recommends:</span>
-                          <span className="text-xs font-bold text-primary">r/{result.recommended_subreddit}</span>
-                        </div>
-                        <p className="text-[11px] text-muted-foreground mt-0.5 leading-relaxed">{result.subreddit_reasoning}</p>
-                      </div>
-                    </div>
-                    <div className="p-3 rounded-lg bg-muted/20 border border-border space-y-2">
+                    </p>
+                  </div>
+                  <div style={{ padding: "1.25rem 1.5rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem", padding: "0.75rem 1rem", border: `0.5px solid oklch(0.88 0.025 85 / 0.2)`, background: "oklch(0.88 0.025 85 / 0.04)" }}>
+                      <Sparkles size={12} color={IVORY_DIM} style={{ flexShrink: 0, marginTop: "2px" }} />
                       <div>
-                        <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wide mb-0.5">Title</p>
-                        <p className="text-xs font-semibold text-foreground leading-snug">{result.improved_title}</p>
-                      </div>
-                      <div>
-                        <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wide mb-0.5">Body</p>
-                        <p className="text-xs text-foreground/80 leading-relaxed line-clamp-3 whitespace-pre-wrap">
-                          {result.improved_draft}
+                        <p style={{ fontSize: "0.78rem", color: FOREGROUND, marginBottom: "0.2rem" }}>
+                          AI recommends: <span style={{ color: IVORY }}>r/{result.recommended_subreddit}</span>
                         </p>
+                        <p style={{ fontSize: "0.72rem", color: MUTED, lineHeight: 1.5 }}>{result.subreddit_reasoning}</p>
                       </div>
                     </div>
-                    <Button
-                      className="w-full gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
+                    <button
                       onClick={() => {
-                        const sub = result.recommended_subreddit;
                         navigator.clipboard.writeText(`${result.improved_title}\n\n${result.improved_draft}`);
-                        window.open(`https://www.reddit.com/r/${sub}/submit`, "_blank");
-                        toast.success(`Title + post copied! Opening r/${sub} to submit.`);
+                        window.open(`https://www.reddit.com/r/${result.recommended_subreddit}/submit`, "_blank");
+                        toast.success(`Title + post copied! Opening r/${result.recommended_subreddit} to submit.`);
+                      }}
+                      style={{
+                        width: "100%",
+                        padding: "0.85rem",
+                        background: IVORY,
+                        border: `0.5px solid ${IVORY}`,
+                        color: BG,
+                        fontFamily: FONT_MONO,
+                        fontSize: "0.65rem",
+                        letterSpacing: "0.2em",
+                        textTransform: "uppercase",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "0.5rem",
                       }}
                     >
-                      <ClipboardCopy className="w-4 h-4" />
-                      Copy & Open r/{result.recommended_subreddit}
-                    </Button>
-                    <p className="text-[10px] text-muted-foreground text-center">
+                      <ClipboardCopy size={12} /> Copy & Open r/{result.recommended_subreddit}
+                    </button>
+                    <p style={{ fontFamily: FONT_MONO, fontSize: "0.55rem", color: MUTED, textAlign: "center", letterSpacing: "0.08em" }}>
                       Copies your improved post to clipboard and opens the subreddit submission page
                     </p>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               </div>
             )}
           </div>

@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { Check, Zap, TrendingUp, ArrowLeft, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Check, ArrowLeft, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
@@ -11,46 +9,75 @@ import { getLoginUrl } from "@/const";
 const PLANS = [
   {
     key: "starter" as const,
+    tier: "I",
     name: "Starter",
     price: 19,
-    description: "Perfect for indie founders testing Reddit outreach",
-    icon: Zap,
-    color: "text-green-400",
-    borderColor: "border-green-500/30",
-    bgColor: "bg-green-500/5",
+    description: "For founders testing Reddit as a distribution channel.",
     features: [
       "1 outreach campaign",
       "AI Draft & Roast with virality score",
       "Lead discovery via Reddit search",
-      "Lead sync: 2x daily",
+      "Lead sync: 2× daily",
       "AI-generated personalized DMs",
       "Match scoring (Strong / Partial / Lowest)",
       "Email alerts for new leads",
     ],
-    cta: "Start 7-Day Free Trial",
+    cta: "Begin 7-Day Trial",
     popular: false,
   },
   {
     key: "growth" as const,
+    tier: "II",
     name: "Growth",
     price: 39,
-    description: "For founders ready to scale Reddit outreach",
-    icon: TrendingUp,
-    color: "text-purple-400",
-    borderColor: "border-purple-500/40",
-    bgColor: "bg-purple-500/5",
+    description: "For founders ready to scale Reddit outreach systematically.",
     features: [
       "Everything in Starter",
       "Unlimited outreach campaigns",
-      "Lead sync: every 4 hours (6x daily)",
-      "AI auto-scheduling (coming soon)",
-      "DM template library (coming soon)",
-      "Advanced analytics (coming soon)",
+      "Lead sync: every 4 hours (6× daily)",
+      "AI auto-scheduling",
+      "DM template library",
+      "Advanced analytics",
     ],
-    cta: "Start 7-Day Free Trial",
+    cta: "Begin 7-Day Trial",
     popular: true,
   },
 ];
+
+const FAQS = [
+  {
+    q: "Do I need a credit card for the free trial?",
+    a: "Yes — Stripe requires a card to start the trial, but you won't be charged until Day 7. You'll receive a reminder on Day 6 so you have time to cancel.",
+  },
+  {
+    q: "What happens after the trial ends?",
+    a: "You'll be automatically charged for the plan you selected. You can cancel anytime from Settings → Manage Billing before the trial ends.",
+  },
+  {
+    q: "Can I switch plans?",
+    a: "Yes. You can upgrade from Starter to Growth at any time from Settings → Manage Billing. Stripe prorates the difference.",
+  },
+  {
+    q: "What is the campaign limit on Starter?",
+    a: "Starter includes 1 active outreach campaign. Upgrade to Growth for unlimited campaigns.",
+  },
+  {
+    q: "Is this month-to-month?",
+    a: "Yes — all plans are billed monthly with no long-term contracts. Cancel anytime.",
+  },
+];
+
+const FONT_DISPLAY = "Cormorant Garamond, Georgia, serif";
+const FONT_MONO = "JetBrains Mono, monospace";
+const BG = "oklch(0.09 0.008 60)";
+const SURFACE = "oklch(0.12 0.007 60)";
+const SURFACE_RAISED = "oklch(0.14 0.007 60)";
+const BORDER = "oklch(0.22 0.007 60)";
+const BORDER_ACCENT = "oklch(0.88 0.025 85 / 0.35)";
+const IVORY = "oklch(0.88 0.025 85)";
+const IVORY_DIM = "oklch(0.88 0.025 85 / 0.55)";
+const FOREGROUND = "oklch(0.93 0.010 80)";
+const MUTED = "oklch(0.52 0.006 80)";
 
 export default function Pricing() {
   const [, navigate] = useLocation();
@@ -81,158 +108,418 @@ export default function Pricing() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      {/* Header */}
-      <div className="border-b border-border/40 px-6 py-4 flex items-center gap-4">
-        <Button
-          variant="ghost"
-          size="sm"
+    <div
+      style={{
+        minHeight: "100vh",
+        background: BG,
+        color: FOREGROUND,
+        fontFamily: "Inter, sans-serif",
+      }}
+    >
+      {/* Nav */}
+      <nav
+        style={{
+          borderBottom: `0.5px solid ${BORDER}`,
+          padding: "0 2rem",
+          height: "3.5rem",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          background: `${BG}`,
+        }}
+      >
+        <button
           onClick={() => navigate("/")}
-          className="text-muted-foreground hover:text-foreground"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
+            background: "none",
+            border: "none",
+            color: MUTED,
+            cursor: "pointer",
+            fontFamily: FONT_MONO,
+            fontSize: "0.7rem",
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+          }}
         >
-          <ArrowLeft className="w-4 h-4 mr-2" />
+          <ArrowLeft size={12} />
           Back
-        </Button>
-        <span className="text-sm text-muted-foreground">SubRoast Pricing</span>
-      </div>
+        </button>
+        <span
+          style={{
+            fontFamily: FONT_DISPLAY,
+            fontSize: "1rem",
+            fontStyle: "italic",
+            color: FOREGROUND,
+            letterSpacing: "0.01em",
+          }}
+        >
+          SubRoast
+        </span>
+        <div style={{ width: "4rem" }} />
+      </nav>
 
-      <div className="max-w-5xl mx-auto px-6 py-16">
+      <div style={{ maxWidth: "900px", margin: "0 auto", padding: "5rem 2rem 8rem" }}>
+
         {/* Hero */}
-        <div className="text-center mb-14">
-          <h1 className="text-4xl font-bold mb-4">
-            Simple, transparent pricing
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-            Start with a 7-day free trial. No credit card required upfront.
-            Cancel anytime — no long-term commitment.
+        <div style={{ textAlign: "center", marginBottom: "6rem" }}>
+          <p
+            style={{
+              fontFamily: FONT_MONO,
+              fontSize: "0.65rem",
+              letterSpacing: "0.32em",
+              textTransform: "uppercase",
+              color: IVORY,
+              marginBottom: "1.5rem",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "0.75rem",
+            }}
+          >
+            <span style={{ display: "inline-block", width: "2rem", height: "0.5px", background: IVORY_DIM }} />
+            Investment
+            <span style={{ display: "inline-block", width: "2rem", height: "0.5px", background: IVORY_DIM }} />
           </p>
-          <div className="mt-4 inline-flex items-center gap-2 bg-green-500/10 border border-green-500/20 rounded-full px-4 py-2 text-sm text-green-400">
-            <Check className="w-4 h-4" />
-            7-day free trial on all plans · Cancel anytime
+          <h1
+            style={{
+              fontFamily: FONT_DISPLAY,
+              fontSize: "clamp(2.8rem, 7vw, 5rem)",
+              fontWeight: 300,
+              fontStyle: "italic",
+              lineHeight: 1.1,
+              letterSpacing: "-0.01em",
+              color: FOREGROUND,
+              marginBottom: "1.5rem",
+            }}
+          >
+            Precision outreach,<br />at any scale.
+          </h1>
+          <p
+            style={{
+              fontSize: "0.95rem",
+              color: MUTED,
+              maxWidth: "440px",
+              margin: "0 auto 2rem",
+              lineHeight: 1.7,
+            }}
+          >
+            Begin with a 7-day free trial. No commitment required.
+            Cancel from Settings at any time.
+          </p>
+          {/* Trial badge */}
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              border: `0.5px solid ${BORDER_ACCENT}`,
+              padding: "0.4rem 1.2rem",
+              fontFamily: FONT_MONO,
+              fontSize: "0.65rem",
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: IVORY,
+            }}
+          >
+            <Check size={10} />
+            7-day free trial · Cancel anytime
           </div>
         </div>
 
         {/* Plan Cards */}
-        <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gap: "1.5px",
+            marginBottom: "6rem",
+            border: `0.5px solid ${BORDER}`,
+          }}
+        >
           {PLANS.map((plan) => {
-            const Icon = plan.icon;
             const isLoading = loadingPlan === plan.key;
-
             return (
               <div
                 key={plan.key}
-                className={`relative rounded-2xl border ${plan.borderColor} ${plan.bgColor} p-8 flex flex-col`}
+                style={{
+                  background: plan.popular ? SURFACE_RAISED : SURFACE,
+                  padding: "3rem 2.5rem",
+                  display: "flex",
+                  flexDirection: "column",
+                  position: "relative",
+                  borderRight: plan.popular ? "none" : `0.5px solid ${BORDER}`,
+                }}
               >
                 {plan.popular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <Badge className="bg-purple-500 text-white border-0 px-3 py-1">
-                      Most Popular
-                    </Badge>
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "1.5rem",
+                      right: "1.5rem",
+                      fontFamily: FONT_MONO,
+                      fontSize: "0.6rem",
+                      letterSpacing: "0.2em",
+                      textTransform: "uppercase",
+                      color: IVORY,
+                      border: `0.5px solid ${BORDER_ACCENT}`,
+                      padding: "0.25rem 0.6rem",
+                    }}
+                  >
+                    Recommended
                   </div>
                 )}
 
-                {/* Plan header */}
-                <div className="mb-6">
-                  <div className={`inline-flex items-center justify-center w-10 h-10 rounded-xl bg-background border border-border/40 mb-4`}>
-                    <Icon className={`w-5 h-5 ${plan.color}`} />
-                  </div>
-                  <h2 className="text-2xl font-bold">{plan.name}</h2>
-                  <p className="text-muted-foreground text-sm mt-1">{plan.description}</p>
-                {plan.key === "growth" && (
-                  <div className="mt-2 inline-flex items-center gap-1.5 text-xs text-purple-400 bg-purple-500/10 border border-purple-500/20 rounded-full px-2.5 py-1">
-                    <TrendingUp className="w-3 h-3" />
-                    3× faster lead discovery
-                  </div>
-                )}
-                </div>
+                {/* Tier label */}
+                <p
+                  style={{
+                    fontFamily: FONT_MONO,
+                    fontSize: "0.6rem",
+                    letterSpacing: "0.25em",
+                    textTransform: "uppercase",
+                    color: MUTED,
+                    marginBottom: "0.75rem",
+                  }}
+                >
+                  Tier {plan.tier}
+                </p>
+
+                {/* Plan name */}
+                <h2
+                  style={{
+                    fontFamily: FONT_DISPLAY,
+                    fontSize: "2.2rem",
+                    fontWeight: 400,
+                    fontStyle: "italic",
+                    color: FOREGROUND,
+                    marginBottom: "0.5rem",
+                    lineHeight: 1.1,
+                  }}
+                >
+                  {plan.name}
+                </h2>
+                <p
+                  style={{
+                    fontSize: "0.82rem",
+                    color: MUTED,
+                    marginBottom: "2rem",
+                    lineHeight: 1.6,
+                  }}
+                >
+                  {plan.description}
+                </p>
 
                 {/* Price */}
-                <div className="mb-6">
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-bold">${plan.price}</span>
-                    <span className="text-muted-foreground">/month</span>
+                <div
+                  style={{
+                    borderTop: `0.5px solid ${BORDER}`,
+                    borderBottom: `0.5px solid ${BORDER}`,
+                    padding: "1.5rem 0",
+                    marginBottom: "2rem",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "baseline", gap: "0.25rem" }}>
+                    <span
+                      style={{
+                        fontFamily: FONT_MONO,
+                        fontSize: "2.8rem",
+                        fontWeight: 400,
+                        color: FOREGROUND,
+                        lineHeight: 1,
+                      }}
+                    >
+                      ${plan.price}
+                    </span>
+                    <span
+                      style={{
+                        fontFamily: FONT_MONO,
+                        fontSize: "0.7rem",
+                        color: MUTED,
+                        letterSpacing: "0.08em",
+                      }}
+                    >
+                      / month
+                    </span>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p
+                    style={{
+                      fontFamily: FONT_MONO,
+                      fontSize: "0.6rem",
+                      color: MUTED,
+                      letterSpacing: "0.1em",
+                      marginTop: "0.4rem",
+                    }}
+                  >
                     After 7-day free trial
                   </p>
                 </div>
 
                 {/* Features */}
-                <ul className="space-y-3 mb-8 flex-1">
+                <ul
+                  style={{
+                    listStyle: "none",
+                    padding: 0,
+                    margin: "0 0 2.5rem",
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "0.85rem",
+                  }}
+                >
                   {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-3 text-sm">
-                      <Check className={`w-4 h-4 mt-0.5 shrink-0 ${plan.color}`} />
-                      <span className={feature.includes("coming soon") ? "text-muted-foreground" : ""}>
-                        {feature}
+                    <li
+                      key={feature}
+                      style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        gap: "0.75rem",
+                        fontSize: "0.82rem",
+                        color: feature.toLowerCase().includes("coming soon") ? MUTED : FOREGROUND,
+                        lineHeight: 1.5,
+                      }}
+                    >
+                      <span
+                        style={{
+                          width: "14px",
+                          height: "14px",
+                          border: `0.5px solid ${BORDER_ACCENT}`,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          flexShrink: 0,
+                          marginTop: "1px",
+                        }}
+                      >
+                        <Check size={8} color={IVORY} />
                       </span>
+                      {feature}
                     </li>
                   ))}
                 </ul>
 
                 {/* CTA */}
-                <Button
-                  className={`w-full ${
-                    plan.key === "growth"
-                      ? "bg-purple-600 hover:bg-purple-700 text-white"
-                      : "bg-green-600 hover:bg-green-700 text-white"
-                  }`}
+                <button
                   onClick={() => handleSelectPlan(plan.key)}
                   disabled={isLoading}
+                  style={{
+                    width: "100%",
+                    padding: "0.9rem 1.5rem",
+                    background: plan.popular ? IVORY : "transparent",
+                    border: `0.5px solid ${plan.popular ? IVORY : BORDER}`,
+                    color: plan.popular ? BG : FOREGROUND,
+                    fontFamily: FONT_MONO,
+                    fontSize: "0.68rem",
+                    letterSpacing: "0.2em",
+                    textTransform: "uppercase",
+                    cursor: isLoading ? "not-allowed" : "pointer",
+                    opacity: isLoading ? 0.6 : 1,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "0.5rem",
+                    transition: "opacity 0.2s",
+                  }}
                 >
                   {isLoading ? (
                     <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      <Loader2 size={12} style={{ animation: "spin 1s linear infinite" }} />
                       Opening checkout...
                     </>
                   ) : (
                     plan.cta
                   )}
-                </Button>
+                </button>
               </div>
             );
           })}
         </div>
 
-        {/* FAQ / Trust signals */}
-        <div className="mt-16 max-w-2xl mx-auto">
-          <h3 className="text-lg font-semibold text-center mb-8">Common questions</h3>
-          <div className="space-y-6">
-            {[
-              {
-                q: "Do I need a credit card for the free trial?",
-                a: "Yes — Stripe requires a card to start the trial, but you won't be charged until Day 7. You'll receive a reminder on Day 6 so you have time to cancel.",
-              },
-              {
-                q: "What happens after the trial ends?",
-                a: "You'll be automatically charged for the plan you selected. You can cancel anytime from Settings → Manage Billing before the trial ends.",
-              },
-              {
-                q: "Can I switch plans?",
-                a: "Yes. You can upgrade from Starter to Growth at any time from Settings → Manage Billing. Stripe prorates the difference.",
-              },
-              {
-                q: "What is the campaign limit on Starter?",
-                a: "Starter includes 1 active outreach campaign. Upgrade to Growth for unlimited campaigns.",
-              },
-              {
-                q: "Is this month-to-month?",
-                a: "Yes — all plans are billed monthly with no long-term contracts. Cancel anytime.",
-              },
-            ].map(({ q, a }) => (
-              <div key={q} className="border-b border-border/30 pb-6">
-                <p className="font-medium mb-2">{q}</p>
-                <p className="text-muted-foreground text-sm">{a}</p>
-              </div>
-            ))}
-          </div>
+        {/* Divider */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "1.5rem",
+            marginBottom: "4rem",
+          }}
+        >
+          <div style={{ flex: 1, height: "0.5px", background: BORDER }} />
+          <p
+            style={{
+              fontFamily: FONT_MONO,
+              fontSize: "0.6rem",
+              letterSpacing: "0.28em",
+              textTransform: "uppercase",
+              color: MUTED,
+            }}
+          >
+            Common Questions
+          </p>
+          <div style={{ flex: 1, height: "0.5px", background: BORDER }} />
+        </div>
+
+        {/* FAQ */}
+        <div style={{ maxWidth: "600px", margin: "0 auto" }}>
+          {FAQS.map(({ q, a }, i) => (
+            <div
+              key={q}
+              style={{
+                borderBottom: `0.5px solid ${BORDER}`,
+                padding: "1.75rem 0",
+                ...(i === 0 ? { borderTop: `0.5px solid ${BORDER}` } : {}),
+              }}
+            >
+              <p
+                style={{
+                  fontFamily: FONT_DISPLAY,
+                  fontSize: "1.05rem",
+                  fontWeight: 400,
+                  fontStyle: "italic",
+                  color: FOREGROUND,
+                  marginBottom: "0.6rem",
+                  lineHeight: 1.4,
+                }}
+              >
+                {q}
+              </p>
+              <p
+                style={{
+                  fontSize: "0.82rem",
+                  color: MUTED,
+                  lineHeight: 1.7,
+                }}
+              >
+                {a}
+              </p>
+            </div>
+          ))}
         </div>
 
         {/* Test card notice */}
-        <div className="mt-12 text-center">
-          <p className="text-xs text-muted-foreground">
-            Testing? Use card <span className="font-mono bg-muted px-1.5 py-0.5 rounded">4242 4242 4242 4242</span> with any future expiry and any CVC.
-          </p>
-        </div>
+        <p
+          style={{
+            textAlign: "center",
+            fontFamily: FONT_MONO,
+            fontSize: "0.6rem",
+            color: MUTED,
+            letterSpacing: "0.08em",
+            marginTop: "4rem",
+          }}
+        >
+          Testing? Use card{" "}
+          <span
+            style={{
+              border: `0.5px solid ${BORDER}`,
+              padding: "0.1rem 0.4rem",
+              background: SURFACE,
+            }}
+          >
+            4242 4242 4242 4242
+          </span>{" "}
+          with any future expiry and any CVC.
+        </p>
       </div>
     </div>
   );

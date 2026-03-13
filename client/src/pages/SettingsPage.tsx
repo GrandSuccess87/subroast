@@ -1,213 +1,206 @@
 import DashboardLayout from "@/components/DashboardLayout";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import {
-  AlertTriangle,
-  CheckCircle2,
   Clock,
   CreditCard,
   Loader2,
-  MessageSquare,
-  RefreshCw,
   Settings,
   Shield,
-  Unlink,
   User,
   Zap,
 } from "lucide-react";
 import { useLocation } from "wouter";
 import { toast } from "sonner";
 
+const FONT_DISPLAY = "Cormorant Garamond, Georgia, serif";
+const FONT_MONO = "JetBrains Mono, monospace";
+const SURFACE = "oklch(0.12 0.007 60)";
+const SURFACE_RAISED = "oklch(0.14 0.007 60)";
+const BORDER = "oklch(0.22 0.007 60)";
+const IVORY = "oklch(0.88 0.025 85)";
+const FOREGROUND = "oklch(0.93 0.010 80)";
+const MUTED = "oklch(0.52 0.006 80)";
+const BG = "oklch(0.09 0.008 60)";
+
 export default function SettingsPage() {
   const { user } = useAuth();
   const utils = trpc.useUtils();
-
   const [, navigate] = useLocation();
-  const { data: account, isLoading: accountLoading } = trpc.reddit.getAccount.useQuery();
-  const { data: rateLimits } = trpc.reddit.getRateLimitStatus.useQuery();
+
   const { data: subStatus, isLoading: subLoading } = trpc.subscription.getStatus.useQuery();
 
   const createPortalSession = trpc.subscription.createPortalSession.useMutation({
-    onSuccess: ({ url }) => {
-      if (url) window.open(url, "_blank");
-    },
+    onSuccess: ({ url }) => { if (url) window.open(url, "_blank"); },
     onError: (err: { message: string }) => toast.error(err.message),
   });
 
-  const disconnectReddit = trpc.reddit.disconnect.useMutation({
-    onSuccess: () => {
-      toast.success("Reddit account disconnected");
-      utils.reddit.getAccount.invalidate();
-      utils.reddit.getRateLimitStatus.invalidate();
-    },
-    onError: (err: { message: string }) => toast.error(err.message),
-  });
+  const sectionStyle: React.CSSProperties = {
+    border: `0.5px solid ${BORDER}`,
+    background: SURFACE,
+    marginBottom: "1.5px",
+  };
 
-  const unpauseAccount = trpc.reddit.unpauseAccount.useMutation({
-    onSuccess: () => {
-      toast.success("Account unpaused");
-      utils.reddit.getAccount.invalidate();
-    },
-    onError: (err: { message: string }) => toast.error(err.message),
-  });
+  const sectionHeaderStyle: React.CSSProperties = {
+    padding: "1.25rem 1.5rem",
+    borderBottom: `0.5px solid ${BORDER}`,
+    display: "flex",
+    alignItems: "center",
+    gap: "0.5rem",
+  };
 
-  const handleConnectReddit = () => {
-    window.location.href = "/api/reddit/connect";
+  const sectionBodyStyle: React.CSSProperties = {
+    padding: "1.5rem",
   };
 
   return (
     <DashboardLayout>
-      <div className="max-w-2xl mx-auto space-y-5">
+      <div style={{ maxWidth: "640px", margin: "0 auto" }}>
+
         {/* Header */}
-        <div>
-          <div className="flex items-center gap-2.5 mb-1">
-            <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center">
-              <Settings className="w-4 h-4 text-muted-foreground" />
-            </div>
-            <h1 className="text-xl font-bold text-foreground">Settings</h1>
-          </div>
-          <p className="text-sm text-muted-foreground ml-10.5">Manage your account and billing settings.</p>
+        <div style={{ marginBottom: "2.5rem" }}>
+          <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: "clamp(1.8rem, 3.5vw, 2.5rem)", fontWeight: 300, fontStyle: "italic", color: FOREGROUND, lineHeight: 1.1, marginBottom: "0.4rem" }}>
+            Settings
+          </h1>
+          <p style={{ fontFamily: FONT_MONO, fontSize: "0.65rem", letterSpacing: "0.12em", textTransform: "uppercase", color: MUTED }}>
+            Account & billing management
+          </p>
         </div>
 
-        {/* Reddit Connection — Coming Soon */}
-        <Card className="bg-card border-border">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold flex items-center gap-2">
-              <Zap className="w-4 h-4 text-primary" />
+        {/* Reddit Connection */}
+        <div style={sectionStyle}>
+          <div style={sectionHeaderStyle}>
+            <Zap size={12} color={IVORY} />
+            <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: MUTED, flex: 1 }}>
               Reddit Connection
-              <span className="ml-auto text-[10px] px-2 py-0.5 rounded-full bg-amber-400/10 text-amber-400 border border-amber-400/20 font-medium">Coming Soon</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/20 border border-border">
-              <Clock className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
+            </p>
+            <span style={{ fontFamily: FONT_MONO, fontSize: "0.55rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "oklch(0.75 0.14 65)", border: "0.5px solid oklch(0.75 0.14 65 / 0.35)", padding: "0.15rem 0.5rem" }}>
+              Coming Soon
+            </span>
+          </div>
+          <div style={sectionBodyStyle}>
+            <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem", padding: "1rem", border: `0.5px solid ${BORDER}`, background: SURFACE_RAISED }}>
+              <Clock size={13} color={MUTED} style={{ flexShrink: 0, marginTop: "2px" }} />
               <div>
-                <p className="text-sm font-medium text-foreground">Direct Reddit integration is pending API approval</p>
-                <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                <p style={{ fontSize: "0.82rem", color: FOREGROUND, fontWeight: 500, marginBottom: "0.4rem" }}>
+                  Direct Reddit integration is pending API approval
+                </p>
+                <p style={{ fontSize: "0.75rem", color: MUTED, lineHeight: 1.6 }}>
                   We've submitted our Reddit API application and are awaiting approval. In the meantime, SubRoast generates your DMs, comments, and posts — you copy and paste them directly on Reddit. Full one-click sending will be enabled once approved.
                 </p>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Billing */}
-        <Card className="bg-card border-border">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold flex items-center gap-2">
-              <CreditCard className="w-4 h-4 text-primary" />
+        <div style={sectionStyle}>
+          <div style={sectionHeaderStyle}>
+            <CreditCard size={12} color={IVORY} />
+            <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: MUTED }}>
               Billing & Plan
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+            </p>
+          </div>
+          <div style={sectionBodyStyle}>
             {subLoading ? (
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Loader2 className="w-4 h-4 animate-spin" />
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: MUTED, fontSize: "0.8rem" }}>
+                <Loader2 size={14} style={{ animation: "spin 1s linear infinite" }} />
                 Loading...
               </div>
             ) : subStatus ? (
-              <>
-                {/* Current plan badge */}
-                <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30 border border-border">
+              <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                {/* Plan status row */}
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem", border: `0.5px solid ${BORDER}`, background: SURFACE_RAISED }}>
                   <div>
-                    <p className="text-sm font-semibold text-foreground capitalize">
+                    <p style={{ fontSize: "0.85rem", color: FOREGROUND, fontWeight: 500, textTransform: "capitalize", marginBottom: "0.2rem" }}>
                       {subStatus.plan === "none" ? "No active plan" : `${subStatus.plan} Plan`}
                     </p>
                     {subStatus.isTrialing && subStatus.trialDaysLeft !== undefined && (
-                      <p className="text-xs text-amber-400 mt-0.5">
+                      <p style={{ fontFamily: FONT_MONO, fontSize: "0.62rem", color: "oklch(0.78 0.14 65)", letterSpacing: "0.08em" }}>
                         Free trial — {subStatus.trialDaysLeft} day{subStatus.trialDaysLeft !== 1 ? "s" : ""} remaining
                       </p>
                     )}
                     {subStatus.subscriptionStatus === "active" && !subStatus.isTrialing && (
-                      <p className="text-xs text-primary mt-0.5">Active subscription</p>
+                      <p style={{ fontFamily: FONT_MONO, fontSize: "0.62rem", color: IVORY, letterSpacing: "0.08em" }}>Active subscription</p>
                     )}
                     {subStatus.plan === "none" && (
-                      <p className="text-xs text-muted-foreground mt-0.5">Start a free trial to unlock campaigns</p>
+                      <p style={{ fontFamily: FONT_MONO, fontSize: "0.62rem", color: MUTED, letterSpacing: "0.08em" }}>Start a free trial to unlock campaigns</p>
                     )}
                   </div>
-                  <span className={`text-[11px] px-2 py-0.5 rounded-full border font-medium ${
-                    subStatus.hasActiveAccess
-                      ? "bg-primary/15 text-primary border-primary/20"
-                      : "bg-muted text-muted-foreground border-border"
-                  }`}>
+                  <span style={{
+                    fontFamily: FONT_MONO,
+                    fontSize: "0.55rem",
+                    letterSpacing: "0.15em",
+                    textTransform: "uppercase",
+                    color: subStatus.hasActiveAccess ? IVORY : MUTED,
+                    border: `0.5px solid ${subStatus.hasActiveAccess ? "oklch(0.88 0.025 85 / 0.4)" : BORDER}`,
+                    padding: "0.2rem 0.5rem",
+                  }}>
                     {subStatus.hasActiveAccess ? "Active" : "Inactive"}
                   </span>
                 </div>
 
-                {/* Campaign limit info */}
-                <div className="text-xs text-muted-foreground flex items-center gap-1.5">
-                  <Shield className="w-3.5 h-3.5 text-muted-foreground/60 shrink-0" />
+                {/* Campaign limit */}
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.75rem", color: MUTED }}>
+                  <Shield size={12} color={MUTED} />
                   {subStatus.campaignLimit === null
                     ? "Unlimited campaigns (Growth plan)"
                     : `${subStatus.campaignLimit} campaign max on ${subStatus.plan === "none" ? "free trial" : subStatus.plan + " plan"}`}
                 </div>
 
                 {/* Action buttons */}
-                <div className="flex gap-2 flex-wrap">
+                <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
                   {subStatus.plan === "none" ? (
-                    <Button
-                      size="sm"
-                      className="gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90"
+                    <button
                       onClick={() => navigate("/pricing")}
+                      style={{ padding: "0.65rem 1.25rem", background: IVORY, border: `0.5px solid ${IVORY}`, color: BG, fontFamily: FONT_MONO, fontSize: "0.62rem", letterSpacing: "0.18em", textTransform: "uppercase", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.4rem" }}
                     >
-                      <Zap className="w-3.5 h-3.5" />
-                      Start Free Trial
-                    </Button>
+                      <Zap size={11} /> Start Free Trial
+                    </button>
                   ) : (
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="gap-1.5 border-border text-muted-foreground hover:text-foreground"
+                    <button
                       onClick={() => createPortalSession.mutate({ origin: window.location.origin })}
                       disabled={createPortalSession.isPending}
+                      style={{ padding: "0.65rem 1.25rem", background: "transparent", border: `0.5px solid ${BORDER}`, color: MUTED, fontFamily: FONT_MONO, fontSize: "0.62rem", letterSpacing: "0.18em", textTransform: "uppercase", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.4rem" }}
                     >
-                      {createPortalSession.isPending
-                        ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                        : <><CreditCard className="w-3.5 h-3.5" />Manage Billing</>}
-                    </Button>
+                      {createPortalSession.isPending ? <Loader2 size={11} style={{ animation: "spin 1s linear infinite" }} /> : <CreditCard size={11} />}
+                      Manage Billing
+                    </button>
                   )}
                   {subStatus.plan !== "growth" && subStatus.plan !== "none" && (
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="gap-1.5 border-primary/30 text-primary hover:bg-primary/10"
+                    <button
                       onClick={() => navigate("/pricing")}
+                      style={{ padding: "0.65rem 1.25rem", background: "transparent", border: `0.5px solid oklch(0.88 0.025 85 / 0.35)`, color: IVORY, fontFamily: FONT_MONO, fontSize: "0.62rem", letterSpacing: "0.18em", textTransform: "uppercase", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.4rem" }}
                     >
-                      <Zap className="w-3.5 h-3.5" />
-                      Upgrade to Growth
-                    </Button>
+                      <Zap size={11} /> Upgrade to Growth
+                    </button>
                   )}
                 </div>
-              </>
+              </div>
             ) : (
-              <div className="text-sm text-muted-foreground">Unable to load billing info.</div>
+              <p style={{ fontSize: "0.8rem", color: MUTED }}>Unable to load billing info.</p>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        {/* Account info */}
-        <Card className="bg-card border-border">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold flex items-center gap-2">
-              <User className="w-4 h-4 text-muted-foreground" />
+        {/* Account */}
+        <div style={sectionStyle}>
+          <div style={sectionHeaderStyle}>
+            <User size={12} color={MUTED} />
+            <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: MUTED }}>
               Account
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-primary/15 border border-primary/20 flex items-center justify-center text-primary text-sm font-bold">
-                {user?.name?.charAt(0).toUpperCase() ?? "U"}
-              </div>
-              <div>
-                <p className="text-sm font-medium text-foreground">{user?.name ?? "User"}</p>
-                <p className="text-xs text-muted-foreground">{user?.email ?? ""}</p>
-              </div>
+            </p>
+          </div>
+          <div style={{ ...sectionBodyStyle, display: "flex", alignItems: "center", gap: "1rem" }}>
+            <div style={{ width: "40px", height: "40px", border: `0.5px solid oklch(0.88 0.025 85 / 0.3)`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: FONT_DISPLAY, fontSize: "1.2rem", fontStyle: "italic", color: IVORY, flexShrink: 0 }}>
+              {user?.name?.charAt(0).toUpperCase() ?? "U"}
             </div>
-          </CardContent>
-        </Card>
-
+            <div>
+              <p style={{ fontSize: "0.85rem", color: FOREGROUND, fontWeight: 500 }}>{user?.name ?? "User"}</p>
+              <p style={{ fontFamily: FONT_MONO, fontSize: "0.65rem", color: MUTED, marginTop: "0.15rem", letterSpacing: "0.05em" }}>{user?.email ?? ""}</p>
+            </div>
+          </div>
+        </div>
 
       </div>
     </DashboardLayout>

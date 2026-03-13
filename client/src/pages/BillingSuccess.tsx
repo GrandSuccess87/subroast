@@ -1,60 +1,75 @@
 import { useEffect } from "react";
 import { useLocation } from "wouter";
 import { CheckCircle, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc";
+
+const FONT_DISPLAY = "Cormorant Garamond, Georgia, serif";
+const FONT_MONO = "JetBrains Mono, monospace";
+const BG = "oklch(0.09 0.008 60)";
+const SURFACE = "oklch(0.12 0.007 60)";
+const BORDER = "oklch(0.22 0.007 60)";
+const IVORY = "oklch(0.88 0.025 85)";
+const FOREGROUND = "oklch(0.93 0.010 80)";
+const MUTED = "oklch(0.52 0.006 80)";
 
 export default function BillingSuccess() {
   const [, navigate] = useLocation();
   const utils = trpc.useUtils();
 
   useEffect(() => {
-    // Invalidate subscription status so dashboard reflects new plan
     utils.subscription.getStatus.invalidate();
   }, [utils]);
 
+  const steps = [
+    "Create your first outreach campaign in DM Campaigns",
+    "Hit \"Sync Leads\" to discover Reddit posts matching your keywords",
+    "Generate AI-personalized DMs and start outreach",
+  ];
+
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-6">
-      <div className="max-w-md w-full text-center">
-        <div className="flex justify-center mb-6">
-          <div className="w-20 h-20 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center">
-            <CheckCircle className="w-10 h-10 text-green-400" />
+    <div style={{ minHeight: "100vh", background: BG, display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
+      <div style={{ maxWidth: "440px", width: "100%", textAlign: "center" }}>
+
+        {/* Icon */}
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: "2rem" }}>
+          <div style={{ width: "64px", height: "64px", border: `0.5px solid oklch(0.88 0.025 85 / 0.4)`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <CheckCircle size={28} color={IVORY} />
           </div>
         </div>
 
-        <h1 className="text-3xl font-bold mb-3">You're all set!</h1>
-        <p className="text-muted-foreground mb-2">
+        {/* Headline */}
+        <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: "clamp(2rem, 5vw, 3rem)", fontWeight: 300, fontStyle: "italic", color: FOREGROUND, lineHeight: 1.1, marginBottom: "0.75rem" }}>
+          You're all set.
+        </h1>
+        <p style={{ fontSize: "0.85rem", color: MUTED, lineHeight: 1.7, marginBottom: "0.4rem" }}>
           Your 7-day free trial has started. You won't be charged until Day 7.
         </p>
-        <p className="text-sm text-muted-foreground mb-8">
+        <p style={{ fontFamily: FONT_MONO, fontSize: "0.62rem", color: MUTED, letterSpacing: "0.08em", marginBottom: "2.5rem" }}>
           We'll send you a reminder on Day 6 so you have time to cancel if needed.
         </p>
 
-        <div className="bg-card border border-border/40 rounded-xl p-6 mb-8 text-left space-y-3">
-          <p className="text-sm font-medium text-foreground">What to do next:</p>
-          <div className="space-y-2 text-sm text-muted-foreground">
-            <div className="flex items-start gap-2">
-              <span className="text-green-400 font-bold mt-0.5">1.</span>
-              <span>Create your first outreach campaign in DM Campaigns</span>
-            </div>
-            <div className="flex items-start gap-2">
-              <span className="text-green-400 font-bold mt-0.5">2.</span>
-              <span>Hit "Sync Leads" to discover Reddit posts matching your keywords</span>
-            </div>
-            <div className="flex items-start gap-2">
-              <span className="text-green-400 font-bold mt-0.5">3.</span>
-              <span>Generate AI-personalized DMs and start outreach</span>
-            </div>
+        {/* Steps */}
+        <div style={{ border: `0.5px solid ${BORDER}`, background: SURFACE, marginBottom: "2rem", textAlign: "left" }}>
+          <div style={{ padding: "1rem 1.25rem", borderBottom: `0.5px solid ${BORDER}` }}>
+            <p style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", letterSpacing: "0.22em", textTransform: "uppercase", color: MUTED }}>
+              What to do next
+            </p>
           </div>
+          {steps.map((step, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "1rem", padding: "0.85rem 1.25rem", borderBottom: i < steps.length - 1 ? `0.5px solid ${BORDER}` : "none" }}>
+              <span style={{ fontFamily: FONT_MONO, fontSize: "0.65rem", color: IVORY, flexShrink: 0, marginTop: "2px" }}>0{i + 1}</span>
+              <p style={{ fontSize: "0.8rem", color: MUTED, lineHeight: 1.5 }}>{step}</p>
+            </div>
+          ))}
         </div>
 
-        <Button
-          className="w-full bg-green-600 hover:bg-green-700 text-white"
+        {/* CTA */}
+        <button
           onClick={() => navigate("/dashboard")}
+          style={{ width: "100%", padding: "0.85rem 1.5rem", background: IVORY, border: `0.5px solid ${IVORY}`, color: BG, fontFamily: FONT_MONO, fontSize: "0.65rem", letterSpacing: "0.22em", textTransform: "uppercase", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}
         >
-          Go to Dashboard
-          <ArrowRight className="w-4 h-4 ml-2" />
-        </Button>
+          Go to Dashboard <ArrowRight size={12} />
+        </button>
       </div>
     </div>
   );

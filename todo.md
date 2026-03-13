@@ -344,3 +344,16 @@
 - [x] Increase letter-spacing on uppercase labels to 0.3em+
 - [x] Generate new logo: replace green with platinum/silver tones
 - [x] Upload new logo to CDN and update DashboardLayout + index.html favicon reference
+
+## Luxury Design System — All Pages (v5.32)
+
+- [x] Pricing.tsx — full luxury rebuild: Cormorant serif headings, ivory accent, hairline card borders, editorial plan cards, no border-radius
+- [x] Dashboard.tsx — Cormorant "Hey [Name]" greeting, ivory stat values in JetBrains Mono, luxury card surfaces
+- [x] DraftRoast.tsx — luxury form layout, Cormorant section headings, ivory score display, editorial roast output
+- [x] DmCampaigns.tsx — luxury table/list layout, Cormorant headings, hairline row dividers, ivory badges
+- [x] HistoryPage.tsx — editorial history list, Cormorant headings, hairline dividers, mono timestamps
+- [x] Schedule.tsx — luxury form layout, Cormorant headings, ivory accent on active states
+- [x] SettingsPage.tsx — luxury settings layout, Cormorant headings, hairline section dividers
+- [x] Feedback.tsx — luxury feedback form, Cormorant headings, ivory accent on submit button
+- [x] BillingSuccess.tsx — luxury success state, Cormorant heading, editorial confirmation layout
+- [x] NotFound.tsx — luxury 404 page, Cormorant italic heading, editorial minimal layout

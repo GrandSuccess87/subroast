@@ -1,9 +1,4 @@
 import DashboardLayout from "@/components/DashboardLayout";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
 import {
   ArrowLeft,
@@ -12,7 +7,6 @@ import {
   ChevronRight,
   Clock,
   Clipboard,
-  ClipboardCheck,
   ExternalLink,
   Flame,
   Inbox,
@@ -36,15 +30,24 @@ import { useState, useEffect, useRef } from "react";
 import { useLocation } from "wouter";
 import { toast } from "sonner";
 
-// ─── Sync timing helpers ──────────────────────────────────────────────────────
+// ─── Design tokens ────────────────────────────────────────────────────────────
+const FONT_DISPLAY = "Cormorant Garamond, Georgia, serif";
+const FONT_MONO = "JetBrains Mono, monospace";
+const BG = "oklch(0.09 0.008 60)";
+const SURFACE = "oklch(0.12 0.007 60)";
+const SURFACE_RAISED = "oklch(0.14 0.007 60)";
+const BORDER = "oklch(0.22 0.007 60)";
+const IVORY = "oklch(0.88 0.025 85)";
+const FOREGROUND = "oklch(0.93 0.010 80)";
+const MUTED = "oklch(0.52 0.006 80)";
+const DANGER = "oklch(0.65 0.18 25)";
+const AMBER = "oklch(0.78 0.14 65)";
 
-/** Sync interval in ms based on plan */
+// ─── Sync timing helpers ──────────────────────────────────────────────────────
 function getSyncIntervalMs(plan: string | undefined): number {
-  // Growth: every 4 hours; Starter/trial/none: twice daily (12h)
   return plan === "growth" ? 4 * 60 * 60 * 1000 : 12 * 60 * 60 * 1000;
 }
 
-/** Human-readable relative time (e.g. "3 min ago", "2 hr ago") */
 function relativeTime(ms: number): string {
   const diff = Date.now() - ms;
   if (diff < 60_000) return "just now";
@@ -53,7 +56,6 @@ function relativeTime(ms: number): string {
   return `${Math.floor(diff / 86_400_000)}d ago`;
 }
 
-/** Human-readable countdown (e.g. "in 2 hr 15 min") */
 function countdown(targetMs: number): string {
   const diff = targetMs - Date.now();
   if (diff <= 0) return "soon";
@@ -63,112 +65,119 @@ function countdown(targetMs: number): string {
   return `in ${m}m`;
 }
 
+// ─── Types ────────────────────────────────────────────────────────────────────
 type Campaign = {
-  id: number;
-  name: string;
-  offering: string;
-  websiteUrl?: string | null;
-  subreddits: string[];
-  keywords: string[];
-  aiPromptInstructions?: string | null;
-  reviewMode: "auto_send" | "review_first";
-  status: "active" | "paused" | "completed";
-  leadsFound: number;
-  dmsSent: number;
-  lastSyncAt?: number | null;
+  id: number; name: string; offering: string; websiteUrl?: string | null;
+  subreddits: string[]; keywords: string[]; aiPromptInstructions?: string | null;
+  reviewMode: "auto_send" | "review_first"; status: "active" | "paused" | "completed";
+  leadsFound: number; dmsSent: number; lastSyncAt?: number | null;
 };
 
 type Lead = {
-  id: number;
-  campaignId: number;
-  redditPostId: string;
-  redditPostUrl: string;
-  subreddit: string;
-  postTitle: string;
-  postBody?: string | null;
-  authorUsername: string;
-  matchScore: "strong" | "partial" | "lowest";
-  matchedKeywords: string[];
-  dmDraft?: string | null;
-  status: "new" | "dm_generated" | "queued" | "sent" | "skipped" | "failed";
-  discoveredAt: number;
-  // Roast Engine fields
-  fitScore?: number | null;
-  urgencyScore?: number | null;
-  sentimentScore?: number | null;
-  leadHeat?: "cold" | "warm" | "hot" | "on_fire" | null;
+  id: number; campaignId: number; redditPostId: string; redditPostUrl: string;
+  subreddit: string; postTitle: string; postBody?: string | null; authorUsername: string;
+  matchScore: "strong" | "partial" | "lowest"; matchedKeywords: string[];
+  dmDraft?: string | null; status: "new" | "dm_generated" | "queued" | "sent" | "skipped" | "failed";
+  discoveredAt: number; fitScore?: number | null; urgencyScore?: number | null;
+  sentimentScore?: number | null; leadHeat?: "cold" | "warm" | "hot" | "on_fire" | null;
   intentType?: "hiring" | "buying" | "seeking_advice" | "venting" | "unknown" | null;
-  roastInsight?: string | null;
-  roastReplyDraft?: string | null;
+  roastInsight?: string | null; roastReplyDraft?: string | null;
   pipelineStage?: "new" | "replied" | "interested" | "converted" | "skipped" | null;
-  commentDraft?: string | null;
-  commentSentAt?: number | null;
+  commentDraft?: string | null; commentSentAt?: number | null;
 };
 
-// ─── Roast Engine UI helpers ──────────────────────────────────────────────────
+// ─── Shared input style ───────────────────────────────────────────────────────
+const inputStyle: React.CSSProperties = {
+  width: "100%", background: SURFACE_RAISED, border: `0.5px solid ${BORDER}`,
+  color: FOREGROUND, fontFamily: "Inter, sans-serif", fontSize: "0.82rem",
+  padding: "0.6rem 0.75rem", outline: "none", boxSizing: "border-box",
+};
 
+// ─── Score bar ────────────────────────────────────────────────────────────────
 function ScoreBar({ label, value, color }: { label: string; value: number; color: string }) {
   return (
-    <div className="space-y-0.5">
-      <div className="flex items-center justify-between">
-        <span className="text-[9px] text-muted-foreground uppercase tracking-wide">{label}</span>
-        <span className="text-[10px] font-bold text-foreground">{value}</span>
+    <div>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.2rem" }}>
+        <span style={{ fontFamily: FONT_MONO, fontSize: "0.55rem", letterSpacing: "0.15em", textTransform: "uppercase", color: MUTED }}>{label}</span>
+        <span style={{ fontFamily: FONT_MONO, fontSize: "0.65rem", color: FOREGROUND, fontWeight: 600 }}>{value}</span>
       </div>
-      <div className="h-1 rounded-full bg-muted/50 overflow-hidden">
-        <div
-          className={`h-full rounded-full transition-all ${color}`}
-          style={{ width: `${value}%` }}
-        />
+      <div style={{ height: "2px", background: `oklch(0.22 0.007 60)`, overflow: "hidden" }}>
+        <div style={{ height: "100%", width: `${value}%`, background: color, transition: "width 0.4s ease" }} />
       </div>
     </div>
   );
 }
 
+// ─── Intent badge ─────────────────────────────────────────────────────────────
 function IntentBadge({ intent }: { intent: string }) {
-  // Only show actionable intents — skip venting/unknown
-  const actionable: Record<string, { label: string; color: string }> = {
-    hiring: { label: "Hiring", color: "bg-violet-400/15 text-violet-400 border-violet-400/20" },
-    buying: { label: "Buying", color: "bg-primary/15 text-primary border-primary/20" },
-    seeking_advice: { label: "Seeking Advice", color: "bg-amber-400/15 text-amber-400 border-amber-400/20" },
+  const actionable: Record<string, { label: string; color: string; border: string }> = {
+    hiring: { label: "Hiring", color: "oklch(0.72 0.12 280)", border: "oklch(0.72 0.12 280 / 0.35)" },
+    buying: { label: "Buying", color: IVORY, border: "oklch(0.88 0.025 85 / 0.35)" },
+    seeking_advice: { label: "Seeking Advice", color: AMBER, border: "oklch(0.78 0.14 65 / 0.35)" },
   };
   const cfg = actionable[intent];
   if (!cfg) return null;
   return (
-    <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium border ${cfg.color}`}>
+    <span style={{ fontFamily: FONT_MONO, fontSize: "0.52rem", letterSpacing: "0.1em", textTransform: "uppercase", color: cfg.color, border: `0.5px solid ${cfg.border}`, padding: "0.1rem 0.35rem" }}>
       {cfg.label}
     </span>
   );
 }
 
+// ─── Match badge ──────────────────────────────────────────────────────────────
 function MatchBadge({ score }: { score: "strong" | "partial" | "lowest" }) {
-  // Only show strong/partial — lowest adds noise
   if (score === "lowest") return null;
   const cfg = {
-    strong: { label: "Strong match", color: "bg-primary/15 text-primary border-primary/20" },
-    partial: { label: "Partial match", color: "bg-amber-400/15 text-amber-400 border-amber-400/20" },
+    strong: { label: "Strong match", color: IVORY, border: "oklch(0.88 0.025 85 / 0.35)" },
+    partial: { label: "Partial match", color: AMBER, border: "oklch(0.78 0.14 65 / 0.35)" },
   };
-  const { label, color } = cfg[score];
+  const { label, color, border } = cfg[score];
   return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold border ${color}`}>
+    <span style={{ fontFamily: FONT_MONO, fontSize: "0.52rem", letterSpacing: "0.1em", textTransform: "uppercase", color, border: `0.5px solid ${border}`, padding: "0.1rem 0.35rem" }}>
       {label}
     </span>
   );
 }
 
+// ─── Status badge ─────────────────────────────────────────────────────────────
 function StatusBadge({ status }: { status: Campaign["status"] }) {
   const cfg = {
-    active: { label: "Active", color: "bg-primary/15 text-primary border-primary/20" },
-    paused: { label: "Paused", color: "bg-amber-400/15 text-amber-400 border-amber-400/20" },
-    completed: { label: "Completed", color: "bg-muted text-muted-foreground border-border" },
+    active: { label: "Active", color: IVORY, border: "oklch(0.88 0.025 85 / 0.35)" },
+    paused: { label: "Paused", color: AMBER, border: "oklch(0.78 0.14 65 / 0.35)" },
+    completed: { label: "Completed", color: MUTED, border: BORDER },
   };
-  const { label, color } = cfg[status];
+  const { label, color, border } = cfg[status];
   return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold border ${color}`}>
+    <span style={{ fontFamily: FONT_MONO, fontSize: "0.52rem", letterSpacing: "0.1em", textTransform: "uppercase", color, border: `0.5px solid ${border}`, padding: "0.1rem 0.35rem" }}>
       {label}
     </span>
   );
 }
 
+// ─── Progress steps ───────────────────────────────────────────────────────────
+function ProgressSteps({ steps, currentStep }: { steps: string[]; currentStep: number }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: "0.25rem", overflowX: "auto", padding: "0.25rem 0" }}>
+      {steps.map((label, i) => {
+        const done = i < currentStep;
+        const active = i === currentStep;
+        return (
+          <div key={i} style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.2rem", minWidth: "36px", color: done ? IVORY : active ? FOREGROUND : MUTED, transition: "color 0.3s" }}>
+              {done ? <CheckCircle2 size={10} /> : active ? <Loader2 size={10} style={{ animation: "spin 1s linear infinite" }} /> : <div style={{ width: "10px", height: "10px", borderRadius: "50%", border: `0.5px solid ${MUTED}` }} />}
+              <span style={{ fontFamily: FONT_MONO, fontSize: "0.5rem", letterSpacing: "0.05em", textAlign: "center", fontWeight: active ? 600 : 400 }}>{label}</span>
+            </div>
+            {i < steps.length - 1 && (
+              <div style={{ width: "8px", height: "0.5px", background: done ? IVORY : BORDER, marginBottom: "12px", transition: "background 0.5s", flexShrink: 0 }} />
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ─── New campaign form ────────────────────────────────────────────────────────
 function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCancel: () => void }) {
   const [name, setName] = useState("");
   const [offering, setOffering] = useState("");
@@ -182,308 +191,190 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
   const [aiRecs, setAiRecs] = useState<{ subreddits: string[]; keywords: string[]; reasoning: string } | null>(null);
 
   const utils = trpc.useUtils();
+  const [, navigate] = useLocation();
 
   const getRecs = trpc.outreach.getRecommendations.useMutation({
-    onSuccess: (data) => {
-      setAiRecs(data);
-      toast.success("AI recommendations ready!");
-    },
+    onSuccess: (data) => { setAiRecs(data); toast.success("AI recommendations ready!"); },
     onError: (err) => toast.error(err.message),
   });
 
-  const [, navigate] = useLocation();
-
   const createCampaign = trpc.outreach.createCampaign.useMutation({
-    onSuccess: () => {
-      toast.success("Campaign created!");
-      utils.outreach.listCampaigns.invalidate();
-      onSuccess();
-    },
+    onSuccess: () => { toast.success("Campaign created!"); utils.outreach.listCampaigns.invalidate(); onSuccess(); },
     onError: (err) => {
       if (err.message === "CAMPAIGN_LIMIT_REACHED") {
-        toast.error("Campaign limit reached. Upgrade to Growth for unlimited campaigns.", {
-          action: {
-            label: "Upgrade",
-            onClick: () => navigate("/pricing"),
-          },
-          duration: 8000,
-        });
+        toast.error("Campaign limit reached. Upgrade to Growth for unlimited campaigns.", { action: { label: "Upgrade", onClick: () => navigate("/pricing") }, duration: 8000 });
       } else if (err.message === "UPGRADE_REQUIRED") {
-        toast.error("Start a free trial to create campaigns.", {
-          action: {
-            label: "View Plans",
-            onClick: () => navigate("/pricing"),
-          },
-          duration: 8000,
-        });
+        toast.error("Start a free trial to create campaigns.", { action: { label: "View Plans", onClick: () => navigate("/pricing") }, duration: 8000 });
       } else {
         toast.error(err.message);
       }
     },
   });
 
-  const addSub = () => {
-    const s = subInput.trim().replace(/^r\//, "");
-    if (s && !subreddits.includes(s)) setSubreddits([...subreddits, s]);
-    setSubInput("");
-  };
-
-  const addKw = () => {
-    const k = kwInput.trim();
-    if (k && !keywords.includes(k)) setKeywords([...keywords, k]);
-    setKwInput("");
-  };
-
-  const applyRecs = () => {
-    if (!aiRecs) return;
-    setSubreddits((prev) => Array.from(new Set([...prev, ...aiRecs.subreddits])));
-    setKeywords((prev) => Array.from(new Set([...prev, ...aiRecs.keywords])));
-    toast.success("AI recommendations applied!");
-  };
+  const addSub = () => { const s = subInput.trim().replace(/^r\//, ""); if (s && !subreddits.includes(s)) setSubreddits([...subreddits, s]); setSubInput(""); };
+  const addKw = () => { const k = kwInput.trim(); if (k && !keywords.includes(k)) setKeywords([...keywords, k]); setKwInput(""); };
+  const applyRecs = () => { if (!aiRecs) return; setSubreddits((prev) => Array.from(new Set([...prev, ...aiRecs.subreddits]))); setKeywords((prev) => Array.from(new Set([...prev, ...aiRecs.keywords]))); toast.success("AI recommendations applied!"); };
 
   const handleCreate = () => {
     if (!name.trim()) return toast.error("Campaign name is required");
     if (!offering.trim()) return toast.error("Offering description is required");
     if (subreddits.length === 0) return toast.error("Add at least one subreddit");
     if (keywords.length === 0) return toast.error("Add at least one keyword");
-    createCampaign.mutate({
-      name,
-      offering,
-      websiteUrl: websiteUrl || undefined,
-      subreddits,
-      keywords,
-      aiPromptInstructions: aiInstructions || undefined,
-      reviewMode,
-    });
+    createCampaign.mutate({ name, offering, websiteUrl: websiteUrl || undefined, subreddits, keywords, aiPromptInstructions: aiInstructions || undefined, reviewMode });
   };
 
+  const labelStyle: React.CSSProperties = { fontFamily: FONT_MONO, fontSize: "0.58rem", letterSpacing: "0.15em", textTransform: "uppercase", color: MUTED, display: "block", marginBottom: "0.4rem" };
+  const tagStyle: React.CSSProperties = { display: "inline-flex", alignItems: "center", gap: "0.3rem", fontFamily: FONT_MONO, fontSize: "0.6rem", color: FOREGROUND, border: `0.5px solid ${BORDER}`, background: SURFACE_RAISED, padding: "0.2rem 0.5rem" };
+
   return (
-    <Card className="bg-card border-border">
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-sm font-semibold">New Outreach Campaign</CardTitle>
-          <button onClick={onCancel} className="text-muted-foreground hover:text-foreground transition-colors">
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-5">
-        <div className="grid sm:grid-cols-2 gap-4">
-          <div className="space-y-1.5">
-            <Label className="text-xs text-muted-foreground">Campaign name</Label>
-            <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. SaaS Founders Outreach" className="bg-muted/40 border-border" />
+    <div style={{ border: `0.5px solid ${BORDER}`, background: SURFACE }}>
+      <div style={{ padding: "1.25rem 1.5rem", borderBottom: `0.5px solid ${BORDER}`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: MUTED }}>New Outreach Campaign</p>
+        <button onClick={onCancel} style={{ background: "none", border: "none", color: MUTED, cursor: "pointer" }}><X size={14} /></button>
+      </div>
+      <div style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+        {/* Name + URL */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+          <div>
+            <label style={labelStyle}>Campaign Name</label>
+            <input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. SaaS Founders Outreach" style={inputStyle} />
           </div>
-          <div className="space-y-1.5">
-            <Label className="text-xs text-muted-foreground">Website URL (optional)</Label>
-            <Input value={websiteUrl} onChange={(e) => setWebsiteUrl(e.target.value)} placeholder="https://yourapp.com" className="bg-muted/40 border-border" />
+          <div>
+            <label style={labelStyle}>Website URL (optional)</label>
+            <input value={websiteUrl} onChange={(e) => setWebsiteUrl(e.target.value)} placeholder="https://yourapp.com" style={inputStyle} />
           </div>
         </div>
 
-        <div className="space-y-1.5">
-          <Label className="text-xs text-muted-foreground">What are you offering?</Label>
-          <Textarea
-            value={offering}
-            onChange={(e) => setOffering(e.target.value)}
-            placeholder="Describe your product/service and who it helps. e.g. 'A Reddit scheduling tool for indie SaaS founders who want to grow without getting banned.'"
-            className="min-h-[80px] resize-none bg-muted/40 border-border text-sm"
-          />
+        {/* Offering */}
+        <div>
+          <label style={labelStyle}>What are you offering?</label>
+          <textarea value={offering} onChange={(e) => setOffering(e.target.value)} placeholder="Describe your product/service and who it helps..." style={{ ...inputStyle, minHeight: "80px", resize: "vertical", lineHeight: 1.6 }} />
         </div>
 
-        <div className="p-3 rounded-lg bg-primary/5 border border-primary/20">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-3.5 h-3.5 text-primary" />
-              <p className="text-xs font-semibold text-foreground">AI Subreddit & Keyword Recommendations</p>
+        {/* AI Recs */}
+        <div style={{ border: `0.5px solid oklch(0.88 0.025 85 / 0.2)`, background: "oklch(0.88 0.025 85 / 0.03)", padding: "1rem" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <Sparkles size={12} color={IVORY} />
+              <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: FOREGROUND }}>AI Subreddit & Keyword Recs</p>
             </div>
-            <Button
-              size="sm"
-              variant="ghost"
+            <button
               onClick={() => getRecs.mutate({ offering, websiteUrl: websiteUrl || undefined })}
               disabled={getRecs.isPending || !offering.trim()}
-              className="h-6 px-2 text-[10px] text-primary hover:text-primary/80 hover:bg-primary/10"
+              style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.1em", color: IVORY, background: "none", border: `0.5px solid oklch(0.88 0.025 85 / 0.4)`, padding: "0.3rem 0.75rem", cursor: !offering.trim() || getRecs.isPending ? "not-allowed" : "pointer", opacity: !offering.trim() ? 0.5 : 1, display: "flex", alignItems: "center", gap: "0.3rem" }}
             >
-              {getRecs.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : "Get AI Recs"}
-            </Button>
+              {getRecs.isPending ? <Loader2 size={10} style={{ animation: "spin 1s linear infinite" }} /> : null}
+              Get AI Recs
+            </button>
           </div>
           {aiRecs ? (
-            <div className="space-y-2">
-              <p className="text-[11px] text-muted-foreground">{aiRecs.reasoning}</p>
-              <div className="flex flex-wrap gap-1">
-                {aiRecs.subreddits.map((s) => (
-                  <span key={s} className="text-[10px] px-1.5 py-0.5 rounded bg-blue-400/10 text-blue-400 border border-blue-400/20">r/{s}</span>
-                ))}
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+              <p style={{ fontSize: "0.75rem", color: MUTED, lineHeight: 1.5 }}>{aiRecs.reasoning}</p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem" }}>
+                {aiRecs.subreddits.map((s) => <span key={s} style={{ ...tagStyle, color: "oklch(0.72 0.12 220)", borderColor: "oklch(0.72 0.12 220 / 0.35)" }}>r/{s}</span>)}
               </div>
-              <div className="flex flex-wrap gap-1">
-                {aiRecs.keywords.map((k) => (
-                  <span key={k} className="text-[10px] px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">{k}</span>
-                ))}
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem" }}>
+                {aiRecs.keywords.map((k) => <span key={k} style={tagStyle}>{k}</span>)}
               </div>
-              <Button size="sm" onClick={applyRecs} className="h-6 px-2 text-[10px] bg-primary text-primary-foreground hover:bg-primary/90">
-                Apply All Recommendations
-              </Button>
+              <button onClick={applyRecs} style={{ alignSelf: "flex-start", fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: BG, background: IVORY, border: `0.5px solid ${IVORY}`, padding: "0.35rem 0.85rem", cursor: "pointer" }}>
+                Apply All
+              </button>
             </div>
           ) : (
-            <p className="text-[11px] text-muted-foreground">Fill in your offering above and click "Get AI Recs" to get subreddit and keyword suggestions.</p>
+            <p style={{ fontSize: "0.75rem", color: MUTED }}>Fill in your offering above and click "Get AI Recs" to get suggestions.</p>
           )}
         </div>
 
-        <div className="space-y-2">
-          <Label className="text-xs text-muted-foreground">Target subreddits</Label>
-          <div className="flex gap-2">
-            <div className="relative flex-1">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">r/</span>
-              <Input
-                value={subInput}
-                onChange={(e) => setSubInput(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && addSub()}
-                placeholder="SaaS"
-                className="pl-7 bg-muted/40 border-border text-sm"
-              />
+        {/* Subreddits */}
+        <div>
+          <label style={labelStyle}>Target Subreddits</label>
+          <div style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem" }}>
+            <div style={{ position: "relative", flex: 1 }}>
+              <span style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)", color: MUTED, fontSize: "0.82rem" }}>r/</span>
+              <input value={subInput} onChange={(e) => setSubInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && addSub()} placeholder="SaaS" style={{ ...inputStyle, paddingLeft: "1.8rem" }} />
             </div>
-            <Button size="sm" variant="outline" onClick={addSub} className="border-border shrink-0">Add</Button>
+            <button onClick={addSub} style={{ padding: "0.6rem 1rem", background: "transparent", border: `0.5px solid ${BORDER}`, color: MUTED, fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.1em", cursor: "pointer", flexShrink: 0 }}>Add</button>
           </div>
           {subreddits.length > 0 && (
-            <div className="flex flex-wrap gap-1.5">
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem" }}>
               {subreddits.map((s) => (
-                <span key={s} className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded bg-muted/60 border border-border text-foreground">
-                  r/{s}
-                  <button onClick={() => setSubreddits(subreddits.filter((x) => x !== s))} className="text-muted-foreground hover:text-red-400">
-                    <X className="w-2.5 h-2.5" />
-                  </button>
+                <span key={s} style={tagStyle}>r/{s}
+                  <button onClick={() => setSubreddits(subreddits.filter((x) => x !== s))} style={{ background: "none", border: "none", color: MUTED, cursor: "pointer", padding: 0, display: "flex" }}><X size={9} /></button>
                 </span>
               ))}
             </div>
           )}
         </div>
 
-        <div className="space-y-2">
-          <Label className="text-xs text-muted-foreground">Keywords to monitor</Label>
-          <div className="flex gap-2">
-            <Input
-              value={kwInput}
-              onChange={(e) => setKwInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && addKw()}
-              placeholder="struggling with churn, need analytics tool..."
-              className="flex-1 bg-muted/40 border-border text-sm"
-            />
-            <Button size="sm" variant="outline" onClick={addKw} className="border-border shrink-0">Add</Button>
+        {/* Keywords */}
+        <div>
+          <label style={labelStyle}>Keywords to Monitor</label>
+          <div style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem" }}>
+            <input value={kwInput} onChange={(e) => setKwInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && addKw()} placeholder="struggling with churn, need analytics tool..." style={{ ...inputStyle, flex: 1 }} />
+            <button onClick={addKw} style={{ padding: "0.6rem 1rem", background: "transparent", border: `0.5px solid ${BORDER}`, color: MUTED, fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.1em", cursor: "pointer", flexShrink: 0 }}>Add</button>
           </div>
           {keywords.length > 0 && (
-            <div className="flex flex-wrap gap-1.5">
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem" }}>
               {keywords.map((k) => (
-                <span key={k} className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded bg-muted/60 border border-border text-foreground">
-                  {k}
-                  <button onClick={() => setKeywords(keywords.filter((x) => x !== k))} className="text-muted-foreground hover:text-red-400">
-                    <X className="w-2.5 h-2.5" />
-                  </button>
+                <span key={k} style={tagStyle}>{k}
+                  <button onClick={() => setKeywords(keywords.filter((x) => x !== k))} style={{ background: "none", border: "none", color: MUTED, cursor: "pointer", padding: 0, display: "flex" }}><X size={9} /></button>
                 </span>
               ))}
             </div>
           )}
         </div>
 
-        <div className="space-y-1.5">
-          <Label className="text-xs text-muted-foreground">AI DM tone/style instructions (optional)</Label>
-          <Input
-            value={aiInstructions}
-            onChange={(e) => setAiInstructions(e.target.value)}
-            placeholder="e.g. Be casual and friendly, mention free trial, avoid technical jargon"
-            className="bg-muted/40 border-border text-sm"
-          />
+        {/* AI instructions */}
+        <div>
+          <label style={labelStyle}>AI DM Tone/Style Instructions (optional)</label>
+          <input value={aiInstructions} onChange={(e) => setAiInstructions(e.target.value)} placeholder="e.g. Be casual and friendly, mention free trial, avoid technical jargon" style={inputStyle} />
         </div>
 
-        <div className="space-y-2">
-          <Label className="text-xs text-muted-foreground">DM review mode</Label>
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              onClick={() => setReviewMode("review_first")}
-              className={`p-3 rounded-lg border text-left transition-all ${
-                reviewMode === "review_first"
-                  ? "bg-primary/10 border-primary/40 text-foreground"
-                  : "bg-muted/20 border-border text-muted-foreground hover:border-border/80"
-              }`}
-            >
-              <div className="flex items-center gap-2 mb-1">
-                <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
-                <p className="text-xs font-semibold">Review First</p>
-              </div>
-              <p className="text-[10px] text-muted-foreground">You approve each DM before it's sent</p>
-            </button>
-            <button
-              onClick={() => setReviewMode("auto_send")}
-              className={`p-3 rounded-lg border text-left transition-all ${
-                reviewMode === "auto_send"
-                  ? "bg-primary/10 border-primary/40 text-foreground"
-                  : "bg-muted/20 border-border text-muted-foreground hover:border-border/80"
-              }`}
-            >
-              <div className="flex items-center gap-2 mb-1">
-                <Zap className="w-3.5 h-3.5 text-amber-400" />
-                <p className="text-xs font-semibold">Auto-Send</p>
-              </div>
-              <p className="text-[10px] text-muted-foreground">AI drafts and queues DMs automatically</p>
-            </button>
+        {/* Review mode */}
+        <div>
+          <label style={labelStyle}>DM Review Mode</label>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.5rem" }}>
+            {(["review_first", "auto_send"] as const).map((mode) => (
+              <button
+                key={mode}
+                onClick={() => setReviewMode(mode)}
+                style={{ padding: "0.85rem 1rem", background: reviewMode === mode ? "oklch(0.88 0.025 85 / 0.06)" : "transparent", border: `0.5px solid ${reviewMode === mode ? "oklch(0.88 0.025 85 / 0.4)" : BORDER}`, textAlign: "left", cursor: "pointer", transition: "all 0.15s" }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.25rem" }}>
+                  {mode === "review_first" ? <CheckCircle2 size={12} color={IVORY} /> : <Zap size={12} color={AMBER} />}
+                  <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: FOREGROUND }}>{mode === "review_first" ? "Review First" : "Auto-Send"}</p>
+                </div>
+                <p style={{ fontSize: "0.72rem", color: MUTED, lineHeight: 1.4 }}>{mode === "review_first" ? "You approve each DM before it's sent" : "AI drafts and queues DMs automatically"}</p>
+              </button>
+            ))}
           </div>
         </div>
 
-        <div className="flex gap-2 pt-1">
-          <Button onClick={handleCreate} disabled={createCampaign.isPending} className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
-            {createCampaign.isPending ? <><Loader2 className="w-4 h-4 animate-spin" />Creating...</> : <><Target className="w-4 h-4" />Create Campaign</>}
-          </Button>
-          <Button variant="outline" onClick={onCancel} className="border-border">Cancel</Button>
+        {/* Actions */}
+        <div style={{ display: "flex", gap: "0.75rem" }}>
+          <button
+            onClick={handleCreate}
+            disabled={createCampaign.isPending}
+            style={{ padding: "0.65rem 1.5rem", background: createCampaign.isPending ? SURFACE_RAISED : IVORY, border: `0.5px solid ${createCampaign.isPending ? BORDER : IVORY}`, color: createCampaign.isPending ? MUTED : BG, fontFamily: FONT_MONO, fontSize: "0.62rem", letterSpacing: "0.18em", textTransform: "uppercase", cursor: createCampaign.isPending ? "not-allowed" : "pointer", display: "flex", alignItems: "center", gap: "0.4rem" }}
+          >
+            {createCampaign.isPending ? <><Loader2 size={11} style={{ animation: "spin 1s linear infinite" }} /> Creating...</> : <><Target size={11} /> Create Campaign</>}
+          </button>
+          <button onClick={onCancel} style={{ padding: "0.65rem 1.25rem", background: "transparent", border: `0.5px solid ${BORDER}`, color: MUTED, fontFamily: FONT_MONO, fontSize: "0.62rem", letterSpacing: "0.18em", textTransform: "uppercase", cursor: "pointer" }}>
+            Cancel
+          </button>
         </div>
-      </CardContent>
-    </Card>
-  );
-}
-
-// ─── Animated step progress indicator ───────────────────────────────────────
-function ProgressSteps({ steps, currentStep }: { steps: string[]; currentStep: number }) {
-  return (
-    <div className="flex items-center gap-0.5 py-0.5 overflow-x-auto">
-      {steps.map((label, i) => {
-        const done = i < currentStep;
-        const active = i === currentStep;
-        return (
-          <div key={i} className="flex items-center gap-0.5">
-            <div className={`flex flex-col items-center gap-0.5 min-w-[36px] transition-all duration-300 ${
-              done ? "text-primary" : active ? "text-foreground" : "text-muted-foreground/40"
-            }`}>
-              {done ? (
-                <CheckCircle2 className="w-3 h-3 text-primary shrink-0" />
-              ) : active ? (
-                <Loader2 className="w-3 h-3 animate-spin shrink-0" />
-              ) : (
-                <div className="w-3 h-3 rounded-full border border-muted-foreground/30 shrink-0" />
-              )}
-              <span className={`text-[9px] leading-tight text-center ${active ? "font-medium" : ""}`}>{label}</span>
-            </div>
-            {i < steps.length - 1 && (
-              <div className={`w-2 h-px mb-3 transition-all duration-500 shrink-0 ${
-                done ? "bg-primary" : "bg-border"
-              }`} />
-            )}
-          </div>
-        );
-      })}
+      </div>
     </div>
   );
 }
 
+// ─── Lead card ────────────────────────────────────────────────────────────────
 function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue, onUpdateDraft, onRoast, onGenerateComment, onSendComment, onMarkContacted, onReDraftDm, isChaining }: {
-  lead: Lead;
-  onGenerateDm: (id: number) => void;
-  onSendDm: (id: number) => void;
-  onSkip: (id: number) => void;
-  onQueue: (id: number) => void;
-  onCancelQueue: (id: number) => void;
-  onUpdateDraft: (id: number, draft: string) => void;
-  onRoast: (id: number) => void;
-  onGenerateComment: (id: number) => void;
-  onSendComment: (id: number) => void;
-  onMarkContacted: (id: number) => void;
-  onReDraftDm: (id: number) => void;
-  isChaining: boolean;
+  lead: Lead; onGenerateDm: (id: number) => void; onSendDm: (id: number) => void;
+  onSkip: (id: number) => void; onQueue: (id: number) => void; onCancelQueue: (id: number) => void;
+  onUpdateDraft: (id: number, draft: string) => void; onRoast: (id: number) => void;
+  onGenerateComment: (id: number) => void; onSendComment: (id: number) => void;
+  onMarkContacted: (id: number) => void; onReDraftDm: (id: number) => void; isChaining: boolean;
 }) {
   const [expandedDm, setExpandedDm] = useState(false);
   const [expandedComment, setExpandedComment] = useState(false);
@@ -498,7 +389,6 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
   const dmTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const commentTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Cleanup timers on unmount
   useEffect(() => () => {
     if (roastTimerRef.current) clearInterval(roastTimerRef.current);
     if (dmTimerRef.current) clearInterval(dmTimerRef.current);
@@ -506,33 +396,16 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
   }, []);
 
   const startRoastProgress = () => {
-    setRoastStep(0);
-    let step = 0;
-    roastTimerRef.current = setInterval(() => {
-      step++;
-      if (step >= 2) { clearInterval(roastTimerRef.current!); roastTimerRef.current = null; }
-      setRoastStep(step);
-    }, 2200);
+    setRoastStep(0); let step = 0;
+    roastTimerRef.current = setInterval(() => { step++; if (step >= 2) { clearInterval(roastTimerRef.current!); roastTimerRef.current = null; } setRoastStep(step); }, 2200);
   };
-
   const startDmProgress = () => {
-    setDmStep(0);
-    let step = 0;
-    dmTimerRef.current = setInterval(() => {
-      step++;
-      if (step >= 2) { clearInterval(dmTimerRef.current!); dmTimerRef.current = null; }
-      setDmStep(step);
-    }, 2500);
+    setDmStep(0); let step = 0;
+    dmTimerRef.current = setInterval(() => { step++; if (step >= 2) { clearInterval(dmTimerRef.current!); dmTimerRef.current = null; } setDmStep(step); }, 2500);
   };
-
   const startCommentProgress = () => {
-    setCommentStep(0);
-    let step = 0;
-    commentTimerRef.current = setInterval(() => {
-      step++;
-      if (step >= 2) { clearInterval(commentTimerRef.current!); commentTimerRef.current = null; }
-      setCommentStep(step);
-    }, 2200);
+    setCommentStep(0); let step = 0;
+    commentTimerRef.current = setInterval(() => { step++; if (step >= 2) { clearInterval(commentTimerRef.current!); commentTimerRef.current = null; } setCommentStep(step); }, 2200);
   };
 
   const isRoasted = lead.fitScore != null;
@@ -546,154 +419,97 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
     });
   };
 
+  const monoBtn: React.CSSProperties = { fontFamily: FONT_MONO, fontSize: "0.58rem", letterSpacing: "0.12em", textTransform: "uppercase", background: "transparent", border: `0.5px solid ${BORDER}`, color: MUTED, padding: "0.3rem 0.65rem", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "0.3rem" };
+  const primaryBtn: React.CSSProperties = { ...monoBtn, background: IVORY, border: `0.5px solid ${IVORY}`, color: BG };
+
   return (
-    <Card className={`bg-card border-border transition-all ${lead.status === "skipped" ? "opacity-40" : ""}`}>
-      <CardContent className="p-4 space-y-3">
-        {/* ── Header row ── */}
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 flex-wrap mb-1.5">
-            <span className="text-xs font-medium text-muted-foreground">r/{lead.subreddit}</span>
+    <div style={{ border: `0.5px solid ${BORDER}`, background: SURFACE, opacity: lead.status === "skipped" ? 0.4 : 1, transition: "opacity 0.2s" }}>
+      <div style={{ padding: "1rem 1.25rem" }}>
+        {/* Header */}
+        <div style={{ marginBottom: "0.75rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", flexWrap: "wrap", marginBottom: "0.5rem" }}>
+            <span style={{ fontFamily: FONT_MONO, fontSize: "0.62rem", color: MUTED }}>r/{lead.subreddit}</span>
             <MatchBadge score={lead.matchScore} />
             {lead.intentType && <IntentBadge intent={lead.intentType} />}
-            {lead.status === "queued" && (
-              <span className="text-[10px] px-1.5 py-0.5 rounded border bg-blue-400/10 text-blue-400 border-blue-400/20">Queued</span>
-            )}
-            {lead.status === "sent" && (
-              <span className="text-[10px] px-1.5 py-0.5 rounded border bg-primary/10 text-primary border-primary/20">Sent</span>
-            )}
+            {lead.status === "queued" && <span style={{ fontFamily: FONT_MONO, fontSize: "0.52rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "oklch(0.72 0.12 220)", border: `0.5px solid oklch(0.72 0.12 220 / 0.35)`, padding: "0.1rem 0.35rem" }}>Queued</span>}
+            {lead.status === "sent" && <span style={{ fontFamily: FONT_MONO, fontSize: "0.52rem", letterSpacing: "0.1em", textTransform: "uppercase", color: IVORY, border: `0.5px solid oklch(0.88 0.025 85 / 0.35)`, padding: "0.1rem 0.35rem" }}>Sent</span>}
             {lead.matchedKeywords.length > 0 && (
-              <div className="flex gap-1">
+              <div style={{ display: "flex", gap: "0.25rem" }}>
                 {lead.matchedKeywords.slice(0, 2).map((k) => (
-                  <span key={k} className="text-[9px] px-1 py-0.5 rounded bg-muted/60 text-muted-foreground border border-border">{k}</span>
+                  <span key={k} style={{ fontFamily: FONT_MONO, fontSize: "0.52rem", color: MUTED, border: `0.5px solid ${BORDER}`, padding: "0.1rem 0.3rem" }}>{k}</span>
                 ))}
-                {lead.matchedKeywords.length > 2 && (
-                  <span className="text-[9px] text-muted-foreground">+{lead.matchedKeywords.length - 2}</span>
-                )}
+                {lead.matchedKeywords.length > 2 && <span style={{ fontFamily: FONT_MONO, fontSize: "0.52rem", color: MUTED }}>+{lead.matchedKeywords.length - 2}</span>}
               </div>
             )}
           </div>
 
-          <a
-            href={lead.redditPostUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm font-medium text-foreground hover:text-primary transition-colors line-clamp-2 flex items-start gap-1"
-          >
+          <a href={lead.redditPostUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.85rem", color: FOREGROUND, textDecoration: "none", display: "flex", alignItems: "flex-start", gap: "0.35rem", lineHeight: 1.4, marginBottom: "0.25rem" }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = IVORY)} onMouseLeave={(e) => (e.currentTarget.style.color = FOREGROUND)}>
             {lead.postTitle}
-            <ExternalLink className="w-3 h-3 shrink-0 mt-0.5 text-muted-foreground" />
+            <ExternalLink size={11} color={MUTED} style={{ flexShrink: 0, marginTop: "2px" }} />
           </a>
 
-          <p className="text-xs text-muted-foreground mt-1">
+          <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", color: MUTED }}>
             u/{lead.authorUsername} · {new Date(lead.discoveredAt).toLocaleDateString()}
           </p>
 
-          {/* ── Chain progress bar — sits just below username/date when chaining ── */}
-          {isChaining && (
-            <div className="mt-2">
-              <ProgressSteps
-                steps={["Reading", "Scoring", "Crafting DM", "DM ready", "Comment", "Done"]}
-                currentStep={
-                  roastStep !== null ? roastStep
-                  : dmStep !== null ? dmStep + 2
-                  : (commentStep ?? 0) + 4
-                }
-              />
-            </div>
-          )}
+          {isChaining && <div style={{ marginTop: "0.75rem" }}><ProgressSteps steps={["Reading", "Scoring", "Crafting DM", "DM ready", "Comment", "Done"]} currentStep={roastStep !== null ? roastStep : dmStep !== null ? dmStep + 2 : (commentStep ?? 0) + 4} /></div>}
         </div>
 
-        {/* ── Roast scores (Fit + Urgency only) ── */}
+        {/* Roast scores */}
         {isRoasted && (
-          <div className="grid grid-cols-2 gap-3 p-3 rounded-lg bg-muted/20 border border-border">
-            <ScoreBar label="Fit" value={lead.fitScore!} color="bg-primary" />
-            <ScoreBar label="Urgency" value={lead.urgencyScore!} color="bg-orange-400" />
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", padding: "0.85rem 1rem", border: `0.5px solid ${BORDER}`, background: SURFACE_RAISED, marginBottom: "0.75rem" }}>
+            <ScoreBar label="Fit" value={lead.fitScore!} color={IVORY} />
+            <ScoreBar label="Urgency" value={lead.urgencyScore!} color={AMBER} />
           </div>
         )}
 
-        {/* ── Roast insight ── */}
+        {/* Roast insight */}
         {lead.roastInsight && (
-          <div className="flex items-start gap-2 p-2.5 rounded-lg bg-primary/5 border border-primary/15">
-            <Sparkles className="w-3 h-3 text-primary shrink-0 mt-0.5" />
-            <p className="text-[11px] text-foreground/80 leading-relaxed">{lead.roastInsight}</p>
+          <div style={{ display: "flex", alignItems: "flex-start", gap: "0.5rem", padding: "0.75rem 0.85rem", border: `0.5px solid oklch(0.88 0.025 85 / 0.2)`, background: "oklch(0.88 0.025 85 / 0.03)", marginBottom: "0.75rem" }}>
+            <Sparkles size={11} color={IVORY} style={{ flexShrink: 0, marginTop: "2px" }} />
+            <p style={{ fontSize: "0.75rem", color: FOREGROUND, lineHeight: 1.6, opacity: 0.85 }}>{lead.roastInsight}</p>
           </div>
         )}
 
-        {/* ── DM draft loading skeleton ── */}
+        {/* DM draft loading */}
         {!lead.dmDraft && dmStep !== null && (
-          <div className="rounded-lg border border-border bg-muted/20 px-3 py-2 flex items-center gap-2 text-[11px] text-muted-foreground">
-            <Loader2 className="w-3 h-3 animate-spin text-primary shrink-0" />
-            Loading DM draft...
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.65rem 0.85rem", border: `0.5px solid ${BORDER}`, background: SURFACE_RAISED, marginBottom: "0.75rem" }}>
+            <Loader2 size={11} color={IVORY} style={{ animation: "spin 1s linear infinite", flexShrink: 0 }} />
+            <span style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", color: MUTED }}>Loading DM draft...</span>
           </div>
         )}
 
-        {/* ── DM draft — show when DM ready step reached (dmStep >= 1) or comment phase started ── */}
+        {/* DM draft */}
         {lead.dmDraft && (!isChaining || (dmStep !== null && dmStep >= 1) || commentStep !== null) && (
-          <div className="rounded-lg border border-border bg-muted/20 overflow-hidden">
-            <div className="flex items-center justify-between px-3 py-2 border-b border-border/50">
-              <button
-                onClick={() => setExpandedDm(!expandedDm)}
-                className="text-[11px] text-primary hover:text-primary/80 flex items-center gap-1"
-              >
-                <Bot className="w-3 h-3" />
-                {expandedDm ? "Hide DM draft" : "View DM draft"}
+          <div style={{ border: `0.5px solid ${BORDER}`, background: SURFACE_RAISED, marginBottom: "0.75rem", overflow: "hidden" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0.6rem 0.85rem", borderBottom: `0.5px solid ${BORDER}` }}>
+              <button onClick={() => setExpandedDm(!expandedDm)} style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", letterSpacing: "0.1em", color: IVORY, background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.3rem" }}>
+                <Bot size={11} /> {expandedDm ? "Hide DM draft" : "View DM draft"}
               </button>
-              <div className="flex flex-col items-end gap-1 sm:flex-row sm:items-center sm:gap-1.5">
-                {/* Re-draft DM */}
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => { startDmProgress(); onReDraftDm(lead.id); }}
-                  disabled={isChaining}
-                  className="h-6 px-2 text-[10px] border-border text-muted-foreground hover:text-primary hover:border-primary/40 gap-1"
-                  title="Regenerate DM draft"
-                >
-                  <RefreshCw className="w-2.5 h-2.5" />
-                  Re-draft
-                </Button>
-                {/* Copy & Open DM — inline in DM section */}
-                <Button
-                  size="sm"
-                  onClick={() => {
-                    navigator.clipboard.writeText(lead.dmDraft!);
-                    window.open(`https://www.reddit.com/user/${lead.authorUsername}`, "_blank");
-                    toast.success("DM copied! Opening Reddit profile to send manually.");
-                  }}
-                  className="h-6 px-2 text-[10px] bg-primary text-primary-foreground hover:bg-primary/90 gap-1"
-                >
-                  <Clipboard className="w-3 h-3" />
-                  Copy & Open
-                </Button>
+              <div style={{ display: "flex", gap: "0.4rem" }}>
+                <button onClick={() => { startDmProgress(); onReDraftDm(lead.id); }} disabled={isChaining} style={{ ...monoBtn, fontSize: "0.55rem" }}>
+                  <RefreshCw size={9} /> Re-draft
+                </button>
+                <button onClick={() => { navigator.clipboard.writeText(lead.dmDraft!); window.open(`https://www.reddit.com/user/${lead.authorUsername}`, "_blank"); toast.success("DM copied! Opening Reddit profile to send manually."); }} style={primaryBtn}>
+                  <Clipboard size={9} /> Copy & Open
+                </button>
               </div>
             </div>
             {expandedDm && (
-              <div className="p-3 space-y-2">
+              <div style={{ padding: "0.85rem" }}>
                 {editingDraft ? (
-                  <div className="space-y-2">
-                    <Textarea
-                      value={draftText}
-                      onChange={(e) => setDraftText(e.target.value)}
-                      className="min-h-[100px] resize-none bg-muted/40 border-border text-xs"
-                    />
-                    <div className="flex gap-2">
-                      <Button
-                        size="sm"
-                        onClick={() => { onUpdateDraft(lead.id, draftText); setEditingDraft(false); }}
-                        className="h-6 px-2 text-[10px] bg-primary text-primary-foreground"
-                      >
-                        Save
-                      </Button>
-                      <Button size="sm" variant="ghost" onClick={() => setEditingDraft(false)} className="h-6 px-2 text-[10px]">Cancel</Button>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                    <textarea value={draftText} onChange={(e) => setDraftText(e.target.value)} style={{ ...inputStyle, minHeight: "100px", resize: "vertical", lineHeight: 1.6 }} />
+                    <div style={{ display: "flex", gap: "0.4rem" }}>
+                      <button onClick={() => { onUpdateDraft(lead.id, draftText); setEditingDraft(false); }} style={primaryBtn}>Save</button>
+                      <button onClick={() => setEditingDraft(false)} style={monoBtn}>Cancel</button>
                     </div>
                   </div>
                 ) : (
-                  <div className="relative group">
-                    <p className="text-xs text-foreground/80 leading-relaxed whitespace-pre-wrap">{lead.dmDraft}</p>
-                    <button
-                      onClick={() => { setDraftText(lead.dmDraft ?? ""); setEditingDraft(true); }}
-                      className="absolute top-0 right-0 text-[10px] text-muted-foreground hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      Edit
-                    </button>
+                  <div style={{ position: "relative" }} className="group">
+                    <p style={{ fontSize: "0.78rem", color: FOREGROUND, lineHeight: 1.7, whiteSpace: "pre-wrap", opacity: 0.85 }}>{lead.dmDraft}</p>
+                    <button onClick={() => { setDraftText(lead.dmDraft ?? ""); setEditingDraft(true); }} style={{ ...monoBtn, position: "absolute", top: 0, right: 0, fontSize: "0.52rem", opacity: 0 }} className="group-hover:opacity-100">Edit</button>
                   </div>
                 )}
               </div>
@@ -701,198 +517,114 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
           </div>
         )}
 
-        {/* ── Comment draft loading skeleton — only while comment phase is in progress ── */}
+        {/* Comment draft loading */}
         {!(lead as any).commentDraft && commentStep !== null && commentStep < 2 && (
-          <div className="rounded-lg border border-border bg-muted/20 px-3 py-2 flex items-center gap-2 text-[11px] text-muted-foreground">
-            <Loader2 className="w-3 h-3 animate-spin text-primary shrink-0" />
-            Loading comment draft...
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.65rem 0.85rem", border: `0.5px solid ${BORDER}`, background: SURFACE_RAISED, marginBottom: "0.75rem" }}>
+            <Loader2 size={11} color={IVORY} style={{ animation: "spin 1s linear infinite", flexShrink: 0 }} />
+            <span style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", color: MUTED }}>Loading comment draft...</span>
           </div>
         )}
 
-        {/* ── Comment draft — show only when Done step reached (commentStep >= 2) or chain complete ── */}
+        {/* Comment draft */}
         {(lead as any).commentDraft && (!isChaining || (commentStep !== null && commentStep >= 2)) && (
-          <div className="rounded-lg border border-border bg-muted/20 overflow-hidden">
-            <div className="flex items-center justify-between px-3 py-2 border-b border-border/50">
-              <button
-                onClick={() => setExpandedComment(!expandedComment)}
-                className="text-[11px] text-primary hover:text-primary/80 flex items-center gap-1"
-              >
-                <MessageSquare className="w-3 h-3" />
-                {expandedComment ? "Hide comment draft" : "View comment draft"}
+          <div style={{ border: `0.5px solid ${BORDER}`, background: SURFACE_RAISED, marginBottom: "0.75rem", overflow: "hidden" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0.6rem 0.85rem", borderBottom: `0.5px solid ${BORDER}` }}>
+              <button onClick={() => setExpandedComment(!expandedComment)} style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", letterSpacing: "0.1em", color: IVORY, background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.3rem" }}>
+                <MessageSquare size={11} /> {expandedComment ? "Hide comment draft" : "View comment draft"}
               </button>
-              <div className="flex flex-col items-end gap-1 sm:flex-row sm:items-center sm:gap-1.5">
-                {/* Re-draft Comment */}
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => { startCommentProgress(); onGenerateComment(lead.id); }}
-                  disabled={isChaining}
-                  className="h-6 px-2 text-[10px] border-border text-muted-foreground hover:text-primary hover:border-primary/40 gap-1"
-                  title="Regenerate comment draft"
-                >
-                  <RefreshCw className="w-2.5 h-2.5" />
-                  Re-draft
-                </Button>
-                {/* Copy & Open Comment — inline in comment section */}
-                {!lead.commentSentAt ? (
-                  <Button
-                    size="sm"
-                    onClick={() => {
-                      navigator.clipboard.writeText((lead as any).commentDraft!);
-                      window.open(lead.redditPostUrl, "_blank");
-                      toast.success("Comment copied! Opening post to paste manually.");
-                    }}
-                    variant="outline"
-                    className="h-6 px-2 text-[10px] border-primary/40 text-primary hover:bg-primary/10 gap-1"
-                  >
-                    <Clipboard className="w-3 h-3" />
-                    Copy & Open
-                  </Button>
+              <div style={{ display: "flex", gap: "0.4rem" }}>
+                <button onClick={() => { startCommentProgress(); onGenerateComment(lead.id); }} disabled={isChaining} style={{ ...monoBtn, fontSize: "0.55rem" }}>
+                  <RefreshCw size={9} /> Re-draft
+                </button>
+                {!(lead as any).commentSentAt ? (
+                  <button onClick={() => { navigator.clipboard.writeText((lead as any).commentDraft!); window.open(lead.redditPostUrl, "_blank"); toast.success("Comment copied! Opening post to paste manually."); }} style={monoBtn}>
+                    <Clipboard size={9} /> Copy & Open
+                  </button>
                 ) : (
-                  <span className="text-[10px] text-primary flex items-center gap-1">
-                    <CheckCircle2 className="w-3 h-3" /> Sent
+                  <span style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", color: IVORY, display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
+                    <CheckCircle2 size={10} /> Sent
                   </span>
                 )}
               </div>
             </div>
             {expandedComment && (
-              <div className="p-3">
-                <p className="text-xs text-foreground/80 leading-relaxed whitespace-pre-wrap">{(lead as any).commentDraft}</p>
+              <div style={{ padding: "0.85rem" }}>
+                <p style={{ fontSize: "0.78rem", color: FOREGROUND, lineHeight: 1.7, whiteSpace: "pre-wrap", opacity: 0.85 }}>{(lead as any).commentDraft}</p>
               </div>
             )}
           </div>
         )}
 
-        {/* ── Action row ── */}
-        <div className="flex items-center gap-2 flex-wrap pt-1 border-t border-border/50">
-          {/* Analyze & Draft — combined single button when neither is done yet */}
+        {/* Action row */}
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap", paddingTop: "0.75rem", borderTop: `0.5px solid ${BORDER}` }}>
+          {/* Analyze & Draft — combined */}
           {!isRoasted && isActionable && !lead.dmDraft && !isChaining && (
             (roastStep !== null || dmStep !== null || commentStep !== null) ? (
-              <ProgressSteps
-                steps={["Reading", "Scoring", "Crafting DM", "DM ready", "Comment", "Done"]}
-                currentStep={
-                  roastStep !== null ? roastStep
-                  : dmStep !== null ? dmStep + 2
-                  : (commentStep ?? 0) + 4
-                }
-              />
+              <ProgressSteps steps={["Reading", "Scoring", "Crafting DM", "DM ready", "Comment", "Done"]} currentStep={roastStep !== null ? roastStep : dmStep !== null ? dmStep + 2 : (commentStep ?? 0) + 4} />
             ) : (
-              <Button
-                size="sm"
-                onClick={() => {
-                  startRoastProgress();
-                  onRoast(lead.id);
-                }}
-                className="h-7 px-2.5 text-[10px] bg-primary text-primary-foreground hover:bg-primary/90 gap-1"
-              >
-                <Sparkles className="w-3 h-3" />
-                Analyze & Draft
-              </Button>
+              <button onClick={() => { startRoastProgress(); onRoast(lead.id); }} style={primaryBtn}>
+                <Sparkles size={10} /> Analyze & Draft
+              </button>
             )
           )}
 
-          {/* Full chain in progress — progress bar is now pinned at top of card */}
-
-          {/* Analyze only — if DM already exists */}
+          {/* Analyze only */}
           {!isRoasted && isActionable && lead.dmDraft && (
             roastStep !== null ? (
-              <ProgressSteps
-                steps={["Reading", "Scoring", "Done"]}
-                currentStep={roastStep}
-              />
+              <ProgressSteps steps={["Reading", "Scoring", "Done"]} currentStep={roastStep} />
             ) : (
-              <Button
-                size="sm"
-                onClick={() => { startRoastProgress(); onRoast(lead.id); }}
-                variant="outline"
-                className="h-7 px-2.5 text-[10px] border-border gap-1"
-              >
-                <TrendingUp className="w-3 h-3" />
-                Analyze Lead
-              </Button>
+              <button onClick={() => { startRoastProgress(); onRoast(lead.id); }} style={monoBtn}>
+                <TrendingUp size={10} /> Analyze Lead
+              </button>
             )
           )}
 
-          {/* Draft DM only — if already roasted but no DM yet */}
+          {/* Draft DM only */}
           {isRoasted && isActionable && !lead.dmDraft && !isChaining && (
             dmStep !== null ? (
-              <ProgressSteps
-                steps={["Reading", "Crafting DM", "Done"]}
-                currentStep={dmStep}
-              />
+              <ProgressSteps steps={["Reading", "Crafting DM", "Done"]} currentStep={dmStep} />
             ) : (
-              <Button
-                size="sm"
-                onClick={() => { startDmProgress(); onGenerateDm(lead.id); }}
-                variant="outline"
-                className="h-7 px-2.5 text-[10px] border-border gap-1"
-              >
-                <Sparkles className="w-3 h-3" />
-                Draft DM
-              </Button>
+              <button onClick={() => { startDmProgress(); onGenerateDm(lead.id); }} style={monoBtn}>
+                <Sparkles size={10} /> Draft DM
+              </button>
             )
           )}
 
-          {/* Draft Comment standalone — only show when not chaining and no DM draft yet (standalone comment progress) */}
-          {isActionable && !isChaining && !lead.dmDraft && (
-            (lead as any).commentDraft ? null : commentStep !== null ? (
-              <ProgressSteps
-                steps={["Reading", "Commenting", "Done"]}
-                currentStep={commentStep}
-              />
-            ) : null
-          )}
-
-          {/* Mark as Contacted */}
+          {/* Mark Contacted */}
           {isActionable && lead.pipelineStage !== "replied" && (
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => onMarkContacted(lead.id)}
-              className="h-7 px-2.5 text-[10px] border-green-500/30 text-green-400 hover:bg-green-500/10 gap-1"
-            >
-              <CheckCircle2 className="w-3 h-3" />
-              Mark Contacted
-            </Button>
+            <button onClick={() => onMarkContacted(lead.id)} style={{ ...monoBtn, color: "oklch(0.72 0.15 145)", borderColor: "oklch(0.72 0.15 145 / 0.35)" }}>
+              <CheckCircle2 size={10} /> Mark Contacted
+            </button>
           )}
           {lead.pipelineStage === "replied" && (
-            <span className="text-[10px] text-green-400 flex items-center gap-1">
-              <CheckCircle2 className="w-3 h-3" /> Contacted
+            <span style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", color: "oklch(0.72 0.15 145)", display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
+              <CheckCircle2 size={10} /> Contacted
             </span>
           )}
 
           {/* Skip */}
           {isActionable && lead.pipelineStage !== "replied" && (
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => onSkip(lead.id)}
-              className="h-7 px-2 text-[10px] text-muted-foreground hover:text-foreground gap-1"
-            >
-              <SkipForward className="w-3 h-3" />
-              Skip
-            </Button>
+            <button onClick={() => onSkip(lead.id)} style={{ ...monoBtn, borderColor: "transparent" }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = FOREGROUND)} onMouseLeave={(e) => (e.currentTarget.style.color = MUTED)}>
+              <SkipForward size={10} /> Skip
+            </button>
           )}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
 
+// ─── Campaign detail ──────────────────────────────────────────────────────────
 function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () => void }) {
   const utils = trpc.useUtils();
   const [activeFilter, setActiveFilter] = useState<"all" | "new" | "dm_generated" | "queued" | "sent" | "skipped">("all");
-  // Tracks which lead is mid-chain (Analyze → DM → Comment) so each onSuccess knows what to fire next
   const chainLeadIdRef = useRef<number | null>(null);
 
   const { data: leads = [], isLoading: leadsLoading } = trpc.outreach.getLeads.useQuery({ campaignId: campaign.id });
 
   const syncLeads = trpc.outreach.syncLeads.useMutation({
-    onSuccess: (data) => {
-      toast.success(`Found ${data.newLeads} new leads!`);
-      utils.outreach.getLeads.invalidate({ campaignId: campaign.id });
-      utils.outreach.listCampaigns.invalidate();
-    },
+    onSuccess: (data) => { toast.success(`Found ${data.newLeads} new leads!`); utils.outreach.getLeads.invalidate({ campaignId: campaign.id }); utils.outreach.listCampaigns.invalidate(); },
     onError: (err) => toast.error(err.message),
   });
 
@@ -900,81 +632,37 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
     onSuccess: (data, variables) => {
       const isChaining = chainLeadIdRef.current === variables.leadId;
       if (!isChaining) {
-        // Only show toasts when not in chain mode (manual DM generation)
-        if (data.sent) {
-          toast.success("DM sent!");
-        } else if (data.queued) {
-          toast.success("Rate limit reached — DM queued for delivery shortly");
-        } else if (data.reason?.startsWith("send_failed")) {
-          toast.error(`Draft saved, but send failed: ${data.reason.replace("send_failed: ", "")}`);
-        } else {
-          toast.success("DM drafted!");
-        }
+        if (data.sent) toast.success("DM sent!");
+        else if (data.queued) toast.success("Rate limit reached — DM queued for delivery shortly");
+        else if (data.reason?.startsWith("send_failed")) toast.error(`Draft saved, but send failed: ${data.reason.replace("send_failed: ", "")}`);
+        else toast.success("DM drafted!");
       }
-      // Suppress no_reddit_account toast entirely during chain — progress bar shows status
       utils.outreach.getLeads.invalidate({ campaignId: campaign.id });
-      // Auto-chain: if this was triggered by Analyze & Draft, continue to comment generation
-      if (isChaining) {
-        generateComment.mutate({ leadId: variables.leadId });
-        // Keep chainLeadIdRef set so comment generation knows it's in chain
-      }
+      if (isChaining) generateComment.mutate({ leadId: variables.leadId });
     },
     onError: (err) => toast.error(err.message),
   });
 
-  const skipLead = trpc.outreach.skipLead.useMutation({
-    onSuccess: () => utils.outreach.getLeads.invalidate({ campaignId: campaign.id }),
-    onError: (err) => toast.error(err.message),
-  });
-
-  const queueLead = trpc.outreach.queueLead.useMutation({
-    onSuccess: () => {
-      toast.success("Lead queued for sending!");
-      utils.outreach.getLeads.invalidate({ campaignId: campaign.id });
-    },
-    onError: (err) => toast.error(err.message),
-  });
-
-  const updateDraft = trpc.outreach.updateDmDraft.useMutation({
-    onSuccess: () => {
-      toast.success("Draft updated");
-      utils.outreach.getLeads.invalidate({ campaignId: campaign.id });
-    },
-    onError: (err) => toast.error(err.message),
-  });
+  const skipLead = trpc.outreach.skipLead.useMutation({ onSuccess: () => utils.outreach.getLeads.invalidate({ campaignId: campaign.id }), onError: (err) => toast.error(err.message) });
+  const queueLead = trpc.outreach.queueLead.useMutation({ onSuccess: () => { toast.success("Lead queued for sending!"); utils.outreach.getLeads.invalidate({ campaignId: campaign.id }); }, onError: (err) => toast.error(err.message) });
+  const updateDraft = trpc.outreach.updateDmDraft.useMutation({ onSuccess: () => { toast.success("Draft updated"); utils.outreach.getLeads.invalidate({ campaignId: campaign.id }); }, onError: (err) => toast.error(err.message) });
 
   const roastLead = trpc.outreach.roastLead.useMutation({
     onSuccess: (_, variables) => {
       utils.outreach.getLeads.invalidate({ campaignId: campaign.id });
-      // Auto-chain: if this was triggered by Analyze & Draft, continue to DM generation
       const chainId = chainLeadIdRef.current;
-      if (chainId !== null && chainId === variables.leadId) {
-        // Suppress intermediate toast during chain — progress bar shows status
-        generateDm.mutate({ leadId: chainId });
-      } else {
-        toast.success("Lead analyzed!");
-      }
+      if (chainId !== null && chainId === variables.leadId) generateDm.mutate({ leadId: chainId });
+      else toast.success("Lead analyzed!");
     },
     onError: (err) => toast.error(err.message),
   });
 
-  const cancelQueue = trpc.outreach.cancelQueuedLead.useMutation({
-    onSuccess: () => {
-      toast.success("DM removed from queue");
-      utils.outreach.getLeads.invalidate({ campaignId: campaign.id });
-    },
-    onError: (err) => toast.error(err.message),
-  });
+  const cancelQueue = trpc.outreach.cancelQueuedLead.useMutation({ onSuccess: () => { toast.success("DM removed from queue"); utils.outreach.getLeads.invalidate({ campaignId: campaign.id }); }, onError: (err) => toast.error(err.message) });
 
   const generateComment = trpc.outreach.generateComment.useMutation({
     onSuccess: (_, variables) => {
-      // Clear chain ref when comment generation completes
-      if (chainLeadIdRef.current === variables.leadId) {
-        chainLeadIdRef.current = null;
-        toast.success("✅ All done — DM & comment drafted!");
-      } else {
-        toast.success("Comment draft ready!");
-      }
+      if (chainLeadIdRef.current === variables.leadId) { chainLeadIdRef.current = null; toast.success("✅ All done — DM & comment drafted!"); }
+      else toast.success("Comment draft ready!");
       utils.outreach.getLeads.invalidate({ campaignId: campaign.id });
     },
     onError: (err) => toast.error(err.message),
@@ -982,176 +670,111 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
 
   const sendDm = trpc.outreach.sendDm.useMutation({
     onSuccess: (data) => {
-      if (data.sent) {
-        toast.success("DM sent!");
-      } else if (data.queued) {
-        toast.success("Rate limit reached — DM queued for delivery shortly");
-      } else {
-        toast.info("Draft saved");
-      }
+      if (data.sent) toast.success("DM sent!");
+      else if (data.queued) toast.success("Rate limit reached — DM queued for delivery shortly");
+      else toast.info("Draft saved");
       utils.outreach.getLeads.invalidate({ campaignId: campaign.id });
     },
     onError: (err) => toast.error(err.message),
   });
 
-  const sendComment = trpc.outreach.sendComment.useMutation({
-    onSuccess: () => {
-      toast.success("Comment posted to Reddit!");
-      utils.outreach.getLeads.invalidate({ campaignId: campaign.id });
-    },
-    onError: (err) => toast.error(err.message),
-  });
-
-  const markContacted = trpc.outreach.updatePipelineStage.useMutation({
-    onSuccess: () => {
-      toast.success("Lead marked as contacted!");
-      utils.outreach.getLeads.invalidate({ campaignId: campaign.id });
-    },
-    onError: (err) => toast.error(err.message),
-  });
-
-  const updateCampaign = trpc.outreach.updateCampaign.useMutation({
-    onSuccess: () => {
-      toast.success("Campaign updated");
-      utils.outreach.listCampaigns.invalidate();
-    },
-    onError: (err) => toast.error(err.message),
-  });
+  const sendComment = trpc.outreach.sendComment.useMutation({ onSuccess: () => { toast.success("Comment posted to Reddit!"); utils.outreach.getLeads.invalidate({ campaignId: campaign.id }); }, onError: (err) => toast.error(err.message) });
+  const markContacted = trpc.outreach.updatePipelineStage.useMutation({ onSuccess: () => { toast.success("Lead marked as contacted!"); utils.outreach.getLeads.invalidate({ campaignId: campaign.id }); }, onError: (err) => toast.error(err.message) });
+  const updateCampaign = trpc.outreach.updateCampaign.useMutation({ onSuccess: () => { toast.success("Campaign updated"); utils.outreach.listCampaigns.invalidate(); }, onError: (err) => toast.error(err.message) });
 
   const filteredLeads = leads.filter((l) => activeFilter === "all" || l.status === activeFilter);
+  const filterCounts = { all: leads.length, new: leads.filter((l) => l.status === "new").length, dm_generated: leads.filter((l) => l.status === "dm_generated").length, queued: leads.filter((l) => l.status === "queued").length, sent: leads.filter((l) => l.status === "sent").length, skipped: leads.filter((l) => l.status === "skipped").length };
 
-  const filterCounts = {
-    all: leads.length,
-    new: leads.filter((l) => l.status === "new").length,
-    dm_generated: leads.filter((l) => l.status === "dm_generated").length,
-    queued: leads.filter((l) => l.status === "queued").length,
-    sent: leads.filter((l) => l.status === "sent").length,
-    skipped: leads.filter((l) => l.status === "skipped").length,
-  };
+  const monoBtn: React.CSSProperties = { fontFamily: FONT_MONO, fontSize: "0.58rem", letterSpacing: "0.12em", textTransform: "uppercase", background: "transparent", border: `0.5px solid ${BORDER}`, color: MUTED, padding: "0.4rem 0.85rem", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "0.3rem" };
 
   return (
-    <div className="space-y-5">
-      <div className="flex items-center gap-3">
-        <button onClick={onBack} className="text-muted-foreground hover:text-foreground transition-colors">
-          <ArrowLeft className="w-4 h-4" />
+    <div>
+      {/* Back + header */}
+      <div style={{ display: "flex", alignItems: "flex-start", gap: "1rem", marginBottom: "2rem" }}>
+        <button onClick={onBack} style={{ background: "none", border: "none", color: MUTED, cursor: "pointer", padding: "0.2rem", marginTop: "0.3rem" }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = FOREGROUND)} onMouseLeave={(e) => (e.currentTarget.style.color = MUTED)}>
+          <ArrowLeft size={16} />
         </button>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <h2 className="text-base font-bold text-foreground truncate">{campaign.name}</h2>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.25rem" }}>
+            <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: 300, fontStyle: "italic", color: FOREGROUND, lineHeight: 1.1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{campaign.name}</h2>
             <StatusBadge status={campaign.status} />
           </div>
-          <p className="text-xs text-muted-foreground mt-0.5 truncate">{campaign.offering.slice(0, 80)}</p>
+          <p style={{ fontFamily: FONT_MONO, fontSize: "0.62rem", color: MUTED, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{campaign.offering.slice(0, 80)}</p>
         </div>
-        <div className="flex items-center gap-2 shrink-0">
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => syncLeads.mutate({ campaignId: campaign.id })}
-            disabled={syncLeads.isPending || campaign.status !== "active"}
-            className="h-7 px-2 text-xs border-border gap-1"
-          >
-            {syncLeads.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : <RefreshCw className="w-3 h-3" />}
-            Sync Leads
-          </Button>
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => updateCampaign.mutate({
-              id: campaign.id,
-              status: campaign.status === "active" ? "paused" : "active",
-            })}
-            className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground gap-1"
-          >
-            {campaign.status === "active" ? <><Pause className="w-3 h-3" />Pause</> : <><Play className="w-3 h-3" />Resume</>}
-          </Button>
+        <div style={{ display: "flex", gap: "0.5rem", flexShrink: 0 }}>
+          <button onClick={() => syncLeads.mutate({ campaignId: campaign.id })} disabled={syncLeads.isPending || campaign.status !== "active"} style={{ ...monoBtn, opacity: (syncLeads.isPending || campaign.status !== "active") ? 0.5 : 1 }}>
+            {syncLeads.isPending ? <Loader2 size={10} style={{ animation: "spin 1s linear infinite" }} /> : <RefreshCw size={10} />} Sync Leads
+          </button>
+          <button onClick={() => updateCampaign.mutate({ id: campaign.id, status: campaign.status === "active" ? "paused" : "active" })} style={monoBtn}>
+            {campaign.status === "active" ? <><Pause size={10} /> Pause</> : <><Play size={10} /> Resume</>}
+          </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-4 gap-3">
-        {[
-          { label: "Leads Found", value: campaign.leadsFound },
-          { label: "DMs Sent", value: campaign.dmsSent },
-          { label: "Subreddits", value: campaign.subreddits.length },
-          { label: "Keywords", value: campaign.keywords.length },
-        ].map(({ label, value }) => (
-          <div key={label} className="p-3 rounded-lg bg-card border border-border text-center">
-            <p className="text-lg font-bold text-foreground">{value}</p>
-            <p className="text-[10px] text-muted-foreground mt-0.5">{label}</p>
+      {/* Stats grid */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1.5px", marginBottom: "1.5rem" }}>
+        {[{ label: "Leads Found", value: campaign.leadsFound }, { label: "DMs Sent", value: campaign.dmsSent }, { label: "Subreddits", value: campaign.subreddits.length }, { label: "Keywords", value: campaign.keywords.length }].map(({ label, value }) => (
+          <div key={label} style={{ padding: "1rem", border: `0.5px solid ${BORDER}`, background: SURFACE, textAlign: "center" }}>
+            <p style={{ fontFamily: FONT_MONO, fontSize: "1.4rem", color: IVORY, fontWeight: 600, lineHeight: 1 }}>{value}</p>
+            <p style={{ fontFamily: FONT_MONO, fontSize: "0.55rem", letterSpacing: "0.12em", textTransform: "uppercase", color: MUTED, marginTop: "0.35rem" }}>{label}</p>
           </div>
         ))}
       </div>
 
-      <div className={`flex items-center gap-2 p-2.5 rounded-lg border text-xs ${
-        campaign.reviewMode === "auto_send"
-          ? "bg-muted/30 border-border text-muted-foreground"
-          : "bg-primary/5 border-primary/20 text-primary"
-      }`}>
-        {campaign.reviewMode === "auto_send" ? <Zap className="w-3.5 h-3.5" /> : <CheckCircle2 className="w-3.5 h-3.5" />}
-        <span className="font-medium">{campaign.reviewMode === "auto_send" ? "Auto-Send mode" : "Review First mode"}</span>
-        <span className="text-muted-foreground">
-          {campaign.reviewMode === "auto_send"
-            ? "— You review each DM before it's sent"
-            : "— You review each DM before it's sent"}
+      {/* Review mode banner */}
+      <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", padding: "0.75rem 1rem", border: `0.5px solid ${campaign.reviewMode === "auto_send" ? BORDER : "oklch(0.88 0.025 85 / 0.25)"}`, background: campaign.reviewMode === "auto_send" ? SURFACE : "oklch(0.88 0.025 85 / 0.03)", marginBottom: "1.5rem" }}>
+        {campaign.reviewMode === "auto_send" ? <Zap size={12} color={AMBER} /> : <CheckCircle2 size={12} color={IVORY} />}
+        <span style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: campaign.reviewMode === "auto_send" ? AMBER : IVORY }}>
+          {campaign.reviewMode === "auto_send" ? "Auto-Send mode" : "Review First mode"}
         </span>
+        <span style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", color: MUTED }}>— You review each DM before it's sent</span>
         {campaign.reviewMode === "auto_send" && (
-          <span className="ml-auto shrink-0 text-[9px] font-semibold px-1.5 py-0.5 rounded border bg-muted/60 text-muted-foreground border-border">
-            Coming soon
-          </span>
+          <span style={{ marginLeft: "auto", fontFamily: FONT_MONO, fontSize: "0.52rem", letterSpacing: "0.1em", textTransform: "uppercase", color: MUTED, border: `0.5px solid ${BORDER}`, padding: "0.1rem 0.4rem" }}>Coming soon</span>
         )}
       </div>
 
+      {/* Leads inbox */}
       <div>
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <Inbox className="w-4 h-4 text-muted-foreground" />
-            <h3 className="text-sm font-semibold text-foreground">Leads Inbox</h3>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <Inbox size={13} color={MUTED} />
+            <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.18em", textTransform: "uppercase", color: MUTED }}>Leads Inbox</p>
           </div>
           {campaign.lastSyncAt && (
-            <p className="text-[10px] text-muted-foreground">
-              Last sync: {new Date(campaign.lastSyncAt).toLocaleString()}
-            </p>
+            <p style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", color: MUTED }}>Last sync: {new Date(campaign.lastSyncAt).toLocaleString()}</p>
           )}
         </div>
 
-        <div className="flex gap-1 p-1 rounded-lg bg-muted/40 border border-border mb-3 overflow-x-auto">
+        {/* Filter tabs */}
+        <div style={{ display: "flex", gap: "1.5px", marginBottom: "1rem", overflowX: "auto" }}>
           {(["all", "new", "dm_generated", "queued", "sent", "skipped"] as const).map((f) => (
-            <button
-              key={f}
-              onClick={() => setActiveFilter(f)}
-              className={`flex-shrink-0 py-1 px-2.5 rounded-md text-[10px] font-medium transition-all ${
-                activeFilter === f
-                  ? "bg-card text-foreground shadow-sm border border-border"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
+            <button key={f} onClick={() => setActiveFilter(f)} style={{ padding: "0.5rem 0.85rem", background: activeFilter === f ? SURFACE_RAISED : "transparent", border: `0.5px solid ${activeFilter === f ? BORDER : "transparent"}`, color: activeFilter === f ? FOREGROUND : MUTED, fontFamily: FONT_MONO, fontSize: "0.58rem", letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer", flexShrink: 0, transition: "all 0.15s" }}>
               {f === "dm_generated" ? "Drafted" : f.charAt(0).toUpperCase() + f.slice(1)}
-              {filterCounts[f] > 0 && (
-                <span className="ml-1 text-[9px] opacity-70">({filterCounts[f]})</span>
-              )}
+              {filterCounts[f] > 0 && <span style={{ marginLeft: "0.3rem", opacity: 0.6 }}>({filterCounts[f]})</span>}
             </button>
           ))}
         </div>
 
         {leadsLoading && (
-          <div className="flex items-center justify-center py-12">
-            <Loader2 className="w-6 h-6 text-primary animate-spin" />
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "4rem" }}>
+            <Loader2 size={20} color={IVORY} style={{ animation: "spin 1s linear infinite" }} />
           </div>
         )}
 
         {!leadsLoading && filteredLeads.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-12 rounded-xl border border-dashed border-border bg-card/50">
-            <Inbox className="w-8 h-8 text-muted-foreground/40 mb-3" />
-            <p className="text-sm text-muted-foreground">
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "4rem 2rem", border: `0.5px dashed ${BORDER}`, background: SURFACE, textAlign: "center", gap: "0.6rem" }}>
+            <Inbox size={24} color={MUTED} />
+            <p style={{ fontFamily: FONT_DISPLAY, fontSize: "1.1rem", fontStyle: "italic", color: MUTED }}>
               {leads.length === 0 ? "No leads yet — click Sync Leads to discover prospects" : "No leads in this filter"}
             </p>
           </div>
         )}
 
-        <div className="space-y-2">
+        <div style={{ display: "flex", flexDirection: "column", gap: "1.5px" }}>
           {filteredLeads.map((lead) => (
             <LeadCard
-              key={lead.id}
-              lead={lead as Lead}
+              key={lead.id} lead={lead as Lead}
               onGenerateDm={(id) => generateDm.mutate({ leadId: id })}
               onSendDm={(id) => sendDm.mutate({ leadId: id })}
               onSkip={(id) => skipLead.mutate({ leadId: id })}
@@ -1172,6 +795,7 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
   );
 }
 
+// ─── Main page ────────────────────────────────────────────────────────────────
 export default function DmCampaigns() {
   const [showNewForm, setShowNewForm] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
@@ -1184,171 +808,137 @@ export default function DmCampaigns() {
   const syncIntervalMs = getSyncIntervalMs(subStatus?.plan);
 
   const deleteCampaign = trpc.outreach.deleteCampaign.useMutation({
-    onSuccess: () => {
-      toast.success("Campaign archived");
-      utils.outreach.listCampaigns.invalidate();
-    },
+    onSuccess: () => { toast.success("Campaign archived"); utils.outreach.listCampaigns.invalidate(); },
     onError: (err) => toast.error(err.message),
   });
 
   if (selectedCampaign) {
     return (
       <DashboardLayout>
-        <div className="max-w-4xl mx-auto">
-          <CampaignDetail
-            campaign={selectedCampaign}
-            onBack={() => setSelectedCampaign(null)}
-          />
+        <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+          <CampaignDetail campaign={selectedCampaign} onBack={() => setSelectedCampaign(null)} />
         </div>
       </DashboardLayout>
     );
   }
 
+  const atLimit = subStatus?.campaignLimit !== null && campaigns.length >= (subStatus?.campaignLimit ?? 1);
+
   return (
     <DashboardLayout>
-      <div className="max-w-4xl mx-auto space-y-6">
-        <div className="space-y-3">
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
-              <div className="flex items-center gap-2.5 mb-1">
-                <div className="w-8 h-8 rounded-lg bg-violet-400/10 flex items-center justify-center shrink-0">
-                  <Target className="w-4 h-4 text-violet-400" />
-                </div>
-                <h1 className="text-xl font-bold text-foreground">DM Campaigns</h1>
-              </div>
-              <p className="text-sm text-muted-foreground ml-10.5">
-                Monitor subreddits for leads, AI-draft personalized DMs, and send with rate-limited safety.
-              </p>
-            </div>
-            {!showNewForm && (() => {
-              // campaignLimit is null for growth (unlimited), 1 for starter/trial
-              const atLimit = subStatus?.campaignLimit !== null && campaigns.length >= (subStatus?.campaignLimit ?? 1);
-              if (atLimit) return null;
-              return (
-                <Button onClick={() => setShowNewForm(true)} size="sm" className="gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 shrink-0">
-                  <Plus className="w-4 h-4" />
-                  New Campaign
-                </Button>
-              );
-            })()}
+      <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+        {/* Header */}
+        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "2.5rem" }}>
+          <div>
+            <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: "clamp(1.8rem, 3.5vw, 2.5rem)", fontWeight: 300, fontStyle: "italic", color: FOREGROUND, lineHeight: 1.1, marginBottom: "0.4rem" }}>
+              DM Campaigns
+            </h1>
+            <p style={{ fontFamily: FONT_MONO, fontSize: "0.65rem", letterSpacing: "0.12em", textTransform: "uppercase", color: MUTED }}>
+              Monitor subreddits · AI-draft personalized DMs · Send safely
+            </p>
           </div>
-          {!showNewForm && (() => {
-            // campaignLimit is null for growth (unlimited), 1 for starter/trial
-            const atLimit = subStatus?.campaignLimit !== null && campaigns.length >= (subStatus?.campaignLimit ?? 1);
-            if (!atLimit) return null;
-            return (
-              <div className="flex items-center gap-3 p-3 rounded-lg border border-amber-500/20 bg-amber-500/5">
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-amber-400">Starter plan — 1 campaign limit</p>
-                  <p className="text-xs text-muted-foreground">Upgrade to Growth for unlimited campaigns, priority sync, and DM templates.</p>
-                </div>
-                <Button
-                  onClick={() => navigate("/pricing")}
-                  size="sm"
-                  className="gap-1.5 bg-amber-500 text-white hover:bg-amber-400 shrink-0"
-                >
-                  <Zap className="w-3.5 h-3.5" />
-                  Upgrade
-                </Button>
-              </div>
-            );
-          })()}
+          {!showNewForm && !atLimit && (
+            <button onClick={() => setShowNewForm(true)} style={{ padding: "0.65rem 1.25rem", background: IVORY, border: `0.5px solid ${IVORY}`, color: BG, fontFamily: FONT_MONO, fontSize: "0.62rem", letterSpacing: "0.18em", textTransform: "uppercase", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.4rem", flexShrink: 0 }}>
+              <Plus size={11} /> New Campaign
+            </button>
+          )}
         </div>
 
-        {showNewForm && (
-          <NewCampaignForm
-            onSuccess={() => setShowNewForm(false)}
-            onCancel={() => setShowNewForm(false)}
-          />
-        )}
-
-        {isLoading && (
-          <div className="flex items-center justify-center py-12">
-            <Loader2 className="w-6 h-6 text-primary animate-spin" />
-          </div>
-        )}
-
-        {!isLoading && campaigns.length === 0 && !showNewForm && (
-          <div className="flex flex-col items-center justify-center py-16 rounded-xl border border-dashed border-border bg-card/50">
-            <div className="w-12 h-12 rounded-xl bg-violet-400/10 flex items-center justify-center mb-3">
-              <Target className="w-6 h-6 text-violet-400/60" />
+        {/* Upgrade banner */}
+        {!showNewForm && atLimit && (
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem", padding: "1rem 1.25rem", border: `0.5px solid oklch(0.78 0.14 65 / 0.35)`, background: "oklch(0.78 0.14 65 / 0.04)", marginBottom: "1.5rem" }}>
+            <div style={{ flex: 1 }}>
+              <p style={{ fontFamily: FONT_MONO, fontSize: "0.65rem", letterSpacing: "0.1em", textTransform: "uppercase", color: AMBER, marginBottom: "0.25rem" }}>Starter plan — 1 campaign limit</p>
+              <p style={{ fontSize: "0.78rem", color: MUTED, lineHeight: 1.5 }}>Upgrade to Growth for unlimited campaigns, priority sync, and DM templates.</p>
             </div>
-            <p className="text-sm font-medium text-muted-foreground">No campaigns yet</p>
-            <p className="text-xs text-muted-foreground/60 mt-1 mb-4">Create your first outreach campaign to start finding leads.</p>
-            <Button onClick={() => setShowNewForm(true)} size="sm" className="gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90">
-              <Plus className="w-4 h-4" />
-              Create Campaign
-            </Button>
+            <button onClick={() => navigate("/pricing")} style={{ padding: "0.6rem 1.1rem", background: AMBER, border: `0.5px solid ${AMBER}`, color: BG, fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.15em", textTransform: "uppercase", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.3rem", flexShrink: 0 }}>
+              <Zap size={10} /> Upgrade
+            </button>
           </div>
         )}
 
-        <div className="space-y-3">
+        {/* New campaign form */}
+        {showNewForm && (
+          <div style={{ marginBottom: "2rem" }}>
+            <NewCampaignForm onSuccess={() => setShowNewForm(false)} onCancel={() => setShowNewForm(false)} />
+          </div>
+        )}
+
+        {/* Loading */}
+        {isLoading && (
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "4rem" }}>
+            <Loader2 size={20} color={IVORY} style={{ animation: "spin 1s linear infinite" }} />
+          </div>
+        )}
+
+        {/* Empty state */}
+        {!isLoading && campaigns.length === 0 && !showNewForm && (
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "5rem 2rem", border: `0.5px dashed ${BORDER}`, background: SURFACE, textAlign: "center", gap: "0.75rem" }}>
+            <Target size={28} color={MUTED} />
+            <p style={{ fontFamily: FONT_DISPLAY, fontSize: "1.3rem", fontStyle: "italic", color: MUTED }}>No campaigns yet</p>
+            <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", color: MUTED, letterSpacing: "0.1em" }}>Create your first outreach campaign to start finding leads.</p>
+            <button onClick={() => setShowNewForm(true)} style={{ padding: "0.65rem 1.5rem", background: IVORY, border: `0.5px solid ${IVORY}`, color: BG, fontFamily: FONT_MONO, fontSize: "0.62rem", letterSpacing: "0.18em", textTransform: "uppercase", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.4rem", marginTop: "0.5rem" }}>
+              <Plus size={11} /> Create Campaign
+            </button>
+          </div>
+        )}
+
+        {/* Campaign list */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "1.5px" }}>
           {campaigns.map((campaign) => (
-            <Card key={campaign.id} className="bg-card border-border hover:border-border/80 transition-all cursor-pointer group">
-              <CardContent className="p-4">
-                <div className="flex items-start gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-violet-400/10 flex items-center justify-center shrink-0">
-                    <Target className="w-4 h-4 text-violet-400" />
-                  </div>
-                  <div className="flex-1 min-w-0" onClick={() => setSelectedCampaign(campaign)}>
-                    <div className="flex items-center gap-2 mb-1">
-                      <p className="text-sm font-semibold text-foreground">{campaign.name}</p>
-                      <StatusBadge status={campaign.status} />
-                      {campaign.reviewMode === "auto_send" && (
-                        <span className="text-[9px] px-1.5 py-0.5 rounded border bg-amber-400/10 text-amber-400 border-amber-400/20 flex items-center gap-0.5">
-                          <Zap className="w-2.5 h-2.5" />Auto
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-xs text-muted-foreground truncate">{campaign.offering.slice(0, 80)}</p>
-                    <div className="flex items-center gap-4 mt-2 text-[10px] text-muted-foreground">
-                      <span>{campaign.subreddits.length} subreddits</span>
-                      <span>{campaign.keywords.length} keywords</span>
-                      <span className="text-primary font-medium">{campaign.leadsFound} leads found</span>
-                      <span>{campaign.dmsSent} DMs sent</span>
-                    </div>
-                    {/* Sync timing row */}
-                    <div className="flex items-center gap-1.5 mt-1.5 text-[10px] text-muted-foreground/70">
-                      <Clock className="w-3 h-3 shrink-0" />
-                      {campaign.lastSyncAt ? (
-                        <>
-                          <span>Last synced {relativeTime(campaign.lastSyncAt)}</span>
-                          <span className="text-muted-foreground/40">&middot;</span>
-                          <span>Next sync {countdown(campaign.lastSyncAt + syncIntervalMs)}</span>
-                        </>
-                      ) : (
-                        <span>Not yet synced &mdash; click Sync Leads to discover your first prospects</span>
-                      )}
-                    </div>
-                    {campaign.subreddits.length > 0 && (
-                      <div className="flex gap-1 mt-2">
-                        {campaign.subreddits.slice(0, 4).map((s) => (
-                          <span key={s} className="text-[9px] px-1.5 py-0.5 rounded bg-muted/60 text-muted-foreground border border-border">r/{s}</span>
-                        ))}
-                        {campaign.subreddits.length > 4 && (
-                          <span className="text-[9px] text-muted-foreground">+{campaign.subreddits.length - 4}</span>
-                        )}
-                      </div>
+            <div key={campaign.id} style={{ border: `0.5px solid ${BORDER}`, background: SURFACE, cursor: "pointer", transition: "border-color 0.15s" }}
+              onMouseEnter={(e) => (e.currentTarget.style.borderColor = "oklch(0.88 0.025 85 / 0.3)")}
+              onMouseLeave={(e) => (e.currentTarget.style.borderColor = BORDER)}>
+              <div style={{ padding: "1.25rem", display: "flex", alignItems: "flex-start", gap: "1rem" }}>
+                <div style={{ width: "36px", height: "36px", border: `0.5px solid ${BORDER}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <Target size={16} color={MUTED} />
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }} onClick={() => setSelectedCampaign(campaign)}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.25rem" }}>
+                    <p style={{ fontSize: "0.88rem", color: FOREGROUND, fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{campaign.name}</p>
+                    <StatusBadge status={campaign.status} />
+                    {campaign.reviewMode === "auto_send" && (
+                      <span style={{ fontFamily: FONT_MONO, fontSize: "0.5rem", letterSpacing: "0.1em", textTransform: "uppercase", color: AMBER, border: `0.5px solid oklch(0.78 0.14 65 / 0.35)`, padding: "0.1rem 0.3rem", display: "inline-flex", alignItems: "center", gap: "0.2rem" }}>
+                        <Zap size={8} />Auto
+                      </span>
                     )}
                   </div>
-                  <div className="flex items-center gap-1 shrink-0">
-                    <button
-                      onClick={(e) => { e.stopPropagation(); deleteCampaign.mutate({ id: campaign.id }); }}
-                      className="p-1.5 text-muted-foreground hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100"
-                      title="Archive campaign"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                    <button
-                      onClick={() => setSelectedCampaign(campaign)}
-                      className="p-1.5 text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      <ChevronRight className="w-4 h-4" />
-                    </button>
+                  <p style={{ fontSize: "0.78rem", color: MUTED, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", marginBottom: "0.5rem" }}>{campaign.offering.slice(0, 80)}</p>
+                  <div style={{ display: "flex", alignItems: "center", gap: "1.5rem", fontFamily: FONT_MONO, fontSize: "0.58rem", color: MUTED }}>
+                    <span>{campaign.subreddits.length} subreddits</span>
+                    <span>{campaign.keywords.length} keywords</span>
+                    <span style={{ color: IVORY }}>{campaign.leadsFound} leads found</span>
+                    <span>{campaign.dmsSent} DMs sent</span>
                   </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", marginTop: "0.4rem", fontFamily: FONT_MONO, fontSize: "0.55rem", color: MUTED, opacity: 0.7 }}>
+                    <Clock size={9} />
+                    {campaign.lastSyncAt ? (
+                      <>Last synced {relativeTime(campaign.lastSyncAt)} · Next sync {countdown(campaign.lastSyncAt + syncIntervalMs)}</>
+                    ) : (
+                      <>Not yet synced — click Sync Leads to discover your first prospects</>
+                    )}
+                  </div>
+                  {campaign.subreddits.length > 0 && (
+                    <div style={{ display: "flex", gap: "0.3rem", marginTop: "0.5rem", flexWrap: "wrap" }}>
+                      {campaign.subreddits.slice(0, 4).map((s) => (
+                        <span key={s} style={{ fontFamily: FONT_MONO, fontSize: "0.52rem", color: MUTED, border: `0.5px solid ${BORDER}`, padding: "0.1rem 0.3rem" }}>r/{s}</span>
+                      ))}
+                      {campaign.subreddits.length > 4 && <span style={{ fontFamily: FONT_MONO, fontSize: "0.52rem", color: MUTED }}>+{campaign.subreddits.length - 4}</span>}
+                    </div>
+                  )}
                 </div>
-              </CardContent>
-            </Card>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.25rem", flexShrink: 0 }}>
+                  <button onClick={(e) => { e.stopPropagation(); deleteCampaign.mutate({ id: campaign.id }); }} style={{ background: "none", border: "none", color: MUTED, cursor: "pointer", padding: "0.4rem" }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = DANGER)} onMouseLeave={(e) => (e.currentTarget.style.color = MUTED)}>
+                    <Trash2 size={13} />
+                  </button>
+                  <button onClick={() => setSelectedCampaign(campaign)} style={{ background: "none", border: "none", color: MUTED, cursor: "pointer", padding: "0.4rem" }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = FOREGROUND)} onMouseLeave={(e) => (e.currentTarget.style.color = MUTED)}>
+                    <ChevronRight size={15} />
+                  </button>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
       </div>

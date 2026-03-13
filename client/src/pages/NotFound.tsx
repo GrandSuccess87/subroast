@@ -1,52 +1,44 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { AlertCircle, Home } from "lucide-react";
 import { useLocation } from "wouter";
+
+const FONT_DISPLAY = "Cormorant Garamond, Georgia, serif";
+const FONT_MONO = "JetBrains Mono, monospace";
+const BG = "oklch(0.09 0.008 60)";
+const BORDER = "oklch(0.22 0.007 60)";
+const IVORY = "oklch(0.88 0.025 85)";
+const FOREGROUND = "oklch(0.93 0.010 80)";
+const MUTED = "oklch(0.52 0.006 80)";
 
 export default function NotFound() {
   const [, setLocation] = useLocation();
 
-  const handleGoHome = () => {
-    setLocation("/");
-  };
-
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
-      <Card className="w-full max-w-lg mx-4 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
-        <CardContent className="pt-8 pb-8 text-center">
-          <div className="flex justify-center mb-6">
-            <div className="relative">
-              <div className="absolute inset-0 bg-red-100 rounded-full animate-pulse" />
-              <AlertCircle className="relative h-16 w-16 text-red-500" />
-            </div>
-          </div>
+    <div style={{ minHeight: "100vh", background: BG, display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem", textAlign: "center" }}>
+      <div style={{ maxWidth: "400px", width: "100%" }}>
 
-          <h1 className="text-4xl font-bold text-slate-900 mb-2">404</h1>
+        {/* 404 number */}
+        <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.35em", textTransform: "uppercase", color: MUTED, marginBottom: "1rem" }}>
+          Error 404
+        </p>
 
-          <h2 className="text-xl font-semibold text-slate-700 mb-4">
-            Page Not Found
-          </h2>
+        <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: "clamp(3rem, 8vw, 5rem)", fontWeight: 300, fontStyle: "italic", color: FOREGROUND, lineHeight: 1, marginBottom: "1rem" }}>
+          Page Not Found
+        </h1>
 
-          <p className="text-slate-600 mb-8 leading-relaxed">
-            Sorry, the page you are looking for doesn't exist.
-            <br />
-            It may have been moved or deleted.
-          </p>
+        <div style={{ width: "2rem", height: "0.5px", background: IVORY, margin: "0 auto 1.5rem" }} />
 
-          <div
-            id="not-found-button-group"
-            className="flex flex-col sm:flex-row gap-3 justify-center"
-          >
-            <Button
-              onClick={handleGoHome}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
-            >
-              <Home className="w-4 h-4 mr-2" />
-              Go Home
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+        <p style={{ fontSize: "0.82rem", color: MUTED, lineHeight: 1.7, marginBottom: "2.5rem" }}>
+          The page you're looking for doesn't exist. It may have been moved or deleted.
+        </p>
+
+        <button
+          onClick={() => setLocation("/")}
+          style={{ padding: "0.75rem 2rem", background: "transparent", border: `0.5px solid ${IVORY}`, color: IVORY, fontFamily: FONT_MONO, fontSize: "0.62rem", letterSpacing: "0.22em", textTransform: "uppercase", cursor: "pointer" }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = IVORY; e.currentTarget.style.color = BG; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = IVORY; }}
+        >
+          Return Home
+        </button>
+      </div>
     </div>
   );
 }

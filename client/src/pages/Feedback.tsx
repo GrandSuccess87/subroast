@@ -1,12 +1,6 @@
 import { useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -17,36 +11,39 @@ import {
 import { toast } from "sonner";
 import { MessageSquare, Bug, Lightbulb, ChevronUp, CheckCircle2, Clock } from "lucide-react";
 
+const FONT_DISPLAY = "Cormorant Garamond, Georgia, serif";
+const FONT_MONO = "JetBrains Mono, monospace";
+const SURFACE = "oklch(0.12 0.007 60)";
+const SURFACE_RAISED = "oklch(0.14 0.007 60)";
+const BORDER = "oklch(0.22 0.007 60)";
+const IVORY = "oklch(0.88 0.025 85)";
+const FOREGROUND = "oklch(0.93 0.010 80)";
+const MUTED = "oklch(0.52 0.006 80)";
+const BG = "oklch(0.09 0.008 60)";
+
 const TYPE_ICONS = {
-  feature: <Lightbulb className="w-4 h-4 text-amber-400" />,
-  bug: <Bug className="w-4 h-4 text-red-400" />,
-  other: <MessageSquare className="w-4 h-4 text-muted-foreground" />,
+  feature: <Lightbulb size={13} color="oklch(0.78 0.14 65)" />,
+  bug: <Bug size={13} color="oklch(0.65 0.18 25)" />,
+  other: <MessageSquare size={13} color={MUTED} />,
 };
 
-const TYPE_LABELS = {
-  feature: "Feature request",
-  bug: "Bug report",
-  other: "Other",
-};
+const TYPE_LABELS = { feature: "Feature request", bug: "Bug report", other: "Other" };
 
-const STATUS_BADGE: Record<string, { label: string; className: string; icon: React.ReactNode }> = {
-  open: { label: "Open", className: "bg-zinc-800 text-zinc-300 border-zinc-700", icon: null },
-  planned: { label: "Planned", className: "bg-blue-950 text-blue-300 border-blue-800", icon: <Clock className="w-3 h-3 mr-1" /> },
-  done: { label: "Done", className: "bg-green-950 text-green-300 border-green-800", icon: <CheckCircle2 className="w-3 h-3 mr-1" /> },
+const STATUS_CONFIG: Record<string, { label: string; color: string; border: string; icon?: React.ReactNode }> = {
+  open: { label: "Open", color: MUTED, border: BORDER },
+  planned: { label: "Planned", color: "oklch(0.72 0.12 220)", border: "oklch(0.72 0.12 220 / 0.35)", icon: <Clock size={9} /> },
+  done: { label: "Done", color: IVORY, border: "oklch(0.88 0.025 85 / 0.4)", icon: <CheckCircle2 size={9} /> },
 };
 
 export default function FeedbackPage() {
   const { user } = useAuth();
   const utils = trpc.useUtils();
-
   const { data: items = [], isLoading } = trpc.feedback.list.useQuery();
 
   const submit = trpc.feedback.submit.useMutation({
     onSuccess: () => {
       toast.success("Feedback submitted — thank you!");
-      setTitle("");
-      setBody("");
-      setType("feature");
+      setTitle(""); setBody(""); setType("feature");
       utils.feedback.list.invalidate();
     },
     onError: (e) => toast.error(e.message),
@@ -61,9 +58,7 @@ export default function FeedbackPage() {
       );
       return { prev };
     },
-    onError: (_e, _v, ctx) => {
-      if (ctx?.prev) utils.feedback.list.setData(undefined, ctx.prev);
-    },
+    onError: (_e, _v, ctx) => { if (ctx?.prev) utils.feedback.list.setData(undefined, ctx.prev); },
     onSettled: () => utils.feedback.list.invalidate(),
   });
 
@@ -75,35 +70,50 @@ export default function FeedbackPage() {
   const [type, setType] = useState<"feature" | "bug" | "other">("feature");
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-
   const isAdmin = user?.role === "admin";
 
-  // Group by status for display
   const planned = items.filter((i) => i.status === "planned");
   const open = items.filter((i) => i.status === "open");
   const done = items.filter((i) => i.status === "done");
 
+  const inputStyle: React.CSSProperties = {
+    width: "100%",
+    background: SURFACE_RAISED,
+    border: `0.5px solid ${BORDER}`,
+    color: FOREGROUND,
+    fontFamily: "Inter, sans-serif",
+    fontSize: "0.82rem",
+    padding: "0.6rem 0.75rem",
+    outline: "none",
+    boxSizing: "border-box",
+  };
+
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8 space-y-8">
+    <div style={{ maxWidth: "700px", margin: "0 auto", padding: "2.5rem 1.5rem" }}>
+
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-foreground">Feedback Board</h1>
-        <p className="text-muted-foreground mt-1 text-sm">
-          Share feature requests, report bugs, or suggest improvements. Upvote what matters most to you.
+      <div style={{ marginBottom: "2.5rem" }}>
+        <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: "clamp(1.8rem, 3.5vw, 2.5rem)", fontWeight: 300, fontStyle: "italic", color: FOREGROUND, lineHeight: 1.1, marginBottom: "0.4rem" }}>
+          Feedback Board
+        </h1>
+        <p style={{ fontFamily: FONT_MONO, fontSize: "0.65rem", letterSpacing: "0.12em", textTransform: "uppercase", color: MUTED }}>
+          Share requests, report bugs, upvote what matters
         </p>
       </div>
 
       {/* Submit form */}
-      <Card className="bg-card border-border">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base">Submit feedback</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="sm:col-span-1">
-              <Label className="text-xs text-muted-foreground mb-1.5 block">Type</Label>
+      <div style={{ border: `0.5px solid ${BORDER}`, background: SURFACE, marginBottom: "2rem" }}>
+        <div style={{ padding: "1.25rem 1.5rem", borderBottom: `0.5px solid ${BORDER}` }}>
+          <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: MUTED }}>
+            Submit Feedback
+          </p>
+        </div>
+        <div style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "1rem" }}>
+            <div>
+              <label style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", letterSpacing: "0.15em", textTransform: "uppercase", color: MUTED, display: "block", marginBottom: "0.4rem" }}>Type</label>
               <Select value={type} onValueChange={(v) => setType(v as typeof type)}>
-                <SelectTrigger className="bg-background border-border text-sm">
+                <SelectTrigger style={{ background: SURFACE_RAISED, border: `0.5px solid ${BORDER}`, color: FOREGROUND, fontSize: "0.8rem", borderRadius: 0 }}>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -113,48 +123,63 @@ export default function FeedbackPage() {
                 </SelectContent>
               </Select>
             </div>
-            <div className="sm:col-span-2">
-              <Label className="text-xs text-muted-foreground mb-1.5 block">Title</Label>
-              <Input
+            <div>
+              <label style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", letterSpacing: "0.15em", textTransform: "uppercase", color: MUTED, display: "block", marginBottom: "0.4rem" }}>Title</label>
+              <input
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Brief summary..."
-                className="bg-background border-border text-sm"
                 maxLength={200}
+                style={inputStyle}
               />
             </div>
           </div>
           <div>
-            <Label className="text-xs text-muted-foreground mb-1.5 block">Details (optional)</Label>
-            <Textarea
+            <label style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", letterSpacing: "0.15em", textTransform: "uppercase", color: MUTED, display: "block", marginBottom: "0.4rem" }}>Details (optional)</label>
+            <textarea
               value={body}
               onChange={(e) => setBody(e.target.value)}
               placeholder="More context, steps to reproduce, or use case..."
-              className="bg-background border-border text-sm resize-none"
-              rows={3}
               maxLength={2000}
+              rows={3}
+              style={{ ...inputStyle, resize: "vertical", lineHeight: 1.6 }}
             />
           </div>
-          <Button
-            onClick={() => submit.mutate({ type, title, body })}
-            disabled={!title.trim() || submit.isPending}
-            className="w-full sm:w-auto bg-primary text-primary-foreground"
-          >
-            {submit.isPending ? "Submitting..." : "Submit"}
-          </Button>
-        </CardContent>
-      </Card>
+          <div>
+            <button
+              onClick={() => submit.mutate({ type, title, body })}
+              disabled={!title.trim() || submit.isPending}
+              style={{
+                padding: "0.65rem 1.5rem",
+                background: title.trim() && !submit.isPending ? IVORY : SURFACE_RAISED,
+                border: `0.5px solid ${title.trim() && !submit.isPending ? IVORY : BORDER}`,
+                color: title.trim() && !submit.isPending ? BG : MUTED,
+                fontFamily: FONT_MONO,
+                fontSize: "0.62rem",
+                letterSpacing: "0.18em",
+                textTransform: "uppercase",
+                cursor: title.trim() && !submit.isPending ? "pointer" : "not-allowed",
+              }}
+            >
+              {submit.isPending ? "Submitting..." : "Submit"}
+            </button>
+          </div>
+        </div>
+      </div>
 
       {/* Board */}
       {isLoading ? (
-        <div className="text-muted-foreground text-sm text-center py-8">Loading feedback...</div>
+        <p style={{ fontFamily: FONT_MONO, fontSize: "0.65rem", color: MUTED, textAlign: "center", padding: "3rem", letterSpacing: "0.1em" }}>
+          Loading feedback...
+        </p>
       ) : items.length === 0 ? (
-        <div className="text-center py-12 text-muted-foreground">
-          <MessageSquare className="w-8 h-8 mx-auto mb-3 opacity-30" />
-          <p className="text-sm">No feedback yet — be the first to share an idea.</p>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "4rem 2rem", border: `0.5px dashed ${BORDER}`, background: SURFACE, textAlign: "center", gap: "0.75rem" }}>
+          <MessageSquare size={24} color={MUTED} />
+          <p style={{ fontFamily: FONT_DISPLAY, fontSize: "1.1rem", fontStyle: "italic", color: MUTED }}>No feedback yet</p>
+          <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", color: MUTED, letterSpacing: "0.1em" }}>Be the first to share an idea.</p>
         </div>
       ) : (
-        <div className="space-y-6">
+        <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
           {[
             { label: "Planned", items: planned },
             { label: "Open", items: open },
@@ -163,72 +188,67 @@ export default function FeedbackPage() {
             .filter((g) => g.items.length > 0)
             .map((group) => (
               <div key={group.label}>
-                <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+                <p style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", letterSpacing: "0.25em", textTransform: "uppercase", color: MUTED, marginBottom: "0.75rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                  <span style={{ display: "inline-block", width: "1.5rem", height: "0.5px", background: BORDER }} />
                   {group.label} · {group.items.length}
-                </h2>
-                <div className="space-y-2">
+                </p>
+                <div style={{ display: "flex", flexDirection: "column", gap: "1.5px" }}>
                   {group.items.map((item) => {
-                    const sb = STATUS_BADGE[item.status];
+                    const sb = STATUS_CONFIG[item.status];
                     return (
                       <div
                         key={item.id}
-                        className="flex items-start gap-3 p-4 rounded-lg bg-card border border-border hover:border-border/80 transition-colors"
+                        style={{ display: "flex", alignItems: "flex-start", gap: "0", border: `0.5px solid ${BORDER}`, background: SURFACE }}
                       >
                         {/* Upvote */}
                         <button
                           onClick={() => upvote.mutate({ id: item.id })}
-                          className="flex flex-col items-center gap-0.5 min-w-[36px] pt-0.5 text-muted-foreground hover:text-primary transition-colors"
+                          style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.2rem", padding: "1rem 0.75rem", borderRight: `0.5px solid ${BORDER}`, background: "transparent", color: MUTED, cursor: "pointer", minWidth: "48px", transition: "color 0.15s", outline: "none" }}
+                          onMouseEnter={(e) => (e.currentTarget.style.color = IVORY)}
+                          onMouseLeave={(e) => (e.currentTarget.style.color = MUTED)}
                         >
-                          <ChevronUp className="w-4 h-4" />
-                          <span className="text-xs font-medium tabular-nums">{item.upvotes}</span>
+                          <ChevronUp size={14} />
+                          <span style={{ fontFamily: FONT_MONO, fontSize: "0.65rem", fontWeight: 400 }}>{item.upvotes}</span>
                         </button>
 
                         {/* Content */}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-start gap-2 flex-wrap">
-                            <span className="mt-0.5">{TYPE_ICONS[item.type]}</span>
-                            <span className="font-medium text-sm text-foreground leading-snug">{item.title}</span>
-                            <Badge variant="outline" className={`text-xs px-1.5 py-0 flex items-center ${sb.className}`}>
+                        <div style={{ flex: 1, padding: "0.85rem 1rem" }}>
+                          <div style={{ display: "flex", alignItems: "flex-start", gap: "0.5rem", flexWrap: "wrap", marginBottom: "0.3rem" }}>
+                            {TYPE_ICONS[item.type]}
+                            <span style={{ fontSize: "0.82rem", color: FOREGROUND, lineHeight: 1.4 }}>{item.title}</span>
+                            <span style={{ fontFamily: FONT_MONO, fontSize: "0.52rem", letterSpacing: "0.12em", textTransform: "uppercase", color: sb.color, border: `0.5px solid ${sb.border}`, padding: "0.1rem 0.35rem", display: "inline-flex", alignItems: "center", gap: "0.2rem" }}>
                               {sb.icon}{sb.label}
-                            </Badge>
-                            <Badge variant="outline" className="text-xs px-1.5 py-0 text-muted-foreground border-zinc-700">
+                            </span>
+                            <span style={{ fontFamily: FONT_MONO, fontSize: "0.52rem", letterSpacing: "0.1em", textTransform: "uppercase", color: MUTED, border: `0.5px solid ${BORDER}`, padding: "0.1rem 0.35rem" }}>
                               {TYPE_LABELS[item.type]}
-                            </Badge>
+                            </span>
                           </div>
                           {item.body && (
-                            <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed line-clamp-3">
-                              {item.body}
-                            </p>
+                            <p style={{ fontSize: "0.75rem", color: MUTED, lineHeight: 1.6, marginBottom: "0.3rem" }}>{item.body}</p>
                           )}
-                          <div className="flex items-center gap-2 mt-2">
-                            <span className="text-xs text-muted-foreground">
-                              {item.authorName ?? "Anonymous"} · {new Date(item.createdAt).toLocaleDateString()}
-                            </span>
-                            {item.isOwn && (
-                              <Badge variant="outline" className="text-xs px-1.5 py-0 text-muted-foreground border-zinc-700">
-                                yours
-                              </Badge>
-                            )}
-                          </div>
+                          <p style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", color: MUTED, letterSpacing: "0.05em" }}>
+                            {item.authorName ?? "Anonymous"} · {new Date(item.createdAt).toLocaleDateString()}
+                            {item.isOwn && <span style={{ marginLeft: "0.5rem", border: `0.5px solid ${BORDER}`, padding: "0.05rem 0.3rem" }}>yours</span>}
+                          </p>
                         </div>
 
                         {/* Admin status control */}
                         {isAdmin && (
-                          <Select
-                            value={item.status}
-                            onValueChange={(v) =>
-                              updateStatus.mutate({ id: item.id, status: v as "open" | "planned" | "done" })
-                            }
-                          >
-                            <SelectTrigger className="w-24 h-7 text-xs bg-background border-border">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="open">Open</SelectItem>
-                              <SelectItem value="planned">Planned</SelectItem>
-                              <SelectItem value="done">Done</SelectItem>
-                            </SelectContent>
-                          </Select>
+                          <div style={{ padding: "0.75rem", borderLeft: `0.5px solid ${BORDER}` }}>
+                            <Select
+                              value={item.status}
+                              onValueChange={(v) => updateStatus.mutate({ id: item.id, status: v as "open" | "planned" | "done" })}
+                            >
+                              <SelectTrigger style={{ width: "90px", height: "28px", background: SURFACE_RAISED, border: `0.5px solid ${BORDER}`, color: MUTED, fontSize: "0.68rem", borderRadius: 0 }}>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="open">Open</SelectItem>
+                                <SelectItem value="planned">Planned</SelectItem>
+                                <SelectItem value="done">Done</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
                         )}
                       </div>
                     );
