@@ -881,4 +881,92 @@ Return JSON: { "commentDraft": "string" }`;
 
       return { success: true, commentDraft: parsed.commentDraft };
     }),
+
+  // ── Spam Risk Scoring ─────────────────────────────────────────────────────
+  scoreSpamRisk: protectedProcedure
+    .input(z.object({ leadId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const leads = await getOutreachLeadsByUserId(ctx.user.id);
+      const lead = leads.find((l) => l.id === input.leadId);
+      if (!lead) throw new TRPCError({ code: "NOT_FOUND" });
+
+      const systemPrompt = `You are SubRoast's Spam Risk Analyzer — an AI that evaluates Reddit posts for signs of low-quality or spammy content.
+You help users identify which leads are genuine vs. bot-generated, low-effort, or promotional spam.
+Always respond with valid JSON matching the exact schema.`;
+
+      const userPrompt = `Analyze this Reddit post for spam and low-quality signals:
+
+Subreddit: r/${lead.subreddit}
+Author: u/${lead.authorUsername}
+Title: "${lead.postTitle}"
+Body: "${(lead.postBody || "").slice(0, 800)}"
+Upvotes: ${lead.upvotes} | Comments: ${lead.commentCount}
+
+Score the spam risk from 0-100 where:
+- 0-25: Genuine post, real person with authentic need
+- 26-50: Slightly suspicious but likely real
+- 51-75: Multiple spam signals, proceed with caution
+- 76-100: Almost certainly spam/bot/low-quality
+
+Look for these signals:
+- Generic or templated language that feels copy-pasted
+- Excessive self-promotion or links
+- Vague or incoherent content with no specific problem
+- Username patterns typical of bots (random strings, numbers)
+- Mismatch between title and body
+- Karma-farming patterns (very short, low-effort posts)
+- Promotional intent disguised as a question
+- Repetitive phrasing or obvious AI-generated text
+
+Return JSON with this EXACT structure:
+{
+  "spamScore": number,
+  "spamFlags": string[]
+}
+
+spamFlags should be a list of specific signals found (empty array if none). Each flag should be a short phrase.`;
+
+      const response = await invokeLLM({
+        messages: [
+          { role: "system" as const, content: systemPrompt },
+          { role: "user" as const, content: userPrompt },
+        ],
+        response_format: {
+          type: "json_schema",
+          json_schema: {
+            name: "spam_risk",
+            strict: true,
+            schema: {
+              type: "object",
+              properties: {
+                spamScore: { type: "number" },
+                spamFlags: { type: "array", items: { type: "string" } },
+              },
+              required: ["spamScore", "spamFlags"],
+              additionalProperties: false,
+            },
+          },
+        },
+      });
+
+      const raw = response.choices[0]?.message?.content;
+      if (!raw) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "AI returned no content" });
+      const content = typeof raw === "string" ? raw : JSON.stringify(raw);
+      const parsed = JSON.parse(content) as { spamScore: number; spamFlags: string[] };
+
+      // Persist to DB
+      const db = await getDb();
+      if (db) {
+        const { outreachLeads: leadsTable } = await import("../../drizzle/schema");
+        await db
+          .update(leadsTable)
+          .set({
+            spamScore: parsed.spamScore,
+            spamFlags: JSON.stringify(parsed.spamFlags),
+          })
+          .where(eq(leadsTable.id, input.leadId));
+      }
+
+      return { success: true, spamScore: parsed.spamScore, spamFlags: parsed.spamFlags };
+    }),
 });

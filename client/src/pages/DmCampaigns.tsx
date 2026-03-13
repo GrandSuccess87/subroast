@@ -17,6 +17,7 @@ import {
   Plus,
   RefreshCw,
   Send,
+  ShieldAlert,
   SkipForward,
   Sparkles,
   Target,
@@ -84,6 +85,7 @@ type Lead = {
   roastInsight?: string | null; roastReplyDraft?: string | null;
   pipelineStage?: "new" | "replied" | "interested" | "converted" | "skipped" | null;
   commentDraft?: string | null; commentSentAt?: number | null;
+  spamScore?: number | null; spamFlags?: string | null;
 };
 
 // ─── Shared input style ───────────────────────────────────────────────────────
@@ -369,12 +371,13 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
 }
 
 // ─── Lead card ────────────────────────────────────────────────────────────────
-function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue, onUpdateDraft, onRoast, onGenerateComment, onSendComment, onMarkContacted, onReDraftDm, isChaining }: {
+function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue, onUpdateDraft, onRoast, onGenerateComment, onSendComment, onMarkContacted, onReDraftDm, onCheckSpam, isChaining }: {
   lead: Lead; onGenerateDm: (id: number) => void; onSendDm: (id: number) => void;
   onSkip: (id: number) => void; onQueue: (id: number) => void; onCancelQueue: (id: number) => void;
   onUpdateDraft: (id: number, draft: string) => void; onRoast: (id: number) => void;
   onGenerateComment: (id: number) => void; onSendComment: (id: number) => void;
-  onMarkContacted: (id: number) => void; onReDraftDm: (id: number) => void; isChaining: boolean;
+  onMarkContacted: (id: number) => void; onReDraftDm: (id: number) => void;
+  onCheckSpam: (id: number) => void; isChaining: boolean;
 }) {
   const [expandedDm, setExpandedDm] = useState(false);
   const [expandedComment, setExpandedComment] = useState(false);
@@ -471,6 +474,32 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
             <p style={{ fontSize: "0.75rem", color: FOREGROUND, lineHeight: 1.6, opacity: 0.85 }}>{lead.roastInsight}</p>
           </div>
         )}
+
+        {/* Spam Risk badge */}
+        {lead.spamScore != null && (() => {
+          const score = lead.spamScore;
+          const flags: string[] = (() => { try { return JSON.parse(lead.spamFlags || "[]"); } catch { return []; } })();
+          const isHighRisk = score >= 51;
+          const color = score >= 76 ? "oklch(0.65 0.22 25)" : score >= 51 ? "oklch(0.75 0.18 55)" : "oklch(0.72 0.15 145)";
+          const label = score >= 76 ? "HIGH SPAM RISK" : score >= 51 ? "SUSPICIOUS" : "LOW RISK";
+          return (
+            <div style={{ display: "flex", alignItems: "flex-start", gap: "0.5rem", padding: "0.65rem 0.85rem", border: `0.5px solid ${color}40`, background: `${color}08`, marginBottom: "0.75rem" }}>
+              <ShieldAlert size={11} color={color} style={{ flexShrink: 0, marginTop: "2px" }} />
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: flags.length > 0 ? "0.3rem" : 0 }}>
+                  <span style={{ fontFamily: FONT_MONO, fontSize: "0.55rem", letterSpacing: "0.1em", color, textTransform: "uppercase" }}>{label}</span>
+                  <span style={{ fontFamily: FONT_MONO, fontSize: "0.55rem", color: MUTED }}>{score}/100</span>
+                  {isHighRisk && <span style={{ fontFamily: FONT_MONO, fontSize: "0.52rem", color, border: `0.5px solid ${color}50`, padding: "0.05rem 0.3rem" }}>Skip recommended</span>}
+                </div>
+                {flags.length > 0 && (
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.25rem" }}>
+                    {flags.map((f, i) => <span key={i} style={{ fontFamily: FONT_MONO, fontSize: "0.52rem", color: MUTED, background: "oklch(0.18 0 0)", padding: "0.1rem 0.3rem" }}>{f}</span>)}
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })()}
 
         {/* DM draft loading */}
         {!lead.dmDraft && dmStep !== null && (
@@ -602,6 +631,16 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
             </span>
           )}
 
+          {/* Spam Check */}
+          {isActionable && (
+            <button
+              onClick={() => onCheckSpam(lead.id)}
+              style={{ ...monoBtn, color: lead.spamScore != null ? (lead.spamScore >= 51 ? "oklch(0.65 0.22 25)" : "oklch(0.72 0.15 145)") : MUTED, borderColor: lead.spamScore != null ? (lead.spamScore >= 51 ? "oklch(0.65 0.22 25 / 0.35)" : "oklch(0.72 0.15 145 / 0.35)") : "transparent" }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = FOREGROUND)} onMouseLeave={(e) => (e.currentTarget.style.color = lead.spamScore != null ? (lead.spamScore >= 51 ? "oklch(0.65 0.22 25)" : "oklch(0.72 0.15 145)") : MUTED)}>
+              <ShieldAlert size={10} /> {lead.spamScore != null ? `Spam ${lead.spamScore}` : "Spam Check"}
+            </button>
+          )}
+
           {/* Skip */}
           {isActionable && lead.pipelineStage !== "replied" && (
             <button onClick={() => onSkip(lead.id)} style={{ ...monoBtn, borderColor: "transparent" }}
@@ -681,6 +720,7 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
   const sendComment = trpc.outreach.sendComment.useMutation({ onSuccess: () => { toast.success("Comment posted to Reddit!"); utils.outreach.getLeads.invalidate({ campaignId: campaign.id }); }, onError: (err) => toast.error(err.message) });
   const markContacted = trpc.outreach.updatePipelineStage.useMutation({ onSuccess: () => { toast.success("Lead marked as contacted!"); utils.outreach.getLeads.invalidate({ campaignId: campaign.id }); }, onError: (err) => toast.error(err.message) });
   const updateCampaign = trpc.outreach.updateCampaign.useMutation({ onSuccess: () => { toast.success("Campaign updated"); utils.outreach.listCampaigns.invalidate(); }, onError: (err) => toast.error(err.message) });
+  const scoreSpamRisk = trpc.outreach.scoreSpamRisk.useMutation({ onSuccess: (data) => { toast.success(`Spam check complete — score: ${data.spamScore}/100`); utils.outreach.getLeads.invalidate({ campaignId: campaign.id }); }, onError: (err) => toast.error(err.message) });
 
   const filteredLeads = leads.filter((l) => activeFilter === "all" || l.status === activeFilter);
   const filterCounts = { all: leads.length, new: leads.filter((l) => l.status === "new").length, dm_generated: leads.filter((l) => l.status === "dm_generated").length, queued: leads.filter((l) => l.status === "queued").length, sent: leads.filter((l) => l.status === "sent").length, skipped: leads.filter((l) => l.status === "skipped").length };
@@ -786,6 +826,7 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
               onSendComment={(id) => sendComment.mutate({ leadId: id })}
               onMarkContacted={(id) => markContacted.mutate({ leadId: id, stage: "replied" })}
               onReDraftDm={(id) => generateDm.mutate({ leadId: id })}
+              onCheckSpam={(id) => scoreSpamRisk.mutate({ leadId: id })}
               isChaining={chainLeadIdRef.current === lead.id}
             />
           ))}

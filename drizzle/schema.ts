@@ -217,6 +217,9 @@ export const outreachLeads = mysqlTable("outreach_leads", {
   dmDraft: text("dmDraft"),                       // AI-generated DM draft
   roastReplyDraft: text("roastReplyDraft"),        // Roast & Reply — contextual PM draft
   commentDraft: text("commentDraft"),              // AI-generated public comment draft
+  // Spam Risk scoring
+  spamScore: int("spamScore"),                     // 0-100: likelihood post is low-quality/spam
+  spamFlags: text("spamFlags"),                    // JSON array of specific spam signals detected
   // Pipeline stage
   pipelineStage: mysqlEnum("pipelineStage", ["new", "replied", "interested", "converted", "skipped"]).default("new").notNull(),
   status: mysqlEnum("status", ["new", "dm_generated", "queued", "sent", "skipped", "failed"]).default("new").notNull(),

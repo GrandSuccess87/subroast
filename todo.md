@@ -381,3 +381,8 @@
 
 ## Mobile Sidebar Footer Fix
 - [x] Fix sidebar footer (name/email/logout) not visible on mobile — sheet not filling full height
+
+## Spam Risk Scoring
+- [x] Lead quality filter: AI spam risk score (0-100) badge on each lead — flag low-quality/bot posts so users skip them and focus on genuine leads
+- [ ] Subreddit health monitor: flag when a subreddit is getting flooded with spam, affecting targeting quality
+- [ ] DM campaign guard: warn before sending DM to a lead whose post history looks spammy
