@@ -336,19 +336,32 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
         <div>
           <label style={labelStyle}>DM Review Mode</label>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.5rem" }}>
-            {(["review_first", "auto_send"] as const).map((mode) => (
-              <button
-                key={mode}
-                onClick={() => setReviewMode(mode)}
-                style={{ padding: "0.85rem 1rem", background: reviewMode === mode ? "oklch(0.88 0.025 85 / 0.06)" : "transparent", border: `0.5px solid ${reviewMode === mode ? "oklch(0.88 0.025 85 / 0.4)" : BORDER}`, textAlign: "left", cursor: "pointer", transition: "all 0.15s" }}
-              >
-                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.25rem" }}>
-                  {mode === "review_first" ? <CheckCircle2 size={12} color={IVORY} /> : <Zap size={12} color={AMBER} />}
-                  <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: FOREGROUND }}>{mode === "review_first" ? "Review First" : "Auto-Send"}</p>
-                </div>
-                <p style={{ fontSize: "0.72rem", color: MUTED, lineHeight: 1.4 }}>{mode === "review_first" ? "You approve each DM before it's sent" : "AI drafts and queues DMs automatically"}</p>
-              </button>
-            ))}
+            {/* Review First — selectable */}
+            <button
+              onClick={() => setReviewMode("review_first")}
+              style={{ padding: "0.85rem 1rem", background: reviewMode === "review_first" ? "oklch(0.88 0.025 85 / 0.06)" : "transparent", border: `0.5px solid ${reviewMode === "review_first" ? "oklch(0.88 0.025 85 / 0.4)" : BORDER}`, textAlign: "left", cursor: "pointer", transition: "all 0.15s" }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.25rem" }}>
+                <CheckCircle2 size={12} color={IVORY} />
+                <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: FOREGROUND }}>Review First</p>
+              </div>
+              <p style={{ fontSize: "0.72rem", color: MUTED, lineHeight: 1.4 }}>You approve each DM before it's sent</p>
+            </button>
+
+            {/* Auto-Send — coming soon, disabled */}
+            <div
+              style={{ padding: "0.85rem 1rem", background: "transparent", border: `0.5px solid ${BORDER}`, textAlign: "left", opacity: 0.5, cursor: "not-allowed", position: "relative" }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.25rem" }}>
+                <Zap size={12} color={AMBER} />
+                <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: FOREGROUND }}>Auto-Send</p>
+                <span style={{ fontFamily: FONT_MONO, fontSize: "0.48rem", letterSpacing: "0.12em", textTransform: "uppercase", color: AMBER, border: `0.5px solid ${AMBER}50`, padding: "0.05rem 0.3rem", display: "inline-flex", alignItems: "center", gap: "0.2rem" }}>
+                  <span style={{ width: 5, height: 5, borderRadius: "50%", background: AMBER, display: "inline-block", animation: "pulse 2s ease-in-out infinite" }} />
+                  Coming soon
+                </span>
+              </div>
+              <p style={{ fontSize: "0.72rem", color: MUTED, lineHeight: 1.4 }}>AI drafts and queues DMs automatically</p>
+            </div>
           </div>
         </div>
 

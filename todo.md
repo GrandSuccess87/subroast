@@ -386,3 +386,8 @@
 - [x] Lead quality filter: AI spam risk score (0-100) badge on each lead — flag low-quality/bot posts so users skip them and focus on genuine leads
 - [ ] Subreddit health monitor: flag when a subreddit is getting flooded with spam, affecting targeting quality
 - [ ] DM campaign guard: warn before sending DM to a lead whose post history looks spammy
+
+## Auto-Send Coming Soon + User Spam Reporting (v5.39)
+- [x] DM Campaigns: mark AUTO-SEND option as "Coming soon" — disabled, pulsating badge, can't be selected
+- [ ] User spam reporting: "Mark as spam" button on lead cards — stores user flag in DB
+- [ ] AI training loop: user-flagged spam leads feed back into the scoreSpamRisk prompt as few-shot examples
