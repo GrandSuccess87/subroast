@@ -1,0 +1,31 @@
+{
+  "query": "SELECT id, openId, name, email, role FROM users LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute SELECT id, openId, name, email, role FROM users LIMIT 5;",
+  "rows": [
+    {
+      "id": "1",
+      "openId": "RDBnQnfqCjrFLLLSW2Bvnd",
+      "name": "Quintessa Anderson",
+      "email": "Tessa.Anderson@blackvectorhorizon.solutions",
+      "role": "user"
+    },
+    {
+      "id": "210019",
+      "openId": "dev-user-grand-success-87",
+      "name": "Dev User",
+      "email": "dev@subroast.app",
+      "role": "user"
+    },
+    {
+      "id": "360023",
+      "openId": "QNRwSpSGmBs9aerFF3h9XG",
+      "name": "Suhail Hilal",
+      "email": "suheelhilal93@gmail.com",
+      "role": "user"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\topenId\tname\temail\trole\n1\tRDBnQnfqCjrFLLLSW2Bvnd\tQuintessa Anderson\tTessa.Anderson@blackvectorhorizon.solutions\tuser\n210019\tdev-user-grand-success-87\tDev User\tdev@subroast.app\tuser\n360023\tQNRwSpSGmBs9aerFF3h9XG\tSuhail Hilal\tsuheelhilal93@gmail.com\tuser\n",
+  "stderr": "",
+  "execution_time_ms": 892
+}

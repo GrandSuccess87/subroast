@@ -375,3 +375,6 @@
 - [x] Add copyright to footer in Home.tsx — "© 2026 SubRoast. All rights reserved."
 - [x] Add pulsating bullet animation for all "coming soon" feature indicators in dashboard and schedule pages
 - [x] Build roast report spider/radar chart — 5-axis chart (Clarity, Fit, Virality, Spam Risk, Urgency) on Draft & Roast page
+
+## Sidebar User Profile Footer (v5.36)
+- [x] Add user avatar initials, name, email, and logout button pinned to the bottom of the sidebar

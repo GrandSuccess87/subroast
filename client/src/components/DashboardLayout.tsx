@@ -1,12 +1,6 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
@@ -379,34 +373,49 @@ function DashboardLayoutContent({
 
           {/* User footer */}
           <SidebarFooter className="p-3" style={{ borderTop: '0.5px solid oklch(0.16 0.004 280)' }}>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="flex items-center gap-2.5 rounded-lg px-1 py-1.5 hover:bg-sidebar-accent/60 transition-colors w-full text-left focus:outline-none">
-                  <Avatar className="h-7 w-7 border border-sidebar-border shrink-0">
-                    <AvatarFallback className="text-xs font-semibold bg-primary/20 text-primary">
-                      {user?.name?.charAt(0).toUpperCase() ?? "U"}
-                    </AvatarFallback>
-                  </Avatar>
-                  {!isCollapsed && (
-                    <div className="flex-1 min-w-0">
-                      <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', fontWeight: 300 }} className="truncate text-sidebar-foreground">{user?.name ?? "User"}</p>
-                      {user?.email && (
-                        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.06em' }} className="text-sidebar-foreground/30 truncate">{user.email}</p>
-                      )}
-                    </div>
-                  )}
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem
+            {isCollapsed ? (
+              /* Collapsed: just avatar + logout icon stacked */
+              <div className="flex flex-col items-center gap-2">
+                <Avatar className="h-7 w-7 border border-sidebar-border shrink-0">
+                  <AvatarFallback className="text-xs font-semibold bg-primary/20 text-primary">
+                    {user?.name?.charAt(0).toUpperCase() ?? "U"}
+                  </AvatarFallback>
+                </Avatar>
+                <button
                   onClick={logout}
-                  className="cursor-pointer text-destructive focus:text-destructive"
+                  className="h-7 w-7 flex items-center justify-center hover:bg-sidebar-accent/60 transition-colors focus:outline-none"
+                  title="Sign out"
                 >
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Sign out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  <LogOut className="h-3.5 w-3.5 text-sidebar-foreground/40" />
+                </button>
+              </div>
+            ) : (
+              /* Expanded: avatar + name/email + logout button */
+              <div className="flex items-center gap-2.5 w-full">
+                <Avatar className="h-8 w-8 border border-sidebar-border shrink-0">
+                  <AvatarFallback className="text-xs font-semibold bg-primary/20 text-primary">
+                    {user?.name?.charAt(0).toUpperCase() ?? "U"}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex-1 min-w-0">
+                  <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', fontWeight: 400 }} className="truncate text-sidebar-foreground">
+                    {user?.name ?? user?.email?.split('@')[0] ?? 'Account'}
+                  </p>
+                  {(user?.email) && (
+                    <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.04em' }} className="text-sidebar-foreground/40 truncate">
+                      {user.email}
+                    </p>
+                  )}
+                </div>
+                <button
+                  onClick={logout}
+                  className="h-7 w-7 flex items-center justify-center hover:bg-sidebar-accent/60 transition-colors focus:outline-none shrink-0"
+                  title="Sign out"
+                >
+                  <LogOut className="h-3.5 w-3.5 text-sidebar-foreground/40 hover:text-sidebar-foreground transition-colors" />
+                </button>
+              </div>
+            )}
           </SidebarFooter>
         </Sidebar>
 
