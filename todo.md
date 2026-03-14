@@ -416,3 +416,6 @@
 
 ## SVG Architectural Illustration Demo (v5.43)
 - [x] Replace demo video section with SVG architectural illustration combining flow diagram (Reddit post → AI analysis → DM campaign) and stylized dashboard preview (lead card, spam score badge, spider graph)
+
+## SVG Illustration Draw-In Animation (v5.44)
+- [x] Add staggered stroke-dashoffset draw-in animation to connector lines triggered on scroll into view
