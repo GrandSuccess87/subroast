@@ -406,3 +406,6 @@
 
 ## Homepage Social Proof Strip — Second Quote (v5.41)
 - [x] Add @viberankdev quote to social proof strip, two quotes side-by-side on desktop, stacked on mobile
+
+## Favicon Update (v5.42)
+- [x] Update favicon to match the new SubRoast logo
