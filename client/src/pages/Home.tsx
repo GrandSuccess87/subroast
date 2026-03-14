@@ -731,10 +731,10 @@ export default function Home() {
             Early signal
           </p>
 
-          {/* Two-column grid on desktop, stacked on mobile */}
+          {/* Three-column grid on desktop, stacked on mobile */}
           <div
-            className="grid lg:grid-cols-2"
-            style={{ gap: "0", maxWidth: "72rem", margin: "0 auto" }}
+            className="grid lg:grid-cols-3"
+            style={{ gap: "0", maxWidth: "88rem", margin: "0 auto" }}
           >
             {/* Quote 1 — @zara_ferna94287 */}
             <div
@@ -778,7 +778,10 @@ export default function Home() {
                 flexDirection: "column",
                 gap: "1.1rem",
                 padding: "clamp(1.5rem, 3vw, 2.5rem)",
+                borderRight: "0.5px solid oklch(0.18 0.007 60)",
+                borderBottom: "0.5px solid oklch(0.18 0.007 60)",
               }}
+              className="lg:border-b-0"
             >
               <blockquote
                 style={{
@@ -800,6 +803,50 @@ export default function Home() {
                 <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.62rem", letterSpacing: "0.08em", color: "oklch(0.65 0.006 80)" }}>
                   @viberankdev &nbsp;&middot;&nbsp; responding to SubRoast&apos;s launch
                 </p>
+              </div>
+            </div>
+
+            {/* Quote 3 — Thomas Smith, tsmithcode.ai */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "1.1rem",
+                padding: "clamp(1.5rem, 3vw, 2.5rem)",
+              }}
+            >
+              <blockquote
+                style={{
+                  fontFamily: "var(--font-sans)",
+                  fontStyle: "normal",
+                  fontSize: "clamp(1rem, 2vw, 1.25rem)",
+                  fontWeight: 500,
+                  color: "oklch(0.93 0.010 80)",
+                  lineHeight: 1.6,
+                  margin: 0,
+                  padding: 0,
+                  border: "none",
+                }}
+              >
+                &ldquo;The real pain point is wasted outreach — spending hours finding leads on Reddit only to DM accounts that never engage. A tool that scores lead quality and flags spam before you invest time is exactly what&apos;s missing from the stack.&rdquo;
+              </blockquote>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.2rem", marginTop: "auto" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="oklch(0.65 0.006 80)" aria-hidden="true">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
+                  </svg>
+                  <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.62rem", letterSpacing: "0.08em", color: "oklch(0.65 0.006 80)" }}>
+                    Thomas Smith &nbsp;&middot;&nbsp; Solution Architect
+                  </p>
+                </div>
+                <a
+                  href="https://www.tsmithcode.ai"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ fontFamily: "var(--font-mono)", fontSize: "0.58rem", letterSpacing: "0.06em", color: "oklch(0.55 0.006 80)", textDecoration: "none", paddingLeft: "1.1rem" }}
+                >
+                  tsmithcode.ai &nbsp;&middot;&nbsp; Atlanta, GA
+                </a>
               </div>
             </div>
           </div>

@@ -424,3 +424,6 @@
 - [x] Move spider graph in SVG illustration to avoid overlapping lead card content
 - [x] Improve social proof / early signal quote font style for better readability
 - [x] Boost faint text legibility in Capabilities, Process, Account Safety, and "No credit card" sections
+
+## Thomas Smith Testimonial (v5.46)
+- [x] Add Thomas Smith (tsmithcode.ai, Solution Architect, Atlanta GA) testimonial to homepage social proof strip — third quote slot
