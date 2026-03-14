@@ -1,6 +1,7 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 import { DashboardLayoutSkeleton } from "@/components/DashboardLayoutSkeleton";
+import { ArchitecturalIllustration } from "@/components/ArchitecturalIllustration";
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 
@@ -356,11 +357,12 @@ function FeatureRow({
   );
 }
 
-/* ── Video Section ── */
+/* ── Demo Illustration Section ── */
 function VideoSection() {
   const ref = useFadeUp();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [playing, setPlaying] = useState(false);
-  const VIDEO_EMBED_URL = ""; // Drop your Loom/YouTube embed URL here
+  const VIDEO_EMBED_URL = ""; // Drop your Loom/YouTube embed URL here to restore video mode
 
   return (
     <section
@@ -392,143 +394,24 @@ function VideoSection() {
           </p>
         </div>
 
-        {/* Video frame */}
+        {/* Architectural Illustration */}
         <div className="relative max-w-4xl">
           {/* Ambient glow */}
           <div
             className="absolute -inset-6 pointer-events-none"
             style={{
               background:
-                "radial-gradient(ellipse 70% 60% at 50% 50%, oklch(0.88 0.025 85 / 0.05) 0%, transparent 70%)",
+                "radial-gradient(ellipse 70% 60% at 50% 50%, oklch(0.88 0.025 85 / 0.04) 0%, transparent 70%)",
             }}
           />
-
           <div
-            className="relative overflow-hidden"
             style={{
-              background: "oklch(0.12 0.007 60)",
-              border: "0.5px solid oklch(0.24 0.007 60)",
-              aspectRatio: "16/9",
+              border: "0.5px solid oklch(0.22 0.007 60)",
+              overflow: "hidden",
             }}
           >
-            {VIDEO_EMBED_URL && playing ? (
-              <iframe
-                src={VIDEO_EMBED_URL + "?autoplay=1"}
-                className="w-full h-full"
-                allow="autoplay; fullscreen"
-                allowFullScreen
-                title="SubRoast product walkthrough"
-              />
-            ) : (
-              <div className="w-full h-full flex flex-col items-center justify-center relative">
-                {/* Subtle grid */}
-                <div
-                  className="absolute inset-0 opacity-[0.04]"
-                  style={{
-                    backgroundImage: `linear-gradient(oklch(0.88 0.025 85) 0.5px, transparent 0.5px), linear-gradient(90deg, oklch(0.88 0.025 85) 0.5px, transparent 0.5px)`,
-                    backgroundSize: "48px 48px",
-                  }}
-                />
-
-                {/* Progress bar at bottom */}
-                <div
-                  className="absolute bottom-0 left-0 right-0 flex items-center gap-4 px-8 py-4"
-                  style={{ borderTop: "0.5px solid oklch(0.20 0.007 60)" }}
-                >
-                  <div
-                    className="flex-1 overflow-hidden"
-                    style={{ height: "0.5px", background: "oklch(0.22 0.007 60)" }}
-                  >
-                    <div
-                      style={{
-                        height: "100%",
-                        width: "35%",
-                        background: "oklch(0.88 0.025 85 / 0.6)",
-                      }}
-                    />
-                  </div>
-                  <span
-                    style={{
-                      fontFamily: "var(--font-mono)",
-                      fontSize: "0.55rem",
-                      color: "oklch(0.35 0 0)",
-                      letterSpacing: "0.1em",
-                      flexShrink: 0,
-                    }}
-                  >
-                    0:42 / 1:58
-                  </span>
-                </div>
-
-                {/* Step labels */}
-                <div className="absolute top-6 left-8 right-8 flex items-center gap-2 flex-wrap">
-                  {["Reading post", "Scoring lead", "Crafting DM", "DM ready", "Comment", "Done"].map(
-                    (label, i) => (
-                      <span
-                        key={label}
-                        style={{
-                          fontFamily: "var(--font-mono)",
-                          fontSize: "0.55rem",
-                          letterSpacing: "0.12em",
-                          textTransform: "uppercase",
-                          padding: "0.2rem 0.6rem",
-                          border: `0.5px solid ${i < 3 ? "oklch(0.88 0.025 85 / 0.4)" : "oklch(0.22 0.007 60)"}`,
-                          color: i < 3 ? "oklch(0.88 0.025 85 / 0.8)" : "oklch(0.35 0 0)",
-                          background: i < 3 ? "oklch(0.88 0.025 85 / 0.05)" : "transparent",
-                        }}
-                      >
-                        {label}
-                      </span>
-                    )
-                  )}
-                </div>
-
-                {/* Play button */}
-                <button
-                  onClick={() => VIDEO_EMBED_URL ? setPlaying(true) : undefined}
-                  className="relative z-10 flex items-center justify-center"
-                  style={{
-                    width: "72px",
-                    height: "72px",
-                    border: "0.5px solid oklch(0.88 0.025 85 / 0.5)",
-                    background: "oklch(0.88 0.025 85 / 0.08)",
-                    transition: "background 0.4s ease, border-color 0.4s ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLButtonElement).style.background = "oklch(0.88 0.025 85 / 0.15)";
-                    (e.currentTarget as HTMLButtonElement).style.borderColor = "oklch(0.88 0.025 85 / 0.8)";
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLButtonElement).style.background = "oklch(0.88 0.025 85 / 0.08)";
-                    (e.currentTarget as HTMLButtonElement).style.borderColor = "oklch(0.88 0.025 85 / 0.5)";
-                  }}
-                  aria-label="Play demo"
-                  title={VIDEO_EMBED_URL ? "Play walkthrough" : "Demo coming soon"}
-                >
-                  {/* Play triangle */}
-                  <svg width="18" height="20" viewBox="0 0 18 20" fill="none">
-                    <path d="M1 1L17 10L1 19V1Z" fill="oklch(0.88 0.025 85)" stroke="none" />
-                  </svg>
-                </button>
-
-                {!VIDEO_EMBED_URL && (
-                  <p
-                    className="mt-5 relative z-10"
-                    style={{
-                      fontFamily: "var(--font-mono)",
-                      fontSize: "0.6rem",
-                      color: "oklch(0.35 0 0)",
-                      letterSpacing: "0.12em",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    Walkthrough available shortly
-                  </p>
-                )}
-              </div>
-            )}
+            <ArchitecturalIllustration />
           </div>
-
           {/* Caption */}
           <p
             className="mt-5"
@@ -540,7 +423,7 @@ function VideoSection() {
               textTransform: "uppercase",
             }}
           >
-            Six-step intelligence chain — Reading · Scoring · Drafting · Queuing · Comment · Complete
+            Six-step intelligence chain — Detect · Analyze · Score · Draft · Queue · Complete
           </p>
         </div>
       </div>

@@ -409,3 +409,10 @@
 
 ## Favicon Update (v5.42)
 - [x] Update favicon to match the new SubRoast logo
+
+## Backlog — Future Products
+- [ ] Cross-domain visual inspiration capture app (working title: "Moodrift" or similar) — photo capture, AI palette/type/mood extraction, domain tagging (web/fashion/interior/branding/food), cross-domain blend generation, creator connections, waitlist landing page
+- [ ] SubRoast design system packaged as a standalone white-label template product — CSS variables, component library, layout patterns, Figma kit
+
+## SVG Architectural Illustration Demo (v5.43)
+- [x] Replace demo video section with SVG architectural illustration combining flow diagram (Reddit post → AI analysis → DM campaign) and stylized dashboard preview (lead card, spam score badge, spider graph)
