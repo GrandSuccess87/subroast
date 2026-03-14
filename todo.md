@@ -419,3 +419,8 @@
 
 ## SVG Illustration Draw-In Animation (v5.44)
 - [x] Add staggered stroke-dashoffset draw-in animation to connector lines triggered on scroll into view
+
+## Homepage Legibility Fixes (v5.45)
+- [x] Move spider graph in SVG illustration to avoid overlapping lead card content
+- [x] Improve social proof / early signal quote font style for better readability
+- [x] Boost faint text legibility in Capabilities, Process, Account Safety, and "No credit card" sections

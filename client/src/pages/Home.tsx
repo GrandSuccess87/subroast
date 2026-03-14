@@ -347,7 +347,7 @@ function FeatureRow({
           fontFamily: "var(--font-sans)",
           fontSize: "0.875rem",
           fontWeight: 300,
-          color: "oklch(0.50 0.006 80)",
+          color: "oklch(0.72 0.006 80)",
           lineHeight: 1.75,
         }}
       >
@@ -418,8 +418,8 @@ function VideoSection() {
             style={{
               fontFamily: "var(--font-mono)",
               fontSize: "0.6rem",
-              color: "oklch(0.35 0 0)",
-              letterSpacing: "0.1em",
+              color: "oklch(0.58 0 0)",
+              letterSpacing: "0.14em",
               textTransform: "uppercase",
             }}
           >
@@ -750,12 +750,12 @@ export default function Home() {
             >
               <blockquote
                 style={{
-                  fontFamily: "var(--font-display)",
-                  fontStyle: "italic",
-                  fontSize: "clamp(1.1rem, 2.2vw, 1.45rem)",
-                  fontWeight: 400,
-                  color: "oklch(0.88 0.012 80)",
-                  lineHeight: 1.5,
+                  fontFamily: "var(--font-sans)",
+                  fontStyle: "normal",
+                  fontSize: "clamp(1rem, 2vw, 1.25rem)",
+                  fontWeight: 500,
+                  color: "oklch(0.93 0.010 80)",
+                  lineHeight: 1.6,
                   margin: 0,
                   padding: 0,
                   border: "none",
@@ -765,7 +765,7 @@ export default function Home() {
               </blockquote>
               <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "auto" }}>
                 <XLogo />
-                <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.62rem", letterSpacing: "0.08em", color: "oklch(0.45 0.006 80)" }}>
+                <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.62rem", letterSpacing: "0.08em", color: "oklch(0.65 0.006 80)" }}>
                   @zara_ferna94287 &nbsp;&middot;&nbsp; responding to SubRoast&apos;s launch
                 </p>
               </div>
@@ -782,12 +782,12 @@ export default function Home() {
             >
               <blockquote
                 style={{
-                  fontFamily: "var(--font-display)",
-                  fontStyle: "italic",
-                  fontSize: "clamp(1.1rem, 2.2vw, 1.45rem)",
-                  fontWeight: 400,
-                  color: "oklch(0.88 0.012 80)",
-                  lineHeight: 1.5,
+                  fontFamily: "var(--font-sans)",
+                  fontStyle: "normal",
+                  fontSize: "clamp(1rem, 2vw, 1.25rem)",
+                  fontWeight: 500,
+                  color: "oklch(0.93 0.010 80)",
+                  lineHeight: 1.6,
                   margin: 0,
                   padding: 0,
                   border: "none",
@@ -797,7 +797,7 @@ export default function Home() {
               </blockquote>
               <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "auto" }}>
                 <XLogo />
-                <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.62rem", letterSpacing: "0.08em", color: "oklch(0.45 0.006 80)" }}>
+                <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.62rem", letterSpacing: "0.08em", color: "oklch(0.65 0.006 80)" }}>
                   @viberankdev &nbsp;&middot;&nbsp; responding to SubRoast&apos;s launch
                 </p>
               </div>
@@ -836,9 +836,9 @@ export default function Home() {
                   fontFamily: "var(--font-sans)",
                   fontSize: "0.9375rem",
                   fontWeight: 300,
-                  color: "oklch(0.45 0.006 80)",
-                  lineHeight: 1.75,
-                  maxWidth: "48ch",
+          color: "oklch(0.70 0.006 80)",
+          lineHeight: 1.75,
+          maxWidth: "48ch",
                 }}
               >
                 A complete intelligence suite — from post analysis to lead
@@ -1066,7 +1066,7 @@ function ProcessStep({
             fontFamily: "var(--font-sans)",
             fontSize: "0.875rem",
             fontWeight: 300,
-            color: "oklch(0.50 0.006 80)",
+            color: "oklch(0.72 0.006 80)",
             lineHeight: 1.75,
           }}
         >
@@ -1101,7 +1101,7 @@ function SafetyBlock() {
             fontFamily: "var(--font-sans)",
             fontSize: "0.9375rem",
             fontWeight: 300,
-            color: "oklch(0.50 0.006 80)",
+            color: "oklch(0.72 0.006 80)",
             lineHeight: 1.75,
             marginBottom: "2rem",
           }}
@@ -1125,7 +1125,7 @@ function SafetyBlock() {
                 fontFamily: "var(--font-sans)",
                 fontSize: "0.8125rem",
                 fontWeight: 300,
-                color: "oklch(0.50 0.006 80)",
+                color: "oklch(0.72 0.006 80)",
                 lineHeight: 1.6,
               }}
             >
@@ -1179,7 +1179,7 @@ function CtaSection() {
             fontFamily: "var(--font-sans)",
             fontSize: "0.9375rem",
             fontWeight: 300,
-            color: "oklch(0.45 0.006 80)",
+            color: "oklch(0.70 0.006 80)",
             lineHeight: 1.75,
             maxWidth: "36ch",
             margin: "0 auto 3rem",
@@ -1195,7 +1195,7 @@ function CtaSection() {
           style={{
             fontFamily: "var(--font-mono)",
             fontSize: "0.58rem",
-            color: "oklch(0.30 0 0)",
+            color: "oklch(0.55 0 0)",
             letterSpacing: "0.14em",
             textTransform: "uppercase",
             marginTop: "1.5rem",

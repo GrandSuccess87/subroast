@@ -31,7 +31,7 @@ export function ArchitecturalIllustration() {
   // Spider graph axes: 5 metrics
   const AXES = ["Clarity", "Fit", "Virality", "Spam\nRisk", "Urgency"];
   const SCORES = [0.82, 0.91, 0.74, 0.18, 0.88];
-  const cx = 220, cy = 148, r = 72;
+  const cx = 220, cy = 340, r = 68;
 
   function polarPoint(angle: number, radius: number) {
     const rad = (angle - 90) * (Math.PI / 180);
@@ -84,7 +84,7 @@ export function ArchitecturalIllustration() {
   return (
     <svg
       ref={svgRef}
-      viewBox="0 0 780 420"
+      viewBox="0 0 780 520"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       style={{ width: "100%", height: "auto", display: "block" }}
@@ -110,14 +110,14 @@ export function ArchitecturalIllustration() {
       </defs>
 
       {/* Background */}
-      <rect width="780" height="420" fill="oklch(0.10 0.007 60)" />
-      <rect width="780" height="420" fill="url(#grid)" />
+      <rect width="780" height="520" fill="oklch(0.10 0.007 60)" />
+      <rect width="780" height="520" fill="url(#grid)" />
 
       {/* Ambient glow */}
       <ellipse cx="530" cy="210" rx="200" ry="140" fill="oklch(0.88 0.025 85)" fillOpacity="0.03" />
 
       {/* ── Corner marks — draw in first (delay 0) ── */}
-      {([[0,0],[780,0],[0,420],[780,420]] as [number,number][]).map(([x, y], i) => {
+      {([[0,0],[780,0],[0,520],[780,520]] as [number,number][]).map(([x, y], i) => {
         const dx = x === 0 ? 1 : -1, dy = y === 0 ? 1 : -1;
         return (
           <g key={i}>
@@ -248,7 +248,7 @@ export function ArchitecturalIllustration() {
       </g>
 
       {/* ── Spider graph — draw in at delay 0.9 ── */}
-      <g transform="translate(378, 0)">
+      <g>
         {/* Grid rings — fade in */}
         {rings.map((ring, ri) => {
           const pts = axisAngles.map((a) => polarPoint(a, ring * r));
@@ -306,6 +306,11 @@ export function ArchitecturalIllustration() {
         <text x="248" y="238" fontFamily="'JetBrains Mono', monospace" fontSize="5" fill="oklch(0.35 0.006 80)" letterSpacing="1"
           style={{ opacity: visible ? 1 : 0, transition: visible ? "opacity 0.4s ease 1.1s" : "none" }}>5-AXIS SCORING · SPAM FILTER</text>
       </g>
+
+      {/* Spider graph section label */}
+      <text x="152" y="258" fontFamily="'JetBrains Mono', monospace" fontSize="5.5" fill="oklch(0.50 0.006 80)" letterSpacing="1.5" textAnchor="middle"
+        style={{ opacity: visible ? 0.7 : 0, transition: visible ? "opacity 0.4s ease 0.85s" : "none" }}>ROAST REPORT</text>
+      <line x1="28" y1="265" x2="304" y2="265" stroke="oklch(0.88 0.025 85)" strokeWidth="0.4" strokeOpacity="0.12" {...animLine(276, 0.85, 0.6)} />
 
       {/* ── Bottom caption ── */}
       <line x1="440" y1="400" x2="756" y2="400" stroke="oklch(0.88 0.025 85)" strokeWidth="0.4" strokeOpacity="0.15"
