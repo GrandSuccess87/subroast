@@ -832,14 +832,30 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
       </div>
 
       {/* Stats grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1.5px", marginBottom: "1.5rem" }}>
-        {[{ label: "Leads Found", value: campaign.leadsFound }, { label: "DMs Sent", value: campaign.dmsSent }, { label: "Subreddits", value: campaign.subreddits.length }, { label: "Keywords", value: campaign.keywords.length }].map(({ label, value }) => (
-          <div key={label} style={{ padding: "1rem", border: `0.5px solid ${BORDER}`, background: SURFACE, textAlign: "center" }}>
-            <p style={{ fontFamily: FONT_MONO, fontSize: "1.4rem", color: IVORY, fontWeight: 600, lineHeight: 1 }}>{value}</p>
-            <p style={{ fontFamily: FONT_MONO, fontSize: "0.55rem", letterSpacing: "0.12em", textTransform: "uppercase", color: MUTED, marginTop: "0.35rem" }}>{label}</p>
+      {(() => {
+        const hotLeads = leads.filter((l) => l.leadHeat === "hot" || l.leadHeat === "on_fire").length;
+        const scoredLeads = leads.filter((l) => l.fitScore != null);
+        const avgFit = scoredLeads.length > 0 ? Math.round(scoredLeads.reduce((s, l) => s + (l.fitScore ?? 0), 0) / scoredLeads.length) : null;
+        const lastSync = campaign.lastSyncAt ? new Date(campaign.lastSyncAt).toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) : "Never";
+        const syncsUsed = (campaign as any).dailySyncsUsed ?? 0;
+        const syncsLimit = 6;
+        const stats = [
+          { label: "Hot Leads", value: hotLeads.toString(), accent: hotLeads > 0 ? AMBER : IVORY },
+          { label: "Avg Fit Score", value: avgFit != null ? `${avgFit}/100` : "—", accent: avgFit != null && avgFit >= 70 ? "oklch(0.72 0.14 145)" : IVORY },
+          { label: "Last Sync", value: lastSync, small: true, accent: IVORY },
+          { label: "Syncs Today", value: `${syncsUsed}/${syncsLimit}`, accent: syncsUsed >= syncsLimit ? DANGER : IVORY },
+        ];
+        return (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1.5px", marginBottom: "1.5rem" }}>
+            {stats.map(({ label, value, accent, small }) => (
+              <div key={label} style={{ padding: "1rem", border: `0.5px solid ${BORDER}`, background: SURFACE, textAlign: "center" }}>
+                <p style={{ fontFamily: FONT_MONO, fontSize: small ? "0.75rem" : "1.4rem", color: accent, fontWeight: 600, lineHeight: 1 }}>{value}</p>
+                <p style={{ fontFamily: FONT_MONO, fontSize: "0.55rem", letterSpacing: "0.12em", textTransform: "uppercase", color: MUTED, marginTop: "0.35rem" }}>{label}</p>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        );
+      })()}
 
       {/* Funnel metrics row */}
       {campaign.leadsFound > 0 && (() => {

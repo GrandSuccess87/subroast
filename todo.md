@@ -490,3 +490,8 @@
 - [x] Fix: use campaign.leadsFound (not leads.length) for the Leads Found stage so it matches the campaign stats grid
 - [x] Fix: change stage 2 from "DMs Drafted" to "DMs Sent" (status === "sent" only)
 - [x] Update funnel unit tests to reflect the corrected logic
+
+### Campaign Stats Grid Redesign (v6.3.2)
+- [x] Remove Subreddits and Keywords counts from the stats grid (redundant/low value)
+- [x] Remove Leads Found and DMs Sent from stats grid (duplicated by funnel row)
+- [x] Replace with: Hot Leads, Avg Fit Score, Last Sync, and Syncs Today/Limit
