@@ -475,3 +475,13 @@
 
 ### Size Filter Badge on Campaign Detail (v6.2.1)
 - [x] Show active subreddit size filter as a subtle badge at the top of the campaign detail screen (e.g. "Filtering: 10k–150k members") — only visible when a filter is set
+
+### Funnel Metrics on Campaign Detail (v6.3)
+- [x] Campaign detail: add "Leads → DMs Drafted → Conversations → Converted" funnel stat row derived from lead statuses
+- [x] Show conversion rates between each stage (e.g. "12% → DM")
+- [x] Add unit tests for funnel calculation logic
+
+### Edit Size Filter on Existing Campaign (v6.4)
+- [ ] Add "Edit filter" link next to the size filter badge on the campaign detail screen
+- [ ] Inline edit UI: min/max inputs + presets, saves via updateCampaign mutation
+- [ ] Update DB updateCampaign helper to accept minSubSize/maxSubSize fields

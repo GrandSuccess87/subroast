@@ -841,6 +841,40 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
         ))}
       </div>
 
+      {/* Funnel metrics row */}
+      {leads.length > 0 && (() => {
+        const total = leads.length;
+        const dmsDrafted = leads.filter((l) => ["dm_generated", "queued", "sent"].includes(l.status)).length;
+        const conversations = leads.filter((l) => l.pipelineStage === "replied" || l.pipelineStage === "interested" || l.pipelineStage === "converted").length;
+        const converted = leads.filter((l) => l.pipelineStage === "converted").length;
+        const pct = (n: number, d: number) => d > 0 ? Math.round((n / d) * 100) : 0;
+        const stages = [
+          { label: "Leads Found", value: total, rate: null },
+          { label: "DMs Drafted", value: dmsDrafted, rate: pct(dmsDrafted, total) },
+          { label: "Conversations", value: conversations, rate: pct(conversations, dmsDrafted) },
+          { label: "Converted", value: converted, rate: pct(converted, conversations) },
+        ];
+        return (
+          <div style={{ marginBottom: "1.5rem" }}>
+            <p style={{ fontFamily: FONT_MONO, fontSize: "0.52rem", letterSpacing: "0.14em", textTransform: "uppercase", color: MUTED, marginBottom: "0.6rem" }}>Funnel</p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1.5px" }}>
+              {stages.map((s, i) => (
+                <div key={s.label} style={{ padding: "0.75rem 1rem", border: `0.5px solid ${BORDER}`, background: SURFACE, position: "relative" }}>
+                  {i > 0 && (
+                    <span style={{ position: "absolute", left: -10, top: "50%", transform: "translateY(-50%)", color: MUTED, fontSize: "0.6rem", zIndex: 1 }}>›</span>
+                  )}
+                  <p style={{ fontFamily: FONT_MONO, fontSize: "1.1rem", color: IVORY, fontWeight: 600, lineHeight: 1 }}>{s.value}</p>
+                  <p style={{ fontFamily: FONT_MONO, fontSize: "0.52rem", letterSpacing: "0.1em", textTransform: "uppercase", color: MUTED, marginTop: "0.25rem" }}>{s.label}</p>
+                  {s.rate !== null && (
+                    <p style={{ fontFamily: FONT_MONO, fontSize: "0.52rem", color: s.rate >= 10 ? "oklch(0.72 0.14 145)" : MUTED, marginTop: "0.2rem" }}>{s.rate}%</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })()}
+
       {/* Size filter badge — only shown when a filter is active */}
       {(campaign.minSubSize || campaign.maxSubSize) && (
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.6rem" }}>

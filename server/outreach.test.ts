@@ -245,3 +245,80 @@ describe("subreddit size filter", () => {
     expect(isSubredditInSizeRange(50000, 150000, null)).toBe(false);
   });
 });
+
+// ─── Funnel metrics calculation ───────────────────────────────────────────────
+
+describe("funnel metrics", () => {
+  type LeadStatus = "new" | "dm_generated" | "queued" | "sent" | "skipped" | "failed";
+  type PipelineStage = "new" | "replied" | "interested" | "converted" | "skipped" | null;
+
+  function calcFunnel(leads: Array<{ status: LeadStatus; pipelineStage: PipelineStage }>) {
+    const total = leads.length;
+    const dmsDrafted = leads.filter((l) => ["dm_generated", "queued", "sent"].includes(l.status)).length;
+    const conversations = leads.filter((l) => ["replied", "interested", "converted"].includes(l.pipelineStage ?? "")).length;
+    const converted = leads.filter((l) => l.pipelineStage === "converted").length;
+    const pct = (n: number, d: number) => d > 0 ? Math.round((n / d) * 100) : 0;
+    return {
+      total,
+      dmsDrafted,
+      conversations,
+      converted,
+      dmRate: pct(dmsDrafted, total),
+      convRate: pct(conversations, dmsDrafted),
+      convertRate: pct(converted, conversations),
+    };
+  }
+
+  it("returns zeros for empty leads", () => {
+    const result = calcFunnel([]);
+    expect(result.total).toBe(0);
+    expect(result.dmsDrafted).toBe(0);
+    expect(result.dmRate).toBe(0);
+  });
+
+  it("counts dm_generated, queued, and sent as DMs drafted", () => {
+    const leads = [
+      { status: "new" as LeadStatus, pipelineStage: null },
+      { status: "dm_generated" as LeadStatus, pipelineStage: null },
+      { status: "queued" as LeadStatus, pipelineStage: null },
+      { status: "sent" as LeadStatus, pipelineStage: null },
+      { status: "skipped" as LeadStatus, pipelineStage: null },
+    ];
+    const result = calcFunnel(leads);
+    expect(result.total).toBe(5);
+    expect(result.dmsDrafted).toBe(3);
+    expect(result.dmRate).toBe(60);
+  });
+
+  it("counts replied, interested, and converted as conversations", () => {
+    const leads = [
+      { status: "sent" as LeadStatus, pipelineStage: "replied" as PipelineStage },
+      { status: "sent" as LeadStatus, pipelineStage: "interested" as PipelineStage },
+      { status: "sent" as LeadStatus, pipelineStage: "converted" as PipelineStage },
+      { status: "sent" as LeadStatus, pipelineStage: null },
+    ];
+    const result = calcFunnel(leads);
+    expect(result.conversations).toBe(3);
+    expect(result.converted).toBe(1);
+  });
+
+  it("calculates conversion rates correctly", () => {
+    const leads = [
+      { status: "sent" as LeadStatus, pipelineStage: "converted" as PipelineStage },
+      { status: "sent" as LeadStatus, pipelineStage: "converted" as PipelineStage },
+      { status: "sent" as LeadStatus, pipelineStage: null },
+      { status: "sent" as LeadStatus, pipelineStage: null },
+      { status: "new" as LeadStatus, pipelineStage: null },
+    ];
+    const result = calcFunnel(leads);
+    expect(result.dmRate).toBe(80); // 4/5
+    expect(result.convertRate).toBe(100); // 2/2 conversations converted
+  });
+
+  it("returns 0% rate when denominator is zero (no divide-by-zero)", () => {
+    const leads = [{ status: "new" as LeadStatus, pipelineStage: null }];
+    const result = calcFunnel(leads);
+    expect(result.convRate).toBe(0);
+    expect(result.convertRate).toBe(0);
+  });
+});
