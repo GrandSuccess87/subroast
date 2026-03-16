@@ -348,19 +348,19 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
               <p style={{ fontSize: "0.72rem", color: MUTED, lineHeight: 1.4 }}>You approve each DM before it's sent</p>
             </button>
 
-            {/* Auto-Send — coming soon, disabled */}
+            {/* One-Click Send via Extension — coming soon, disabled */}
             <div
               style={{ padding: "0.85rem 1rem", background: "transparent", border: `0.5px solid ${BORDER}`, textAlign: "left", opacity: 0.5, cursor: "not-allowed", position: "relative" }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.25rem" }}>
                 <Zap size={12} color={AMBER} />
-                <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: FOREGROUND }}>Auto-Send</p>
+                <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: FOREGROUND }}>One-Click Send</p>
                 <span style={{ fontFamily: FONT_MONO, fontSize: "0.48rem", letterSpacing: "0.12em", textTransform: "uppercase", color: AMBER, border: `0.5px solid ${AMBER}50`, padding: "0.05rem 0.3rem", display: "inline-flex", alignItems: "center", gap: "0.2rem" }}>
                   <span style={{ width: 5, height: 5, borderRadius: "50%", background: AMBER, display: "inline-block", animation: "pulse 2s ease-in-out infinite" }} />
                   Coming soon
                 </span>
               </div>
-              <p style={{ fontSize: "0.72rem", color: MUTED, lineHeight: 1.4 }}>AI drafts and queues DMs automatically</p>
+              <p style={{ fontSize: "0.72rem", color: MUTED, lineHeight: 1.4 }}>Send from your own browser — no API, no ban risk</p>
             </div>
           </div>
         </div>
@@ -779,11 +779,14 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
       <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", padding: "0.75rem 1rem", border: `0.5px solid ${campaign.reviewMode === "auto_send" ? BORDER : "oklch(0.88 0.025 85 / 0.25)"}`, background: campaign.reviewMode === "auto_send" ? SURFACE : "oklch(0.88 0.025 85 / 0.03)", marginBottom: "1.5rem" }}>
         {campaign.reviewMode === "auto_send" ? <Zap size={12} color={AMBER} /> : <CheckCircle2 size={12} color={IVORY} />}
         <span style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: campaign.reviewMode === "auto_send" ? AMBER : IVORY }}>
-          {campaign.reviewMode === "auto_send" ? "Auto-Send mode" : "Review First mode"}
+          {campaign.reviewMode === "auto_send" ? "One-Click Send mode" : "Review First mode"}
         </span>
         <span style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", color: MUTED }}>— You review each DM before it's sent</span>
         {campaign.reviewMode === "auto_send" && (
-          <span style={{ marginLeft: "auto", fontFamily: FONT_MONO, fontSize: "0.52rem", letterSpacing: "0.1em", textTransform: "uppercase", color: MUTED, border: `0.5px solid ${BORDER}`, padding: "0.1rem 0.4rem" }}>Coming soon</span>
+          <span style={{ marginLeft: "auto", fontFamily: FONT_MONO, fontSize: "0.52rem", letterSpacing: "0.1em", textTransform: "uppercase", color: AMBER, border: `0.5px solid ${AMBER}50`, padding: "0.1rem 0.4rem", display: "inline-flex", alignItems: "center", gap: "0.2rem" }}>
+            <span style={{ width: 4, height: 4, borderRadius: "50%", background: AMBER, display: "inline-block", animation: "pulse 2s ease-in-out infinite" }} />
+            Extension coming soon
+          </span>
         )}
       </div>
 
@@ -953,7 +956,7 @@ export default function DmCampaigns() {
                     <StatusBadge status={campaign.status} />
                     {campaign.reviewMode === "auto_send" && (
                       <span style={{ fontFamily: FONT_MONO, fontSize: "0.5rem", letterSpacing: "0.1em", textTransform: "uppercase", color: AMBER, border: `0.5px solid oklch(0.78 0.14 65 / 0.35)`, padding: "0.1rem 0.3rem", display: "inline-flex", alignItems: "center", gap: "0.2rem" }}>
-                        <Zap size={8} />Auto
+                        <Zap size={8} />1-Click
                       </span>
                     )}
                   </div>

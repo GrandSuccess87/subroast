@@ -875,7 +875,7 @@ export default function Home() {
             {
               number: "05",
               title: "Account Safety",
-              desc: "Hard limits enforced automatically: five posts per day, twenty-five DMs per day, randomized delays between actions. You are alerted at eighty percent of any daily limit.",
+              desc: "AI spam scoring flags risky leads before you reach out. The upcoming Chrome extension sends from your own browser — no API, no bot flags, no ban risk.",
             },
             {
               number: "06",
@@ -926,7 +926,7 @@ export default function Home() {
               <ProcessStep
                 n="II"
                 title="Find leads & send outreach"
-                body="SubRoast monitors your target subreddits around the clock, scores each post by relevance, and drafts a personalized message for every prospect it identifies."
+                body="SubRoast scans your target subreddits, scores each post by relevance, and drafts a personalized DM for every prospect. You review, then send with one click via the browser extension — coming soon."
                 hasBorder={false}
                 delay={150}
               />
@@ -1106,17 +1106,16 @@ function SafetyBlock() {
             marginBottom: "2rem",
           }}
         >
-          SubRoast enforces Reddit's unwritten rules automatically. You never
-          need to think about limits — the system does.
+          SubRoast keeps you inside Reddit's unwritten rules. The AI flags risky content before you post, and the upcoming Chrome extension sends from your own browser session — so every action looks exactly like a human, because it is.
         </p>
         <div className="grid sm:grid-cols-2 gap-x-8 gap-y-4">
           {[
-            "Maximum five posts per day",
-            "Thirty-minute cooldown between posts",
-            "Maximum twenty-five DMs per day",
-            "Five DMs per hour maximum",
-            "Randomised two–ten minute delays",
-            "Alert at eighty percent of any limit",
+            "Spam risk score on every lead",
+            "Flags templated or bot-like content",
+            "Roast catches promo language before you post",
+            "One-click send via extension — coming soon",
+            "No Reddit API — no ban risk",
+            "Your browser session, your account",
           ].map((item) => (
             <div
               key={item}

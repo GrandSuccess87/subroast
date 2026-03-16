@@ -83,10 +83,10 @@ export default function SettingsPage() {
               <Clock size={13} color={MUTED} style={{ flexShrink: 0, marginTop: "2px" }} />
               <div>
                 <p style={{ fontSize: "0.82rem", color: FOREGROUND, fontWeight: 500, marginBottom: "0.4rem" }}>
-                  Direct Reddit integration is pending API approval
+                  One-click send via Chrome extension — coming soon
                 </p>
                 <p style={{ fontSize: "0.75rem", color: MUTED, lineHeight: 1.6 }}>
-                  We've submitted our Reddit API application and are awaiting approval. In the meantime, SubRoast generates your DMs, comments, and posts — you copy and paste them directly on Reddit. Full one-click sending will be enabled once approved.
+                  SubRoast is building a Chrome extension that lets you send DMs, comments, and posts directly from your own browser session — no Reddit API, no bot flags, no ban risk. Until then, use the Copy &amp; Open workflow to paste drafts directly on Reddit.
                 </p>
               </div>
             </div>

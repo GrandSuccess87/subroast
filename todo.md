@@ -424,3 +424,21 @@
 - [x] Move spider graph in SVG illustration to avoid overlapping lead card content
 - [x] Improve social proof / early signal quote font style for better readability
 - [x] Boost faint text legibility in Capabilities, Process, Account Safety, and "No credit card" sections
+
+## Chrome Extension — Hybrid Send Architecture (v6.0)
+- [ ] Spike: Chrome extension scaffold (Manifest V3, communicates with SubRoast web app)
+- [ ] Extension: "Send DM" action — opens Reddit DM compose in user's browser session and pre-fills drafted message
+- [ ] Extension: "Post to Subreddit" action — opens Reddit post composer and pre-fills AI-drafted post
+- [ ] Extension: "Send Comment" action — pre-fills comment on a target Reddit thread
+- [ ] Web app: Replace "Auto-Send (Coming Soon)" label with "Send via Extension" CTA
+- [ ] Web app: Extension install prompt / onboarding step for new users
+- [ ] Web app: Connection indicator showing whether extension is installed and active
+- [ ] Research: Chrome Web Store review requirements for Reddit automation tools
+- [ ] Decision: Pause Reddit Data API approval application in favour of extension path (revisit if Reddit policy changes)
+
+## Extension Send Messaging (v6.1)
+- [x] Replace "Auto-Send" toggle/label with "One-Click Send via Extension (Coming Soon)" across DM Campaigns page
+- [x] Update campaign creation form: review mode selector messaging
+- [x] Update any "Send DM" / "Send Comment" buttons to reflect extension-based send coming soon
+- [x] Add brief tooltip/explainer: "Send directly from your browser — no API, no ban risk"
+- [x] Landing page: update any automation language to reflect extension approach
