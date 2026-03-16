@@ -831,7 +831,7 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
         </div>
       </div>
 
-      {/* Stats grid */}
+      {/* Stats grid — commented out, kept in backlog for future consideration
       {(() => {
         const hotLeads = leads.filter((l) => l.leadHeat === "hot" || l.leadHeat === "on_fire").length;
         const scoredLeads = leads.filter((l) => l.fitScore != null);
@@ -856,6 +856,7 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
           </div>
         );
       })()}
+      */}
 
       {/* Funnel metrics row */}
       {campaign.leadsFound > 0 && (() => {
