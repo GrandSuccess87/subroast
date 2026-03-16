@@ -72,6 +72,7 @@ type Campaign = {
   subreddits: string[]; keywords: string[]; aiPromptInstructions?: string | null;
   reviewMode: "auto_send" | "review_first"; status: "active" | "paused" | "completed";
   leadsFound: number; dmsSent: number; lastSyncAt?: number | null;
+  minSubSize?: number | null; maxSubSize?: number | null;
 };
 
 type Lead = {
@@ -839,6 +840,19 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
           </div>
         ))}
       </div>
+
+      {/* Size filter badge — only shown when a filter is active */}
+      {(campaign.minSubSize || campaign.maxSubSize) && (
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.6rem" }}>
+          <span style={{ fontFamily: FONT_MONO, fontSize: "0.52rem", letterSpacing: "0.12em", textTransform: "uppercase", color: MUTED }}>Sub filter</span>
+          <span style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", color: "oklch(0.72 0.12 220)", border: "0.5px solid oklch(0.72 0.12 220 / 0.3)", padding: "0.1rem 0.45rem", display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
+            {campaign.minSubSize ? `${(campaign.minSubSize / 1000).toFixed(0)}k` : "any"}
+            {" – "}
+            {campaign.maxSubSize ? `${(campaign.maxSubSize / 1000).toFixed(0)}k` : "∞"}
+            {" members"}
+          </span>
+        </div>
+      )}
 
       {/* Review mode banner */}
       <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", padding: "0.75rem 1rem", border: `0.5px solid ${campaign.reviewMode === "auto_send" ? BORDER : "oklch(0.88 0.025 85 / 0.25)"}`, background: campaign.reviewMode === "auto_send" ? SURFACE : "oklch(0.88 0.025 85 / 0.03)", marginBottom: "1.5rem" }}>

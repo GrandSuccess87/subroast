@@ -472,3 +472,6 @@
 - [ ] Per-account rate limits: 25 replies/day, 2-3 posts/week
 - [ ] Account warm-up mode: one account that never DMs, only builds karma in adjacent subs
 - [ ] Account health dashboard: karma score, post history, ban risk per account
+
+### Size Filter Badge on Campaign Detail (v6.2.1)
+- [x] Show active subreddit size filter as a subtle badge at the top of the campaign detail screen (e.g. "Filtering: 10k–150k members") — only visible when a filter is set
