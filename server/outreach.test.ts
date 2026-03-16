@@ -252,19 +252,19 @@ describe("funnel metrics", () => {
   type LeadStatus = "new" | "dm_generated" | "queued" | "sent" | "skipped" | "failed";
   type PipelineStage = "new" | "replied" | "interested" | "converted" | "skipped" | null;
 
-  function calcFunnel(leads: Array<{ status: LeadStatus; pipelineStage: PipelineStage }>) {
-    const total = leads.length;
-    const dmsDrafted = leads.filter((l) => ["dm_generated", "queued", "sent"].includes(l.status)).length;
+  function calcFunnel(leads: Array<{ status: LeadStatus; pipelineStage: PipelineStage }>, campaignLeadsFound?: number) {
+    const total = campaignLeadsFound ?? leads.length;
+    const dmsSent = leads.filter((l) => l.status === "sent").length;
     const conversations = leads.filter((l) => ["replied", "interested", "converted"].includes(l.pipelineStage ?? "")).length;
     const converted = leads.filter((l) => l.pipelineStage === "converted").length;
     const pct = (n: number, d: number) => d > 0 ? Math.round((n / d) * 100) : 0;
     return {
       total,
-      dmsDrafted,
+      dmsSent,
       conversations,
       converted,
-      dmRate: pct(dmsDrafted, total),
-      convRate: pct(conversations, dmsDrafted),
+      dmRate: pct(dmsSent, total),
+      convRate: pct(conversations, dmsSent),
       convertRate: pct(converted, conversations),
     };
   }
@@ -272,11 +272,11 @@ describe("funnel metrics", () => {
   it("returns zeros for empty leads", () => {
     const result = calcFunnel([]);
     expect(result.total).toBe(0);
-    expect(result.dmsDrafted).toBe(0);
+    expect(result.dmsSent).toBe(0);
     expect(result.dmRate).toBe(0);
   });
 
-  it("counts dm_generated, queued, and sent as DMs drafted", () => {
+  it("counts only sent status as DMs Sent", () => {
     const leads = [
       { status: "new" as LeadStatus, pipelineStage: null },
       { status: "dm_generated" as LeadStatus, pipelineStage: null },
@@ -284,10 +284,10 @@ describe("funnel metrics", () => {
       { status: "sent" as LeadStatus, pipelineStage: null },
       { status: "skipped" as LeadStatus, pipelineStage: null },
     ];
-    const result = calcFunnel(leads);
-    expect(result.total).toBe(5);
-    expect(result.dmsDrafted).toBe(3);
-    expect(result.dmRate).toBe(60);
+    const result = calcFunnel(leads, 10);
+    expect(result.total).toBe(10); // uses campaign.leadsFound, not leads.length
+    expect(result.dmsSent).toBe(1); // only status === "sent"
+    expect(result.dmRate).toBe(10); // 1/10
   });
 
   it("counts replied, interested, and converted as conversations", () => {
@@ -311,8 +311,8 @@ describe("funnel metrics", () => {
       { status: "new" as LeadStatus, pipelineStage: null },
     ];
     const result = calcFunnel(leads);
-    expect(result.dmRate).toBe(80); // 4/5
-    expect(result.convertRate).toBe(100); // 2/2 conversations converted
+    expect(result.dmRate).toBe(80); // 4 sent / 5 total
+    expect(result.convertRate).toBe(100); // 2 converted / 2 conversations
   });
 
   it("returns 0% rate when denominator is zero (no divide-by-zero)", () => {

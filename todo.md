@@ -485,3 +485,8 @@
 - [ ] Add "Edit filter" link next to the size filter badge on the campaign detail screen
 - [ ] Inline edit UI: min/max inputs + presets, saves via updateCampaign mutation
 - [ ] Update DB updateCampaign helper to accept minSubSize/maxSubSize fields
+
+### Funnel Metrics Fixes (v6.3.1)
+- [x] Fix: use campaign.leadsFound (not leads.length) for the Leads Found stage so it matches the campaign stats grid
+- [x] Fix: change stage 2 from "DMs Drafted" to "DMs Sent" (status === "sent" only)
+- [x] Update funnel unit tests to reflect the corrected logic

@@ -842,16 +842,16 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
       </div>
 
       {/* Funnel metrics row */}
-      {leads.length > 0 && (() => {
-        const total = leads.length;
-        const dmsDrafted = leads.filter((l) => ["dm_generated", "queued", "sent"].includes(l.status)).length;
+      {campaign.leadsFound > 0 && (() => {
+        const total = campaign.leadsFound;
+        const dmsSent = leads.filter((l) => l.status === "sent").length;
         const conversations = leads.filter((l) => l.pipelineStage === "replied" || l.pipelineStage === "interested" || l.pipelineStage === "converted").length;
         const converted = leads.filter((l) => l.pipelineStage === "converted").length;
         const pct = (n: number, d: number) => d > 0 ? Math.round((n / d) * 100) : 0;
         const stages = [
           { label: "Leads Found", value: total, rate: null },
-          { label: "DMs Drafted", value: dmsDrafted, rate: pct(dmsDrafted, total) },
-          { label: "Conversations", value: conversations, rate: pct(conversations, dmsDrafted) },
+          { label: "DMs Sent", value: dmsSent, rate: pct(dmsSent, total) },
+          { label: "Conversations", value: conversations, rate: pct(conversations, dmsSent) },
           { label: "Converted", value: converted, rate: pct(converted, conversations) },
         ];
         return (
