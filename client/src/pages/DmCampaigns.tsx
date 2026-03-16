@@ -191,6 +191,9 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
   const [aiInstructions, setAiInstructions] = useState("");
   const [reviewMode, setReviewMode] = useState<"auto_send" | "review_first">("review_first");
   const [aiRecs, setAiRecs] = useState<{ subreddits: string[]; keywords: string[]; reasoning: string } | null>(null);
+  const [minSubSize, setMinSubSize] = useState<string>("");
+  const [maxSubSize, setMaxSubSize] = useState<string>("");
+  const [showSizeFilter, setShowSizeFilter] = useState(false);
 
   const utils = trpc.useUtils();
   const [, navigate] = useLocation();
@@ -222,7 +225,7 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
     if (!offering.trim()) return toast.error("Offering description is required");
     if (subreddits.length === 0) return toast.error("Add at least one subreddit");
     if (keywords.length === 0) return toast.error("Add at least one keyword");
-    createCampaign.mutate({ name, offering, websiteUrl: websiteUrl || undefined, subreddits, keywords, aiPromptInstructions: aiInstructions || undefined, reviewMode });
+    createCampaign.mutate({ name, offering, websiteUrl: websiteUrl || undefined, subreddits, keywords, aiPromptInstructions: aiInstructions || undefined, reviewMode, minSubSize: minSubSize ? parseInt(minSubSize) : undefined, maxSubSize: maxSubSize ? parseInt(maxSubSize) : undefined });
   };
 
   const labelStyle: React.CSSProperties = { fontFamily: FONT_MONO, fontSize: "0.58rem", letterSpacing: "0.15em", textTransform: "uppercase", color: MUTED, display: "block", marginBottom: "0.4rem" };
@@ -261,7 +264,7 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
               <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: FOREGROUND }}>AI Subreddit & Keyword Recs</p>
             </div>
             <button
-              onClick={() => getRecs.mutate({ offering, websiteUrl: websiteUrl || undefined })}
+              onClick={() => getRecs.mutate({ offering, websiteUrl: websiteUrl || undefined, minSubSize: minSubSize ? parseInt(minSubSize) : undefined, maxSubSize: maxSubSize ? parseInt(maxSubSize) : undefined })}
               disabled={getRecs.isPending || !offering.trim()}
               style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.1em", color: IVORY, background: "none", border: `0.5px solid oklch(0.88 0.025 85 / 0.4)`, padding: "0.3rem 0.75rem", cursor: !offering.trim() || getRecs.isPending ? "not-allowed" : "pointer", opacity: !offering.trim() ? 0.5 : 1, display: "flex", alignItems: "center", gap: "0.3rem" }}
             >
@@ -322,6 +325,68 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
                   <button onClick={() => setKeywords(keywords.filter((x) => x !== k))} style={{ background: "none", border: "none", color: MUTED, cursor: "pointer", padding: 0, display: "flex" }}><X size={9} /></button>
                 </span>
               ))}
+            </div>
+          )}
+        </div>
+
+        {/* Subreddit Size Filter */}
+        <div>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: showSizeFilter ? "0.75rem" : 0 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <label style={{ ...labelStyle, marginBottom: 0 }}>Subreddit Size Filter</label>
+              <span style={{ fontFamily: FONT_MONO, fontSize: "0.48rem", letterSpacing: "0.1em", textTransform: "uppercase", color: MUTED, border: `0.5px solid ${BORDER}`, padding: "0.05rem 0.3rem" }}>optional</span>
+            </div>
+            <button
+              onClick={() => setShowSizeFilter(!showSizeFilter)}
+              style={{ background: "none", border: `0.5px solid ${BORDER}`, color: MUTED, fontFamily: FONT_MONO, fontSize: "0.55rem", letterSpacing: "0.1em", padding: "0.2rem 0.5rem", cursor: "pointer" }}
+            >
+              {showSizeFilter ? "Hide" : "Set filter"}
+            </button>
+          </div>
+          {showSizeFilter && (
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+              <p style={{ fontSize: "0.72rem", color: MUTED, lineHeight: 1.5 }}>
+                Filter subreddits by subscriber count. Sweet spot for high signal-to-noise: <span style={{ color: IVORY }}>10k – 150k members</span>.
+              </p>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
+                <div>
+                  <label style={labelStyle}>Min subscribers</label>
+                  <input
+                    type="number"
+                    value={minSubSize}
+                    onChange={(e) => setMinSubSize(e.target.value)}
+                    placeholder="e.g. 10000"
+                    min={0}
+                    style={inputStyle}
+                  />
+                </div>
+                <div>
+                  <label style={labelStyle}>Max subscribers</label>
+                  <input
+                    type="number"
+                    value={maxSubSize}
+                    onChange={(e) => setMaxSubSize(e.target.value)}
+                    placeholder="e.g. 150000"
+                    min={0}
+                    style={inputStyle}
+                  />
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
+                {[
+                  { label: "Niche (10k–50k)", min: "10000", max: "50000" },
+                  { label: "Mid (10k–150k)", min: "10000", max: "150000" },
+                  { label: "Large (150k+)", min: "150000", max: "" },
+                ].map((preset) => (
+                  <button
+                    key={preset.label}
+                    onClick={() => { setMinSubSize(preset.min); setMaxSubSize(preset.max); }}
+                    style={{ fontFamily: FONT_MONO, fontSize: "0.52rem", letterSpacing: "0.08em", color: minSubSize === preset.min && maxSubSize === preset.max ? IVORY : MUTED, background: "transparent", border: `0.5px solid ${minSubSize === preset.min && maxSubSize === preset.max ? "oklch(0.88 0.025 85 / 0.4)" : BORDER}`, padding: "0.2rem 0.5rem", cursor: "pointer" }}
+                  >
+                    {preset.label}
+                  </button>
+                ))}
+              </div>
             </div>
           )}
         </div>

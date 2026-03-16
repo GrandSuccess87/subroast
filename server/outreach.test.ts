@@ -190,3 +190,58 @@ describe("review mode", () => {
     expect(autoQueued).toBe(false);
   });
 });
+
+// ─── Subreddit size filter logic ──────────────────────────────────────────────
+
+describe("subreddit size filter", () => {
+  function isSubredditInSizeRange(
+    subscriberCount: number | null,
+    minSubSize: number | null,
+    maxSubSize: number | null
+  ): boolean {
+    if (subscriberCount === null) return true; // unknown size: allow through
+    if (minSubSize !== null && subscriberCount < minSubSize) return false;
+    if (maxSubSize !== null && subscriberCount > maxSubSize) return false;
+    return true;
+  }
+
+  it("allows subreddit when no filter is set", () => {
+    expect(isSubredditInSizeRange(50000, null, null)).toBe(true);
+  });
+
+  it("allows subreddit when subscriber count is unknown", () => {
+    expect(isSubredditInSizeRange(null, 10000, 150000)).toBe(true);
+  });
+
+  it("blocks subreddit below minimum size", () => {
+    expect(isSubredditInSizeRange(5000, 10000, null)).toBe(false);
+  });
+
+  it("allows subreddit exactly at minimum size", () => {
+    expect(isSubredditInSizeRange(10000, 10000, null)).toBe(true);
+  });
+
+  it("blocks subreddit above maximum size", () => {
+    expect(isSubredditInSizeRange(200000, null, 150000)).toBe(false);
+  });
+
+  it("allows subreddit exactly at maximum size", () => {
+    expect(isSubredditInSizeRange(150000, null, 150000)).toBe(true);
+  });
+
+  it("allows subreddit within niche range (10k-50k)", () => {
+    expect(isSubredditInSizeRange(30000, 10000, 50000)).toBe(true);
+  });
+
+  it("blocks subreddit outside niche range (10k-50k)", () => {
+    expect(isSubredditInSizeRange(75000, 10000, 50000)).toBe(false);
+  });
+
+  it("allows large subreddit with only min filter (150k+)", () => {
+    expect(isSubredditInSizeRange(500000, 150000, null)).toBe(true);
+  });
+
+  it("blocks small subreddit with only min filter (150k+)", () => {
+    expect(isSubredditInSizeRange(50000, 150000, null)).toBe(false);
+  });
+});

@@ -41,6 +41,29 @@ async function getValidRedditToken(account: {
 
 // ─── Reddit Public Search ─────────────────────────────────────────────────────
 
+// Cache subreddit subscriber counts within a single sync run to avoid redundant API calls
+const subSizeCache = new Map<string, number>();
+
+async function getSubredditSubscriberCount(subreddit: string): Promise<number | null> {
+  if (subSizeCache.has(subreddit)) return subSizeCache.get(subreddit)!;
+  try {
+    const url = `https://www.reddit.com/r/${subreddit}/about.json`;
+    const res = await fetch(url, {
+      headers: {
+        "User-Agent": "SubRoast/1.0 (subreddit monitoring bot)",
+        Accept: "application/json",
+      },
+    });
+    if (!res.ok) return null;
+    const json = await res.json() as { data?: { subscribers?: number } };
+    const count = json.data?.subscribers ?? null;
+    if (count !== null) subSizeCache.set(subreddit, count);
+    return count;
+  } catch {
+    return null;
+  }
+}
+
 async function searchRedditPosts(
   subreddit: string,
   keyword: string,
@@ -122,6 +145,8 @@ export const outreachRouter = router({
         keywords: z.array(z.string().min(1).max(128)).min(1).max(30),
         aiPromptInstructions: z.string().max(1000).optional(),
         reviewMode: z.enum(["auto_send", "review_first"]).default("review_first"),
+        minSubSize: z.number().int().min(0).optional(),
+        maxSubSize: z.number().int().min(0).optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -169,6 +194,8 @@ export const outreachRouter = router({
         subreddits: JSON.stringify(input.subreddits),
         keywords: JSON.stringify(input.keywords),
         aiPromptInstructions: input.aiPromptInstructions || null,
+        minSubSize: input.minSubSize ?? null,
+        maxSubSize: input.maxSubSize ?? null,
         reviewMode: input.reviewMode,
         status: "active",
         leadsFound: 0,
@@ -238,9 +265,15 @@ export const outreachRouter = router({
       z.object({
         offering: z.string().min(10).max(2000),
         websiteUrl: z.string().optional(),
+        minSubSize: z.number().int().min(0).optional(),
+        maxSubSize: z.number().int().min(0).optional(),
       })
     )
     .mutation(async ({ input }) => {
+      const sizeConstraint = input.minSubSize || input.maxSubSize
+        ? `\n- Subreddit size constraint: only recommend subreddits with approximately ${input.minSubSize ? `${(input.minSubSize / 1000).toFixed(0)}k+` : "any"} to ${input.maxSubSize ? `${(input.maxSubSize / 1000).toFixed(0)}k` : "any"} subscribers. Prefer niche communities in this range where signal-to-noise is higher.`
+        : "";
+
       const systemPrompt = `You are an expert Reddit growth strategist for indie SaaS founders.
 Given a product description, you recommend the best subreddits and keywords for finding potential customers.
 Always respond with valid JSON matching the exact schema.`;
@@ -261,7 +294,7 @@ Return JSON with this EXACT structure:
 Rules:
 - 5-10 subreddits (without r/ prefix)
 - 8-15 keywords/phrases that indicate someone needs this product
-- Keywords should be problem-oriented, not product-oriented (e.g. "struggling with X" not "need X tool")`;
+- Keywords should be problem-oriented, not product-oriented (e.g. "struggling with X" not "need X tool")${sizeConstraint}`;
 
       const response = await invokeLLM({
         messages: [
@@ -332,6 +365,11 @@ Rules:
 
       const subreddits = JSON.parse(c.subreddits) as string[];
       const keywords = JSON.parse(c.keywords) as string[];
+      const minSubSize = c.minSubSize ?? null;
+      const maxSubSize = c.maxSubSize ?? null;
+
+      // Clear the per-sync subreddit size cache
+      subSizeCache.clear();
 
       let newLeads = 0;
 
@@ -340,6 +378,15 @@ Rules:
       const existingPostIds = new Set(existingLeads.map((l) => l.redditPostId));
 
       for (const sub of subreddits.slice(0, 5)) { // limit to 5 subreddits per sync
+        // Check subreddit size filter if set
+        if (minSubSize !== null || maxSubSize !== null) {
+          const subscriberCount = await getSubredditSubscriberCount(sub);
+          if (subscriberCount !== null) {
+            if (minSubSize !== null && subscriberCount < minSubSize) continue;
+            if (maxSubSize !== null && subscriberCount > maxSubSize) continue;
+          }
+        }
+
         for (const kw of keywords.slice(0, 3)) { // limit to 3 keywords per subreddit
           const posts = await searchRedditPosts(sub, kw, 10);
           for (const post of posts) {

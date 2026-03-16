@@ -442,3 +442,33 @@
 - [x] Update any "Send DM" / "Send Comment" buttons to reflect extension-based send coming soon
 - [x] Add brief tooltip/explainer: "Send directly from your browser — no API, no ban risk"
 - [x] Landing page: update any automation language to reflect extension approach
+
+## Reddit Scaling Insights — Backlog (v6.2+)
+
+### Subreddit Size Filter (v6.2)
+- [x] Campaign creation form: add optional subreddit size filter (min/max subscriber count)
+- [x] DB schema: add minSubSize and maxSubSize fields to campaigns table
+- [x] AI subreddit recommendation prompt: respect size filter when suggesting subreddits
+- [x] Lead sync: filter out leads from subreddits outside the size range (if filter set)
+- [x] UI hint: show "Sweet spot: 10k–150k members" as helper text on the filter field
+
+### Funnel Metrics Dashboard (v6.3)
+- [ ] DB schema: add repliesSent, conversationsStarted, leadsConverted fields to campaigns table (or derived from leads table statuses)
+- [ ] Campaign detail view: add funnel stat row — Leads Found → DMs Drafted → Conversations → Converted
+- [ ] Dashboard overview: show aggregate funnel across all campaigns
+- [ ] Conversion rate calculation: show % at each funnel stage
+- [ ] Benchmark tooltip: "Industry average: 10% engagement → 10% conversion = ~28 leads/month at 100 replies/day"
+
+### Anti-Pattern / Footprint Risk (v6.4)
+- [ ] Add Footprint Risk as a 6th axis on the Intelligence Radar (Draft & Roast spider chart)
+- [ ] AI roast: detect if draft is too similar in length/tone to recent drafts (fingerprint risk)
+- [ ] AI roast: flag if post always agrees, always uses same opener, or always same word count
+- [ ] Roast feedback: suggest varying comment length, contradicting usual takes, changing posting rhythm
+- [ ] Anti-fingerprint tips section in Draft & Roast results
+
+### Multi-Account Management (v6.5 — future tier)
+- [ ] DB schema: support multiple Reddit accounts per user
+- [ ] Campaign assignment: assign campaigns to specific accounts
+- [ ] Per-account rate limits: 25 replies/day, 2-3 posts/week
+- [ ] Account warm-up mode: one account that never DMs, only builds karma in adjacent subs
+- [ ] Account health dashboard: karma score, post history, ban risk per account
