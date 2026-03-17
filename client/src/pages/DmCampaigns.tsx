@@ -894,7 +894,12 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
   const { data: rateLimits } = trpc.reddit.getRateLimitStatus.useQuery();
 
   const syncLeads = trpc.outreach.syncLeads.useMutation({
-    onSuccess: (data) => { toast.success(`Found ${data.newLeads} new leads!`); utils.outreach.getLeads.invalidate({ campaignId: campaign.id }); utils.outreach.listCampaigns.invalidate(); },
+    onSuccess: (data) => {
+      const spamNote = data.spamFiltered > 0 ? ` · ${data.spamFiltered} spam filtered` : "";
+      toast.success(`Found ${data.newLeads} new leads!${spamNote}`);
+      utils.outreach.getLeads.invalidate({ campaignId: campaign.id });
+      utils.outreach.listCampaigns.invalidate();
+    },
     onError: (err) => toast.error(err.message),
   });
 

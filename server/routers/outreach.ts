@@ -140,7 +140,59 @@ function scoreMatch(
   return { score, matchedKeywords: matched };
 }
 
-// ─── Outreach Router ──────────────────────────────────────────────────────────
+/// ─── Lightweight Spam Filter ─────────────────────────────────────────────────────
+// Uses only data already present in the post response — no extra API calls.
+
+// Bot/spam username patterns: random alphanum strings, ends in 4+ digits, underscore+numbers combos
+const BOT_USERNAME_RE = /^[a-z]+[_-]?[0-9]{4,}$|^[a-z0-9]{8,}[0-9]{4,}$|^[A-Za-z]+[0-9]{4,}$/;
+// External URL pattern (http/https links in post body)
+const URL_RE = /https?:\/\/[^\s)\]]+/i;
+// Excessive punctuation in title
+const EXCESSIVE_PUNCT_RE = /[!?]{3,}/;
+
+function isSpamPost(post: {
+  title: string;
+  body: string;
+  author: string;
+}): { spam: boolean; reason: string } {
+  const { title, body, author } = post;
+  const bodyTrimmed = body.trim();
+
+  // 1. Body contains an external URL — almost always an ad or spam link
+  if (URL_RE.test(bodyTrimmed)) {
+    return { spam: true, reason: "external_url_in_body" };
+  }
+
+  // 2. Body is too short to be a genuine discussion post (< 50 chars, non-empty)
+  if (bodyTrimmed.length > 0 && bodyTrimmed.length < 50) {
+    return { spam: true, reason: "body_too_short" };
+  }
+
+  // 3. Body is identical or near-identical to title (copy-paste spam)
+  if (bodyTrimmed.length > 0 && bodyTrimmed.toLowerCase() === title.toLowerCase().trim()) {
+    return { spam: true, reason: "body_equals_title" };
+  }
+
+  // 4. Title is all-caps (shouting spam)
+  const titleWords = title.replace(/[^a-zA-Z\s]/g, "").trim();
+  if (titleWords.length > 10 && titleWords === titleWords.toUpperCase()) {
+    return { spam: true, reason: "title_all_caps" };
+  }
+
+  // 5. Excessive punctuation in title (!!!, ???, etc.)
+  if (EXCESSIVE_PUNCT_RE.test(title)) {
+    return { spam: true, reason: "excessive_punctuation" };
+  }
+
+  // 6. Username matches bot/throwaway patterns
+  if (BOT_USERNAME_RE.test(author)) {
+    return { spam: true, reason: "bot_username_pattern" };
+  }
+
+  return { spam: false, reason: "" };
+}
+
+// ─── Outreach Router ─────────────────────────────────────────────────────
 
 export const outreachRouter = router({
   // ── Campaign CRUD ──────────────────────────────────────────────────────────
@@ -427,6 +479,7 @@ Rules:
       subSizeCache.clear();
 
       let newLeads = 0;
+      let spamFiltered = 0;
 
       // Fetch existing post IDs for this campaign to detect truly new leads
       const existingLeads = await getOutreachLeadsByCampaignId(input.campaignId);
@@ -454,6 +507,15 @@ Rules:
           console.log(`[syncLeads] r/${sub} + "${searchQuery}" (from "${kw}"): ${posts.length} posts found`);
           for (const post of posts) {
             if (post.author === "[deleted]" || post.author === "AutoModerator") continue;
+
+            // ── Lightweight spam filter ────────────────────────────────────────────────────
+            const spamCheck = isSpamPost({ title: post.title, body: post.body, author: post.author });
+            if (spamCheck.spam) {
+              console.log(`[syncLeads] Spam filtered: ${post.id} by u/${post.author} (${spamCheck.reason})`);
+              spamFiltered++;
+              continue;
+            }
+
             const { score, matchedKeywords } = scoreMatch(post.title, post.body, keywords);
             const isNew = !existingPostIds.has(post.id);
             await upsertOutreachLead({
@@ -474,6 +536,8 @@ Rules:
           }
         }
       }
+
+      console.log(`[syncLeads] Campaign ${input.campaignId}: newLeads=${newLeads}, spamFiltered=${spamFiltered}`);
 
       // Update campaign lastSyncAt and leadsFound
       // Always increment the daily sync counter (prevents unlimited spam syncing)
@@ -499,7 +563,7 @@ Rules:
       }
 
       const totalLeads = existingLeads.length + newLeads;
-      return { success: true, newLeads, totalLeads };
+      return { success: true, newLeads, totalLeads, spamFiltered };
     }),
 
   // ── Leads Inbox ────────────────────────────────────────────────────────────

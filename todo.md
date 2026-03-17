@@ -620,3 +620,21 @@
 - [x] Hero: restored ArchitecturalIllustration SVG to the right column
 - [x] DM Campaign detail: added Edit Campaign button with full EditCampaignModal (name, offering, subreddits, keywords, daily limit, review mode)
 - [x] Bug: sync leads returning 0 — root cause: Reddit IP-level block (HTTP 403) on unauthenticated public API calls from cloud server. Fixed by adding app-only OAuth (client credentials flow) as automatic fallback. Confirmed: 117 leads returned on first successful sync.
+
+### Spam Filter (v6.12)
+- [x] Lightweight spam filter (no extra API calls) — applied at sync time before saving leads:
+  - Filter: post body contains an external URL (http/https link) → likely ad/spam
+  - Filter: post body under 50 characters → too thin to be a genuine discussion post
+  - Filter: username matches bot patterns (random alphanum string, ends in 4+ digits, contains underscores+numbers)
+  - Filter: post title is all-caps or contains excessive punctuation (!!!, ???)
+  - Filter: post body is identical or near-identical to title (copy-paste spam)
+  - Log filtered count per sync so user can see how many were dropped
+  - Show "X spam filtered" count in sync result toast (e.g. "Found 12 new leads! · 8 spam filtered")
+- [ ] Full author-profile spam filter (extra API call per author, higher accuracy):
+  - Fetch /user/{username}/about for each lead author via OAuth API
+  - Filter: account age < 30 days
+  - Filter: comment karma < 10 (posts but never engages)
+  - Filter: post karma > 10× comment karma (ad account pattern)
+  - Filter: account has no comment history (pure poster)
+  - Cache author profiles within a sync run to avoid duplicate calls for same author
+  - Respect Reddit rate limits (max 60 author lookups per sync, queue remainder)
