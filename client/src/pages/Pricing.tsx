@@ -254,24 +254,13 @@ export default function Pricing() {
                   borderRight: plan.popular ? "none" : `0.5px solid ${BORDER}`,
                 }}
               >
+                {/* Recommended badge — commented out
                 {plan.popular && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "1.5rem",
-                      right: "1.5rem",
-                      fontFamily: FONT_MONO,
-                      fontSize: "0.6rem",
-                      letterSpacing: "0.2em",
-                      textTransform: "uppercase",
-                      color: IVORY,
-                      border: `0.5px solid ${BORDER_ACCENT}`,
-                      padding: "0.25rem 0.6rem",
-                    }}
-                  >
+                  <div style={{ position: "absolute", top: "1.5rem", right: "1.5rem", fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.2em", textTransform: "uppercase", color: IVORY, border: `0.5px solid ${BORDER_ACCENT}`, padding: "0.25rem 0.6rem" }}>
                     Recommended
                   </div>
                 )}
+                */}
 
                 {/* Tier label */}
                 <p

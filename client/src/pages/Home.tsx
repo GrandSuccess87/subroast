@@ -758,8 +758,8 @@ export default function Home() {
           {/* Nav links */}
           <div className="hidden md:flex items-center gap-8">
             {[
-              { href: "#demo", label: "Walkthrough" },
-              { href: "#capabilities", label: "Capabilities" },
+              { href: "#lead-intelligence", label: "How It Works" },
+              { href: "#safety", label: "Account Safety" },
               { href: "/pricing", label: "Pricing" },
             ].map(({ href, label }) => (
               <a
@@ -886,11 +886,11 @@ export default function Home() {
                     zIndex: 0,
                   }}
                 />
-                <a href={getLoginUrl()} className="btn-luxury-primary" style={{ position: "relative", zIndex: 1 }}>
+                <a href={getLoginUrl()} className="btn-luxury-primary" style={{ position: "relative", zIndex: 1, textAlign: "center", justifyContent: "center" }}>
                   Begin free trial
                 </a>
-                <a href="#demo" className="btn-luxury" style={{ position: "relative", zIndex: 1 }}>
-                  View walkthrough
+                <a href="#lead-intelligence" className="btn-luxury" style={{ position: "relative", zIndex: 1 }}>
+                  See how it works
                 </a>
               </div>
 
@@ -908,29 +908,15 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Right: architectural SVG demo */}
-            <div className="hidden lg:flex justify-end items-center">
-              <div
-                className="relative w-full max-w-[520px]"
-              >
-                {/* Faint gold aura */}
-                <div
-                  className="absolute -inset-8 pointer-events-none"
-                  style={{
-                    background:
-                      "radial-gradient(ellipse 60% 50% at 50% 50%, oklch(0.88 0.025 85 / 0.06) 0%, transparent 70%)",
-                  }}
-                />
-                <div
-                  style={{
-                    border: "0.5px solid oklch(0.22 0.007 60)",
-                    overflow: "hidden",
-                  }}
-                >
+            {/* Right: architectural SVG demo — commented out, restore if needed */}
+            {/* <div className="hidden lg:flex justify-end items-center">
+              <div className="relative w-full max-w-[520px]">
+                <div className="absolute -inset-8 pointer-events-none" style={{ background: "radial-gradient(ellipse 60% 50% at 50% 50%, oklch(0.88 0.025 85 / 0.06) 0%, transparent 70%)" }} />
+                <div style={{ border: "0.5px solid oklch(0.22 0.007 60)", overflow: "hidden" }}>
                   <ArchitecturalIllustration />
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -1093,6 +1079,7 @@ export default function Home() {
 
       {/* ── SAFETY ── */}
       <section
+        id="safety"
         style={{
           paddingTop: "clamp(5rem, 10vw, 9rem)",
           paddingBottom: "clamp(5rem, 10vw, 9rem)",
@@ -1229,6 +1216,7 @@ function LeadIntelligenceDemo() {
 
   return (
     <section
+      id="lead-intelligence"
       style={{
         paddingTop: "clamp(5rem, 10vw, 9rem)",
         paddingBottom: "clamp(5rem, 10vw, 9rem)",

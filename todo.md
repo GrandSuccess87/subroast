@@ -670,3 +670,13 @@
 - [x] Move Social Proof (Early Signal) strip to just before Account Safety
 - [x] Animate Account Safety bullets: staggered IntersectionObserver fade-in from left (220ms stagger, 0.5s ease)
 - [x] Remove "Post smarter. Grow faster." headline and hairline rule from CTA section
+
+### Primary Text Contrast (v6.19) — X user feedback
+- [ ] Raise primary/foreground text from near-pure-white to a warm off-white (~#E4E4E7 / oklch(0.91 0.004 60)) — more readable against black, distinct from secondary text at oklch(0.62)
+
+### Nav, Hero & Pricing Cleanup (v6.19)
+- [x] Remove ArchitecturalIllustration SVG from hero right column (commented out for easy restore)
+- [x] Update top nav links: removed Walkthrough and Capabilities, kept Pricing, added How It Works (#lead-intelligence) and Account Safety (#safety)
+- [x] Comment out "Recommended" badge on Growth plan in Pricing page
+- [x] Center the "Begin Free Trial" button text (added textAlign + justifyContent center)
+- [x] Feedback page already existed at /dashboard/feedback — confirmed fully built with submit form, upvote board, and admin controls. No rebuild needed. Also updated secondary CTA from "View walkthrough" to "See how it works" pointing to #lead-intelligence.
