@@ -472,21 +472,10 @@ function VideoSection() {
             From blank draft to warm leads
           </h2>
           <div className="rule-gold mb-6" style={{ width: "3rem" }} />
-          <p
-            style={{
-              fontFamily: "var(--font-sans)",
-              fontSize: "0.9375rem",
-              fontWeight: 300,
-              color: "oklch(0.62 0.006 80)",
-              lineHeight: 1.75,
-            }}
-          >
-            Watch the complete six-step intelligence chain — from post analysis
-            to personalized outreach — executed in under sixty seconds.
-          </p>
+
         </div>
 
-        {/* Intelligence Report Mockup — full-width showcase */}
+              {/* Intelligence Report Mockup — full-width showcase */}
         <div className="relative">
           {/* Wide ambient glow */}
           <div
@@ -882,10 +871,8 @@ export default function Home() {
                   marginBottom: "3rem",
                 }}
               >
-                SubRoast gives every Reddit post an AI roast, a virality score,
-                and a rewrite — then finds warm leads, drafts personalized
-                outreach, and mines Reddit for product validation signals while
-                you sleep.
+                AI roast, virality score, and rewrite for every post.
+                Warm leads found, outreach drafted, validation signals surfaced — automatically.
               </p>
 
               {/* CTAs */}
@@ -1163,20 +1150,20 @@ export default function Home() {
               {
                 tag: "Lead Generation",
                 headline: "Find buyers already talking about your product or service",
-                body: "SubRoast monitors niche subreddits, scores each post by relevance and urgency, and drafts a personalized DM for every high-signal prospect. You review, copy, and send — no cold lists, no mass blasting.",
+                body: "Monitor subreddits, score leads by relevance and urgency, draft personalized outreach. You review and send.",
                 stat: "High-signal leads only — scored by relevance, urgency, and subreddit fit",
               },
               {
                 tag: "Draft & Roast",
                 headline: "Write better Reddit content before you hit post",
-                body: "Paste your draft post or comment and SubRoast's AI gives you a brutally honest score: relevance to the subreddit, likely engagement, tone, and a virality rating from 1–100. Rewrite with confidence, not guesswork.",
+                body: "Paste your draft. Get a clarity score, subreddit fit, virality rating, and a fully rewritten version.",
                 stat: "Know how your post will land — before it does",
               },
               {
                 tag: "App Validation",
                 headline: "Know if people will pay before you build",
-                body: "Run a research campaign to surface real complaints in your target niche. SubRoast finds the posts, scores them by signal strength, and drafts personalised outreach so you can start the conversation.",
-                stat: "Surface pain points — then validate willingness to pay before writing a line of code",
+                body: "Surface real complaints in your niche, score them by signal strength, and validate willingness to pay before writing a line of code.",
+                stat: "48-hour validation framework, built in",
               },
             ].map(({ tag, headline, body, stat }) => (
               <UseCaseCard key={tag} tag={tag} headline={headline} body={body} stat={stat} />
@@ -1185,52 +1172,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── HOW IT WORKS ── */}
-      <section
-        style={{
-          paddingTop: "clamp(5rem, 10vw, 9rem)",
-          paddingBottom: "clamp(5rem, 10vw, 9rem)",
-          borderBottom: "0.5px solid oklch(0.18 0.007 60)",
-          background: "oklch(0.10 0.007 60)",
-        }}
-      >
-        <div className="container">
-          <div className="grid lg:grid-cols-[1fr_2fr] gap-16 items-start">
-            {/* Left */}
-            <div>
-              <p className="eyebrow mb-5">Process</p>
-              <h2 className="display-md mb-6">
-                Two steps from draft to leads
-              </h2>
-              <div
-                style={{
-                  width: "3rem",
-                  height: "0.5px",
-                  background: "oklch(0.88 0.025 85 / 0.5)",
-                }}
-              />
-            </div>
 
-            {/* Right: steps */}
-            <div>
-              <ProcessStep
-                n="I"
-                title="Roast your post"
-                body="Paste your draft. Receive a clarity score, a subreddit fit score, a virality score, a roast, and a rewritten version. Publish only when the numbers say you're ready."
-                hasBorder
-                delay={0}
-              />
-              <ProcessStep
-                n="II"
-                title="Find leads & send outreach"
-                body="SubRoast scans your target subreddits, scores each post by relevance, and drafts a personalized DM for every prospect. You review, then send with one click via the browser extension — coming soon."
-                hasBorder={false}
-                delay={150}
-              />
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* ── SAFETY ── */}
       <section
@@ -1393,18 +1335,7 @@ function SafetyBlock() {
         />
       </div>
       <div>
-        <p
-          style={{
-            fontFamily: "var(--font-sans)",
-            fontSize: "0.9375rem",
-            fontWeight: 300,
-            color: "oklch(0.72 0.006 80)",
-            lineHeight: 1.75,
-            marginBottom: "2rem",
-          }}
-        >
-          SubRoast keeps you inside Reddit's unwritten rules. The AI flags risky content before you post. The upcoming Chrome extension sends from your own browser session — no API token, no bot fingerprint, no ban risk.
-        </p>
+
         <div className="grid sm:grid-cols-2 gap-x-8 gap-y-4">
           {[
             "Spam risk score on every lead",

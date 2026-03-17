@@ -641,3 +641,10 @@
 
 ### Secondary Text Contrast (v6.13) — X user feedback 2026-03-17
 - [x] Raise all secondary/muted text from oklch(0.52) to oklch(0.62) (~#9CA3AF equivalent) across homepage, pricing page, and dashboard — improves WCAG AA readability while preserving dark aesthetic
+
+### Homepage Copy Reduction (v6.14)
+- [x] Remove redundant "How It Works" section (duplicates Capabilities section)
+- [x] Trim Safety section: remove prose paragraph, keep only the 6 bullet points
+- [x] Shorten use case card bodies to 1 punchy sentence each (~15 words)
+- [x] Remove walkthrough section paragraph (no video exists; report mockup speaks for itself)
+- [x] Trim hero body paragraph to a tighter two-sentence version
