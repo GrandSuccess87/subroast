@@ -609,3 +609,9 @@
 - [ ] Body copy color audit: several body paragraphs use oklch(0.48–0.50) which fails WCAG AA — raise to oklch(0.60) minimum
 - [ ] CTA section: add the noise texture here too (currently flat dark background)
 - [ ] Mobile: trust line wraps awkwardly at 375px — add a max-width or line-break hint
+
+### Homepage Polish Batch 2 (v6.10)
+- [x] Nav: transparent at top, backdrop-blur(20px) + hairline border on scroll with 0.4s ease transition
+- [x] Hero: radial amber glow (oklch(0.78 0.14 65 / 0.10)) behind CTA buttons with zIndex layering
+- [x] Footer: Pricing/Feedback raised from oklch(0.35) → oklch(0.62); SubRoast wordmark raised to oklch(0.58); copyright raised to oklch(0.42)
+- [x] Homepage: replaced ArchitecturalIllustration with full two-column expanded ReportMockup (860px max-width) including Lead Signal Detected panel

@@ -486,31 +486,134 @@ function VideoSection() {
           </p>
         </div>
 
-        {/* Architectural Illustration */}
-        <div className="relative max-w-4xl">
-          {/* Ambient glow */}
+        {/* Intelligence Report Mockup — full-width showcase */}
+        <div className="relative">
+          {/* Wide ambient glow */}
           <div
-            className="absolute -inset-6 pointer-events-none"
+            className="absolute pointer-events-none"
             style={{
+              inset: "-4rem -6rem",
               background:
-                "radial-gradient(ellipse 70% 60% at 50% 50%, oklch(0.88 0.025 85 / 0.04) 0%, transparent 70%)",
+                "radial-gradient(ellipse 60% 50% at 50% 50%, oklch(0.78 0.14 65 / 0.07) 0%, transparent 70%)",
             }}
           />
+          {/* Report card — wider layout */}
           <div
+            className="relative grid md:grid-cols-2 gap-0"
             style={{
-              border: "0.5px solid oklch(0.22 0.007 60)",
-              overflow: "hidden",
+              background: "oklch(0.12 0.007 60)",
+              border: "0.5px solid oklch(0.24 0.007 60)",
+              maxWidth: "860px",
             }}
           >
-            <ArchitecturalIllustration />
+            {/* Left column: header + scores + assessment */}
+            <div style={{ borderRight: "0.5px solid oklch(0.20 0.007 60)" }}>
+              {/* Report header */}
+              <div
+                className="px-8 pt-8 pb-6"
+                style={{ borderBottom: "0.5px solid oklch(0.20 0.007 60)" }}
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <p className="eyebrow mb-1" style={{ color: "oklch(0.88 0.025 85)", fontSize: "0.6rem" }}>
+                      SubRoast Intelligence
+                    </p>
+                    <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", color: "oklch(0.38 0 0)", letterSpacing: "0.1em" }}>
+                      POST ANALYSIS REPORT
+                    </p>
+                  </div>
+                  <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", color: "oklch(0.35 0 0)", textAlign: "right", letterSpacing: "0.08em" }}>
+                    <div>REF-2024-0312</div>
+                    <div>r/SaaS</div>
+                  </div>
+                </div>
+                <p style={{ fontFamily: "var(--font-display)", fontSize: "1.1rem", fontWeight: 400, color: "oklch(0.93 0.010 80)", lineHeight: 1.3 }}>
+                  "Just launched my SaaS tool for tracking Reddit mentions…"
+                </p>
+              </div>
+
+              {/* Score grid */}
+              <div className="grid grid-cols-3" style={{ borderBottom: "0.5px solid oklch(0.20 0.007 60)" }}>
+                {[{ label: "Clarity", value: "74", sub: "Moderate" }, { label: "Fit", value: "81", sub: "Strong" }, { label: "Virality", value: "68", sub: "Fair" }].map((s, i) => (
+                  <div key={s.label} className="px-5 py-5 text-center" style={{ borderRight: i < 2 ? "0.5px solid oklch(0.20 0.007 60)" : "none" }}>
+                    <div style={{ fontFamily: "var(--font-mono)", fontSize: "2rem", fontWeight: 300, color: "oklch(0.88 0.025 85)", lineHeight: 1 }}>{s.value}</div>
+                    <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", color: "oklch(0.50 0.006 80)", letterSpacing: "0.12em", textTransform: "uppercase", marginTop: "0.4rem" }}>{s.label}</div>
+                    <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", color: "oklch(0.38 0 0)", letterSpacing: "0.08em", marginTop: "0.15rem" }}>{s.sub}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Assessment */}
+              <div className="px-8 py-6">
+                <p className="eyebrow mb-3" style={{ fontSize: "0.58rem", color: "oklch(0.88 0.025 85 / 0.7)" }}>Assessment</p>
+                <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.8rem", fontWeight: 300, color: "oklch(0.55 0.006 80)", lineHeight: 1.7 }}>
+                  This draft reads as promotional rather than conversational. Reddit’s highest-performing posts lead with a problem, not a product. Recommend restructuring the opening to surface the pain point first.
+                </p>
+              </div>
+            </div>
+
+            {/* Right column: recommended draft + virality tip + badge */}
+            <div className="relative flex flex-col">
+              {/* Recommended draft */}
+              <div className="px-8 pt-8 pb-6" style={{ borderBottom: "0.5px solid oklch(0.20 0.007 60)" }}>
+                <p className="eyebrow mb-3" style={{ fontSize: "0.58rem", color: "oklch(0.88 0.025 85 / 0.7)" }}>Recommended Draft</p>
+                <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.8rem", fontWeight: 300, color: "oklch(0.72 0.006 80)", lineHeight: 1.7, fontStyle: "italic" }}>
+                  "Has anyone found a reliable way to track when your product gets mentioned on Reddit? I built something for this after spending 3 hours manually searching…"
+                </p>
+              </div>
+
+              {/* Virality tip */}
+              <div className="px-8 py-6" style={{ borderBottom: "0.5px solid oklch(0.20 0.007 60)" }}>
+                <div className="flex items-start gap-3">
+                  <div style={{ width: "1px", alignSelf: "stretch", background: "oklch(0.88 0.025 85 / 0.4)", flexShrink: 0 }} />
+                  <div>
+                    <p className="eyebrow mb-2" style={{ fontSize: "0.58rem", color: "oklch(0.88 0.025 85 / 0.7)" }}>Virality Recommendation</p>
+                    <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", fontWeight: 300, color: "oklch(0.50 0.006 80)", lineHeight: 1.65 }}>
+                      Posts opening with “Has anyone…” receive 2.4× more comments on r/SaaS. Optimal posting window: Tuesday–Thursday, 9–11am EST.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Lead signal */}
+              <div className="px-8 py-6">
+                <p className="eyebrow mb-3" style={{ fontSize: "0.58rem", color: "oklch(0.88 0.025 85 / 0.7)" }}>Lead Signal Detected</p>
+                <div
+                  className="px-4 py-3"
+                  style={{ background: "oklch(0.15 0.010 65)", border: "0.5px solid oklch(0.28 0.020 65)" }}
+                >
+                  <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", color: "oklch(0.78 0.14 65)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "0.4rem" }}>3 warm leads in r/SaaS</p>
+                  <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.72rem", fontWeight: 300, color: "oklch(0.55 0.006 80)", lineHeight: 1.6 }}>
+                    Posts mentioning “Reddit tracking” or “mentions tool” in the last 48 hours. Outreach drafts ready.
+                  </p>
+                </div>
+              </div>
+
+              {/* Score improved badge */}
+              <div
+                className="absolute -bottom-3 -right-3 px-3 py-1.5"
+                style={{
+                  background: "oklch(0.88 0.025 85)",
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "0.6rem",
+                  fontWeight: 400,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: "oklch(0.09 0.008 60)",
+                }}
+              >
+                +18 pts after revision
+              </div>
+            </div>
           </div>
+
           {/* Caption */}
           <p
             className="mt-5"
             style={{
               fontFamily: "var(--font-mono)",
               fontSize: "0.6rem",
-              color: "oklch(0.58 0 0)",
+              color: "oklch(0.45 0 0)",
               letterSpacing: "0.14em",
               textTransform: "uppercase",
             }}
@@ -587,6 +690,7 @@ export default function Home() {
   const { isAuthenticated, loading } = useAuth();
   const [, setLocation] = useLocation();
   const heroRef = useRef<HTMLDivElement>(null);
+  const [scrolled, setScrolled] = useState(false);
 
   // Set SEO-optimised page title (30–60 chars)
   useEffect(() => {
@@ -610,6 +714,13 @@ export default function Home() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Nav scroll state
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   if (loading) return <DashboardLayoutSkeleton />;
 
   return (
@@ -624,9 +735,10 @@ export default function Home() {
       <nav
         className="sticky top-0 z-50"
         style={{
-          borderBottom: "0.5px solid oklch(0.18 0.007 60)",
-          background: "oklch(0.09 0.008 60 / 0.92)",
-          backdropFilter: "blur(16px)",
+          borderBottom: scrolled ? "0.5px solid oklch(0.22 0.007 60)" : "0.5px solid transparent",
+          background: scrolled ? "oklch(0.09 0.008 60 / 0.88)" : "transparent",
+          backdropFilter: scrolled ? "blur(20px) saturate(1.4)" : "none",
+          transition: "background 0.4s ease, border-color 0.4s ease, backdrop-filter 0.4s ease",
         }}
       >
         <div className="container flex items-center justify-between h-14">
@@ -777,11 +889,20 @@ export default function Home() {
               </p>
 
               {/* CTAs */}
-              <div className="flex flex-col sm:flex-row items-start gap-4 mb-10">
-                <a href={getLoginUrl()} className="btn-luxury-primary">
+              <div className="relative flex flex-col sm:flex-row items-start gap-4 mb-10">
+                {/* Radial amber glow behind the CTA area */}
+                <div
+                  className="absolute pointer-events-none"
+                  style={{
+                    inset: "-2rem -3rem",
+                    background: "radial-gradient(ellipse 70% 80% at 30% 50%, oklch(0.78 0.14 65 / 0.10) 0%, transparent 70%)",
+                    zIndex: 0,
+                  }}
+                />
+                <a href={getLoginUrl()} className="btn-luxury-primary" style={{ position: "relative", zIndex: 1 }}>
                   Begin free trial
                 </a>
-                <a href="#demo" className="btn-luxury">
+                <a href="#demo" className="btn-luxury" style={{ position: "relative", zIndex: 1 }}>
                   View walkthrough
                 </a>
               </div>
@@ -1121,7 +1242,7 @@ export default function Home() {
               fontFamily: "var(--font-display)",
               fontSize: "0.9rem",
               fontStyle: "italic",
-              color: "oklch(0.40 0 0)",
+              color: "oklch(0.58 0 0)",
             }}
           >
             SubRoast
@@ -1139,7 +1260,7 @@ export default function Home() {
                   fontSize: "0.58rem",
                   letterSpacing: "0.14em",
                   textTransform: "uppercase",
-                  color: "oklch(0.35 0 0)",
+                  color: "oklch(0.62 0.006 80)",
                   textDecoration: "none",
                   transition: "color 0.3s ease",
                 }}
@@ -1147,7 +1268,7 @@ export default function Home() {
                   ((e.target as HTMLAnchorElement).style.color = "oklch(0.88 0.025 85)")
                 }
                 onMouseLeave={(e) =>
-                  ((e.target as HTMLAnchorElement).style.color = "oklch(0.35 0 0)")
+                  ((e.target as HTMLAnchorElement).style.color = "oklch(0.62 0.006 80)")
                 }
               >
                 {label}
@@ -1158,7 +1279,7 @@ export default function Home() {
             style={{
               fontFamily: "var(--font-mono)",
               fontSize: "0.55rem",
-              color: "oklch(0.28 0 0)",
+              color: "oklch(0.42 0 0)",
               letterSpacing: "0.1em",
               textTransform: "uppercase",
             }}
