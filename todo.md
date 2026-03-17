@@ -546,3 +546,10 @@
 - [x] Rewrite App Validation card stat line to focus on feature value, not third-party claims
 - [x] Gate App Validation campaigns behind Growth plan (server-side check + UI lock on Starter)
 - [x] Add Chrome extension blurb to Growth plan on pricing page (coming soon, with "why" explanation)
+
+### Homepage & Pricing Polish (v6.5.2)
+- [x] Pricing: remove "AI auto-scheduling" from Growth plan features
+- [x] Dashboard: update banner from "Reddit direct posting coming soon" to "One-click send via Chrome extension — coming soon"
+- [x] Homepage use case #1: change "problem" to "product or service" in the headline
+- [x] Homepage use case #1: replace "no spray-and-pray" with "no cold lists, no mass blasting"
+- [x] Homepage: add Draft & Roast as a third use case card

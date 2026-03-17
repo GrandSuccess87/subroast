@@ -179,8 +179,8 @@ export default function Schedule() {
           <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.75rem 1rem", border: `0.5px solid ${BORDER}`, background: SURFACE, marginBottom: "1.5rem" }}>
             <span className="coming-soon-dot" />
             <p style={{ fontSize: "0.78rem", color: MUTED, lineHeight: 1.5 }}>
-              <span style={{ color: FOREGROUND, fontWeight: 500 }}>Reddit direct posting coming soon.</span>{" "}
-              Reddit API approval is pending — scheduling will be enabled automatically once approved.
+              <span style={{ color: FOREGROUND, fontWeight: 500 }}>One-click send via Chrome extension — coming soon.</span>{" "}
+              Scheduling will be enabled automatically once the extension ships.
             </p>
           </div>
         )}

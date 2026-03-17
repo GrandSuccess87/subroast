@@ -35,7 +35,6 @@ const PLANS = [
       "Everything in Starter",
       "Unlimited outreach campaigns",
       "Lead sync: every 4 hours (6× daily)",
-      "AI auto-scheduling",
       "App Validation campaigns",
       "One-click send via Chrome extension __COMING_SOON__",
       "DM template library __COMING_SOON__",

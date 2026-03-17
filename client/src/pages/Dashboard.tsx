@@ -117,7 +117,7 @@ export default function Dashboard() {
           >
             <span className="coming-soon-dot" />
             <p style={{ fontSize: "0.8rem", color: MUTED, lineHeight: 1.5 }}>
-              <span style={{ color: FOREGROUND, fontWeight: 500 }}>Reddit direct posting coming soon.</span>{" "}
+              <span style={{ color: FOREGROUND, fontWeight: 500 }}>One-click send via Chrome extension — coming soon.</span>{" "}
               Use Copy &amp; Open to send DMs and comments manually in the meantime.
             </p>
           </div>

@@ -906,15 +906,21 @@ export default function Home() {
         <div className="container">
           <p className="eyebrow mb-5">Use Cases</p>
           <h2 className="display-md mb-12" style={{ maxWidth: "22ch" }}>
-            Two ways founders use SubRoast
+            Three ways founders use SubRoast
           </h2>
-          <div className="grid lg:grid-cols-2 gap-px" style={{ border: "0.5px solid oklch(0.18 0.007 60)" }}>
+          <div className="grid lg:grid-cols-3 gap-px" style={{ border: "0.5px solid oklch(0.18 0.007 60)" }}>
             {[
               {
                 tag: "Lead Generation",
-                headline: "Find buyers already talking about your problem",
-                body: "SubRoast monitors niche subreddits, scores each post by relevance and urgency, and drafts a personalized DM for every high-signal prospect. You review, copy, and send — no cold lists, no spray-and-pray.",
+                headline: "Find buyers already talking about your product or service",
+                body: "SubRoast monitors niche subreddits, scores each post by relevance and urgency, and drafts a personalized DM for every high-signal prospect. You review, copy, and send — no cold lists, no mass blasting.",
                 stat: "High-signal leads only — scored by relevance, urgency, and subreddit fit",
+              },
+              {
+                tag: "Draft & Roast",
+                headline: "Write better Reddit content before you hit post",
+                body: "Paste your draft post or comment and SubRoast's AI gives you a brutally honest score: relevance to the subreddit, likely engagement, tone, and a virality rating from 1–100. Rewrite with confidence, not guesswork.",
+                stat: "Know how your post will land — before it does",
               },
               {
                 tag: "App Validation",
