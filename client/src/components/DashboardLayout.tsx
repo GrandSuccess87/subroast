@@ -385,7 +385,7 @@ function DashboardLayoutContent({
                   className="h-7 w-7 flex items-center justify-center hover:bg-sidebar-accent/60 transition-colors focus:outline-none"
                   title="Sign out"
                 >
-                  <LogOut className="h-3.5 w-3.5 text-sidebar-foreground/40" />
+                  <LogOut className="h-3.5 w-3.5 text-sidebar-foreground/60 hover:text-sidebar-foreground transition-colors" />
                 </button>
               </div>
             ) : (
@@ -408,10 +408,11 @@ function DashboardLayoutContent({
                 </div>
                 <button
                   onClick={logout}
-                  className="h-7 w-7 flex items-center justify-center hover:bg-sidebar-accent/60 transition-colors focus:outline-none shrink-0"
+                  className="flex items-center gap-1.5 px-2 py-1 hover:bg-sidebar-accent/60 transition-colors focus:outline-none shrink-0"
                   title="Sign out"
                 >
-                  <LogOut className="h-3.5 w-3.5 text-sidebar-foreground/40 hover:text-sidebar-foreground transition-colors" />
+                  <LogOut className="h-3.5 w-3.5 text-sidebar-foreground/60 hover:text-sidebar-foreground transition-colors" />
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.08em', textTransform: 'uppercase' }} className="text-sidebar-foreground/60">Sign out</span>
                 </button>
               </div>
             )}

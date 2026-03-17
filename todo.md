@@ -652,3 +652,8 @@
 ### Dashboard & Homepage Cleanup (v6.15)
 - [x] Remove "Connect your Reddit account" step from dashboard onboarding checklist (was marked comingSoon/disabled; now fully removed from the 3-step flow)
 - [x] Comment out Capabilities section on homepage (redundant with Use Cases; preserved in JSX comment for easy restore)
+
+### UX Fixes (v6.16)
+- [x] Rename walkthrough section headline to "What a lead looks like" (eyebrow: "In practice")
+- [x] Remove Reddit connect paragraph from homepage CTA area ("Connect your Reddit account and receive your first AI analysis in under two minutes" removed)
+- [x] Logout button made more visible in sidebar: icon raised from /40 to /60 opacity; expanded state now shows icon + "SIGN OUT" label

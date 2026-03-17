@@ -469,7 +469,7 @@ function VideoSection() {
         <div ref={ref} className="fade-up mb-16 max-w-xl">
           <p className="eyebrow mb-5">In practice</p>
           <h2 className="display-lg mb-6">
-            From blank draft to warm leads
+            What a lead looks like
           </h2>
           <div className="rule-gold mb-6" style={{ width: "3rem" }} />
 
@@ -1357,21 +1357,7 @@ function CtaSection() {
             margin: "0 auto 2.5rem",
           }}
         />
-        <p
-          style={{
-            fontFamily: "var(--font-sans)",
-            fontSize: "0.9375rem",
-            fontWeight: 300,
-            color: "oklch(0.70 0.006 80)",
-            lineHeight: 1.75,
-            maxWidth: "36ch",
-            margin: "0 auto 3rem",
-          }}
-        >
-          Connect your Reddit account and receive your first AI analysis in
-          under two minutes.
-        </p>
-        <a href={getLoginUrl()} className="btn-luxury-primary">
+        <a href={getLoginUrl()} className="btn-luxury-primary" style={{ marginBottom: "0" }}>
           Begin free trial — seven days
         </a>
         <p
