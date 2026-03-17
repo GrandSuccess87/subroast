@@ -1,0 +1,18 @@
+{
+  "query": "SHOW COLUMNS FROM outreach_campaigns LIKE 'campaign%';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute SHOW COLUMNS FROM outreach_campaigns LIKE 'campaign%';",
+  "rows": [
+    {
+      "Field": "campaignType",
+      "Type": "enum('outreach','validation')",
+      "Null": "NO",
+      "Key": "",
+      "Default": "outreach",
+      "Extra": ""
+    }
+  ],
+  "messages": [],
+  "stdout": "Field\tType\tNull\tKey\tDefault\tExtra\ncampaignType\tenum('outreach','validation')\tNO\t\toutreach\t\n",
+  "stderr": "",
+  "execution_time_ms": 65
+}

@@ -925,7 +925,7 @@ export default function Home() {
               {
                 tag: "App Validation",
                 headline: "Know if people will pay before you build",
-                body: "Run a research campaign to surface real complaints in your target niche. SubRoast finds the posts, scores them by signal strength, and drafts outreach so you can ask three questions: what do you use now, what frustrates you most, and would you pay to fix it.",
+                body: "Run a research campaign to surface real complaints in your target niche. SubRoast finds the posts, scores them by signal strength, and drafts personalised outreach so you can start the conversation.",
                 stat: "Surface pain points — then validate willingness to pay before writing a line of code",
               },
             ].map(({ tag, headline, body, stat }) => (
@@ -1211,7 +1211,7 @@ function SafetyBlock() {
             marginBottom: "2rem",
           }}
         >
-          SubRoast keeps you inside Reddit's unwritten rules. The AI flags risky content before you post, and the upcoming Chrome extension sends from your own browser session — so every action looks exactly like a human, because it is.
+          SubRoast keeps you inside Reddit's unwritten rules. The AI flags risky content before you post. The upcoming Chrome extension sends from your own browser session — no API token, no bot fingerprint, no ban risk.
         </p>
         <div className="grid sm:grid-cols-2 gap-x-8 gap-y-4">
           {[
@@ -1219,7 +1219,7 @@ function SafetyBlock() {
             "Flags templated or bot-like content",
             "Roast catches promo language before you post",
             "One-click send via extension — coming soon",
-            "No Reddit API — no ban risk",
+            "Sends from your browser session — no API token, no bot fingerprint",
             "Your browser session, your account",
           ].map((item) => (
             <div

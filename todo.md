@@ -553,3 +553,11 @@
 - [x] Homepage use case #1: change "problem" to "product or service" in the headline
 - [x] Homepage use case #1: replace "no spray-and-pray" with "no cold lists, no mass blasting"
 - [x] Homepage: add Draft & Roast as a third use case card
+
+### Rate Limit Indicators & Copy Polish (v6.6)
+- [x] Homepage: trim App Validation body copy — remove the three-question list
+- [x] Homepage: tighten Account Safety copy — replace "No Reddit API — no ban risk" with precise framing
+- [x] Scheduled Posts: Posts Today X/5 indicator already built (confirmed existing)
+- [x] Campaign detail: surface DMs Today counter (DMs today: X/Y + this hour: X/Y)
+- [x] CHROME_EXTENSION_PLAN.md: update with precise technical framing (DOM-based, no API calls, residual risks)
+- [x] CHROME_EXTENSION_PLAN.md: add Phase 2 requirement — extension must POST to SubRoast after each send to keep counters accurate

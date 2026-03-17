@@ -771,6 +771,7 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
   const chainLeadIdRef = useRef<number | null>(null);
 
   const { data: leads = [], isLoading: leadsLoading } = trpc.outreach.getLeads.useQuery({ campaignId: campaign.id });
+  const { data: rateLimits } = trpc.reddit.getRateLimitStatus.useQuery();
 
   const syncLeads = trpc.outreach.syncLeads.useMutation({
     onSuccess: (data) => { toast.success(`Found ${data.newLeads} new leads!`); utils.outreach.getLeads.invalidate({ campaignId: campaign.id }); utils.outreach.listCampaigns.invalidate(); },
@@ -922,6 +923,20 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
           </div>
         );
       })()}
+
+      {/* Rate limit indicator row */}
+      {rateLimits && (
+        <div style={{ display: "flex", alignItems: "center", gap: "1.5rem", padding: "0.6rem 1rem", border: `0.5px solid ${BORDER}`, background: SURFACE, marginBottom: "0.75rem", fontFamily: FONT_MONO, fontSize: "0.6rem", color: MUTED }}>
+          <span style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
+            DMs today: <span style={{ color: rateLimits.dmWarning ? "oklch(0.78 0.14 65)" : FOREGROUND }}>{rateLimits.dmsToday}/{rateLimits.maxDmsPerDay}</span>
+          </span>
+          {rateLimits.dmsThisHour > 0 && (
+            <span style={{ display: "flex", alignItems: "center", gap: "0.35rem", color: MUTED }}>
+              This hour: <span style={{ color: FOREGROUND }}>{rateLimits.dmsThisHour}/{rateLimits.maxDmsPerHour}</span>
+            </span>
+          )}
+        </div>
+      )}
 
       {/* Size filter badge — only shown when a filter is active */}
       {(campaign.minSubSize || campaign.maxSubSize) && (

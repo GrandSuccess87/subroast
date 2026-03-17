@@ -8,7 +8,11 @@
 
 ## Why a Chrome Extension?
 
-Reddit's public API is rate-limited, increasingly restricted, and a direct line to account bans when used for automated sending. The Chrome extension approach sidesteps all of this: every action happens inside the user's own authenticated browser session, indistinguishable from a human manually clicking. No API keys, no bot fingerprints, no ban risk.
+Reddit's public API is rate-limited, increasingly restricted, and a direct line to account bans when used for automated sending. The Chrome extension approach removes the highest-confidence signal Reddit uses to identify bots: API token presence and programmatic HTTP call patterns.
+
+The extension operates entirely within the browser DOM. It does not make API calls to Reddit. Instead, it navigates to the correct Reddit page, finds the compose window, fills in the pre-drafted text, and waits for the user to click Send. The send action itself is a native browser form submission — Reddit sees a logged-in session cookie, a human-initiated form submit event, and normal browser headers. No OAuth token, no `Authorization` header, no call to `api.reddit.com`.
+
+**Residual risk (small but real):** Reddit's pattern recognition can still detect velocity signals (many sends in a short window) and content similarity across accounts. SubRoast mitigates both: daily send limits are enforced server-side regardless of the extension, and AI-personalised drafts reduce content fingerprinting. The extension does not bypass SubRoast's own rate limits — it is purely the delivery mechanism.
 
 The extension's job is narrow and deliberate: **receive a pre-drafted message from SubRoast, navigate to the correct Reddit thread or DM compose window, pre-fill the message, and let the user send with one click.** SubRoast remains the intelligence layer; the extension is purely the delivery mechanism.
 
@@ -64,6 +68,7 @@ Connect the extension to the SubRoast web app so that clicking "Send via Extensi
 - Extension background worker receives the payload: `{ redditUsername, messageBody, campaignId, leadId }`
 - Extension opens a new tab to `https://www.reddit.com/user/{username}`, waits for page load, then triggers the DM compose flow
 - SubRoast lead card updates status to `"sent"` after the user confirms send (via a callback message from the extension)
+- **Extension must POST to SubRoast after each send** to increment `dmsCount` in `rateLimitTracking` — this keeps the "DMs Today" counter on the campaign detail accurate. Use the existing `trpc.outreach.recordSend` endpoint (to be created in Phase 2). SubRoast remains the record of truth for all rate limit counters regardless of how the send was initiated.
 - Extension popup UI: shows the last 5 pending sends, connection status to SubRoast
 
 **Technical decisions:**
