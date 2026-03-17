@@ -831,10 +831,10 @@ export default function Home() {
         </svg>
 
         <div className="container relative w-full">
-          <div className="flex flex-col items-center py-24 lg:py-32">
+          <div className="grid lg:grid-cols-2 gap-16 xl:gap-24 items-center py-20 lg:py-28">
 
-            {/* Center: editorial copy */}
-            <div ref={heroRef} style={{ maxWidth: "42rem", width: "100%", textAlign: "center" }}>
+            {/* LEFT: editorial copy */}
+            <div ref={heroRef}>
               {/* Eyebrow */}
               <p className="eyebrow mb-8 hero-eyebrow-animate">
                 AI Intelligence for Reddit
@@ -857,7 +857,6 @@ export default function Home() {
                   height: "0.5px",
                   background: "oklch(0.88 0.025 85 / 0.6)",
                   marginBottom: "2rem",
-                  margin: "0 auto 2rem",
                 }}
               />
 
@@ -870,9 +869,8 @@ export default function Home() {
                   fontWeight: 300,
                   color: "oklch(0.62 0.006 80)",
                   lineHeight: 1.8,
-                  maxWidth: "52ch",
+                  maxWidth: "48ch",
                   marginBottom: "3rem",
-                  margin: "0 auto 3rem",
                 }}
               >
                 AI roast, virality score, and rewrite for every post.
@@ -880,13 +878,13 @@ export default function Home() {
               </p>
 
               {/* CTAs */}
-              <div className="relative flex flex-col sm:flex-row items-center justify-center gap-4 mb-10 hero-cta-animate">
+              <div className="relative flex flex-wrap gap-4 mb-10 hero-cta-animate">
                 {/* Radial amber glow behind the CTA area */}
                 <div
                   className="absolute pointer-events-none"
                   style={{
                     inset: "-2rem -3rem",
-                    background: "radial-gradient(ellipse 70% 80% at 50% 50%, oklch(0.78 0.14 65 / 0.10) 0%, transparent 70%)",
+                    background: "radial-gradient(ellipse 70% 80% at 40% 50%, oklch(0.78 0.14 65 / 0.10) 0%, transparent 70%)",
                     zIndex: 0,
                   }}
                 />
@@ -913,15 +911,40 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Right: architectural SVG demo — commented out, restore if needed */}
-            {/* <div className="hidden lg:flex justify-end items-center">
-              <div className="relative w-full max-w-[520px]">
-                <div className="absolute -inset-8 pointer-events-none" style={{ background: "radial-gradient(ellipse 60% 50% at 50% 50%, oklch(0.88 0.025 85 / 0.06) 0%, transparent 70%)" }} />
-                <div style={{ border: "0.5px solid oklch(0.22 0.007 60)", overflow: "hidden" }}>
-                  <ArchitecturalIllustration />
-                </div>
+            {/* RIGHT: Lead Intelligence section + animated demo */}
+            <div className="hero-cta-animate">
+              {/* Section header */}
+              <div style={{ marginBottom: "1.5rem" }}>
+                <p className="eyebrow mb-3" style={{ color: "oklch(0.88 0.025 85 / 0.7)" }}>Lead Intelligence</p>
+                <h2
+                  style={{
+                    fontFamily: "var(--font-display)",
+                    fontSize: "clamp(1.25rem, 2vw, 1.6rem)",
+                    fontWeight: 400,
+                    color: "oklch(0.93 0.010 80)",
+                    lineHeight: 1.25,
+                    marginBottom: "0.75rem",
+                  }}
+                >
+                  From subreddit to warm lead
+                </h2>
+                <p
+                  style={{
+                    fontFamily: "var(--font-sans)",
+                    fontSize: "0.875rem",
+                    fontWeight: 300,
+                    color: "oklch(0.55 0.006 80)",
+                    lineHeight: 1.7,
+                    maxWidth: "44ch",
+                  }}
+                >
+                  SubRoast runs a six-step AI chain continuously — scanning, filtering spam, scoring intent, drafting personalised DMs, and writing public comment replies before you even open the app.
+                </p>
               </div>
-            </div> */}
+
+              {/* Animated demo panel — inline */}
+              <HeroDemoPanel />
+            </div>
           </div>
         </div>
 
@@ -1182,8 +1205,8 @@ const SPAM_POSTS = [
 
 const COMMENT_TEXT = "Hey — saw your post about Reddit traction. I built SubRoast specifically for this problem. It scores your draft before you post and finds warm leads in your target subreddits. Happy to share more if useful.";
 
-function LeadIntelligenceDemo() {
-  const sectionRef = useFadeUp();
+/* ── Shared animated demo panel (used in hero + Lead Intelligence section) ── */
+function HeroDemoPanel() {
   const [phase, setPhase] = useState<0 | 1 | 2 | 3>(0); // 0=chain, 1=spam, 2=lead, 3=comment
   const [activeStep, setActiveStep] = useState(0);
   const [visiblePosts, setVisiblePosts] = useState(0);
@@ -1220,28 +1243,6 @@ function LeadIntelligenceDemo() {
   }, [phase, activeStep, visiblePosts, typedChars]);
 
   return (
-    <section
-      id="lead-intelligence"
-      style={{
-        paddingTop: "clamp(5rem, 10vw, 9rem)",
-        paddingBottom: "clamp(5rem, 10vw, 9rem)",
-        borderBottom: "0.5px solid oklch(0.18 0.007 60)",
-        background: "oklch(0.09 0.007 60)",
-      }}
-    >
-      <div className="container">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left: copy */}
-          <div ref={sectionRef} className="fade-up">
-            <p className="eyebrow mb-5">Lead Intelligence</p>
-            <h2 className="display-lg mb-6">From subreddit to warm lead</h2>
-            <div className="rule-gold mb-6" style={{ width: "3rem" }} />
-            <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.9375rem", fontWeight: 300, color: "oklch(0.62 0.006 80)", lineHeight: 1.75, maxWidth: "44ch" }}>
-              SubRoast runs a six-step AI chain continuously — scanning, filtering spam, scoring intent, drafting personalised DMs, and writing public comment replies before you even open the app.
-            </p>
-          </div>
-
-          {/* Right: animated demo panel */}
           <div
             style={{
               background: "oklch(0.12 0.007 60)",
@@ -1433,6 +1434,35 @@ function LeadIntelligenceDemo() {
               </div>
             )}
           </div>
+  );
+}
+
+/* ── Lead Intelligence section (uses HeroDemoPanel) ── */
+function LeadIntelligenceDemo() {
+  const sectionRef = useFadeUp();
+  return (
+    <section
+      id="lead-intelligence"
+      style={{
+        paddingTop: "clamp(5rem, 10vw, 9rem)",
+        paddingBottom: "clamp(5rem, 10vw, 9rem)",
+        borderBottom: "0.5px solid oklch(0.18 0.007 60)",
+        background: "oklch(0.09 0.007 60)",
+      }}
+    >
+      <div className="container">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          {/* Left: copy */}
+          <div ref={sectionRef} className="fade-up">
+            <p className="eyebrow mb-5">Lead Intelligence</p>
+            <h2 className="display-lg mb-6">From subreddit to warm lead</h2>
+            <div className="rule-gold mb-6" style={{ width: "3rem" }} />
+            <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.9375rem", fontWeight: 300, color: "oklch(0.62 0.006 80)", lineHeight: 1.75, maxWidth: "44ch" }}>
+              SubRoast runs a six-step AI chain continuously — scanning, filtering spam, scoring intent, drafting personalised DMs, and writing public comment replies before you even open the app.
+            </p>
+          </div>
+          {/* Right: animated demo panel */}
+          <HeroDemoPanel />
         </div>
       </div>
     </section>

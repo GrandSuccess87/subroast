@@ -686,3 +686,8 @@
 
 ### Hero Eyebrow Animation (v6.21)
 - [x] Hero eyebrow "AI Intelligence for Reddit" fades in 200ms before the headline on first load (premium entrance effect)
+
+### Hero Two-Column Layout (v6.22)
+- [x] Rebuild hero as lg:grid-cols-2 layout: left = editorial copy (eyebrow, headline, body, CTAs, trust line), right = Lead Intelligence section (eyebrow, headline, description, animated demo)
+- [x] HeroDemoPanel extracted as shared component — used in hero right column AND in the standalone Lead Intelligence section below (kept both for scroll depth)
+- [x] Hero entrance animations preserved — eyebrow first, headline 200ms, body/rule 380ms, CTA+right-column 500ms
