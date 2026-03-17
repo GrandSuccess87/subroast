@@ -530,9 +530,12 @@
 - [ ] Weekly digest email: top leads, funnel movement, and subreddit highlights
 
 ### Homepage Updates (v6.4)
-- [ ] Add "App Validation" as a use case on the homepage (alongside "Lead Generation")
-- [ ] Update hero or features section to mention the 48-hour validation framework
-- [ ] Add social proof angle: "Used by founders to validate ideas before building"
+- [x] Add "App Validation" as a use case on the homepage (alongside "Lead Generation")
+- [x] Update hero or features section to mention the 48-hour validation framework
+- [x] Add social proof angle: "Used by founders to validate ideas before building"
+
+### Chrome Extension Planning Doc
+- [x] Write CHROME_EXTENSION_PLAN.md with full build roadmap, phases, and technical decisions
 
 ### Keyword Validation Fix (v6.4.1)
 - [x] Raise per-keyword character limit from 128 to 256 in the campaign router schema

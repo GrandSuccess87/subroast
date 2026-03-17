@@ -661,8 +661,9 @@ export default function Home() {
                 }}
               >
                 SubRoast gives every Reddit post an AI roast, a virality score,
-                and a rewrite — then finds warm leads and drafts personalized
-                outreach while you sleep.
+                and a rewrite — then finds warm leads, drafts personalized
+                outreach, and mines Reddit for product validation signals while
+                you sleep.
               </p>
 
               {/* CTAs */}
@@ -882,9 +883,107 @@ export default function Home() {
               title: "History & Performance",
               desc: "Every post, DM, and comment is logged with status and engagement context. Track what works and refine your approach over time.",
             },
+            {
+              number: "07",
+              title: "App Validation",
+              desc: "Run a research campaign to mine Reddit for 40+ unique complaints in a niche. Identify willingness to pay before you write a single line of code — the 48-hour validation framework, built in.",
+            },
           ].map((f, i) => (
             <FeatureRow key={f.number} {...f} delay={i * 80} />
           ))}
+        </div>
+      </section>
+
+      {/* ── USE CASES ── */}
+      <section
+        style={{
+          paddingTop: "clamp(5rem, 10vw, 9rem)",
+          paddingBottom: "clamp(5rem, 10vw, 9rem)",
+          borderBottom: "0.5px solid oklch(0.18 0.007 60)",
+          background: "oklch(0.10 0.007 60)",
+        }}
+      >
+        <div className="container">
+          <p className="eyebrow mb-5">Use Cases</p>
+          <h2 className="display-md mb-12" style={{ maxWidth: "22ch" }}>
+            Two ways founders use SubRoast
+          </h2>
+          <div className="grid lg:grid-cols-2 gap-px" style={{ border: "0.5px solid oklch(0.18 0.007 60)" }}>
+            {[
+              {
+                tag: "Lead Generation",
+                headline: "Find buyers already talking about your problem",
+                body: "SubRoast monitors niche subreddits, scores each post by relevance and urgency, and drafts a personalized DM for every high-signal prospect. You review, copy, and send — no cold lists, no spray-and-pray.",
+                stat: "280 warm conversations / month at 100 replies / day",
+              },
+              {
+                tag: "App Validation",
+                headline: "Validate your next idea in 48 hours, not 3 months",
+                body: "Run a research campaign to surface 40+ unique complaints in your target niche. Identify willingness to pay before you write a single line of code. The framework: find complaints Friday, DM 50 people Saturday, pre-sell Sunday.",
+                stat: "One founder killed 2 bad ideas and hit $7K MRR in 3 weeks",
+              },
+            ].map(({ tag, headline, body, stat }) => (
+              <div
+                key={tag}
+                style={{
+                  padding: "3rem",
+                  background: "oklch(0.115 0.007 60)",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "1.25rem",
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: "0.58rem",
+                    letterSpacing: "0.18em",
+                    textTransform: "uppercase",
+                    color: "oklch(0.88 0.025 85)",
+                    border: "0.5px solid oklch(0.88 0.025 85 / 0.3)",
+                    padding: "0.2rem 0.6rem",
+                    alignSelf: "flex-start",
+                  }}
+                >
+                  {tag}
+                </span>
+                <h3
+                  style={{
+                    fontFamily: "var(--font-display)",
+                    fontSize: "clamp(1.3rem, 2.5vw, 1.7rem)",
+                    fontWeight: 400,
+                    fontStyle: "italic",
+                    color: "oklch(0.92 0.006 80)",
+                    lineHeight: 1.25,
+                  }}
+                >
+                  {headline}
+                </h3>
+                <p
+                  style={{
+                    fontSize: "0.88rem",
+                    color: "oklch(0.48 0.006 80)",
+                    lineHeight: 1.75,
+                  }}
+                >
+                  {body}
+                </p>
+                <p
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: "0.6rem",
+                    letterSpacing: "0.1em",
+                    color: "oklch(0.55 0.006 80)",
+                    borderTop: "0.5px solid oklch(0.20 0.007 60)",
+                    paddingTop: "1rem",
+                    marginTop: "auto",
+                  }}
+                >
+                  {stat}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
