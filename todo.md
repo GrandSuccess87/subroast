@@ -581,3 +581,8 @@
 - [x] Hero background: add subtle SVG noise texture overlay for depth
 - [x] Homepage cards: add warm amber/gold background tint on hover
 - [x] Homepage cards: add 3D lift effect on hover (translateY + shadow scale)
+
+### UI & Sync Fixes (v6.8.1)
+- [x] Fix: trust line "Seven days complimentary..." hard to read on homepage — increase contrast
+- [x] Fix: button hover background contrast on homepage and pricing page
+- [x] Bug: App Validation campaign sync returns 0 leads — root cause: long keyword phrases (>4 words) return 0 results from Reddit search API. Fixed by truncating to first 4 words for the API call while keeping full phrase for local scoring. Also fixed daily sync counter to always increment (prevents unlimited spam syncing).

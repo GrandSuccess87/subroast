@@ -423,6 +423,26 @@ export default function Pricing() {
                 <button
                   onClick={() => handleSelectPlan(plan.key)}
                   disabled={isLoading}
+                  onMouseEnter={(e) => {
+                    if (!isLoading) {
+                      const btn = e.currentTarget;
+                      if (plan.popular) {
+                        btn.style.background = "oklch(0.94 0.030 85)";
+                        btn.style.boxShadow = "0 6px 20px oklch(0.78 0.14 65 / 0.30)";
+                      } else {
+                        btn.style.background = "oklch(0.88 0.025 85 / 0.10)";
+                        btn.style.borderColor = "oklch(0.88 0.025 85 / 0.65)";
+                        btn.style.color = "oklch(0.97 0.015 85)";
+                      }
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    const btn = e.currentTarget;
+                    btn.style.background = plan.popular ? IVORY : "transparent";
+                    btn.style.boxShadow = "none";
+                    btn.style.borderColor = plan.popular ? IVORY : BORDER;
+                    btn.style.color = plan.popular ? BG : FOREGROUND;
+                  }}
                   style={{
                     width: "100%",
                     padding: "0.9rem 1.5rem",
@@ -439,7 +459,7 @@ export default function Pricing() {
                     alignItems: "center",
                     justifyContent: "center",
                     gap: "0.5rem",
-                    transition: "opacity 0.2s",
+                    transition: "background 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease",
                   }}
                 >
                   {isLoading ? (

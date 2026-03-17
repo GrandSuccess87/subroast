@@ -409,7 +409,12 @@ Rules:
         }
 
         for (const kw of keywords.slice(0, 3)) { // limit to 3 keywords per subreddit
-          const posts = await searchRedditPosts(sub, kw, 10);
+          // Truncate long keyword phrases to the first 4 words for Reddit search
+          // (Reddit treats long phrases as near-exact matches, returning 0 results)
+          const searchQuery = kw.split(/\s+/).length > 4
+            ? kw.split(/\s+/).slice(0, 4).join(" ")
+            : kw;
+          const posts = await searchRedditPosts(sub, searchQuery, 10);
           for (const post of posts) {
             if (post.author === "[deleted]" || post.author === "AutoModerator") continue;
             const { score, matchedKeywords } = scoreMatch(post.title, post.body, keywords);
@@ -434,15 +439,13 @@ Rules:
       }
 
       // Update campaign lastSyncAt and leadsFound
-      // Only increment the daily sync counter when new leads are actually found
+      // Always increment the daily sync counter (prevents unlimited spam syncing)
       const updatedLeadsFound = c.leadsFound + newLeads;
       await updateOutreachCampaign(input.campaignId, {
         lastSyncAt: nowMs,
         leadsFound: updatedLeadsFound,
-        ...(newLeads > 0 ? {
-          dailySyncsUsed: syncsUsed + 1,
-          dailySyncsResetAt: lastResetAt < todayStartMs ? todayStartMs : lastResetAt,
-        } : {}),
+        dailySyncsUsed: syncsUsed + 1,
+        dailySyncsResetAt: lastResetAt < todayStartMs ? todayStartMs : lastResetAt,
       });
 
       // Send email notification for new leads
@@ -458,7 +461,8 @@ Rules:
         }).catch(() => {}); // fire-and-forget
       }
 
-      return { success: true, newLeads };
+      const totalLeads = existingLeads.length + newLeads;
+      return { success: true, newLeads, totalLeads };
     }),
 
   // ── Leads Inbox ────────────────────────────────────────────────────────────

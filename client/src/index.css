@@ -257,8 +257,9 @@
     text-decoration: none;
   }
   .btn-luxury:hover {
-    background: oklch(0.88 0.025 85 / 0.06);
+    background: oklch(0.88 0.025 85 / 0.12);
     border-color: oklch(0.88 0.025 85 / 0.9);
+    color: oklch(0.97 0.015 85);
   }
 
   /* Luxury primary button — amber-gold fill, high contrast, used sparingly */

@@ -699,7 +699,7 @@ export default function Home() {
                 style={{
                   fontFamily: "var(--font-mono)",
                   fontSize: "0.6rem",
-                  color: "oklch(0.35 0 0)",
+                  color: "oklch(0.55 0.008 60)",
                   letterSpacing: "0.14em",
                   textTransform: "uppercase",
                 }}
@@ -1318,7 +1318,7 @@ function CtaSection() {
           style={{
             fontFamily: "var(--font-mono)",
             fontSize: "0.58rem",
-            color: "oklch(0.55 0 0)",
+            color: "oklch(0.52 0.008 60)",
             letterSpacing: "0.14em",
             textTransform: "uppercase",
             marginTop: "1.5rem",
