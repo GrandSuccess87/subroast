@@ -944,6 +944,53 @@ export default function Home() {
         />
       </section>
 
+      {/* ── LEAD INTELLIGENCE DEMO ── */}
+      <LeadIntelligenceDemo />
+
+      {/* ── DEMO VIDEO ── */}
+      <VideoSection />
+
+      {/* ── USE CASES ── */}
+      <section
+        style={{
+          paddingTop: "clamp(5rem, 10vw, 9rem)",
+          paddingBottom: "clamp(5rem, 10vw, 9rem)",
+          borderBottom: "0.5px solid oklch(0.18 0.007 60)",
+          background: "oklch(0.10 0.007 60)",
+        }}
+      >
+        <div className="container">
+          <p className="eyebrow mb-5">Use Cases</p>
+          <h2 className="display-md mb-12" style={{ maxWidth: "22ch" }}>
+            Three ways founders use SubRoast
+          </h2>
+          <div className="grid lg:grid-cols-3 gap-px" style={{ border: "0.5px solid oklch(0.18 0.007 60)" }}>
+            {[
+              {
+                tag: "Lead Generation",
+                headline: "Find buyers already talking about your product or service",
+                body: "Monitor subreddits, score leads by relevance and urgency, draft personalized outreach. You review and send.",
+                stat: "High-signal leads only — scored by relevance, urgency, and subreddit fit",
+              },
+              {
+                tag: "Draft & Roast",
+                headline: "Write better Reddit content before you hit post",
+                body: "Paste your draft. Get a clarity score, subreddit fit, virality rating, and a fully rewritten version.",
+                stat: "Know how your post will land — before it does",
+              },
+              {
+                tag: "App Validation",
+                headline: "Know if people will pay before you build",
+                body: "Surface real complaints in your niche, score them by signal strength, and validate willingness to pay before writing a line of code.",
+                stat: "48-hour validation framework, built in",
+              },
+            ].map(({ tag, headline, body, stat }) => (
+              <UseCaseCard key={tag} tag={tag} headline={headline} body={body} stat={stat} />
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── SOCIAL PROOF STRIP ── */}
       <section
         style={{
@@ -1044,95 +1091,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── STAT BAR ── */}
-      <StatBar />
-
-      {/* ── LEAD INTELLIGENCE DEMO ── */}
-      <LeadIntelligenceDemo />
-
-      {/* ── DEMO VIDEO ── */}
-      <VideoSection />
-
-      {/* ── CAPABILITIES (commented out — redundant with Use Cases; restore if needed) ──
-      <section
-        id="capabilities"
-        style={{
-          paddingTop: "clamp(5rem, 10vw, 9rem)",
-          paddingBottom: "clamp(5rem, 10vw, 9rem)",
-          borderBottom: "0.5px solid oklch(0.18 0.007 60)",
-        }}
-      >
-        <div className="container">
-          <div className="grid lg:grid-cols-[1fr_2fr] gap-12 mb-16">
-            <div>
-              <p className="eyebrow mb-5">Capabilities</p>
-              <h2 className="display-md">Everything required to win on Reddit</h2>
-            </div>
-            <div className="flex items-end">
-              <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.9375rem", fontWeight: 300, color: "oklch(0.70 0.006 80)", lineHeight: 1.75, maxWidth: "48ch" }}>
-                A complete intelligence suite — from post analysis to lead generation to personalized outreach — designed for founders who treat Reddit as a serious acquisition channel.
-              </p>
-            </div>
-          </div>
-          <Divider />
-          {[
-            { number: "01", title: "AI Draft & Roast", desc: "Paste your draft and receive a structured analysis: clarity score, subreddit fit score, virality score, a brutally honest roast, and a fully rewritten version — all before you publish." },
-            { number: "02", title: "Lead Intelligence", desc: "SubRoast monitors your target subreddits continuously, scoring each post by relevance and urgency. Only the highest-signal leads surface in your inbox." },
-            { number: "03", title: "Personalized Outreach", desc: "For each lead, the AI reads the original post and drafts a message that references specific details — never a template, always a conversation starter." },
-            { number: "04", title: "Public Comment Drafting", desc: "Beyond DMs, SubRoast drafts public comment replies that add genuine value to the thread — positioning you as a peer, not a promoter." },
-            { number: "05", title: "Account Safety", desc: "AI spam scoring flags risky leads before you reach out. The upcoming Chrome extension sends from your own browser — no API, no bot flags, no ban risk." },
-            { number: "06", title: "History & Performance", desc: "Every post, DM, and comment is logged with status and engagement context. Track what works and refine your approach over time." },
-            { number: "07", title: "App Validation", desc: "Run a research campaign to mine Reddit for 40+ unique complaints in a niche. Identify willingness to pay before you write a single line of code — the 48-hour validation framework, built in." },
-          ].map((f, i) => (
-            <FeatureRow key={f.number} {...f} delay={i * 80} />
-          ))}
-        </div>
-      </section>
-      ── */}
-
-      {/* ── USE CASES ── */}
-      <section
-        style={{
-          paddingTop: "clamp(5rem, 10vw, 9rem)",
-          paddingBottom: "clamp(5rem, 10vw, 9rem)",
-          borderBottom: "0.5px solid oklch(0.18 0.007 60)",
-          background: "oklch(0.10 0.007 60)",
-        }}
-      >
-        <div className="container">
-          <p className="eyebrow mb-5">Use Cases</p>
-          <h2 className="display-md mb-12" style={{ maxWidth: "22ch" }}>
-            Three ways founders use SubRoast
-          </h2>
-          <div className="grid lg:grid-cols-3 gap-px" style={{ border: "0.5px solid oklch(0.18 0.007 60)" }}>
-            {[
-              {
-                tag: "Lead Generation",
-                headline: "Find buyers already talking about your product or service",
-                body: "Monitor subreddits, score leads by relevance and urgency, draft personalized outreach. You review and send.",
-                stat: "High-signal leads only — scored by relevance, urgency, and subreddit fit",
-              },
-              {
-                tag: "Draft & Roast",
-                headline: "Write better Reddit content before you hit post",
-                body: "Paste your draft. Get a clarity score, subreddit fit, virality rating, and a fully rewritten version.",
-                stat: "Know how your post will land — before it does",
-              },
-              {
-                tag: "App Validation",
-                headline: "Know if people will pay before you build",
-                body: "Surface real complaints in your niche, score them by signal strength, and validate willingness to pay before writing a line of code.",
-                stat: "48-hour validation framework, built in",
-              },
-            ].map(({ tag, headline, body, stat }) => (
-              <UseCaseCard key={tag} tag={tag} headline={headline} body={body} stat={stat} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-
-
       {/* ── SAFETY ── */}
       <section
         style={{
@@ -1230,36 +1188,44 @@ const SPAM_POSTS = [
   { text: "FREE followers — click link in bio", spam: true },
 ];
 
+const COMMENT_TEXT = "Hey — saw your post about Reddit traction. I built SubRoast specifically for this problem. It scores your draft before you post and finds warm leads in your target subreddits. Happy to share more if useful.";
+
 function LeadIntelligenceDemo() {
   const sectionRef = useFadeUp();
-  const [phase, setPhase] = useState<0 | 1 | 2>(0); // 0=chain, 1=spam, 2=lead
+  const [phase, setPhase] = useState<0 | 1 | 2 | 3>(0); // 0=chain, 1=spam, 2=lead, 3=comment
   const [activeStep, setActiveStep] = useState(0);
   const [visiblePosts, setVisiblePosts] = useState(0);
   const [showLead, setShowLead] = useState(false);
+  const [typedChars, setTypedChars] = useState(0);
 
   // Cycle phases automatically
   useEffect(() => {
     let timeout: ReturnType<typeof setTimeout>;
     if (phase === 0) {
-      // Step through the 6-step chain
       if (activeStep < CHAIN_STEPS.length - 1) {
         timeout = setTimeout(() => setActiveStep(s => s + 1), 600);
       } else {
         timeout = setTimeout(() => { setPhase(1); setActiveStep(0); setVisiblePosts(0); }, 1200);
       }
     } else if (phase === 1) {
-      // Reveal spam posts one by one
       if (visiblePosts < SPAM_POSTS.length) {
         timeout = setTimeout(() => setVisiblePosts(v => v + 1), 400);
       } else {
         timeout = setTimeout(() => { setPhase(2); setShowLead(false); setTimeout(() => setShowLead(true), 300); }, 1000);
       }
+    } else if (phase === 2) {
+      // Hold lead card then move to comment drafting
+      timeout = setTimeout(() => { setPhase(3); setTypedChars(0); }, 3500);
     } else {
-      // Hold lead card, then restart
-      timeout = setTimeout(() => { setPhase(0); setActiveStep(0); setVisiblePosts(0); setShowLead(false); }, 4000);
+      // Type out the comment, then restart
+      if (typedChars < COMMENT_TEXT.length) {
+        timeout = setTimeout(() => setTypedChars(c => c + 1), 28);
+      } else {
+        timeout = setTimeout(() => { setPhase(0); setActiveStep(0); setVisiblePosts(0); setShowLead(false); setTypedChars(0); }, 3000);
+      }
     }
     return () => clearTimeout(timeout);
-  }, [phase, activeStep, visiblePosts]);
+  }, [phase, activeStep, visiblePosts, typedChars]);
 
   return (
     <section
@@ -1278,7 +1244,7 @@ function LeadIntelligenceDemo() {
             <h2 className="display-lg mb-6">From subreddit to warm lead</h2>
             <div className="rule-gold mb-6" style={{ width: "3rem" }} />
             <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.9375rem", fontWeight: 300, color: "oklch(0.62 0.006 80)", lineHeight: 1.75, maxWidth: "44ch" }}>
-              SubRoast runs a six-step AI chain continuously — scanning, filtering spam, scoring intent, and drafting personalised outreach before you even open the app.
+              SubRoast runs a six-step AI chain continuously — scanning, filtering spam, scoring intent, drafting personalised DMs, and writing public comment replies before you even open the app.
             </p>
           </div>
 
@@ -1304,7 +1270,7 @@ function LeadIntelligenceDemo() {
             >
               <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "oklch(0.78 0.14 65)", animation: "pulse 2s ease-in-out infinite" }} />
               <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.58rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "oklch(0.62 0.006 80)" }}>
-                {phase === 0 ? "AI chain running" : phase === 1 ? "Spam filter" : "Lead ready"}
+                {phase === 0 ? "AI chain running" : phase === 1 ? "Spam filter" : phase === 2 ? "Lead ready" : "Drafting comment"}
               </span>
             </div>
 
@@ -1390,6 +1356,33 @@ function LeadIntelligenceDemo() {
                     </span>
                   </div>
                 ))}
+              </div>
+            )}
+
+            {/* Phase 3: comment drafting */}
+            {phase === 3 && (
+              <div style={{ padding: "1.25rem" }}>
+                {/* Context bar */}
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem", padding: "0.5rem 0.75rem", background: "oklch(0.14 0.007 60)", border: "0.5px solid oklch(0.20 0.007 60)" }}>
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.52rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "oklch(0.78 0.14 65)" }}>r/SaaS</span>
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.52rem", color: "oklch(0.28 0 0)" }}>/</span>
+                  <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.72rem", fontWeight: 300, color: "oklch(0.62 0.006 80)", flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    &ldquo;Struggling to get traction on Reddit without sounding like an ad&rdquo;
+                  </span>
+                </div>
+                {/* Comment box */}
+                <div style={{ background: "oklch(0.10 0.007 60)", border: "0.5px solid oklch(0.22 0.007 60)", padding: "0.875rem 1rem", minHeight: "120px" }}>
+                  <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.52rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "oklch(0.45 0 0)", marginBottom: "0.6rem" }}>Public comment draft</div>
+                  <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.78rem", fontWeight: 300, color: "oklch(0.82 0.006 80)", lineHeight: 1.65 }}>
+                    {COMMENT_TEXT.slice(0, typedChars)}
+                    <span style={{ display: "inline-block", width: "1px", height: "0.9em", background: "oklch(0.78 0.14 65)", marginLeft: "1px", verticalAlign: "text-bottom", animation: "pulse 1s ease-in-out infinite" }} />
+                  </p>
+                </div>
+                {/* Status */}
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "0.75rem" }}>
+                  <div style={{ width: "5px", height: "5px", borderRadius: "50%", background: "oklch(0.78 0.14 65)", animation: "pulse 1.5s ease-in-out infinite" }} />
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.52rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "oklch(0.45 0 0)" }}>AI writing — review before posting</span>
+                </div>
               </div>
             )}
 
@@ -1516,9 +1509,45 @@ function ProcessStep({
   );
 }
 
+const SAFETY_ITEMS = [
+  "Spam risk score on every lead",
+  "Flags templated or bot-like content",
+  "Roast catches promo language before you post",
+  "One-click send via extension — coming soon",
+  "Sends from your browser session — no API token, no bot fingerprint",
+  "Your browser session, your account",
+];
+
 /* ── Safety block (extracted to avoid hook-in-loop) ── */
 function SafetyBlock() {
   const ref = useFadeUp();
+  const gridRef = useRef<HTMLDivElement>(null);
+  const [visibleItems, setVisibleItems] = useState<boolean[]>(SAFETY_ITEMS.map(() => false));
+
+  useEffect(() => {
+    const el = gridRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          SAFETY_ITEMS.forEach((_, i) => {
+            setTimeout(() => {
+              setVisibleItems(prev => {
+                const next = [...prev];
+                next[i] = true;
+                return next;
+              });
+            }, i * 220);
+          });
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.2 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div ref={ref} className="fade-up grid md:grid-cols-[1fr_2fr] gap-12 items-start">
       <div>
@@ -1534,17 +1563,9 @@ function SafetyBlock() {
           }}
         />
       </div>
-      <div>
-
+      <div ref={gridRef}>
         <div className="grid sm:grid-cols-2 gap-x-8 gap-y-4">
-          {[
-            "Spam risk score on every lead",
-            "Flags templated or bot-like content",
-            "Roast catches promo language before you post",
-            "One-click send via extension — coming soon",
-            "Sends from your browser session — no API token, no bot fingerprint",
-            "Your browser session, your account",
-          ].map((item) => (
+          {SAFETY_ITEMS.map((item, i) => (
             <div
               key={item}
               className="flex items-start gap-3"
@@ -1554,6 +1575,9 @@ function SafetyBlock() {
                 fontWeight: 300,
                 color: "oklch(0.72 0.006 80)",
                 lineHeight: 1.6,
+                opacity: visibleItems[i] ? 1 : 0,
+                transform: visibleItems[i] ? "translateX(0)" : "translateX(-16px)",
+                transition: "opacity 0.5s ease, transform 0.5s ease",
               }}
             >
               <span
@@ -1588,19 +1612,6 @@ function CtaSection() {
     >
       <div ref={ref} className="fade-up container text-center">
         <p className="eyebrow mb-8 block">Ready to begin</p>
-        <h2 className="display-xl mb-6 mx-auto" style={{ maxWidth: "14ch" }}>
-          Post smarter.
-          <br />
-          <span style={{ color: "oklch(0.88 0.025 85)" }}>Grow faster.</span>
-        </h2>
-        <div
-          style={{
-            width: "3rem",
-            height: "0.5px",
-            background: "oklch(0.88 0.025 85 / 0.5)",
-            margin: "0 auto 2.5rem",
-          }}
-        />
         <a href={getLoginUrl()} className="btn-luxury-primary" style={{ marginBottom: "0" }}>
           Begin free trial — seven days
         </a>

@@ -662,3 +662,11 @@
 - [x] Remove "Two steps from draft to leads" Process section (was already removed in prior session)
 - [x] Rename "What a lead looks like" section to "The intelligence report" (eyebrow: "AI Analysis")
 - [x] Added LeadIntelligenceDemo section before the intelligence report: 3-phase looping animation (6-step AI chain → spam filter with red/green post badges → lead card reveal with scores + DM preview), pure CSS keyframes + useEffect timer, amber/dark aesthetic, left-copy + right-panel layout
+
+### Homepage Restructure (v6.18)
+- [x] Move LeadIntelligenceDemo to be the first section after the hero
+- [x] Add 4th phase to LeadIntelligenceDemo: comment drafting with typewriter animation (28ms/char)
+- [x] Remove StatBar section entirely
+- [x] Move Social Proof (Early Signal) strip to just before Account Safety
+- [x] Animate Account Safety bullets: staggered IntersectionObserver fade-in from left (220ms stagger, 0.5s ease)
+- [x] Remove "Post smarter. Grow faster." headline and hairline rule from CTA section
