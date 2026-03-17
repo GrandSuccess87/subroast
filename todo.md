@@ -586,3 +586,26 @@
 - [x] Fix: trust line "Seven days complimentary..." hard to read on homepage — increase contrast
 - [x] Fix: button hover background contrast on homepage and pricing page
 - [x] Bug: App Validation campaign sync returns 0 leads — root cause: long keyword phrases (>4 words) return 0 results from Reddit search API. Fixed by truncating to first 4 words for the API call while keeping full phrase for local scoring. Also fixed daily sync counter to always increment (prevents unlimited spam syncing).
+
+### Homepage Visual Polish (v6.9)
+- [x] Trust line: raised to oklch(0.78 0.012 80) — clearly legible warm silver
+- [x] Noise texture: hero SVG opacity 0.045 → 0.18 with soft-light blend; body noise 0.06 → 0.10 with smaller tile size
+- [x] btn-luxury hover: stronger fill (0.18 opacity), full-opacity border, slight lift (translateY -1px)
+- [x] btn-luxury-primary hover: deeper amber glow, stronger box-shadow spread (50% + 25%)
+- [x] card-hover-lift: translateY -6px → -10px, amber tint oklch(0.18 0.025 65), amber platinum ring on hover
+- [x] Use case cards: extracted to UseCaseCard component with amber top-border accent on hover, headline brightens, stat brightens
+- [x] Feature rows: extracted hover state — number badge brightens to full platinum, title brightens to near-white, amber left-border accent appears
+
+### UI Backlog — Polish Without Breaking Character (v6.9+)
+- [ ] Hero: add a very faint radial amber glow behind the CTA button area (like a warm lamp on a dark desk)
+- [ ] Nav: add a subtle backdrop-blur + border-bottom on scroll (currently fully transparent, hard to read over content)
+- [ ] Social proof strip: raise quote text from oklch(0.93) — currently fine, but attribution line could go from 0.65 → 0.72
+- [ ] Footer: "SubRoast" wordmark and copyright are nearly invisible (oklch 0.40 and 0.28) — raise to 0.45 and 0.38
+- [ ] Pricing page: add the same noise texture to the hero section for consistency with homepage
+- [ ] Pricing page: plan card borders on hover should glow amber (Growth) or platinum (Starter) — currently only button changes
+- [ ] Use case cards: add a thin amber top-border accent line (1px) to each card for visual anchoring
+- [ ] Feature rows: add a right-side amber dot or chevron that appears on hover to signal interactivity
+- [ ] Process steps (I, II): raise the roman numeral from oklch(0.88 / 0.4) to oklch(0.88 / 0.65) — currently too faint
+- [ ] Body copy color audit: several body paragraphs use oklch(0.48–0.50) which fails WCAG AA — raise to oklch(0.60) minimum
+- [ ] CTA section: add the noise texture here too (currently flat dark background)
+- [ ] Mobile: trust line wraps awkwardly at 375px — add a max-width or line-break hint

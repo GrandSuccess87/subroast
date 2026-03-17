@@ -300,6 +300,88 @@ function Divider() {
   );
 }
 
+/* ── Use Case Card ── */
+function UseCaseCard({
+  tag,
+  headline,
+  body,
+  stat,
+}: {
+  tag: string;
+  headline: string;
+  body: string;
+  stat: string;
+}) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div
+      className="card-hover-lift"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        padding: "3rem",
+        background: "oklch(0.115 0.007 60)",
+        display: "flex",
+        flexDirection: "column",
+        gap: "1.25rem",
+        borderTop: hovered ? "2px solid oklch(0.78 0.14 65 / 0.75)" : "2px solid transparent",
+        transition: "border-top-color 0.3s ease",
+      }}
+    >
+      <span
+        style={{
+          fontFamily: "var(--font-mono)",
+          fontSize: "0.58rem",
+          letterSpacing: "0.18em",
+          textTransform: "uppercase",
+          color: "oklch(0.88 0.025 85)",
+          border: "0.5px solid oklch(0.88 0.025 85 / 0.3)",
+          padding: "0.2rem 0.6rem",
+          alignSelf: "flex-start",
+        }}
+      >
+        {tag}
+      </span>
+      <h3
+        style={{
+          fontFamily: "var(--font-display)",
+          fontSize: "clamp(1.3rem, 2.5vw, 1.7rem)",
+          fontWeight: 400,
+          fontStyle: "italic",
+          color: hovered ? "oklch(0.98 0.010 80)" : "oklch(0.92 0.006 80)",
+          lineHeight: 1.25,
+          transition: "color 0.3s ease",
+        }}
+      >
+        {headline}
+      </h3>
+      <p
+        style={{
+          fontSize: "0.88rem",
+          color: "oklch(0.60 0.006 80)",
+          lineHeight: 1.75,
+        }}
+      >
+        {body}
+      </p>
+      <p
+        style={{
+          fontFamily: "var(--font-mono)",
+          fontSize: "0.6rem",
+          letterSpacing: "0.1em",
+          color: hovered ? "oklch(0.72 0.008 75)" : "oklch(0.55 0.006 80)",
+          borderTop: "0.5px solid oklch(0.20 0.007 60)",
+          paddingTop: "1rem",
+          marginTop: "auto",
+          transition: "color 0.3s ease",
+        }}
+      >
+        {stat}
+      </p>
+    </div>
+  );
+}
+
 /* ── Feature row ── */
 function FeatureRow({
   number,
@@ -313,11 +395,19 @@ function FeatureRow({
   delay?: number;
 }) {
   const ref = useFadeUp(delay);
+  const [hovered, setHovered] = useState(false);
   return (
     <div
       ref={ref}
       className="fade-up card-hover-lift grid md:grid-cols-[80px_1fr_2fr] gap-6 md:gap-10 py-10 px-4"
-      style={{ borderBottom: "0.5px solid oklch(0.18 0.007 60)" }}
+      style={{
+        borderBottom: "0.5px solid oklch(0.18 0.007 60)",
+        borderLeft: hovered ? "2px solid oklch(0.78 0.14 65 / 0.7)" : "2px solid transparent",
+        paddingLeft: hovered ? "calc(1rem - 2px)" : "1rem",
+        transition: "border-left-color 0.3s ease, padding-left 0.3s ease",
+      }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
       <div
         style={{
@@ -325,8 +415,9 @@ function FeatureRow({
           fontSize: "0.6rem",
           fontWeight: 300,
           letterSpacing: "0.18em",
-          color: "oklch(0.88 0.025 85 / 0.5)",
+          color: hovered ? "oklch(0.88 0.025 85)" : "oklch(0.88 0.025 85 / 0.5)",
           paddingTop: "0.2rem",
+          transition: "color 0.3s ease",
         }}
       >
         {number}
@@ -336,8 +427,9 @@ function FeatureRow({
           fontFamily: "var(--font-display)",
           fontSize: "1.35rem",
           fontWeight: 400,
-          color: "oklch(0.93 0.010 80)",
+          color: hovered ? "oklch(0.98 0.010 80)" : "oklch(0.93 0.010 80)",
           lineHeight: 1.2,
+          transition: "color 0.3s ease",
         }}
       >
         {title}
@@ -622,7 +714,7 @@ export default function Home() {
         {/* SVG noise texture — adds analogue grain depth */}
         <svg
           className="absolute inset-0 w-full h-full pointer-events-none"
-          style={{ opacity: 0.045, mixBlendMode: "overlay" }}
+          style={{ opacity: 0.18, mixBlendMode: "soft-light" }}
           xmlns="http://www.w3.org/2000/svg"
         >
           <filter id="hero-noise">
@@ -699,7 +791,7 @@ export default function Home() {
                 style={{
                   fontFamily: "var(--font-mono)",
                   fontSize: "0.6rem",
-                  color: "oklch(0.55 0.008 60)",
+                  color: "oklch(0.78 0.012 80)",
                   letterSpacing: "0.14em",
                   textTransform: "uppercase",
                 }}
@@ -947,66 +1039,7 @@ export default function Home() {
                 stat: "Surface pain points — then validate willingness to pay before writing a line of code",
               },
             ].map(({ tag, headline, body, stat }) => (
-              <div
-                key={tag}
-                className="card-hover-lift"
-                style={{
-                  padding: "3rem",
-                  background: "oklch(0.115 0.007 60)",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "1.25rem",
-                }}
-              >
-                <span
-                  style={{
-                    fontFamily: "var(--font-mono)",
-                    fontSize: "0.58rem",
-                    letterSpacing: "0.18em",
-                    textTransform: "uppercase",
-                    color: "oklch(0.88 0.025 85)",
-                    border: "0.5px solid oklch(0.88 0.025 85 / 0.3)",
-                    padding: "0.2rem 0.6rem",
-                    alignSelf: "flex-start",
-                  }}
-                >
-                  {tag}
-                </span>
-                <h3
-                  style={{
-                    fontFamily: "var(--font-display)",
-                    fontSize: "clamp(1.3rem, 2.5vw, 1.7rem)",
-                    fontWeight: 400,
-                    fontStyle: "italic",
-                    color: "oklch(0.92 0.006 80)",
-                    lineHeight: 1.25,
-                  }}
-                >
-                  {headline}
-                </h3>
-                <p
-                  style={{
-                    fontSize: "0.88rem",
-                    color: "oklch(0.48 0.006 80)",
-                    lineHeight: 1.75,
-                  }}
-                >
-                  {body}
-                </p>
-                <p
-                  style={{
-                    fontFamily: "var(--font-mono)",
-                    fontSize: "0.6rem",
-                    letterSpacing: "0.1em",
-                    color: "oklch(0.55 0.006 80)",
-                    borderTop: "0.5px solid oklch(0.20 0.007 60)",
-                    paddingTop: "1rem",
-                    marginTop: "auto",
-                  }}
-                >
-                  {stat}
-                </p>
-              </div>
+              <UseCaseCard key={tag} tag={tag} headline={headline} body={body} stat={stat} />
             ))}
           </div>
         </div>
