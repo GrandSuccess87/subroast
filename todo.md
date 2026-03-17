@@ -683,3 +683,6 @@
 
 ### Hero Layout (v6.20)
 - [x] Add centered max-width constraint to hero: collapsed grid to single centered column (max-w-[42rem]), gold rule and body centered, CTA row centered with justify-center, amber glow recentered to 50% 50%
+
+### Hero Eyebrow Animation (v6.21)
+- [x] Hero eyebrow "AI Intelligence for Reddit" fades in 200ms before the headline on first load (premium entrance effect)

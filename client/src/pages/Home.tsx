@@ -836,12 +836,12 @@ export default function Home() {
             {/* Center: editorial copy */}
             <div ref={heroRef} style={{ maxWidth: "42rem", width: "100%", textAlign: "center" }}>
               {/* Eyebrow */}
-              <p className="eyebrow mb-8">
+              <p className="eyebrow mb-8 hero-eyebrow-animate">
                 AI Intelligence for Reddit
               </p>
 
               {/* Display headline */}
-              <h1 className="display-xl mb-6">
+              <h1 className="display-xl mb-6 hero-headline-animate">
                 Stop guessing.
                 <br />
                 <span style={{ color: "oklch(0.88 0.025 85)" }}>
@@ -851,6 +851,7 @@ export default function Home() {
 
               {/* Gold rule */}
               <div
+                className="hero-body-animate"
                 style={{
                   width: "4rem",
                   height: "0.5px",
@@ -862,6 +863,7 @@ export default function Home() {
 
               {/* Body */}
               <p
+                className="hero-body-animate"
                 style={{
                   fontFamily: "var(--font-sans)",
                   fontSize: "1rem",
@@ -878,7 +880,7 @@ export default function Home() {
               </p>
 
               {/* CTAs */}
-              <div className="relative flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
+              <div className="relative flex flex-col sm:flex-row items-center justify-center gap-4 mb-10 hero-cta-animate">
                 {/* Radial amber glow behind the CTA area */}
                 <div
                   className="absolute pointer-events-none"
@@ -898,6 +900,7 @@ export default function Home() {
 
               {/* Trust line */}
               <p
+                className="hero-cta-animate"
                 style={{
                   fontFamily: "var(--font-mono)",
                   fontSize: "0.6rem",
