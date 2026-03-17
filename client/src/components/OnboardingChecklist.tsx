@@ -106,7 +106,7 @@ export default function OnboardingChecklist() {
                 </div>
                 {!step.completed && (
                   <p className="text-xs text-muted-foreground mt-0.5 truncate">
-                    {isComingSoon ? "Reddit API approval pending — full integration coming soon" : step.description}
+                    {isComingSoon ? "Chrome extension coming soon — one-click send from your own browser session" : step.description}
                   </p>
                 )}
               </div>
