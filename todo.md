@@ -572,3 +572,12 @@
 - [x] Bug: manual "Sync Leads" returns 0 — root cause: same posts re-appear in Reddit search, already in DB, so newLeads=0 (correct behaviour, not a bug — sync still upserts them)
 - [x] Fix: listCampaigns and getCampaign now return live lead count from leads table instead of stale leadsFound counter
 - [x] GitHub: fixed — two remotes existed (origin=Manus S3, github=GitHub). Pushed all 62 missing commits to GrandSuccess87/subroast main.
+
+### GitHub Auto-Push Hook (v6.7.1)
+- [x] Add git post-commit hook to auto-push to github remote after every checkpoint
+
+### Landing Page Visual Upgrade (v6.8)
+- [x] Hero CTA: larger button, higher contrast, warm amber color
+- [x] Hero background: add subtle SVG noise texture overlay for depth
+- [x] Homepage cards: add warm amber/gold background tint on hover
+- [x] Homepage cards: add 3D lift effect on hover (translateY + shadow scale)

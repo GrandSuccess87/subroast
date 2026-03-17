@@ -316,7 +316,7 @@ function FeatureRow({
   return (
     <div
       ref={ref}
-      className="fade-up grid md:grid-cols-[80px_1fr_2fr] gap-6 md:gap-10 py-10"
+      className="fade-up card-hover-lift grid md:grid-cols-[80px_1fr_2fr] gap-6 md:gap-10 py-10 px-4"
       style={{ borderBottom: "0.5px solid oklch(0.18 0.007 60)" }}
     >
       <div
@@ -618,6 +618,24 @@ export default function Home() {
             backgroundSize: "80px 80px",
           }}
         />
+
+        {/* SVG noise texture — adds analogue grain depth */}
+        <svg
+          className="absolute inset-0 w-full h-full pointer-events-none"
+          style={{ opacity: 0.045, mixBlendMode: "overlay" }}
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <filter id="hero-noise">
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.72"
+              numOctaves="4"
+              stitchTiles="stitch"
+            />
+            <feColorMatrix type="saturate" values="0" />
+          </filter>
+          <rect width="100%" height="100%" filter="url(#hero-noise)" />
+        </svg>
 
         <div className="container relative w-full">
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center py-24 lg:py-0">
@@ -931,6 +949,7 @@ export default function Home() {
             ].map(({ tag, headline, body, stat }) => (
               <div
                 key={tag}
+                className="card-hover-lift"
                 style={{
                   padding: "3rem",
                   background: "oklch(0.115 0.007 60)",
