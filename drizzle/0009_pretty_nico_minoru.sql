@@ -1,0 +1,1 @@
+ALTER TABLE `outreach_campaigns` ADD `campaignType` enum('outreach','validation') DEFAULT 'outreach' NOT NULL;

@@ -914,13 +914,13 @@ export default function Home() {
                 tag: "Lead Generation",
                 headline: "Find buyers already talking about your problem",
                 body: "SubRoast monitors niche subreddits, scores each post by relevance and urgency, and drafts a personalized DM for every high-signal prospect. You review, copy, and send — no cold lists, no spray-and-pray.",
-                stat: "280 warm conversations / month at 100 replies / day",
+                stat: "High-signal leads only — scored by relevance, urgency, and subreddit fit",
               },
               {
                 tag: "App Validation",
-                headline: "Validate your next idea in 48 hours, not 3 months",
-                body: "Run a research campaign to surface 40+ unique complaints in your target niche. Identify willingness to pay before you write a single line of code. The framework: find complaints Friday, DM 50 people Saturday, pre-sell Sunday.",
-                stat: "One founder killed 2 bad ideas and hit $7K MRR in 3 weeks",
+                headline: "Know if people will pay before you build",
+                body: "Run a research campaign to surface real complaints in your target niche. SubRoast finds the posts, scores them by signal strength, and drafts outreach so you can ask three questions: what do you use now, what frustrates you most, and would you pay to fix it.",
+                stat: "Surface pain points — then validate willingness to pay before writing a line of code",
               },
             ].map(({ tag, headline, body, stat }) => (
               <div

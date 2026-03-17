@@ -144,6 +144,7 @@ export const outreachRouter = router({
         subreddits: z.array(z.string().min(1).max(256)).min(1).max(20),
         keywords: z.array(z.string().min(1).max(256)).min(1).max(50),
         aiPromptInstructions: z.string().max(1000).optional(),
+        campaignType: z.enum(["outreach", "validation"]).default("outreach"),
         reviewMode: z.enum(["auto_send", "review_first"]).default("review_first"),
         minSubSize: z.number().int().min(0).optional(),
         maxSubSize: z.number().int().min(0).optional(),
@@ -171,6 +172,14 @@ export const outreachRouter = router({
             });
           }
 
+          // Validation campaigns require Growth plan
+          if (input.campaignType === "validation" && user.plan !== "growth") {
+            throw new TRPCError({
+              code: "FORBIDDEN",
+              message: "VALIDATION_REQUIRES_GROWTH",
+            });
+          }
+
           // Starter or trial → limit to 1 campaign
           if (user.plan !== "growth") {
             const existing = await getOutreachCampaignsByUserId(ctx.user.id);
@@ -194,6 +203,7 @@ export const outreachRouter = router({
         subreddits: JSON.stringify(input.subreddits),
         keywords: JSON.stringify(input.keywords),
         aiPromptInstructions: input.aiPromptInstructions || null,
+        campaignType: input.campaignType,
         minSubSize: input.minSubSize ?? null,
         maxSubSize: input.maxSubSize ?? null,
         reviewMode: input.reviewMode,

@@ -70,7 +70,7 @@ function countdown(targetMs: number): string {
 type Campaign = {
   id: number; name: string; offering: string; websiteUrl?: string | null;
   subreddits: string[]; keywords: string[]; aiPromptInstructions?: string | null;
-  reviewMode: "auto_send" | "review_first"; status: "active" | "paused" | "completed";
+  campaignType: "outreach" | "validation"; reviewMode: "auto_send" | "review_first"; status: "active" | "paused" | "completed";
   leadsFound: number; dmsSent: number; lastSyncAt?: number | null;
   minSubSize?: number | null; maxSubSize?: number | null;
 };
@@ -190,6 +190,7 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
   const [subInput, setSubInput] = useState("");
   const [kwInput, setKwInput] = useState("");
   const [aiInstructions, setAiInstructions] = useState("");
+  const [campaignType, setCampaignType] = useState<"outreach" | "validation">("outreach");
   const [reviewMode, setReviewMode] = useState<"auto_send" | "review_first">("review_first");
   const [aiRecs, setAiRecs] = useState<{ subreddits: string[]; keywords: string[]; reasoning: string } | null>(null);
   const [minSubSize, setMinSubSize] = useState<string>("");
@@ -211,6 +212,8 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
         toast.error("Campaign limit reached. Upgrade to Growth for unlimited campaigns.", { action: { label: "Upgrade", onClick: () => navigate("/pricing") }, duration: 8000 });
       } else if (err.message === "UPGRADE_REQUIRED") {
         toast.error("Start a free trial to create campaigns.", { action: { label: "View Plans", onClick: () => navigate("/pricing") }, duration: 8000 });
+      } else if (err.message === "VALIDATION_REQUIRES_GROWTH") {
+        toast.error("App Validation campaigns require the Growth plan.", { action: { label: "Upgrade", onClick: () => navigate("/pricing") }, duration: 8000 });
       } else {
         toast.error(err.message);
       }
@@ -226,7 +229,7 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
     if (!offering.trim()) return toast.error("Offering description is required");
     if (subreddits.length === 0) return toast.error("Add at least one subreddit");
     if (keywords.length === 0) return toast.error("Add at least one keyword");
-    createCampaign.mutate({ name, offering, websiteUrl: websiteUrl || undefined, subreddits, keywords, aiPromptInstructions: aiInstructions || undefined, reviewMode, minSubSize: minSubSize ? parseInt(minSubSize) : undefined, maxSubSize: maxSubSize ? parseInt(maxSubSize) : undefined });
+    createCampaign.mutate({ name, offering, websiteUrl: websiteUrl || undefined, subreddits, keywords, aiPromptInstructions: aiInstructions || undefined, campaignType, reviewMode, minSubSize: minSubSize ? parseInt(minSubSize) : undefined, maxSubSize: maxSubSize ? parseInt(maxSubSize) : undefined });
   };
 
   const labelStyle: React.CSSProperties = { fontFamily: FONT_MONO, fontSize: "0.58rem", letterSpacing: "0.15em", textTransform: "uppercase", color: MUTED, display: "block", marginBottom: "0.4rem" };
@@ -396,6 +399,34 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
         <div>
           <label style={labelStyle}>AI DM Tone/Style Instructions (optional)</label>
           <input value={aiInstructions} onChange={(e) => setAiInstructions(e.target.value)} placeholder="e.g. Be casual and friendly, mention free trial, avoid technical jargon" style={inputStyle} />
+        </div>
+
+        {/* Campaign type */}
+        <div>
+          <label style={labelStyle}>Campaign Type</label>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.5rem" }}>
+            <button
+              onClick={() => setCampaignType("outreach")}
+              style={{ padding: "0.85rem 1rem", background: campaignType === "outreach" ? "oklch(0.88 0.025 85 / 0.06)" : "transparent", border: `0.5px solid ${campaignType === "outreach" ? "oklch(0.88 0.025 85 / 0.4)" : BORDER}`, textAlign: "left", cursor: "pointer", transition: "all 0.15s" }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.25rem" }}>
+                <Target size={12} color={IVORY} />
+                <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: FOREGROUND }}>Lead Outreach</p>
+              </div>
+              <p style={{ fontSize: "0.72rem", color: MUTED, lineHeight: 1.4 }}>Find buyers and draft personalized DMs</p>
+            </button>
+            <button
+              onClick={() => setCampaignType("validation")}
+              style={{ padding: "0.85rem 1rem", background: campaignType === "validation" ? "oklch(0.88 0.025 85 / 0.06)" : "transparent", border: `0.5px solid ${campaignType === "validation" ? "oklch(0.88 0.025 85 / 0.4)" : BORDER}`, textAlign: "left", cursor: "pointer", transition: "all 0.15s", position: "relative" }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.25rem" }}>
+                <Sparkles size={12} color={AMBER} />
+                <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: FOREGROUND }}>App Validation</p>
+                <span style={{ fontFamily: FONT_MONO, fontSize: "0.48rem", letterSpacing: "0.12em", textTransform: "uppercase", color: AMBER, border: `0.5px solid ${AMBER}50`, padding: "0.05rem 0.3rem" }}>Growth</span>
+              </div>
+              <p style={{ fontSize: "0.72rem", color: MUTED, lineHeight: 1.4 }}>Surface complaints and validate willingness to pay</p>
+            </button>
+          </div>
         </div>
 
         {/* Review mode */}

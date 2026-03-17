@@ -36,6 +36,8 @@ const PLANS = [
       "Unlimited outreach campaigns",
       "Lead sync: every 4 hours (6× daily)",
       "AI auto-scheduling",
+      "App Validation campaigns",
+      "One-click send via Chrome extension __COMING_SOON__",
       "DM template library __COMING_SOON__",
       "Advanced analytics __COMING_SOON__",
     ],
@@ -453,6 +455,61 @@ export default function Pricing() {
               </div>
             );
           })}
+        </div>
+
+        {/* Chrome Extension Callout */}
+        <div
+          style={{
+            margin: "3rem 0 4rem",
+            padding: "2.5rem 3rem",
+            border: `0.5px solid oklch(0.88 0.025 85 / 0.25)`,
+            background: "oklch(0.115 0.007 60)",
+            display: "grid",
+            gridTemplateColumns: "auto 1fr",
+            gap: "2rem",
+            alignItems: "start",
+          }}
+        >
+          <div
+            style={{
+              fontFamily: FONT_MONO,
+              fontSize: "0.58rem",
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "oklch(0.88 0.025 85)",
+              border: "0.5px solid oklch(0.88 0.025 85 / 0.3)",
+              padding: "0.25rem 0.6rem",
+              whiteSpace: "nowrap",
+              marginTop: "0.2rem",
+            }}
+          >
+            Growth — Coming Soon
+          </div>
+          <div>
+            <p
+              style={{
+                fontFamily: FONT_DISPLAY,
+                fontSize: "1.1rem",
+                fontWeight: 400,
+                fontStyle: "italic",
+                color: FOREGROUND,
+                marginBottom: "0.75rem",
+                lineHeight: 1.3,
+              }}
+            >
+              One-click send via Chrome extension
+            </p>
+            <p
+              style={{
+                fontSize: "0.82rem",
+                color: MUTED,
+                lineHeight: 1.75,
+                maxWidth: "60ch",
+              }}
+            >
+              Reddit's public API is rate-limited, increasingly restricted, and a direct line to account bans when used for automated sending. The Chrome extension sidesteps all of this — every action happens inside your own authenticated browser session, indistinguishable from a human manually clicking. No API keys, no bot fingerprints, no ban risk. SubRoast remains the intelligence layer; the extension is purely the delivery mechanism.
+            </p>
+          </div>
         </div>
 
         {/* Divider */}

@@ -540,3 +540,9 @@
 ### Keyword Validation Fix (v6.4.1)
 - [x] Raise per-keyword character limit from 128 to 256 in the campaign router schema
 - [ ] Add helper text in the campaign form: "Paste keywords comma-separated — each keyword must be under 256 characters"
+
+### Homepage & Pricing Revisions (v6.5.1)
+- [x] Remove unverified "$7K MRR" social proof stat from App Validation use case card
+- [x] Rewrite App Validation card stat line to focus on feature value, not third-party claims
+- [x] Gate App Validation campaigns behind Growth plan (server-side check + UI lock on Starter)
+- [x] Add Chrome extension blurb to Growth plan on pricing page (coming soon, with "why" explanation)

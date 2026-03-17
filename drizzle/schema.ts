@@ -180,6 +180,7 @@ export const outreachCampaigns = mysqlTable("outreach_campaigns", {
   aiPromptInstructions: text("aiPromptInstructions"), // custom tone/style instructions
   minSubSize: int("minSubSize"),                    // optional: minimum subreddit subscriber count
   maxSubSize: int("maxSubSize"),                    // optional: maximum subreddit subscriber count
+  campaignType: mysqlEnum("campaignType", ["outreach", "validation"]).default("outreach").notNull(),
   reviewMode: mysqlEnum("reviewMode", ["auto_send", "review_first"]).default("review_first").notNull(),
   status: mysqlEnum("status", ["active", "paused", "completed"]).default("active").notNull(),
   lastSyncAt: bigint("lastSyncAt", { mode: "number" }),
