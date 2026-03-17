@@ -648,3 +648,7 @@
 - [x] Shorten use case card bodies to 1 punchy sentence each (~15 words)
 - [x] Remove walkthrough section paragraph (no video exists; report mockup speaks for itself)
 - [x] Trim hero body paragraph to a tighter two-sentence version
+
+### Dashboard & Homepage Cleanup (v6.15)
+- [x] Remove "Connect your Reddit account" step from dashboard onboarding checklist (was marked comingSoon/disabled; now fully removed from the 3-step flow)
+- [x] Comment out Capabilities section on homepage (redundant with Use Cases; preserved in JSX comment for easy restore)

@@ -1050,7 +1050,7 @@ export default function Home() {
       {/* ── DEMO VIDEO ── */}
       <VideoSection />
 
-      {/* ── CAPABILITIES ── */}
+      {/* ── CAPABILITIES (commented out — redundant with Use Cases; restore if needed) ──
       <section
         id="capabilities"
         style={{
@@ -1060,76 +1060,32 @@ export default function Home() {
         }}
       >
         <div className="container">
-          {/* Section header */}
           <div className="grid lg:grid-cols-[1fr_2fr] gap-12 mb-16">
             <div>
               <p className="eyebrow mb-5">Capabilities</p>
-              <h2 className="display-md">
-                Everything required to win on Reddit
-              </h2>
+              <h2 className="display-md">Everything required to win on Reddit</h2>
             </div>
             <div className="flex items-end">
-              <p
-                style={{
-                  fontFamily: "var(--font-sans)",
-                  fontSize: "0.9375rem",
-                  fontWeight: 300,
-          color: "oklch(0.70 0.006 80)",
-          lineHeight: 1.75,
-          maxWidth: "48ch",
-                }}
-              >
-                A complete intelligence suite — from post analysis to lead
-                generation to personalized outreach — designed for founders who
-                treat Reddit as a serious acquisition channel.
+              <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.9375rem", fontWeight: 300, color: "oklch(0.70 0.006 80)", lineHeight: 1.75, maxWidth: "48ch" }}>
+                A complete intelligence suite — from post analysis to lead generation to personalized outreach — designed for founders who treat Reddit as a serious acquisition channel.
               </p>
             </div>
           </div>
-
           <Divider />
-
-          {/* Feature rows */}
           {[
-            {
-              number: "01",
-              title: "AI Draft & Roast",
-              desc: "Paste your draft and receive a structured analysis: clarity score, subreddit fit score, virality score, a brutally honest roast, and a fully rewritten version — all before you publish.",
-            },
-            {
-              number: "02",
-              title: "Lead Intelligence",
-              desc: "SubRoast monitors your target subreddits continuously, scoring each post by relevance and urgency. Only the highest-signal leads surface in your inbox.",
-            },
-            {
-              number: "03",
-              title: "Personalized Outreach",
-              desc: "For each lead, the AI reads the original post and drafts a message that references specific details — never a template, always a conversation starter.",
-            },
-            {
-              number: "04",
-              title: "Public Comment Drafting",
-              desc: "Beyond DMs, SubRoast drafts public comment replies that add genuine value to the thread — positioning you as a peer, not a promoter.",
-            },
-            {
-              number: "05",
-              title: "Account Safety",
-              desc: "AI spam scoring flags risky leads before you reach out. The upcoming Chrome extension sends from your own browser — no API, no bot flags, no ban risk.",
-            },
-            {
-              number: "06",
-              title: "History & Performance",
-              desc: "Every post, DM, and comment is logged with status and engagement context. Track what works and refine your approach over time.",
-            },
-            {
-              number: "07",
-              title: "App Validation",
-              desc: "Run a research campaign to mine Reddit for 40+ unique complaints in a niche. Identify willingness to pay before you write a single line of code — the 48-hour validation framework, built in.",
-            },
+            { number: "01", title: "AI Draft & Roast", desc: "Paste your draft and receive a structured analysis: clarity score, subreddit fit score, virality score, a brutally honest roast, and a fully rewritten version — all before you publish." },
+            { number: "02", title: "Lead Intelligence", desc: "SubRoast monitors your target subreddits continuously, scoring each post by relevance and urgency. Only the highest-signal leads surface in your inbox." },
+            { number: "03", title: "Personalized Outreach", desc: "For each lead, the AI reads the original post and drafts a message that references specific details — never a template, always a conversation starter." },
+            { number: "04", title: "Public Comment Drafting", desc: "Beyond DMs, SubRoast drafts public comment replies that add genuine value to the thread — positioning you as a peer, not a promoter." },
+            { number: "05", title: "Account Safety", desc: "AI spam scoring flags risky leads before you reach out. The upcoming Chrome extension sends from your own browser — no API, no bot flags, no ban risk." },
+            { number: "06", title: "History & Performance", desc: "Every post, DM, and comment is logged with status and engagement context. Track what works and refine your approach over time." },
+            { number: "07", title: "App Validation", desc: "Run a research campaign to mine Reddit for 40+ unique complaints in a niche. Identify willingness to pay before you write a single line of code — the 48-hour validation framework, built in." },
           ].map((f, i) => (
             <FeatureRow key={f.number} {...f} delay={i * 80} />
           ))}
         </div>
       </section>
+      ── */}
 
       {/* ── USE CASES ── */}
       <section

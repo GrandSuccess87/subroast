@@ -45,14 +45,6 @@ export const onboardingRouter = router({
 
     const steps = [
       {
-        id: "reddit_connected",
-        label: "Connect your Reddit account",
-        description: "Link Reddit to enable post drafting and DM sending",
-        href: "/settings",
-        completed: redditConnected,
-        comingSoon: true, // REDDIT_CONNECT_DISABLED: remove this flag when Reddit API is approved
-      },
-      {
         id: "campaign_created",
         label: "Create your first outreach campaign",
         description: "Set up subreddit monitoring to discover leads automatically",
