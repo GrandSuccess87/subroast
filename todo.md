@@ -657,3 +657,8 @@
 - [x] Rename walkthrough section headline to "What a lead looks like" (eyebrow: "In practice")
 - [x] Remove Reddit connect paragraph from homepage CTA area ("Connect your Reddit account and receive your first AI analysis in under two minutes" removed)
 - [x] Logout button made more visible in sidebar: icon raised from /40 to /60 opacity; expanded state now shows icon + "SIGN OUT" label
+
+### Homepage Demo Section (v6.17)
+- [x] Remove "Two steps from draft to leads" Process section (was already removed in prior session)
+- [x] Rename "What a lead looks like" section to "The intelligence report" (eyebrow: "AI Analysis")
+- [x] Added LeadIntelligenceDemo section before the intelligence report: 3-phase looping animation (6-step AI chain → spam filter with red/green post badges → lead card reveal with scores + DM preview), pure CSS keyframes + useEffect timer, amber/dark aesthetic, left-copy + right-panel layout

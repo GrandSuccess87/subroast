@@ -467,9 +467,9 @@ function VideoSection() {
     >
       <div className="container">
         <div ref={ref} className="fade-up mb-16 max-w-xl">
-          <p className="eyebrow mb-5">In practice</p>
+          <p className="eyebrow mb-5">AI Analysis</p>
           <h2 className="display-lg mb-6">
-            What a lead looks like
+            The intelligence report
           </h2>
           <div className="rule-gold mb-6" style={{ width: "3rem" }} />
 
@@ -1047,6 +1047,9 @@ export default function Home() {
       {/* ── STAT BAR ── */}
       <StatBar />
 
+      {/* ── LEAD INTELLIGENCE DEMO ── */}
+      <LeadIntelligenceDemo />
+
       {/* ── DEMO VIDEO ── */}
       <VideoSection />
 
@@ -1206,6 +1209,247 @@ export default function Home() {
         </div>
       </footer>
     </div>
+  );
+}
+
+/* ── Lead Intelligence Demo ── */
+const CHAIN_STEPS = [
+  { id: "scan",    label: "Scanning subreddits",       sub: "r/SaaS · r/startups · r/entrepreneur" },
+  { id: "filter",  label: "Spam check running",         sub: "Filtering bots, ad accounts, thin posts" },
+  { id: "score",   label: "Scoring relevance",          sub: "Intent · Urgency · Subreddit fit" },
+  { id: "draft",   label: "Drafting outreach",          sub: "Personalised to each post" },
+  { id: "queue",   label: "Queueing for review",        sub: "Awaiting your approval" },
+  { id: "done",    label: "Lead ready",                 sub: "High-signal · Outreach drafted" },
+];
+
+const SPAM_POSTS = [
+  { text: "Best crypto signals 2024 — join now!", spam: true },
+  { text: "How do I find my first SaaS customers?", spam: false },
+  { text: "Earn $500/day from home — DM me", spam: true },
+  { text: "Struggling to get traction on Reddit", spam: false },
+  { text: "FREE followers — click link in bio", spam: true },
+];
+
+function LeadIntelligenceDemo() {
+  const sectionRef = useFadeUp();
+  const [phase, setPhase] = useState<0 | 1 | 2>(0); // 0=chain, 1=spam, 2=lead
+  const [activeStep, setActiveStep] = useState(0);
+  const [visiblePosts, setVisiblePosts] = useState(0);
+  const [showLead, setShowLead] = useState(false);
+
+  // Cycle phases automatically
+  useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout>;
+    if (phase === 0) {
+      // Step through the 6-step chain
+      if (activeStep < CHAIN_STEPS.length - 1) {
+        timeout = setTimeout(() => setActiveStep(s => s + 1), 600);
+      } else {
+        timeout = setTimeout(() => { setPhase(1); setActiveStep(0); setVisiblePosts(0); }, 1200);
+      }
+    } else if (phase === 1) {
+      // Reveal spam posts one by one
+      if (visiblePosts < SPAM_POSTS.length) {
+        timeout = setTimeout(() => setVisiblePosts(v => v + 1), 400);
+      } else {
+        timeout = setTimeout(() => { setPhase(2); setShowLead(false); setTimeout(() => setShowLead(true), 300); }, 1000);
+      }
+    } else {
+      // Hold lead card, then restart
+      timeout = setTimeout(() => { setPhase(0); setActiveStep(0); setVisiblePosts(0); setShowLead(false); }, 4000);
+    }
+    return () => clearTimeout(timeout);
+  }, [phase, activeStep, visiblePosts]);
+
+  return (
+    <section
+      style={{
+        paddingTop: "clamp(5rem, 10vw, 9rem)",
+        paddingBottom: "clamp(5rem, 10vw, 9rem)",
+        borderBottom: "0.5px solid oklch(0.18 0.007 60)",
+        background: "oklch(0.09 0.007 60)",
+      }}
+    >
+      <div className="container">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          {/* Left: copy */}
+          <div ref={sectionRef} className="fade-up">
+            <p className="eyebrow mb-5">Lead Intelligence</p>
+            <h2 className="display-lg mb-6">From subreddit to warm lead</h2>
+            <div className="rule-gold mb-6" style={{ width: "3rem" }} />
+            <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.9375rem", fontWeight: 300, color: "oklch(0.62 0.006 80)", lineHeight: 1.75, maxWidth: "44ch" }}>
+              SubRoast runs a six-step AI chain continuously — scanning, filtering spam, scoring intent, and drafting personalised outreach before you even open the app.
+            </p>
+          </div>
+
+          {/* Right: animated demo panel */}
+          <div
+            style={{
+              background: "oklch(0.12 0.007 60)",
+              border: "0.5px solid oklch(0.22 0.007 60)",
+              minHeight: "340px",
+              position: "relative",
+              overflow: "hidden",
+            }}
+          >
+            {/* Panel header */}
+            <div
+              style={{
+                borderBottom: "0.5px solid oklch(0.18 0.007 60)",
+                padding: "0.75rem 1.25rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+              }}
+            >
+              <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "oklch(0.78 0.14 65)", animation: "pulse 2s ease-in-out infinite" }} />
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.58rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "oklch(0.62 0.006 80)" }}>
+                {phase === 0 ? "AI chain running" : phase === 1 ? "Spam filter" : "Lead ready"}
+              </span>
+            </div>
+
+            {/* Phase 0: 6-step chain */}
+            {phase === 0 && (
+              <div style={{ padding: "1.25rem" }}>
+                {CHAIN_STEPS.map((step, i) => (
+                  <div
+                    key={step.id}
+                    style={{
+                      display: "flex",
+                      alignItems: "flex-start",
+                      gap: "0.75rem",
+                      padding: "0.6rem 0",
+                      borderBottom: i < CHAIN_STEPS.length - 1 ? "0.5px solid oklch(0.16 0.007 60)" : "none",
+                      opacity: i <= activeStep ? 1 : 0.2,
+                      transition: "opacity 0.4s ease",
+                    }}
+                  >
+                    {/* Step indicator */}
+                    <div style={{
+                      width: "18px", height: "18px", borderRadius: "50%", flexShrink: 0, marginTop: "1px",
+                      background: i < activeStep ? "oklch(0.78 0.14 65)" : i === activeStep ? "oklch(0.78 0.14 65 / 0.25)" : "oklch(0.18 0.007 60)",
+                      border: i === activeStep ? "1px solid oklch(0.78 0.14 65)" : "1px solid oklch(0.22 0.007 60)",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      transition: "all 0.4s ease",
+                    }}>
+                      {i < activeStep && (
+                        <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                          <path d="M1.5 4L3.5 6L6.5 2" stroke="oklch(0.09 0.008 60)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      )}
+                      {i === activeStep && (
+                        <div style={{ width: "5px", height: "5px", borderRadius: "50%", background: "oklch(0.78 0.14 65)", animation: "pulse 1s ease-in-out infinite" }} />
+                      )}
+                    </div>
+                    <div>
+                      <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.65rem", letterSpacing: "0.08em", color: i <= activeStep ? "oklch(0.88 0.025 85)" : "oklch(0.38 0 0)", transition: "color 0.4s ease" }}>
+                        {step.label}
+                      </div>
+                      <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", color: "oklch(0.38 0 0)", letterSpacing: "0.06em", marginTop: "0.15rem" }}>
+                        {step.sub}
+                      </div>
+                    </div>
+                    {/* Step number */}
+                    <div style={{ marginLeft: "auto", fontFamily: "var(--font-mono)", fontSize: "0.55rem", color: "oklch(0.28 0 0)", letterSpacing: "0.1em" }}>
+                      0{i + 1}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Phase 1: spam filter */}
+            {phase === 1 && (
+              <div style={{ padding: "1.25rem" }}>
+                <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", color: "oklch(0.38 0 0)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "0.75rem" }}>
+                  {visiblePosts} of {SPAM_POSTS.length} posts evaluated
+                </div>
+                {SPAM_POSTS.slice(0, visiblePosts).map((post, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.75rem",
+                      padding: "0.55rem 0.75rem",
+                      marginBottom: "0.4rem",
+                      background: post.spam ? "oklch(0.14 0.015 25 / 0.6)" : "oklch(0.14 0.010 140 / 0.4)",
+                      border: `0.5px solid ${post.spam ? "oklch(0.35 0.08 25)" : "oklch(0.30 0.06 140)"}`,
+                      animation: "fadeSlideIn 0.3s ease forwards",
+                    }}
+                  >
+                    <div style={{
+                      width: "6px", height: "6px", borderRadius: "50%", flexShrink: 0,
+                      background: post.spam ? "oklch(0.65 0.18 25)" : "oklch(0.65 0.15 140)",
+                    }} />
+                    <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.72rem", fontWeight: 300, color: post.spam ? "oklch(0.55 0.006 80)" : "oklch(0.75 0.006 80)", flex: 1, lineHeight: 1.4 }}>
+                      {post.text}
+                    </span>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.1em", textTransform: "uppercase", color: post.spam ? "oklch(0.65 0.18 25)" : "oklch(0.65 0.15 140)", flexShrink: 0 }}>
+                      {post.spam ? "Filtered" : "Signal"}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Phase 2: lead card */}
+            {phase === 2 && (
+              <div
+                style={{
+                  padding: "1.25rem",
+                  opacity: showLead ? 1 : 0,
+                  transform: showLead ? "translateY(0)" : "translateY(12px)",
+                  transition: "opacity 0.5s ease, transform 0.5s ease",
+                }}
+              >
+                {/* Lead card */}
+                <div
+                  style={{
+                    background: "oklch(0.14 0.010 65)",
+                    border: "0.5px solid oklch(0.30 0.025 65)",
+                    padding: "1rem 1.25rem",
+                  }}
+                >
+                  {/* Card header */}
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                      <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "oklch(0.78 0.14 65)", background: "oklch(0.20 0.020 65)", padding: "0.2rem 0.5rem" }}>r/SaaS</span>
+                      <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "oklch(0.65 0.15 140)", background: "oklch(0.16 0.012 140)", padding: "0.2rem 0.5rem" }}>High intent</span>
+                    </div>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", color: "oklch(0.38 0 0)", letterSpacing: "0.08em" }}>2h ago</span>
+                  </div>
+                  {/* Post title */}
+                  <p style={{ fontFamily: "var(--font-display)", fontSize: "0.95rem", fontWeight: 400, color: "oklch(0.93 0.010 80)", lineHeight: 1.35, marginBottom: "0.6rem" }}>
+                    "Struggling to get traction on Reddit without sounding like an ad"
+                  </p>
+                  {/* Scores */}
+                  <div style={{ display: "flex", gap: "1rem", marginBottom: "0.75rem" }}>
+                    {[{ l: "Relevance", v: "94" }, { l: "Urgency", v: "87" }, { l: "Fit", v: "91" }].map(s => (
+                      <div key={s.l}>
+                        <div style={{ fontFamily: "var(--font-mono)", fontSize: "1rem", fontWeight: 300, color: "oklch(0.88 0.025 85)", lineHeight: 1 }}>{s.v}</div>
+                        <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", color: "oklch(0.38 0 0)", letterSpacing: "0.12em", textTransform: "uppercase", marginTop: "0.2rem" }}>{s.l}</div>
+                      </div>
+                    ))}
+                  </div>
+                  {/* DM preview */}
+                  <div style={{ borderTop: "0.5px solid oklch(0.22 0.007 60)", paddingTop: "0.65rem" }}>
+                    <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "oklch(0.88 0.025 85 / 0.6)", marginBottom: "0.35rem" }}>Outreach draft ready</p>
+                    <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.72rem", fontWeight: 300, color: "oklch(0.62 0.006 80)", lineHeight: 1.6, fontStyle: "italic" }}>
+                      "Hey — saw your post about Reddit traction. I built SubRoast specifically for this problem…"
+                    </p>
+                  </div>
+                </div>
+                {/* Counter */}
+                <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", color: "oklch(0.38 0 0)", letterSpacing: "0.12em", textTransform: "uppercase", marginTop: "0.75rem" }}>
+                  1 of 12 leads ready for review
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
