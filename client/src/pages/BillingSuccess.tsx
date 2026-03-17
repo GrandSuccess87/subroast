@@ -10,7 +10,7 @@ const SURFACE = "oklch(0.12 0.007 60)";
 const BORDER = "oklch(0.22 0.007 60)";
 const IVORY = "oklch(0.88 0.025 85)";
 const FOREGROUND = "oklch(0.93 0.010 80)";
-const MUTED = "oklch(0.52 0.006 80)";
+const MUTED = "oklch(0.62 0.006 80)";
 
 export default function BillingSuccess() {
   const [, navigate] = useLocation();

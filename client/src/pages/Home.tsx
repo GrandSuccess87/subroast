@@ -76,7 +76,7 @@ function ReportMockup() {
               style={{
                 fontFamily: "var(--font-mono)",
                 fontSize: "0.55rem",
-                color: "oklch(0.35 0 0)",
+                color: "oklch(0.48 0 0)",
                 textAlign: "right",
                 letterSpacing: "0.08em",
               }}
@@ -132,7 +132,7 @@ function ReportMockup() {
                 style={{
                   fontFamily: "var(--font-mono)",
                   fontSize: "0.55rem",
-                  color: "oklch(0.50 0.006 80)",
+                  color: "oklch(0.62 0.006 80)",
                   letterSpacing: "0.12em",
                   textTransform: "uppercase",
                   marginTop: "0.35rem",
@@ -231,7 +231,7 @@ function ReportMockup() {
                   fontFamily: "var(--font-sans)",
                   fontSize: "0.7rem",
                   fontWeight: 300,
-                  color: "oklch(0.50 0.006 80)",
+                  color: "oklch(0.62 0.006 80)",
                   lineHeight: 1.6,
                 }}
               >
@@ -477,7 +477,7 @@ function VideoSection() {
               fontFamily: "var(--font-sans)",
               fontSize: "0.9375rem",
               fontWeight: 300,
-              color: "oklch(0.50 0.006 80)",
+              color: "oklch(0.62 0.006 80)",
               lineHeight: 1.75,
             }}
           >
@@ -522,7 +522,7 @@ function VideoSection() {
                       POST ANALYSIS REPORT
                     </p>
                   </div>
-                  <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", color: "oklch(0.35 0 0)", textAlign: "right", letterSpacing: "0.08em" }}>
+                  <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", color: "oklch(0.48 0 0)", textAlign: "right", letterSpacing: "0.08em" }}>
                     <div>REF-2024-0312</div>
                     <div>r/SaaS</div>
                   </div>
@@ -537,7 +537,7 @@ function VideoSection() {
                 {[{ label: "Clarity", value: "74", sub: "Moderate" }, { label: "Fit", value: "81", sub: "Strong" }, { label: "Virality", value: "68", sub: "Fair" }].map((s, i) => (
                   <div key={s.label} className="px-5 py-5 text-center" style={{ borderRight: i < 2 ? "0.5px solid oklch(0.20 0.007 60)" : "none" }}>
                     <div style={{ fontFamily: "var(--font-mono)", fontSize: "2rem", fontWeight: 300, color: "oklch(0.88 0.025 85)", lineHeight: 1 }}>{s.value}</div>
-                    <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", color: "oklch(0.50 0.006 80)", letterSpacing: "0.12em", textTransform: "uppercase", marginTop: "0.4rem" }}>{s.label}</div>
+                    <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", color: "oklch(0.62 0.006 80)", letterSpacing: "0.12em", textTransform: "uppercase", marginTop: "0.4rem" }}>{s.label}</div>
                     <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", color: "oklch(0.38 0 0)", letterSpacing: "0.08em", marginTop: "0.15rem" }}>{s.sub}</div>
                   </div>
                 ))}
@@ -568,7 +568,7 @@ function VideoSection() {
                   <div style={{ width: "1px", alignSelf: "stretch", background: "oklch(0.88 0.025 85 / 0.4)", flexShrink: 0 }} />
                   <div>
                     <p className="eyebrow mb-2" style={{ fontSize: "0.58rem", color: "oklch(0.88 0.025 85 / 0.7)" }}>Virality Recommendation</p>
-                    <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", fontWeight: 300, color: "oklch(0.50 0.006 80)", lineHeight: 1.65 }}>
+                    <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", fontWeight: 300, color: "oklch(0.62 0.006 80)", lineHeight: 1.65 }}>
                       Posts opening with “Has anyone…” receive 2.4× more comments on r/SaaS. Optimal posting window: Tuesday–Thursday, 9–11am EST.
                     </p>
                   </div>
@@ -613,7 +613,7 @@ function VideoSection() {
             style={{
               fontFamily: "var(--font-mono)",
               fontSize: "0.6rem",
-              color: "oklch(0.45 0 0)",
+              color: "oklch(0.55 0 0)",
               letterSpacing: "0.14em",
               textTransform: "uppercase",
             }}
@@ -782,7 +782,7 @@ export default function Home() {
                   fontWeight: 300,
                   letterSpacing: "0.14em",
                   textTransform: "uppercase",
-                  color: "oklch(0.45 0 0)",
+                  color: "oklch(0.55 0 0)",
                   textDecoration: "none",
                   transition: "color 0.3s ease",
                 }}
@@ -790,7 +790,7 @@ export default function Home() {
                   ((e.target as HTMLAnchorElement).style.color = "oklch(0.88 0.025 85)")
                 }
                 onMouseLeave={(e) =>
-                  ((e.target as HTMLAnchorElement).style.color = "oklch(0.45 0 0)")
+                  ((e.target as HTMLAnchorElement).style.color = "oklch(0.55 0 0)")
                 }
               >
                 {label}
@@ -876,7 +876,7 @@ export default function Home() {
                   fontFamily: "var(--font-sans)",
                   fontSize: "1rem",
                   fontWeight: 300,
-                  color: "oklch(0.50 0.006 80)",
+                  color: "oklch(0.62 0.006 80)",
                   lineHeight: 1.8,
                   maxWidth: "38ch",
                   marginBottom: "3rem",
@@ -1491,7 +1491,7 @@ function CtaSection() {
           style={{
             fontFamily: "var(--font-mono)",
             fontSize: "0.58rem",
-            color: "oklch(0.52 0.008 60)",
+            color: "oklch(0.62 0.008 60)",
             letterSpacing: "0.14em",
             textTransform: "uppercase",
             marginTop: "1.5rem",

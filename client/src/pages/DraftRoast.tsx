@@ -23,7 +23,7 @@ const BORDER = "oklch(0.22 0.007 60)";
 const IVORY = "oklch(0.88 0.025 85)";
 const IVORY_DIM = "oklch(0.88 0.025 85 / 0.5)";
 const FOREGROUND = "oklch(0.93 0.010 80)";
-const MUTED = "oklch(0.52 0.006 80)";
+const MUTED = "oklch(0.62 0.006 80)";
 
 type AnalysisResult = {
   review: {
@@ -113,7 +113,7 @@ function RadarChart({ result }: { result: AnalysisResult }) {
   const labelPositions = axes.map((ax, i) => { const p = pt(i, 1.32); return { ...p, label: ax.label, value: ax.value }; });
 
   const IVORY_COLOR = "oklch(0.88 0.025 85)";
-  const MUTED_COLOR = "oklch(0.52 0.006 80)";
+  const MUTED_COLOR = "oklch(0.62 0.006 80)";
   const BORDER_COLOR = "oklch(0.22 0.007 60)";
 
   return (

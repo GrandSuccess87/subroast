@@ -638,3 +638,6 @@
   - Filter: account has no comment history (pure poster)
   - Cache author profiles within a sync run to avoid duplicate calls for same author
   - Respect Reddit rate limits (max 60 author lookups per sync, queue remainder)
+
+### Secondary Text Contrast (v6.13) — X user feedback 2026-03-17
+- [x] Raise all secondary/muted text from oklch(0.52) to oklch(0.62) (~#9CA3AF equivalent) across homepage, pricing page, and dashboard — improves WCAG AA readability while preserving dark aesthetic
