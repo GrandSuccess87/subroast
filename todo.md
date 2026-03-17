@@ -533,3 +533,7 @@
 - [ ] Add "App Validation" as a use case on the homepage (alongside "Lead Generation")
 - [ ] Update hero or features section to mention the 48-hour validation framework
 - [ ] Add social proof angle: "Used by founders to validate ideas before building"
+
+### Keyword Validation Fix (v6.4.1)
+- [x] Raise per-keyword character limit from 128 to 256 in the campaign router schema
+- [ ] Add helper text in the campaign form: "Paste keywords comma-separated — each keyword must be under 256 characters"
