@@ -36,8 +36,8 @@ const PLANS = [
       "Unlimited outreach campaigns",
       "Lead sync: every 4 hours (6× daily)",
       "AI auto-scheduling",
-      "DM template library",
-      "Advanced analytics",
+      "DM template library __COMING_SOON__",
+      "Advanced analytics __COMING_SOON__",
     ],
     cta: "Begin 7-Day Trial",
     popular: true,
@@ -368,35 +368,54 @@ export default function Pricing() {
                     gap: "0.85rem",
                   }}
                 >
-                  {plan.features.map((feature) => (
-                    <li
-                      key={feature}
-                      style={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        gap: "0.75rem",
-                        fontSize: "0.82rem",
-                        color: feature.toLowerCase().includes("coming soon") ? MUTED : FOREGROUND,
-                        lineHeight: 1.5,
-                      }}
-                    >
-                      <span
+                  {plan.features.map((feature) => {
+                    const isComingSoon = feature.includes("__COMING_SOON__");
+                    const label = feature.replace(" __COMING_SOON__", "");
+                    return (
+                      <li
+                        key={feature}
                         style={{
-                          width: "14px",
-                          height: "14px",
-                          border: `0.5px solid ${BORDER_ACCENT}`,
                           display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          flexShrink: 0,
-                          marginTop: "1px",
+                          alignItems: "flex-start",
+                          gap: "0.75rem",
+                          fontSize: "0.82rem",
+                          color: isComingSoon ? MUTED : FOREGROUND,
+                          lineHeight: 1.5,
                         }}
                       >
-                        <Check size={8} color={IVORY} />
-                      </span>
-                      {feature}
-                    </li>
-                  ))}
+                        <span
+                          style={{
+                            width: "14px",
+                            height: "14px",
+                            border: `0.5px solid ${isComingSoon ? MUTED : BORDER_ACCENT}`,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            flexShrink: 0,
+                            marginTop: "1px",
+                            opacity: isComingSoon ? 0.4 : 1,
+                          }}
+                        >
+                          <Check size={8} color={isComingSoon ? MUTED : IVORY} />
+                        </span>
+                        <span style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
+                          {label}
+                          {isComingSoon && (
+                            <span style={{
+                              fontFamily: FONT_MONO,
+                              fontSize: "0.5rem",
+                              letterSpacing: "0.15em",
+                              textTransform: "uppercase",
+                              color: "oklch(0.78 0.12 75)",
+                              border: "0.5px solid oklch(0.78 0.12 75 / 0.4)",
+                              padding: "0.1rem 0.4rem",
+                              lineHeight: 1.6,
+                            }}>Coming soon</span>
+                          )}
+                        </span>
+                      </li>
+                    );
+                  })}
                 </ul>
 
                 {/* CTA */}

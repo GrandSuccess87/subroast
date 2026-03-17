@@ -496,3 +496,40 @@
 - [x] Remove Leads Found and DMs Sent from stats grid (duplicated by funnel row)
 - [x] Designed replacement: Hot Leads, Avg Fit Score, Last Sync, Syncs Today/Limit
 - [ ] DEFERRED: Stats grid is commented out in CampaignDetail — uncomment and re-evaluate when ready to add back
+
+### Campaign UX — Keyword Input (v6.4)
+- [ ] Confirm comma-separated keyword paste works in the keyword text field (user-reported need)
+- [ ] Add helper text: "Paste keywords comma-separated or add one at a time"
+
+### Campaign 3 — Product Research Engine / App Validation (v6.4)
+- [ ] DM template for validation outreach: "Hey [name], saw your post about [pain point]. Researching this problem — can I ask 3 quick questions?"
+- [ ] Follow-up question sequence: (1) What do you currently use? (2) What's most frustrating about it? (3) If I solved [specific pain] for $X/month would you buy it?
+- [ ] Campaign mode: "Research" — AI summarizes complaint instead of drafting a sales DM
+- [ ] Tag pain point category on each lead (workflow friction / missing tool / bad existing solution)
+- [ ] Save exact complaint phrase from the post as a lead field
+- [ ] Validation scorecard per campaign: 15+ complaints found / 10+ willing to pay / 5+ clicked payment
+- [ ] Export complaints as CSV for offline analysis
+
+### Pricing Page — Growth Plan Accuracy (v6.4)
+- [x] Mark "DM Templates" as "Coming soon" on Growth plan
+- [x] Mark "Advanced Insights" as "Coming soon" on Growth plan
+
+### Backlog — Templates Feature (v6.5)
+- [ ] DM template library: validation template, warm intro template, pain-point empathy template, follow-up template
+- [ ] Template picker in campaign creation form (choose a starting template or write custom)
+- [ ] Template variables: [name], [pain point], [subreddit], [post title], [product name]
+- [ ] Save custom templates per user for reuse across campaigns
+- [ ] Template performance tracking: response rate per template
+
+### Backlog — Advanced Insights Feature (v6.5)
+- [ ] Pain point frequency chart: most common complaint phrases across all campaigns
+- [ ] Subreddit performance heatmap: which subs yield the highest fit scores
+- [ ] Best time to sync: show which hours produce the most leads based on post activity
+- [ ] Keyword effectiveness: which keywords surface the most hot leads
+- [ ] Validation scorecard dashboard: aggregate view across all research campaigns
+- [ ] Weekly digest email: top leads, funnel movement, and subreddit highlights
+
+### Homepage Updates (v6.4)
+- [ ] Add "App Validation" as a use case on the homepage (alongside "Lead Generation")
+- [ ] Update hero or features section to mention the 48-hour validation framework
+- [ ] Add social proof angle: "Used by founders to validate ideas before building"
