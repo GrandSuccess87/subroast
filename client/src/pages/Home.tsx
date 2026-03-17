@@ -921,9 +921,28 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Right: intelligence report mockup */}
-            <div className="hidden lg:flex justify-end">
-              <ReportMockup />
+            {/* Right: architectural SVG demo */}
+            <div className="hidden lg:flex justify-end items-center">
+              <div
+                className="relative w-full max-w-[520px]"
+              >
+                {/* Faint gold aura */}
+                <div
+                  className="absolute -inset-8 pointer-events-none"
+                  style={{
+                    background:
+                      "radial-gradient(ellipse 60% 50% at 50% 50%, oklch(0.88 0.025 85 / 0.06) 0%, transparent 70%)",
+                  }}
+                />
+                <div
+                  style={{
+                    border: "0.5px solid oklch(0.22 0.007 60)",
+                    overflow: "hidden",
+                  }}
+                >
+                  <ArchitecturalIllustration />
+                </div>
+              </div>
             </div>
           </div>
         </div>

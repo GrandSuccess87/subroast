@@ -615,3 +615,8 @@
 - [x] Hero: radial amber glow (oklch(0.78 0.14 65 / 0.10)) behind CTA buttons with zIndex layering
 - [x] Footer: Pricing/Feedback raised from oklch(0.35) → oklch(0.62); SubRoast wordmark raised to oklch(0.58); copyright raised to oklch(0.42)
 - [x] Homepage: replaced ArchitecturalIllustration with full two-column expanded ReportMockup (860px max-width) including Lead Signal Detected panel
+
+### Fixes & Features (v6.11)
+- [x] Hero: restored ArchitecturalIllustration SVG to the right column
+- [x] DM Campaign detail: added Edit Campaign button with full EditCampaignModal (name, offering, subreddits, keywords, daily limit, review mode)
+- [x] Bug: sync leads returning 0 — root cause: Reddit IP-level block (HTTP 403) on unauthenticated public API calls from cloud server. Fixed by adding app-only OAuth (client credentials flow) as automatic fallback. Confirmed: 117 leads returned on first successful sync.

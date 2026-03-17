@@ -13,6 +13,7 @@ import {
   Loader2,
   MessageSquare,
   Pause,
+  Pencil,
   Play,
   Plus,
   RefreshCw,
@@ -180,7 +181,125 @@ function ProgressSteps({ steps, currentStep }: { steps: string[]; currentStep: n
   );
 }
 
-// ─── New campaign form ────────────────────────────────────────────────────────
+// ─── Edit campaign modal ────────────────────────────────────────────────────────────────────────────────────
+function EditCampaignModal({ campaign, onClose }: { campaign: Campaign; onClose: () => void }) {
+  const utils = trpc.useUtils();
+  const [name, setName] = useState(campaign.name);
+  const [offering, setOffering] = useState(campaign.offering);
+  const [websiteUrl, setWebsiteUrl] = useState(campaign.websiteUrl ?? "");
+  const [subreddits, setSubreddits] = useState<string[]>(campaign.subreddits);
+  const [keywords, setKeywords] = useState<string[]>(campaign.keywords);
+  const [subInput, setSubInput] = useState("");
+  const [kwInput, setKwInput] = useState("");
+  const [aiInstructions, setAiInstructions] = useState(campaign.aiPromptInstructions ?? "");
+
+  const updateCampaign = trpc.outreach.updateCampaign.useMutation({
+    onSuccess: () => { toast.success("Campaign updated!"); utils.outreach.listCampaigns.invalidate(); onClose(); },
+    onError: (err) => toast.error(err.message),
+  });
+
+  const addSub = () => { const s = subInput.trim().replace(/^r\//, ""); if (s && !subreddits.includes(s)) setSubreddits([...subreddits, s]); setSubInput(""); };
+  const addKw = () => { const k = kwInput.trim(); if (k && !keywords.includes(k)) setKeywords([...keywords, k]); setKwInput(""); };
+
+  const handleSave = () => {
+    if (!name.trim()) return toast.error("Campaign name is required");
+    if (!offering.trim()) return toast.error("Offering description is required");
+    if (subreddits.length === 0) return toast.error("Add at least one subreddit");
+    if (keywords.length === 0) return toast.error("Add at least one keyword");
+    updateCampaign.mutate({ id: campaign.id, name, offering, websiteUrl: websiteUrl || undefined, subreddits, keywords, aiPromptInstructions: aiInstructions || undefined });
+  };
+
+  const labelStyle: React.CSSProperties = { fontFamily: FONT_MONO, fontSize: "0.58rem", letterSpacing: "0.15em", textTransform: "uppercase", color: MUTED, display: "block", marginBottom: "0.4rem" };
+  const tagStyle: React.CSSProperties = { display: "inline-flex", alignItems: "center", gap: "0.3rem", fontFamily: FONT_MONO, fontSize: "0.6rem", color: FOREGROUND, border: `0.5px solid ${BORDER}`, background: SURFACE_RAISED, padding: "0.2rem 0.5rem" };
+
+  return (
+    <div style={{ position: "fixed", inset: 0, zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem" }}>
+      {/* Backdrop */}
+      <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "oklch(0 0 0 / 0.7)", backdropFilter: "blur(4px)" }} />
+      {/* Modal */}
+      <div style={{ position: "relative", width: "100%", maxWidth: "640px", maxHeight: "90vh", overflowY: "auto", background: SURFACE, border: `0.5px solid ${BORDER}`, zIndex: 1 }}>
+        {/* Header */}
+        <div style={{ padding: "1.25rem 1.5rem", borderBottom: `0.5px solid ${BORDER}`, display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, background: SURFACE, zIndex: 2 }}>
+          <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: MUTED }}>Edit Campaign</p>
+          <button onClick={onClose} style={{ background: "none", border: "none", color: MUTED, cursor: "pointer" }}><X size={14} /></button>
+        </div>
+        <div style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+          {/* Name + URL */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+            <div>
+              <label style={labelStyle}>Campaign Name</label>
+              <input value={name} onChange={(e) => setName(e.target.value)} style={inputStyle} />
+            </div>
+            <div>
+              <label style={labelStyle}>Website URL (optional)</label>
+              <input value={websiteUrl} onChange={(e) => setWebsiteUrl(e.target.value)} placeholder="https://yourapp.com" style={inputStyle} />
+            </div>
+          </div>
+          {/* Offering */}
+          <div>
+            <label style={labelStyle}>What are you offering?</label>
+            <textarea value={offering} onChange={(e) => setOffering(e.target.value)} style={{ ...inputStyle, minHeight: "80px", resize: "vertical", lineHeight: 1.6 }} />
+          </div>
+          {/* Subreddits */}
+          <div>
+            <label style={labelStyle}>Target Subreddits</label>
+            <div style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem" }}>
+              <div style={{ position: "relative", flex: 1 }}>
+                <span style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)", color: MUTED, fontSize: "0.82rem" }}>r/</span>
+                <input value={subInput} onChange={(e) => setSubInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && addSub()} placeholder="SaaS" style={{ ...inputStyle, paddingLeft: "1.8rem" }} />
+              </div>
+              <button onClick={addSub} style={{ padding: "0.6rem 1rem", background: "transparent", border: `0.5px solid ${BORDER}`, color: MUTED, fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.1em", cursor: "pointer", flexShrink: 0 }}>Add</button>
+            </div>
+            {subreddits.length > 0 && (
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem" }}>
+                {subreddits.map((s) => (
+                  <span key={s} style={tagStyle}>r/{s}
+                    <button onClick={() => setSubreddits(subreddits.filter((x) => x !== s))} style={{ background: "none", border: "none", color: MUTED, cursor: "pointer", padding: 0, display: "flex" }}><X size={9} /></button>
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+          {/* Keywords */}
+          <div>
+            <label style={labelStyle}>Keywords to Monitor</label>
+            <div style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem" }}>
+              <input value={kwInput} onChange={(e) => setKwInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && addKw()} placeholder="add a keyword..." style={{ ...inputStyle, flex: 1 }} />
+              <button onClick={addKw} style={{ padding: "0.6rem 1rem", background: "transparent", border: `0.5px solid ${BORDER}`, color: MUTED, fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.1em", cursor: "pointer", flexShrink: 0 }}>Add</button>
+            </div>
+            {keywords.length > 0 && (
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem" }}>
+                {keywords.map((k) => (
+                  <span key={k} style={tagStyle}>{k}
+                    <button onClick={() => setKeywords(keywords.filter((x) => x !== k))} style={{ background: "none", border: "none", color: MUTED, cursor: "pointer", padding: 0, display: "flex" }}><X size={9} /></button>
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+          {/* AI instructions */}
+          <div>
+            <label style={labelStyle}>AI DM Tone/Style Instructions (optional)</label>
+            <input value={aiInstructions} onChange={(e) => setAiInstructions(e.target.value)} placeholder="e.g. Be casual and friendly, mention free trial" style={inputStyle} />
+          </div>
+          {/* Actions */}
+          <div style={{ display: "flex", gap: "0.75rem" }}>
+            <button
+              onClick={handleSave}
+              disabled={updateCampaign.isPending}
+              style={{ padding: "0.65rem 1.5rem", background: updateCampaign.isPending ? SURFACE_RAISED : IVORY, border: `0.5px solid ${updateCampaign.isPending ? BORDER : IVORY}`, color: updateCampaign.isPending ? MUTED : BG, fontFamily: FONT_MONO, fontSize: "0.62rem", letterSpacing: "0.18em", textTransform: "uppercase", cursor: updateCampaign.isPending ? "not-allowed" : "pointer", display: "flex", alignItems: "center", gap: "0.4rem" }}
+            >
+              {updateCampaign.isPending ? <><Loader2 size={11} style={{ animation: "spin 1s linear infinite" }} /> Saving...</> : <><Pencil size={11} /> Save Changes</>}
+            </button>
+            <button onClick={onClose} style={{ padding: "0.65rem 1.25rem", background: "transparent", border: `0.5px solid ${BORDER}`, color: MUTED, fontFamily: FONT_MONO, fontSize: "0.62rem", letterSpacing: "0.18em", textTransform: "uppercase", cursor: "pointer" }}>Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── New campaign form ────────────────────────────────────────────────────────────────────────────────────
 function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCancel: () => void }) {
   const [name, setName] = useState("");
   const [offering, setOffering] = useState("");
@@ -769,6 +888,7 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
   const utils = trpc.useUtils();
   const [activeFilter, setActiveFilter] = useState<"all" | "new" | "dm_generated" | "queued" | "sent" | "skipped">("all");
   const chainLeadIdRef = useRef<number | null>(null);
+  const [showEdit, setShowEdit] = useState(false);
 
   const { data: leads = [], isLoading: leadsLoading } = trpc.outreach.getLeads.useQuery({ campaignId: campaign.id });
   const { data: rateLimits } = trpc.reddit.getRateLimitStatus.useQuery();
@@ -857,10 +977,14 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
           <button onClick={() => syncLeads.mutate({ campaignId: campaign.id })} disabled={syncLeads.isPending || campaign.status !== "active"} style={{ ...monoBtn, opacity: (syncLeads.isPending || campaign.status !== "active") ? 0.5 : 1 }}>
             {syncLeads.isPending ? <Loader2 size={10} style={{ animation: "spin 1s linear infinite" }} /> : <RefreshCw size={10} />} Sync Leads
           </button>
+          <button onClick={() => setShowEdit(true)} style={monoBtn}>
+            <Pencil size={10} /> Edit
+          </button>
           <button onClick={() => updateCampaign.mutate({ id: campaign.id, status: campaign.status === "active" ? "paused" : "active" })} style={monoBtn}>
             {campaign.status === "active" ? <><Pause size={10} /> Pause</> : <><Play size={10} /> Resume</>}
           </button>
         </div>
+        {showEdit && <EditCampaignModal campaign={campaign} onClose={() => setShowEdit(false)} />}
       </div>
 
       {/* Stats grid — commented out, kept in backlog for future consideration

@@ -87,6 +87,39 @@ export async function refreshRedditToken(
   return response.data;
 }
 
+// App-only OAuth token cache (client credentials flow — no user login needed)
+let appOnlyToken: { token: string; expiresAt: number } | null = null;
+
+export async function getAppOnlyRedditToken(): Promise<string | null> {
+  const clientId = ENV.redditClientId;
+  const clientSecret = ENV.redditClientSecret;
+  if (!clientId || !clientSecret) return null;
+
+  const now = Date.now();
+  if (appOnlyToken && appOnlyToken.expiresAt - now > 60_000) {
+    return appOnlyToken.token;
+  }
+
+  try {
+    const response = await axios.post<RedditTokenResponse>(
+      REDDIT_TOKEN_URL,
+      new URLSearchParams({ grant_type: "client_credentials" }),
+      {
+        auth: { username: clientId, password: clientSecret },
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      }
+    );
+    appOnlyToken = {
+      token: response.data.access_token,
+      expiresAt: now + response.data.expires_in * 1000,
+    };
+    return appOnlyToken.token;
+  } catch (err) {
+    console.error("[Reddit] Failed to get app-only token:", err);
+    return null;
+  }
+}
+
 export async function getRedditMe(accessToken: string): Promise<RedditMeResponse> {
   const response = await axios.get<RedditMeResponse>(`${REDDIT_OAUTH_BASE}/api/v1/me`, {
     headers: {

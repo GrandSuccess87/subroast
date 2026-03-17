@@ -18,7 +18,7 @@ import {
   incrementDmCount,
 } from "../db";
 import { checkCanDm } from "../rateLimiter";
-import { refreshRedditToken, sendRedditDM } from "../reddit";
+import { getAppOnlyRedditToken, refreshRedditToken, sendRedditDM } from "../reddit";
 import { users } from "../../drizzle/schema";
 import { eq } from "drizzle-orm";
 
@@ -39,18 +39,20 @@ async function getValidRedditToken(account: {
   return account.accessToken;
 }
 
-// ─── Reddit Public Search ─────────────────────────────────────────────────────
+// ─── Reddit OAuth Search ──────────────────────────────────────────────────────
+// Uses authenticated OAuth API to avoid IP-level blocks on public .json endpoints
 
 // Cache subreddit subscriber counts within a single sync run to avoid redundant API calls
 const subSizeCache = new Map<string, number>();
 
-async function getSubredditSubscriberCount(subreddit: string): Promise<number | null> {
+async function getSubredditSubscriberCount(subreddit: string, accessToken: string): Promise<number | null> {
   if (subSizeCache.has(subreddit)) return subSizeCache.get(subreddit)!;
   try {
-    const url = `https://www.reddit.com/r/${subreddit}/about.json`;
+    const url = `https://oauth.reddit.com/r/${subreddit}/about`;
     const res = await fetch(url, {
       headers: {
-        "User-Agent": "SubRoast/1.0 (subreddit monitoring bot)",
+        Authorization: `Bearer ${accessToken}`,
+        "User-Agent": "SubRoast/1.0 by SubRoastApp",
         Accept: "application/json",
       },
     });
@@ -67,7 +69,8 @@ async function getSubredditSubscriberCount(subreddit: string): Promise<number | 
 async function searchRedditPosts(
   subreddit: string,
   keyword: string,
-  limit = 10
+  limit = 10,
+  accessToken?: string
 ): Promise<Array<{
   id: string;
   url: string;
@@ -79,14 +82,21 @@ async function searchRedditPosts(
 }>> {
   try {
     const query = encodeURIComponent(keyword);
-    const url = `https://www.reddit.com/r/${subreddit}/search.json?q=${query}&restrict_sr=1&sort=new&limit=${limit}&t=month`;
-    const res = await fetch(url, {
-      headers: {
-        "User-Agent": "SubRoast/1.0 (subreddit monitoring bot)",
-        Accept: "application/json",
-      },
-    });
-    if (!res.ok) return [];
+    // Use OAuth API if token available (avoids IP blocks), fall back to public API
+    const baseUrl = accessToken
+      ? `https://oauth.reddit.com/r/${subreddit}/search`
+      : `https://www.reddit.com/r/${subreddit}/search.json`;
+    const url = `${baseUrl}?q=${query}&restrict_sr=1&sort=new&limit=${limit}&t=month`;
+    const headers: Record<string, string> = {
+      "User-Agent": "SubRoast/1.0 by SubRoastApp",
+      Accept: "application/json",
+    };
+    if (accessToken) headers["Authorization"] = `Bearer ${accessToken}`;
+    const res = await fetch(url, { headers });
+    if (!res.ok) {
+      console.log(`[searchRedditPosts] HTTP ${res.status} for r/${subreddit} + "${keyword}"`);
+      return [];
+    }
     const json = await res.json() as {
       data?: {
         children?: Array<{
@@ -389,6 +399,30 @@ Rules:
       const minSubSize = c.minSubSize ?? null;
       const maxSubSize = c.maxSubSize ?? null;
 
+      // ── Get user's Reddit OAuth token for authenticated API calls ─────────────
+      // Authenticated requests use oauth.reddit.com which bypasses IP-level blocks
+      const redditAccount = await getRedditAccountByUserId(ctx.user.id);
+      let accessToken: string | undefined;
+      if (redditAccount) {
+        try {
+          accessToken = await getValidRedditToken(redditAccount);
+        } catch {
+          console.log(`[syncLeads] Could not refresh Reddit token, falling back to public API`);
+        }
+      }
+      if (!accessToken) {
+        // Fall back to app-only OAuth (client credentials) — works from server IP, no user login needed
+        const appToken = await getAppOnlyRedditToken();
+        if (appToken) {
+          accessToken = appToken;
+          console.log(`[syncLeads] Using app-only Reddit OAuth token for campaign ${input.campaignId}`);
+        } else {
+          console.log(`[syncLeads] No Reddit token available — sync will likely fail (IP blocked)`);
+        }
+      } else {
+        console.log(`[syncLeads] Using user Reddit OAuth token for campaign ${input.campaignId}`);
+      }
+
       // Clear the per-sync subreddit size cache
       subSizeCache.clear();
 
@@ -398,13 +432,15 @@ Rules:
       const existingLeads = await getOutreachLeadsByCampaignId(input.campaignId);
       const existingPostIds = new Set(existingLeads.map((l) => l.redditPostId));
 
+      console.log(`[syncLeads] Campaign ${input.campaignId}: subreddits=${JSON.stringify(subreddits)}, keywords=${JSON.stringify(keywords)}, existingLeads=${existingLeads.length}`);
+
       for (const sub of subreddits.slice(0, 5)) { // limit to 5 subreddits per sync
         // Check subreddit size filter if set
         if (minSubSize !== null || maxSubSize !== null) {
-          const subscriberCount = await getSubredditSubscriberCount(sub);
+          const subscriberCount = await getSubredditSubscriberCount(sub, accessToken ?? "");
           if (subscriberCount !== null) {
-            if (minSubSize !== null && subscriberCount < minSubSize) continue;
-            if (maxSubSize !== null && subscriberCount > maxSubSize) continue;
+            if (minSubSize !== null && subscriberCount < minSubSize) { console.log(`[syncLeads] Skipping r/${sub}: ${subscriberCount} subscribers < minSubSize ${minSubSize}`); continue; }
+            if (maxSubSize !== null && subscriberCount > maxSubSize) { console.log(`[syncLeads] Skipping r/${sub}: ${subscriberCount} subscribers > maxSubSize ${maxSubSize}`); continue; }
           }
         }
 
@@ -414,7 +450,8 @@ Rules:
           const searchQuery = kw.split(/\s+/).length > 4
             ? kw.split(/\s+/).slice(0, 4).join(" ")
             : kw;
-          const posts = await searchRedditPosts(sub, searchQuery, 10);
+          const posts = await searchRedditPosts(sub, searchQuery, 10, accessToken);
+          console.log(`[syncLeads] r/${sub} + "${searchQuery}" (from "${kw}"): ${posts.length} posts found`);
           for (const post of posts) {
             if (post.author === "[deleted]" || post.author === "AutoModerator") continue;
             const { score, matchedKeywords } = scoreMatch(post.title, post.body, keywords);

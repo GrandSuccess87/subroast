@@ -1,0 +1,20 @@
+{
+  "query": "SELECT id, name, subreddits, keywords, status, campaignType, dailySyncsUsed, leadsFound FROM outreach_campaigns WHERE id = 30001;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute SELECT id, name, subreddits, keywords, status, campaignType, dailySyncsUsed, leadsFound FROM outreach_campaigns WHERE id = 30001;",
+  "rows": [
+    {
+      "id": "30001",
+      "name": "SubRoast ICP Pain-Point Outreach",
+      "subreddits": "[\"SaaS\",\"Entrepreneur\",\"startups\",\"smallbusiness\",\"marketing\",\"GrowthHacking\",\"SideProject\",\"indiehackers\",\"leadgeneration\",\"RedditMarketing\"]",
+      "keywords": "[\"struggling with lead generation\",\"finding customers Reddit\",\"Reddit outreach strategy\",\"automating Reddit DMs\",\"cold outreach Reddit\",\"how to get leads from Reddit\",\"marketing on Reddit challenges\",\"time-consuming lead research\",\"finding target audience Reddit\",\"drafting outreach messages\",\"scaling Reddit marketing\",\"manual lead finding pain\",\"improving conversion rates Reddit\",\"efficient prospect identification\",\"first customers\",\"customer acquisition reddit\",\"automating reddit outreach\"]",
+      "status": "active",
+      "campaignType": "validation",
+      "dailySyncsUsed": "1",
+      "leadsFound": "0"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tsubreddits\tkeywords\tstatus\tcampaignType\tdailySyncsUsed\tleadsFound\n30001\tSubRoast ICP Pain-Point Outreach\t[\"SaaS\",\"Entrepreneur\",\"startups\",\"smallbusiness\",\"marketing\",\"GrowthHacking\",\"SideProject\",\"indiehackers\",\"leadgeneration\",\"RedditMarketing\"]\t[\"struggling with lead generation\",\"finding customers Reddit\",\"Reddit outreach strategy\",\"automating Reddit DMs\",\"cold outreach Reddit\",\"how to get leads from Reddit\",\"marketing on Reddit challenges\",\"time-consuming lead research\",\"finding target audience Reddit\",\"drafting outreach messages\",\"scaling Reddit marketing\",\"manual lead finding pain\",\"improving conversion rates Reddit\",\"efficient prospect identification\",\"first customers\",\"customer acquisition reddit\",\"automating reddit outreach\"]\tactive\tvalidation\t1\t0\n",
+  "stderr": "",
+  "execution_time_ms": 57
+}
