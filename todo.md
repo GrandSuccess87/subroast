@@ -680,3 +680,6 @@
 - [x] Comment out "Recommended" badge on Growth plan in Pricing page
 - [x] Center the "Begin Free Trial" button text (added textAlign + justifyContent center)
 - [x] Feedback page already existed at /dashboard/feedback — confirmed fully built with submit form, upvote board, and admin controls. No rebuild needed. Also updated secondary CTA from "View walkthrough" to "See how it works" pointing to #lead-intelligence.
+
+### Hero Layout (v6.20)
+- [x] Add centered max-width constraint to hero: collapsed grid to single centered column (max-w-[42rem]), gold rule and body centered, CTA row centered with justify-center, amber glow recentered to 50% 50%

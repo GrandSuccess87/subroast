@@ -831,10 +831,10 @@ export default function Home() {
         </svg>
 
         <div className="container relative w-full">
-          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center py-24 lg:py-0">
+          <div className="flex flex-col items-center py-24 lg:py-32">
 
-            {/* Left: editorial copy */}
-            <div ref={heroRef}>
+            {/* Center: editorial copy */}
+            <div ref={heroRef} style={{ maxWidth: "42rem", width: "100%", textAlign: "center" }}>
               {/* Eyebrow */}
               <p className="eyebrow mb-8">
                 AI Intelligence for Reddit
@@ -856,6 +856,7 @@ export default function Home() {
                   height: "0.5px",
                   background: "oklch(0.88 0.025 85 / 0.6)",
                   marginBottom: "2rem",
+                  margin: "0 auto 2rem",
                 }}
               />
 
@@ -867,8 +868,9 @@ export default function Home() {
                   fontWeight: 300,
                   color: "oklch(0.62 0.006 80)",
                   lineHeight: 1.8,
-                  maxWidth: "38ch",
+                  maxWidth: "52ch",
                   marginBottom: "3rem",
+                  margin: "0 auto 3rem",
                 }}
               >
                 AI roast, virality score, and rewrite for every post.
@@ -876,13 +878,13 @@ export default function Home() {
               </p>
 
               {/* CTAs */}
-              <div className="relative flex flex-col sm:flex-row items-start gap-4 mb-10">
+              <div className="relative flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
                 {/* Radial amber glow behind the CTA area */}
                 <div
                   className="absolute pointer-events-none"
                   style={{
                     inset: "-2rem -3rem",
-                    background: "radial-gradient(ellipse 70% 80% at 30% 50%, oklch(0.78 0.14 65 / 0.10) 0%, transparent 70%)",
+                    background: "radial-gradient(ellipse 70% 80% at 50% 50%, oklch(0.78 0.14 65 / 0.10) 0%, transparent 70%)",
                     zIndex: 0,
                   }}
                 />
