@@ -691,3 +691,6 @@
 - [x] Rebuild hero as lg:grid-cols-2 layout: left = editorial copy (eyebrow, headline, body, CTAs, trust line), right = Lead Intelligence section (eyebrow, headline, description, animated demo)
 - [x] HeroDemoPanel extracted as shared component — used in hero right column AND in the standalone Lead Intelligence section below (kept both for scroll depth)
 - [x] Hero entrance animations preserved — eyebrow first, headline 200ms, body/rule 380ms, CTA+right-column 500ms
+
+### Remove Duplicate Lead Intelligence Section (v6.23)
+- [x] Remove standalone LeadIntelligenceDemo call from the Home page render (now lives in hero right column)

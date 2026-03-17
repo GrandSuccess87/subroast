@@ -958,9 +958,6 @@ export default function Home() {
         />
       </section>
 
-      {/* ── LEAD INTELLIGENCE DEMO ── */}
-      <LeadIntelligenceDemo />
-
       {/* ── DEMO VIDEO ── */}
       <VideoSection />
 
