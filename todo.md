@@ -565,4 +565,10 @@
 ### Onboarding & Settings Extension Messaging (v6.6.1)
 - [x] Onboarding checklist: update "Connect your Reddit account" step to reflect Chrome extension approach
 - [x] Settings: "Reddit Connection" section already updated (confirmed v6.1)
-- [ ] Push all changes to GitHub
+- [x] Push all changes to GitHub (all checkpoints auto-synced to origin/main via Manus)
+
+### Bug Fixes — Leads Count & Sync (v6.7)
+- [x] Bug: leads count on campaign detail doesn't match dashboard and sidebar counts
+- [x] Bug: manual "Sync Leads" returns 0 — root cause: same posts re-appear in Reddit search, already in DB, so newLeads=0 (correct behaviour, not a bug — sync still upserts them)
+- [x] Fix: listCampaigns and getCampaign now return live lead count from leads table instead of stale leadsFound counter
+- [x] GitHub: fixed — two remotes existed (origin=Manus S3, github=GitHub). Pushed all 62 missing commits to GrandSuccess87/subroast main.

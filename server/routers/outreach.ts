@@ -216,10 +216,18 @@ export const outreachRouter = router({
 
   listCampaigns: protectedProcedure.query(async ({ ctx }) => {
     const campaigns = await getOutreachCampaignsByUserId(ctx.user.id);
+    // Fetch all leads for this user once and group by campaignId for live counts
+    const allLeads = await getOutreachLeadsByUserId(ctx.user.id);
+    const leadCountByCampaign = new Map<number, number>();
+    for (const lead of allLeads) {
+      leadCountByCampaign.set(lead.campaignId, (leadCountByCampaign.get(lead.campaignId) ?? 0) + 1);
+    }
     return campaigns.map((c) => ({
       ...c,
       subreddits: JSON.parse(c.subreddits) as string[],
       keywords: JSON.parse(c.keywords) as string[],
+      // Override stale leadsFound counter with live count from leads table
+      leadsFound: leadCountByCampaign.get(c.id) ?? 0,
     }));
   }),
 
@@ -228,10 +236,13 @@ export const outreachRouter = router({
     .query(async ({ ctx, input }) => {
       const c = await getOutreachCampaignById(input.id);
       if (!c || c.userId !== ctx.user.id) throw new TRPCError({ code: "NOT_FOUND" });
+      // Use live lead count from leads table instead of stale leadsFound counter
+      const leads = await getOutreachLeadsByCampaignId(input.id);
       return {
         ...c,
         subreddits: JSON.parse(c.subreddits) as string[],
         keywords: JSON.parse(c.keywords) as string[],
+        leadsFound: leads.length,
       };
     }),
 
