@@ -698,3 +698,6 @@
 ### Pricing on Landing Page + Feedback Link Fix (v6.24)
 - [x] Add pricing section to the public landing page (pull plans/copy from Pricing.tsx, place before footer)
 - [x] Fix broken "Feedback" footer link — corrected to /dashboard/feedback
+
+### CTA Section Conversion Copy (v6.25)
+- [x] Add high-converting headline + supporting copy between "Ready to begin" eyebrow and the CTA button in CtaSection

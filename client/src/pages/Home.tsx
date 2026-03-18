@@ -1638,6 +1638,41 @@ function CtaSection() {
     >
       <div ref={ref} className="fade-up container text-center">
         <p className="eyebrow mb-8 block">Ready to begin</p>
+
+        {/* Headline */}
+        <h2
+          style={{
+            fontFamily: "var(--font-display)",
+            fontSize: "clamp(2.4rem, 6vw, 4.5rem)",
+            fontWeight: 300,
+            fontStyle: "italic",
+            lineHeight: 1.1,
+            letterSpacing: "-0.01em",
+            color: "oklch(0.93 0.010 80)",
+            marginBottom: "1.75rem",
+          }}
+        >
+          Your next customer<br />is already on Reddit.
+        </h2>
+
+        {/* Gold rule */}
+        <div className="rule-gold mx-auto mb-6" style={{ width: "3rem" }} />
+
+        {/* Supporting copy */}
+        <p
+          style={{
+            fontFamily: "var(--font-sans)",
+            fontSize: "0.9375rem",
+            fontWeight: 300,
+            color: "oklch(0.62 0.006 80)",
+            lineHeight: 1.8,
+            maxWidth: "46ch",
+            margin: "0 auto 3rem",
+          }}
+        >
+          They're describing their exact problem in a thread right now. SubRoast finds them, scores their intent, and hands you a personalised DM — before your competitors even open the app.
+        </p>
+
         <a href={getLoginUrl()} className="btn-luxury-primary" style={{ marginBottom: "0" }}>
           Begin free trial — seven days
         </a>
