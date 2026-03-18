@@ -694,3 +694,7 @@
 
 ### Remove Duplicate Lead Intelligence Section (v6.23)
 - [x] Remove standalone LeadIntelligenceDemo call from the Home page render (now lives in hero right column)
+
+### Pricing on Landing Page + Feedback Link Fix (v6.24)
+- [x] Add pricing section to the public landing page (pull plans/copy from Pricing.tsx, place before footer)
+- [x] Fix broken "Feedback" footer link — corrected to /dashboard/feedback

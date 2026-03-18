@@ -4,6 +4,9 @@ import { DashboardLayoutSkeleton } from "@/components/DashboardLayoutSkeleton";
 import { ArchitecturalIllustration } from "@/components/ArchitecturalIllustration";
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
+import { trpc } from "@/lib/trpc";
+import { Check, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 /* ── Intersection-observer fade-up ── */
 function useFadeUp(delay = 0) {
@@ -1119,6 +1122,9 @@ export default function Home() {
       {/* ── CTA ── */}
       <CtaSection />
 
+      {/* ── PRICING ── */}
+      <HomePricingSection />
+
       {/* ── FOOTER ── */}
       <footer
         style={{
@@ -1140,7 +1146,7 @@ export default function Home() {
           <div className="flex items-center gap-6">
             {[
               { href: "/pricing", label: "Pricing" },
-              { href: "/feedback", label: "Feedback" },
+              { href: "/dashboard/feedback", label: "Feedback" },
             ].map(({ href, label }) => (
               <a
                 key={label}
@@ -1646,6 +1652,196 @@ function CtaSection() {
           }}
         >
           No credit card required · Cancel at any time
+        </p>
+      </div>
+    </section>
+  );
+}
+
+/* ── Pricing section (landing page) ── */
+const HOME_PLANS = [
+  {
+    key: "starter" as const,
+    tier: "I",
+    name: "Starter",
+    price: 19,
+    description: "For founders testing Reddit as a distribution channel.",
+    features: [
+      "1 outreach campaign",
+      "AI Draft & Roast with virality score",
+      "Lead discovery via Reddit search",
+      "Lead sync: 2× daily",
+      "AI-generated personalized DMs",
+      "Match scoring (Strong / Partial / Lowest)",
+      "Email alerts for new leads",
+    ],
+    popular: false,
+  },
+  {
+    key: "growth" as const,
+    tier: "II",
+    name: "Growth",
+    price: 39,
+    description: "For founders ready to scale Reddit outreach systematically.",
+    features: [
+      "Everything in Starter",
+      "Unlimited outreach campaigns",
+      "Lead sync: every 4 hours (6× daily)",
+      "App Validation campaigns",
+      "One-click send via Chrome extension",
+      "DM template library",
+      "Advanced analytics",
+    ],
+    popular: true,
+  },
+];
+
+function HomePricingSection() {
+  const ref = useFadeUp();
+  const { user } = useAuth();
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
+
+  const createCheckout = trpc.subscription.createCheckoutSession.useMutation({
+    onSuccess: (data) => {
+      if (data.url) {
+        window.open(data.url, "_blank");
+        toast.info("Redirecting to secure checkout…");
+      }
+      setLoadingPlan(null);
+    },
+    onError: (err) => {
+      toast.error(err.message || "Failed to start checkout");
+      setLoadingPlan(null);
+    },
+  });
+
+  const handleSelectPlan = (planKey: "starter" | "growth") => {
+    if (!user) {
+      window.location.href = getLoginUrl();
+      return;
+    }
+    setLoadingPlan(planKey);
+    createCheckout.mutate({ plan: planKey, origin: window.location.origin });
+  };
+
+  return (
+    <section
+      id="pricing"
+      style={{
+        paddingTop: "clamp(5rem, 10vw, 9rem)",
+        paddingBottom: "clamp(5rem, 10vw, 9rem)",
+        borderBottom: "0.5px solid oklch(0.18 0.007 60)",
+        background: "oklch(0.09 0.008 60)",
+      }}
+    >
+      <div ref={ref} className="fade-up container">
+        {/* Header */}
+        <div style={{ textAlign: "center", marginBottom: "4rem" }}>
+          <p className="eyebrow mb-5">Investment</p>
+          <h2 className="display-lg mb-4">
+            Precision outreach,<br />at any scale.
+          </h2>
+          <div className="rule-gold mx-auto mb-6" style={{ width: "3rem" }} />
+          <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.9375rem", fontWeight: 300, color: "oklch(0.62 0.006 80)", lineHeight: 1.75, maxWidth: "40ch", margin: "0 auto" }}>
+            Begin with a 7-day free trial. No commitment required.
+          </p>
+        </div>
+
+        {/* Plan cards */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gap: "1.5px",
+            maxWidth: "780px",
+            margin: "0 auto 3rem",
+            border: "0.5px solid oklch(0.22 0.007 60)",
+          }}
+        >
+          {HOME_PLANS.map((plan) => {
+            const isLoading = loadingPlan === plan.key;
+            return (
+              <div
+                key={plan.key}
+                style={{
+                  background: plan.popular ? "oklch(0.14 0.007 60)" : "oklch(0.12 0.007 60)",
+                  padding: "2.5rem 2rem",
+                  display: "flex",
+                  flexDirection: "column",
+                  borderRight: plan.popular ? "none" : "0.5px solid oklch(0.22 0.007 60)",
+                }}
+              >
+                {/* Tier */}
+                <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", letterSpacing: "0.25em", textTransform: "uppercase", color: "oklch(0.62 0.006 80)", marginBottom: "0.75rem" }}>
+                  Tier {plan.tier}
+                </p>
+                {/* Name */}
+                <h3 style={{ fontFamily: "var(--font-display)", fontSize: "2rem", fontWeight: 400, fontStyle: "italic", color: "oklch(0.93 0.010 80)", marginBottom: "0.4rem", lineHeight: 1.1 }}>
+                  {plan.name}
+                </h3>
+                <p style={{ fontSize: "0.82rem", color: "oklch(0.62 0.006 80)", marginBottom: "1.75rem", lineHeight: 1.6 }}>
+                  {plan.description}
+                </p>
+                {/* Price */}
+                <div style={{ borderTop: "0.5px solid oklch(0.22 0.007 60)", borderBottom: "0.5px solid oklch(0.22 0.007 60)", padding: "1.25rem 0", marginBottom: "1.75rem" }}>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: "0.25rem" }}>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "2.5rem", fontWeight: 400, color: "oklch(0.93 0.010 80)", lineHeight: 1 }}>
+                      ${plan.price}
+                    </span>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.7rem", color: "oklch(0.62 0.006 80)", letterSpacing: "0.08em" }}>/ month</span>
+                  </div>
+                  <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", color: "oklch(0.62 0.006 80)", letterSpacing: "0.1em", marginTop: "0.35rem" }}>
+                    After 7-day free trial
+                  </p>
+                </div>
+                {/* Features */}
+                <ul style={{ listStyle: "none", padding: 0, margin: "0 0 2rem", flex: 1, display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                  {plan.features.map((feature) => (
+                    <li key={feature} style={{ display: "flex", alignItems: "flex-start", gap: "0.65rem", fontSize: "0.82rem", color: "oklch(0.93 0.010 80)", lineHeight: 1.5 }}>
+                      <span style={{ width: "14px", height: "14px", border: "0.5px solid oklch(0.88 0.025 85 / 0.35)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: "1px" }}>
+                        <Check size={8} color="oklch(0.88 0.025 85)" />
+                      </span>
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+                {/* CTA */}
+                <button
+                  onClick={() => handleSelectPlan(plan.key)}
+                  disabled={isLoading}
+                  style={{
+                    width: "100%",
+                    padding: "0.85rem 1.5rem",
+                    background: plan.popular ? "oklch(0.88 0.025 85)" : "transparent",
+                    border: `0.5px solid ${plan.popular ? "oklch(0.88 0.025 85)" : "oklch(0.22 0.007 60)"}`,
+                    color: plan.popular ? "oklch(0.09 0.008 60)" : "oklch(0.93 0.010 80)",
+                    fontFamily: "var(--font-mono)",
+                    fontSize: "0.68rem",
+                    letterSpacing: "0.2em",
+                    textTransform: "uppercase",
+                    cursor: isLoading ? "not-allowed" : "pointer",
+                    opacity: isLoading ? 0.6 : 1,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "0.5rem",
+                    transition: "background 0.25s ease, border-color 0.25s ease, color 0.25s ease",
+                  }}
+                >
+                  {isLoading ? (
+                    <><Loader2 size={12} style={{ animation: "spin 1s linear infinite" }} /> Opening checkout…</>
+                  ) : (
+                    "Begin 7-Day Trial"
+                  )}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Trust line */}
+        <p style={{ textAlign: "center", fontFamily: "var(--font-mono)", fontSize: "0.58rem", color: "oklch(0.42 0 0)", letterSpacing: "0.12em", textTransform: "uppercase" }}>
+          Seven days complimentary · No card required · Cancel at any time
         </p>
       </div>
     </section>
