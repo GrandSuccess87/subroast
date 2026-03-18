@@ -763,11 +763,17 @@ export default function Home() {
             {[
               { href: "#lead-intelligence", label: "How It Works" },
               { href: "#safety", label: "Account Safety" },
-              { href: "/pricing", label: "Pricing" },
+              { href: "#pricing", label: "Pricing" },
             ].map(({ href, label }) => (
               <a
                 key={label}
                 href={href}
+                onClick={(e) => {
+                  if (href.startsWith("#")) {
+                    e.preventDefault();
+                    document.getElementById(href.slice(1))?.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
                 style={{
                   fontFamily: "var(--font-mono)",
                   fontSize: "0.6rem",
@@ -1145,12 +1151,18 @@ export default function Home() {
           </span>
           <div className="flex items-center gap-6">
             {[
-              { href: "/pricing", label: "Pricing" },
+              { href: "#pricing", label: "Pricing" },
               { href: "/dashboard/feedback", label: "Feedback" },
             ].map(({ href, label }) => (
               <a
                 key={label}
                 href={href}
+                onClick={(e) => {
+                  if (href.startsWith("#")) {
+                    e.preventDefault();
+                    document.getElementById(href.slice(1))?.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
                 style={{
                   fontFamily: "var(--font-mono)",
                   fontSize: "0.58rem",

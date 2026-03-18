@@ -701,3 +701,6 @@
 
 ### CTA Section Conversion Copy (v6.25)
 - [x] Add high-converting headline + supporting copy between "Ready to begin" eyebrow and the CTA button in CtaSection
+
+### Nav Pricing Anchor Link (v6.26)
+- [x] Change nav "Pricing" link from /pricing to /#pricing with smooth scroll behaviour
