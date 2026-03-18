@@ -9,6 +9,26 @@ import { Check, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 /* ── Intersection-observer fade-up ── */
+/* ── Active section tracker for nav highlight ── */
+function useActiveSection(ids: string[]) {
+  const [active, setActive] = useState<string>("");
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+    ids.forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) setActive(id); },
+        { rootMargin: "-40% 0px -55% 0px", threshold: 0 }
+      );
+      obs.observe(el);
+      observers.push(obs);
+    });
+    return () => observers.forEach((o) => o.disconnect());
+  }, [ids.join(",")]);
+  return active;
+}
+
 function useFadeUp(delay = 0) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -713,6 +733,55 @@ export default function Home() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const NAV_SECTIONS = ["lead-intelligence", "safety", "pricing"];
+
+  function NavLinks() {
+    const active = useActiveSection(NAV_SECTIONS);
+    const links = [
+      { href: "#lead-intelligence", label: "How It Works" },
+      { href: "#safety", label: "Account Safety" },
+      { href: "#pricing", label: "Pricing" },
+    ];
+    return (
+      <div className="hidden md:flex items-center gap-8">
+        {links.map(({ href, label }) => {
+          const id = href.slice(1);
+          const isActive = active === id;
+          return (
+            <a
+              key={label}
+              href={href}
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+              }}
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.6rem",
+                fontWeight: isActive ? 500 : 300,
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                color: isActive ? "oklch(0.88 0.025 85)" : "oklch(0.55 0 0)",
+                textDecoration: "none",
+                transition: "color 0.3s ease, font-weight 0.2s ease",
+                borderBottom: isActive ? "0.5px solid oklch(0.88 0.025 85 / 0.6)" : "0.5px solid transparent",
+                paddingBottom: "2px",
+              }}
+              onMouseEnter={(e) =>
+                ((e.target as HTMLAnchorElement).style.color = "oklch(0.88 0.025 85)")
+              }
+              onMouseLeave={(e) =>
+                ((e.target as HTMLAnchorElement).style.color = isActive ? "oklch(0.88 0.025 85)" : "oklch(0.55 0 0)")
+              }
+            >
+              {label}
+            </a>
+          );
+        })}
+      </div>
+    );
+  }
+
   if (loading) return <DashboardLayoutSkeleton />;
 
   return (
@@ -759,42 +828,7 @@ export default function Home() {
           </a>
 
           {/* Nav links */}
-          <div className="hidden md:flex items-center gap-8">
-            {[
-              { href: "#lead-intelligence", label: "How It Works" },
-              { href: "#safety", label: "Account Safety" },
-              { href: "#pricing", label: "Pricing" },
-            ].map(({ href, label }) => (
-              <a
-                key={label}
-                href={href}
-                onClick={(e) => {
-                  if (href.startsWith("#")) {
-                    e.preventDefault();
-                    document.getElementById(href.slice(1))?.scrollIntoView({ behavior: "smooth" });
-                  }
-                }}
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: "0.6rem",
-                  fontWeight: 300,
-                  letterSpacing: "0.14em",
-                  textTransform: "uppercase",
-                  color: "oklch(0.55 0 0)",
-                  textDecoration: "none",
-                  transition: "color 0.3s ease",
-                }}
-                onMouseEnter={(e) =>
-                  ((e.target as HTMLAnchorElement).style.color = "oklch(0.88 0.025 85)")
-                }
-                onMouseLeave={(e) =>
-                  ((e.target as HTMLAnchorElement).style.color = "oklch(0.55 0 0)")
-                }
-              >
-                {label}
-              </a>
-            ))}
-          </div>
+          <NavLinks />
 
           {/* CTA */}
           <a href={getLoginUrl()} className="btn-luxury">
@@ -1887,10 +1921,101 @@ function HomePricingSection() {
         </div>
 
         {/* Trust line */}
-        <p style={{ textAlign: "center", fontFamily: "var(--font-mono)", fontSize: "0.58rem", color: "oklch(0.42 0 0)", letterSpacing: "0.12em", textTransform: "uppercase" }}>
+        <p style={{ textAlign: "center", fontFamily: "var(--font-mono)", fontSize: "0.58rem", color: "oklch(0.42 0 0)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "4rem" }}>
           Seven days complimentary · No card required · Cancel at any time
         </p>
+
+        {/* FAQ accordion */}
+        <PricingFAQ />
       </div>
     </section>
+  );
+}
+
+const PRICING_FAQS = [
+  {
+    q: "Do I need a credit card for the free trial?",
+    a: "Yes — Stripe requires a card to start the trial, but you won’t be charged until Day 7. You’ll receive a reminder on Day 6 so you have time to cancel.",
+  },
+  {
+    q: "What happens after the trial ends?",
+    a: "You’ll be automatically charged for the plan you selected. You can cancel anytime from Settings → Manage Billing before the trial ends.",
+  },
+  {
+    q: "Can I switch plans?",
+    a: "Yes. You can upgrade from Starter to Growth at any time from Settings → Manage Billing. Stripe prorates the difference automatically.",
+  },
+  {
+    q: "Is this month-to-month?",
+    a: "Yes — all plans are billed monthly with no long-term contracts. Cancel anytime, no questions asked.",
+  },
+];
+
+function PricingFAQ() {
+  const [open, setOpen] = useState<number | null>(null);
+  return (
+    <div style={{ maxWidth: "600px", margin: "0 auto" }}>
+      {/* Divider */}
+      <div style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "2.5rem" }}>
+        <div style={{ flex: 1, height: "0.5px", background: "oklch(0.22 0.007 60)" }} />
+        <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", letterSpacing: "0.28em", textTransform: "uppercase", color: "oklch(0.62 0.006 80)", whiteSpace: "nowrap" }}>
+          Common Questions
+        </p>
+        <div style={{ flex: 1, height: "0.5px", background: "oklch(0.22 0.007 60)" }} />
+      </div>
+      {PRICING_FAQS.map(({ q, a }, i) => (
+        <div
+          key={q}
+          style={{
+            borderBottom: "0.5px solid oklch(0.22 0.007 60)",
+            ...(i === 0 ? { borderTop: "0.5px solid oklch(0.22 0.007 60)" } : {}),
+          }}
+        >
+          <button
+            onClick={() => setOpen(open === i ? null : i)}
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: "1rem",
+              padding: "1.4rem 0",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              textAlign: "left",
+            }}
+          >
+            <span style={{ fontFamily: "var(--font-display)", fontSize: "1rem", fontWeight: 400, fontStyle: "italic", color: "oklch(0.93 0.010 80)", lineHeight: 1.4 }}>
+              {q}
+            </span>
+            <span
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.75rem",
+                color: "oklch(0.62 0.006 80)",
+                flexShrink: 0,
+                transform: open === i ? "rotate(45deg)" : "rotate(0deg)",
+                transition: "transform 0.25s ease",
+                lineHeight: 1,
+              }}
+            >
+              +
+            </span>
+          </button>
+          <div
+            style={{
+              overflow: "hidden",
+              maxHeight: open === i ? "200px" : "0",
+              transition: "max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
+            }}
+          >
+            <p style={{ fontSize: "0.85rem", color: "oklch(0.62 0.006 80)", lineHeight: 1.75, paddingBottom: "1.4rem" }}>
+              {a}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }

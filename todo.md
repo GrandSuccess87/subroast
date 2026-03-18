@@ -704,3 +704,7 @@
 
 ### Nav Pricing Anchor Link (v6.26)
 - [x] Change nav "Pricing" link from /pricing to /#pricing with smooth scroll behaviour
+
+### FAQ Accordion + Active Nav Highlight (v6.27)
+- [x] Add FAQ accordion (3-4 Q&As) below pricing cards in HomePricingSection
+- [x] Add IntersectionObserver active nav link highlighting on scroll
