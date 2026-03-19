@@ -787,11 +787,11 @@ export default function Waitlist() {
 
   useEffect(() => {
     const onScroll = () => {
-      setScrolled(window.scrollY > 40);
-      if (heroFormRef.current) {
-        const formBottom = heroFormRef.current.getBoundingClientRect().bottom;
-        setPastHero(formBottom < 0);
-      }
+      const y = window.scrollY;
+      setScrolled(y > 40);
+      // Show nav CTA once user has scrolled past ~80% of the viewport height
+      // (i.e. the hero form is no longer visible)
+      setPastHero(y > window.innerHeight * 0.75);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -874,36 +874,44 @@ export default function Waitlist() {
           </div>
 
           {/* Nav right: fade in after scrolling past hero form */}
-          <a
-            href="#waitlist-cta"
-            onClick={(e) => {
-              e.preventDefault();
-              const el = document.getElementById("waitlist-cta");
-              if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: "smooth" });
-            }}
+          <div
             style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: "0.58rem",
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: "oklch(0.88 0.025 85)",
-              textDecoration: "none",
-              padding: "0.5rem 1rem",
-              border: "0.5px solid oklch(0.88 0.025 85 / 0.35)",
-              whiteSpace: "nowrap",
               opacity: pastHero ? 1 : 0,
               pointerEvents: pastHero ? "auto" : "none",
-              transition: "opacity 0.4s ease, border-color 0.2s ease",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.borderColor = "oklch(0.88 0.025 85 / 0.7)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.borderColor = "oklch(0.88 0.025 85 / 0.35)";
+              transition: "opacity 0.4s ease",
+              flexShrink: 0,
             }}
           >
-            Join waitlist
-          </a>
+            <a
+              href="#waitlist-cta"
+              onClick={(e) => {
+                e.preventDefault();
+                const el = document.getElementById("waitlist-cta");
+                if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: "smooth" });
+              }}
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.58rem",
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                color: "oklch(0.88 0.025 85)",
+                textDecoration: "none",
+                padding: "0.5rem 1rem",
+                border: "0.5px solid oklch(0.88 0.025 85 / 0.35)",
+                whiteSpace: "nowrap",
+                display: "block",
+                transition: "border-color 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.borderColor = "oklch(0.88 0.025 85 / 0.7)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.borderColor = "oklch(0.88 0.025 85 / 0.35)";
+              }}
+            >
+              Join waitlist
+            </a>
+          </div>
         </div>
       </nav>
 
