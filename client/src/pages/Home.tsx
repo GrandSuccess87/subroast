@@ -19,7 +19,7 @@ function useActiveSection(ids: string[]) {
       if (!el) return;
       const obs = new IntersectionObserver(
         ([entry]) => { if (entry.isIntersecting) setActive(id); },
-        { rootMargin: "-40% 0px -55% 0px", threshold: 0 }
+        { rootMargin: "-20% 0px -60% 0px", threshold: 0 }
       );
       obs.observe(el);
       observers.push(obs);
@@ -934,7 +934,15 @@ export default function Home() {
                 <a href={getLoginUrl()} className="btn-luxury-primary" style={{ position: "relative", zIndex: 1, textAlign: "center", justifyContent: "center" }}>
                   Begin free trial
                 </a>
-                <a href="#lead-intelligence" className="btn-luxury" style={{ position: "relative", zIndex: 1 }}>
+                <a
+                  href="#lead-intelligence"
+                  className="btn-luxury"
+                  style={{ position: "relative", zIndex: 1 }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById("lead-intelligence")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                  }}
+                >
                   See how it works
                 </a>
               </div>

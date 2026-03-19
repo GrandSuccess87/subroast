@@ -723,3 +723,7 @@
 
 ### Mobile Hero Demo Panel Overflow Fix (v6.30)
 - [x] Fix HeroDemoPanel overflowing its grid column on mobile — hero grid, right column wrapper, demo panel wrapper all get minWidth:0/overflow:hidden; comment box gets overflowWrap:break-word
+
+### See How It Works CTA + Nav Highlight (v6.31)
+- [x] Wire "See how it works" button to scroll to the Lead Intelligence section (smooth scroll with scrollIntoView)
+- [x] Add Lead Intelligence section to IntersectionObserver so its nav item highlights when in view (rootMargin widened to -20% 0px -60% 0px)
