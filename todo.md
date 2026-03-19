@@ -720,3 +720,6 @@
 
 ### Mobile Hero Demo Panel Width Fix (v6.29)
 - [x] Fix HeroDemoPanel animation width-shift on mobile — container now has width:100%/overflow:hidden, phase 3 context bar uses minWidth:0 + flex truncation so no phase can expand the panel width
+
+### Mobile Hero Demo Panel Overflow Fix (v6.30)
+- [x] Fix HeroDemoPanel overflowing its grid column on mobile — hero grid, right column wrapper, demo panel wrapper all get minWidth:0/overflow:hidden; comment box gets overflowWrap:break-word

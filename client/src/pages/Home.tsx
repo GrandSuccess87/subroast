@@ -874,7 +874,7 @@ export default function Home() {
         </svg>
 
         <div className="container relative w-full">
-          <div className="grid lg:grid-cols-2 gap-16 xl:gap-24 items-center py-20 lg:py-28">
+          <div className="grid lg:grid-cols-2 gap-16 xl:gap-24 items-center py-20 lg:py-28" style={{ minWidth: 0, overflow: "hidden" }}>
 
             {/* LEFT: editorial copy */}
             <div ref={heroRef}>
@@ -955,7 +955,7 @@ export default function Home() {
             </div>
 
             {/* RIGHT: Lead Intelligence section + animated demo */}
-            <div className="hero-cta-animate">
+            <div className="hero-cta-animate" style={{ minWidth: 0, overflow: "hidden", width: "100%" }}>
               {/* Section header */}
               <div style={{ marginBottom: "1.5rem" }}>
                 <p className="eyebrow mb-3" style={{ color: "oklch(0.88 0.025 85 / 0.7)" }}>Lead Intelligence</p>
@@ -986,7 +986,9 @@ export default function Home() {
               </div>
 
               {/* Animated demo panel — inline */}
-              <HeroDemoPanel />
+              <div style={{ width: "100%", minWidth: 0, overflow: "hidden" }}>
+                <HeroDemoPanel />
+              </div>
             </div>
           </div>
         </div>
@@ -1417,9 +1419,9 @@ function HeroDemoPanel() {
                   </span>
                 </div>
                 {/* Comment box */}
-                <div style={{ background: "oklch(0.10 0.007 60)", border: "0.5px solid oklch(0.22 0.007 60)", padding: "0.875rem 1rem", minHeight: "120px" }}>
+                <div style={{ background: "oklch(0.10 0.007 60)", border: "0.5px solid oklch(0.22 0.007 60)", padding: "0.875rem 1rem", minHeight: "120px", overflow: "hidden", width: "100%", boxSizing: "border-box" }}>
                   <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.52rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "oklch(0.45 0 0)", marginBottom: "0.6rem" }}>Public comment draft</div>
-                  <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.78rem", fontWeight: 300, color: "oklch(0.82 0.006 80)", lineHeight: 1.65 }}>
+                  <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.78rem", fontWeight: 300, color: "oklch(0.82 0.006 80)", lineHeight: 1.65, overflowWrap: "break-word", wordBreak: "break-word" }}>
                     {COMMENT_TEXT.slice(0, typedChars)}
                     <span style={{ display: "inline-block", width: "1px", height: "0.9em", background: "oklch(0.78 0.14 65)", marginLeft: "1px", verticalAlign: "text-bottom", animation: "pulse 1s ease-in-out infinite" }} />
                   </p>
