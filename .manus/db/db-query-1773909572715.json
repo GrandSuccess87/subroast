@@ -1,0 +1,19 @@
+{
+  "query": "\nSELECT \n  c.id,\n  c.name,\n  c.leadsFound,\n  c.lastSyncAt,\n  FROM_UNIXTIME(c.lastSyncAt/1000) as lastSyncHuman,\n  COUNT(l.id) as actualLeadCount,\n  MAX(FROM_UNIXTIME(l.discoveredAt/1000)) as latestLeadDiscovered\nFROM outreach_campaigns c\nLEFT JOIN outreach_leads l ON l.campaignId = c.id\nWHERE c.id = 30001\nGROUP BY c.id;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute \nSELECT \n  c.id,\n  c.name,\n  c.leadsFound,\n  c.lastSyncAt,\n  FROM_UNIXTIME(c.lastSyncAt/1000) as lastSyncHuman,\n  COUNT(l.id) as actualLeadCount,\n  MAX(FROM_UNIXTIME(l.discoveredAt/1000)) as latestLeadDiscovered\nFROM outreach_campaigns c\nLEFT JOIN outreach_leads l ON l.campaignId = c.id\nWHERE c.id = 30001\nGROUP BY c.id;\n",
+  "rows": [
+    {
+      "id": "30001",
+      "name": "App Validation Complaint Mining",
+      "leadsFound": "117",
+      "lastSyncAt": "1773477145000",
+      "lastSyncHuman": "2026-03-14 08:32:25.0000",
+      "actualLeadCount": "104",
+      "latestLeadDiscovered": "2026-03-17 06:22:46.3200"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tleadsFound\tlastSyncAt\tlastSyncHuman\tactualLeadCount\tlatestLeadDiscovered\n30001\tApp Validation Complaint Mining\t117\t1773477145000\t2026-03-14 08:32:25.0000\t104\t2026-03-17 06:22:46.3200\n",
+  "stderr": "",
+  "execution_time_ms": 59
+}

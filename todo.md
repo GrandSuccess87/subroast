@@ -711,5 +711,12 @@
 
 ### Leads Auto-Refresh + Backfill (v6.28)
 - [x] Add refetchInterval (60s) to getLeads query in CampaignDetail so new leads appear automatically
-- [ ] Push changes to GitHub
-- [ ] Force backfill sync for Campaign 30001 (App Validation Complaint Mining) to catch up from 3/17
+- [x] Push changes to GitHub
+- [x] Force backfill sync for Campaign 30001 (App Validation Complaint Mining) — synced 2026-03-19 08:41, 104 unique leads (no new posts found since 3/17 for this campaign's keywords)
+
+### Leads Not Refreshing After 3/17 (v6.29)
+- [ ] Diagnose why syncs run but produce 0 new leads since 3/17 across all campaigns
+- [ ] Fix root cause and verify new leads are being written
+
+### Mobile Hero Demo Panel Width Fix (v6.29)
+- [x] Fix HeroDemoPanel animation width-shift on mobile — container now has width:100%/overflow:hidden, phase 3 context bar uses minWidth:0 + flex truncation so no phase can expand the panel width

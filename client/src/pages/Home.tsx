@@ -1297,8 +1297,11 @@ function HeroDemoPanel() {
               background: "oklch(0.12 0.007 60)",
               border: "0.5px solid oklch(0.22 0.007 60)",
               minHeight: "340px",
+              width: "100%",
+              maxWidth: "100%",
               position: "relative",
               overflow: "hidden",
+              boxSizing: "border-box",
             }}
           >
             {/* Panel header */}
@@ -1404,12 +1407,12 @@ function HeroDemoPanel() {
 
             {/* Phase 3: comment drafting */}
             {phase === 3 && (
-              <div style={{ padding: "1.25rem" }}>
+              <div style={{ padding: "1.25rem", width: "100%", boxSizing: "border-box", overflow: "hidden" }}>
                 {/* Context bar */}
-                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem", padding: "0.5rem 0.75rem", background: "oklch(0.14 0.007 60)", border: "0.5px solid oklch(0.20 0.007 60)" }}>
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.52rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "oklch(0.78 0.14 65)" }}>r/SaaS</span>
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.52rem", color: "oklch(0.28 0 0)" }}>/</span>
-                  <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.72rem", fontWeight: 300, color: "oklch(0.62 0.006 80)", flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem", padding: "0.5rem 0.75rem", background: "oklch(0.14 0.007 60)", border: "0.5px solid oklch(0.20 0.007 60)", overflow: "hidden", minWidth: 0 }}>
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.52rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "oklch(0.78 0.14 65)", flexShrink: 0 }}>r/SaaS</span>
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.52rem", color: "oklch(0.28 0 0)", flexShrink: 0 }}>/</span>
+                  <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.72rem", fontWeight: 300, color: "oklch(0.62 0.006 80)", flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                     &ldquo;Struggling to get traction on Reddit without sounding like an ad&rdquo;
                   </span>
                 </div>

@@ -1,0 +1,20 @@
+{
+  "query": "\n-- Check current state of campaign 30001\nSELECT id, name, status, leadsFound, lastSyncAt, FROM_UNIXTIME(lastSyncAt/1000) as lastSyncHuman, subreddits, keywords\nFROM outreach_campaigns\nWHERE id = 30001;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute \n-- Check current state of campaign 30001\nSELECT id, name, status, leadsFound, lastSyncAt, FROM_UNIXTIME(lastSyncAt/1000) as lastSyncHuman, subreddits, keywords\nFROM outreach_campaigns\nWHERE id = 30001;\n",
+  "rows": [
+    {
+      "id": "30001",
+      "name": "App Validation Complaint Mining",
+      "status": "active",
+      "leadsFound": "117",
+      "lastSyncAt": "1773901150144",
+      "lastSyncHuman": "2026-03-19 06:19:10.1440",
+      "subreddits": "[\"SaaS\",\"Entrepreneur\",\"startups\",\"smallbusiness\",\"marketing\",\"GrowthHacking\",\"SideProject\",\"indiehackers\",\"leadgeneration\",\"RedditMarketing\"]",
+      "keywords": "[\"i wish someone would build, why doesn't this exist, why is there no app for, struggling to find a tool, can't find anything that does, frustrated with, this sucks, why is X so hard, nobody has solved, looking for a solution to, is there a better way to, tired of manually, hate that I have to, why do I still have to, there has to be a better way, this workflow is broken, every tool I try, nothing works for, spent hours trying to, why isn't there a simple, I've been looking everywhere for, built my own because, had to hack together, cobbled together, duct tape solution, [tool]: # \\\"is terrible for, [tool] doesn't support, [tool] keeps breaking,\\\" wish [tool] could, [tool] sucks at, why can't [tool] just, anyone else frustrated by, does anyone else struggle with, am I the only one who, please tell me there's a better way, I would pay for something that, would literally pay money if, take my money if you build, someone needs to build, this is a million dollar idea but, gap in the market for, underserved market, nobody is solving, pain point that nobody addresses\"]"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tstatus\tleadsFound\tlastSyncAt\tlastSyncHuman\tsubreddits\tkeywords\n30001\tApp Validation Complaint Mining\tactive\t117\t1773901150144\t2026-03-19 06:19:10.1440\t[\"SaaS\",\"Entrepreneur\",\"startups\",\"smallbusiness\",\"marketing\",\"GrowthHacking\",\"SideProject\",\"indiehackers\",\"leadgeneration\",\"RedditMarketing\"]\t[\"i wish someone would build, why doesn't this exist, why is there no app for, struggling to find a tool, can't find anything that does, frustrated with, this sucks, why is X so hard, nobody has solved, looking for a solution to, is there a better way to, tired of manually, hate that I have to, why do I still have to, there has to be a better way, this workflow is broken, every tool I try, nothing works for, spent hours trying to, why isn't there a simple, I've been looking everywhere for, built my own because, had to hack together, cobbled together, duct tape solution, [tool]: # \\\"is terrible for, [tool] doesn't support, [tool] keeps breaking,\\\" wish [tool] could, [tool] sucks at, why can't [tool] just, anyone else frustrated by, does anyone else struggle with, am I the only one who, please tell me there's a better way, I would pay for something that, would literally pay money if, take my money if you build, someone needs to build, this is a million dollar idea but, gap in the market for, underserved market, nobody is solving, pain point that nobody addresses\"]\n",
+  "stderr": "",
+  "execution_time_ms": 70
+}
