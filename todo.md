@@ -780,3 +780,8 @@
 - [x] Replace homepage CtaSection primary CTA with WaitlistGateModal trigger ("Join the waitlist")
 - [x] Pricing section kept visible (users can still see plans, but trial entry is gated through modal)
 - [x] All 104 tests passing
+
+### Homepage + Modal Fixes (v6.47)
+- [x] Remove "Join Waitlist" button from homepage nav top bar
+- [x] Update pricing plan CTA buttons to "Start Free Trial (Early Access)"
+- [x] Fix WaitlistGateModal content overflow/padding — reduced side padding to 1.25rem, added boxSizing:border-box on both wrapper and panel

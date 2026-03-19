@@ -153,6 +153,8 @@ export default function WaitlistGateModal({ open, onClose }: WaitlistGateModalPr
           zIndex: 9999,
           padding: "1rem",
           pointerEvents: "none",
+          boxSizing: "border-box",
+          overflowY: "auto",
         }}
       >
         <div
@@ -162,9 +164,11 @@ export default function WaitlistGateModal({ open, onClose }: WaitlistGateModalPr
             border: "0.5px solid oklch(0.22 0.007 60)",
             width: "100%",
             maxWidth: "420px",
-            padding: "2.5rem 2rem",
+            padding: "2rem 1.25rem",
             position: "relative",
             animation: "modalSlideIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both",
+            boxSizing: "border-box",
+            flexShrink: 0,
           }}
         >
           {/* Close button */}
