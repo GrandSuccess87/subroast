@@ -8,6 +8,71 @@ import { trpc } from "@/lib/trpc";
 import { Check, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
+/* ── Inline waitlist form for homepage ── */
+function HomeWaitlistForm({ source }: { source: "home_header" | "home_footer" }) {
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
+  const join = trpc.waitlist.join.useMutation({
+    onSuccess: () => { setStatus("success"); setEmail(""); setName(""); },
+    onError: () => { setStatus("error"); setTimeout(() => setStatus("idle"), 4000); },
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim() || !name.trim()) return;
+    setStatus("loading");
+    join.mutate({ email: email.trim(), name: name.trim(), source });
+  };
+
+  if (status === "success") {
+    return (
+      <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.875rem 1.25rem", background: "oklch(0.14 0.010 140 / 0.4)", border: "0.5px solid oklch(0.30 0.06 140)" }}>
+        <div style={{ width: "18px", height: "18px", borderRadius: "50%", background: "oklch(0.65 0.15 140)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+          <Check size={10} color="oklch(0.09 0.008 60)" strokeWidth={2.5} />
+        </div>
+        <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.62rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "oklch(0.65 0.15 140)" }}>
+          You&rsquo;re on the list — we&rsquo;ll be in touch.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "0.6rem", width: "100%", maxWidth: "400px" }}>
+      <input
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Your name"
+        required
+        disabled={status === "loading"}
+        style={{ width: "100%", padding: "0.65rem 0.875rem", background: "oklch(0.12 0.007 60)", border: "0.5px solid oklch(0.22 0.007 60)", color: "oklch(0.93 0.010 80)", fontFamily: "var(--font-sans)", fontSize: "0.82rem", fontWeight: 300, outline: "none", boxSizing: "border-box" }}
+      />
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="your@email.com"
+        required
+        disabled={status === "loading"}
+        style={{ width: "100%", padding: "0.65rem 0.875rem", background: "oklch(0.12 0.007 60)", border: "0.5px solid oklch(0.22 0.007 60)", color: "oklch(0.93 0.010 80)", fontFamily: "var(--font-sans)", fontSize: "0.82rem", fontWeight: 300, outline: "none", boxSizing: "border-box" }}
+      />
+      <button
+        type="submit"
+        disabled={status === "loading" || !email.trim() || !name.trim()}
+        style={{ width: "100%", padding: "0.75rem 1.25rem", background: "oklch(0.88 0.025 85)", border: "none", color: "oklch(0.09 0.008 60)", fontFamily: "var(--font-mono)", fontSize: "0.6rem", letterSpacing: "0.16em", textTransform: "uppercase", cursor: status === "loading" ? "not-allowed" : "pointer", opacity: (status === "loading" || !email.trim() || !name.trim()) ? 0.6 : 1, display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", boxSizing: "border-box" }}
+      >
+        {status === "loading" ? <Loader2 size={11} style={{ animation: "spin 1s linear infinite" }} /> : "Join the waitlist"}
+      </button>
+      {status === "error" && (
+        <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.58rem", color: "oklch(0.65 0.18 25)", letterSpacing: "0.08em" }}>Something went wrong. Please try again.</p>
+      )}
+    </form>
+  );
+}
+
 /* ── Intersection-observer fade-up ── */
 /* ── Active section tracker for nav highlight ── */
 function useActiveSection(ids: string[]) {
@@ -1184,68 +1249,87 @@ export default function Home() {
       <HomePricingSection />
 
       {/* ── FOOTER ── */}
-      <footer
-        style={{
-          borderTop: "0.5px solid oklch(0.18 0.007 60)",
-          padding: "2rem 0",
-        }}
-      >
-        <div className="container flex flex-col sm:flex-row items-center justify-between gap-4">
-          <span
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: "0.9rem",
-              fontStyle: "italic",
-              color: "oklch(0.58 0 0)",
-            }}
-          >
-            SubRoast
-          </span>
-          <div className="flex items-center gap-6">
-            {[
-              { href: "#pricing", label: "Pricing" },
-              { href: "/dashboard/feedback", label: "Feedback" },
-            ].map(({ href, label }) => (
-              <a
-                key={label}
-                href={href}
-                onClick={(e) => {
-                  if (href.startsWith("#")) {
-                    e.preventDefault();
-                    document.getElementById(href.slice(1))?.scrollIntoView({ behavior: "smooth" });
-                  }
-                }}
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: "0.58rem",
-                  letterSpacing: "0.14em",
-                  textTransform: "uppercase",
-                  color: "oklch(0.62 0.006 80)",
-                  textDecoration: "none",
-                  transition: "color 0.3s ease",
-                }}
-                onMouseEnter={(e) =>
-                  ((e.target as HTMLAnchorElement).style.color = "oklch(0.88 0.025 85)")
-                }
-                onMouseLeave={(e) =>
-                  ((e.target as HTMLAnchorElement).style.color = "oklch(0.62 0.006 80)")
-                }
-              >
-                {label}
-              </a>
-            ))}
+      <footer style={{ borderTop: "0.5px solid oklch(0.18 0.007 60)" }}>
+        {/* Waitlist strip */}
+        <div
+          style={{
+            borderBottom: "0.5px solid oklch(0.18 0.007 60)",
+            padding: "clamp(3rem, 6vw, 5rem) 0",
+            background: "oklch(0.08 0.007 60)",
+          }}
+        >
+          <div className="container">
+            <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+              {/* Left: copy */}
+              <div>
+                <p className="eyebrow mb-4">Not ready to start a trial?</p>
+                <h2
+                  style={{
+                    fontFamily: "var(--font-display)",
+                    fontSize: "clamp(1.6rem, 3vw, 2.4rem)",
+                    fontWeight: 300,
+                    fontStyle: "italic",
+                    color: "oklch(0.93 0.010 80)",
+                    lineHeight: 1.15,
+                    marginBottom: "0.875rem",
+                  }}
+                >
+                  Join the waitlist.
+                  <br />
+                  <span style={{ color: "oklch(0.88 0.025 85 / 0.7)" }}>Be first in line.</span>
+                </h2>
+                <p
+                  style={{
+                    fontFamily: "var(--font-sans)",
+                    fontSize: "0.875rem",
+                    fontWeight: 300,
+                    color: "oklch(0.55 0.006 80)",
+                    lineHeight: 1.7,
+                    maxWidth: "38ch",
+                  }}
+                >
+                  We&rsquo;ll notify you when early access opens. Free to join, no spam, unsubscribe any time.
+                </p>
+              </div>
+              {/* Right: form */}
+              <div>
+                <HomeWaitlistForm source="home_footer" />
+              </div>
+            </div>
           </div>
-          <p
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: "0.55rem",
-              color: "oklch(0.42 0 0)",
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-            }}
-          >
-            &copy; {new Date().getFullYear()} SubRoast. All rights reserved.
-          </p>
+        </div>
+        {/* Bottom bar */}
+        <div style={{ padding: "1.75rem 0" }}>
+          <div className="container flex flex-col sm:flex-row items-center justify-between gap-4">
+            <span style={{ fontFamily: "var(--font-display)", fontSize: "0.9rem", fontStyle: "italic", color: "oklch(0.58 0 0)" }}>
+              SubRoast
+            </span>
+            <div className="flex items-center gap-6">
+              {[
+                { href: "#pricing", label: "Pricing" },
+                { href: "/dashboard/feedback", label: "Feedback" },
+              ].map(({ href, label }) => (
+                <a
+                  key={label}
+                  href={href}
+                  onClick={(e) => {
+                    if (href.startsWith("#")) {
+                      e.preventDefault();
+                      document.getElementById(href.slice(1))?.scrollIntoView({ behavior: "smooth" });
+                    }
+                  }}
+                  style={{ fontFamily: "var(--font-mono)", fontSize: "0.58rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "oklch(0.62 0.006 80)", textDecoration: "none", transition: "color 0.3s ease" }}
+                  onMouseEnter={(e) => ((e.target as HTMLAnchorElement).style.color = "oklch(0.88 0.025 85)")}
+                  onMouseLeave={(e) => ((e.target as HTMLAnchorElement).style.color = "oklch(0.62 0.006 80)")}
+                >
+                  {label}
+                </a>
+              ))}
+            </div>
+            <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", color: "oklch(0.42 0 0)", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+              &copy; {new Date().getFullYear()} SubRoast. All rights reserved.
+            </p>
+          </div>
         </div>
       </footer>
     </div>

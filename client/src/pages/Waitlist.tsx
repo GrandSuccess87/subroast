@@ -727,6 +727,52 @@ function DifferentiatorsSection() {
   );
 }
 
+/* ── Waitlist counter ── */
+function WaitlistCounter() {
+  const { data } = trpc.waitlist.count.useQuery(undefined, {
+    refetchInterval: 30_000, // refresh every 30s
+    staleTime: 20_000,
+  });
+  const count = data?.count ?? 0;
+  // Only show once we have a real number and it's meaningful
+  if (count < 1) return null;
+  return (
+    <div
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "0.5rem",
+        padding: "0.3rem 0.875rem",
+        background: "oklch(0.78 0.14 65 / 0.08)",
+        border: "0.5px solid oklch(0.78 0.14 65 / 0.25)",
+        marginBottom: "1.25rem",
+      }}
+    >
+      <div
+        style={{
+          width: "5px",
+          height: "5px",
+          borderRadius: "50%",
+          background: "oklch(0.78 0.14 65)",
+          flexShrink: 0,
+          animation: "pulse 2s ease-in-out infinite",
+        }}
+      />
+      <span
+        style={{
+          fontFamily: "var(--font-mono)",
+          fontSize: "0.58rem",
+          letterSpacing: "0.14em",
+          textTransform: "uppercase",
+          color: "oklch(0.78 0.14 65)",
+        }}
+      >
+        {count.toLocaleString()} founder{count !== 1 ? "s" : ""} already joined
+      </span>
+    </div>
+  );
+}
+
 /* ── Main Waitlist page ── */
 export default function Waitlist() {
   const [scrolled, setScrolled] = useState(false);
@@ -884,13 +930,18 @@ export default function Waitlist() {
           >
             {/* LEFT: editorial copy */}
             <div style={{ minWidth: 0 }}>
-              {/* Eyebrow — centered on mobile */}
+              {/* Eyebrow — centered */}
               <p
-                className="eyebrow mb-8 hero-eyebrow-animate"
+                className="eyebrow mb-4 hero-eyebrow-animate"
                 style={{ textAlign: "center" }}
               >
                 AI Intelligence for Reddit
               </p>
+
+              {/* Live counter */}
+              <div className="hero-eyebrow-animate" style={{ display: "flex", justifyContent: "center", marginBottom: "0.75rem" }}>
+                <WaitlistCounter />
+              </div>
 
               {/* Waitlist badge — centered */}
               <div

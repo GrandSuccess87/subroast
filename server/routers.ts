@@ -1,6 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { invokeLLM } from "./_core/llm";
@@ -588,6 +588,13 @@ export const appRouter = router({
   history: historyRouter,
   settings: settingsRouter,
   waitlist: router({
+    count: publicProcedure
+      .query(async () => {
+        const db = await getDb();
+        if (!db) return { count: 0 };
+        const result = await db.select({ count: sql<number>`COUNT(*)` }).from(waitlistSignups);
+        return { count: Number(result[0]?.count ?? 0) };
+      }),
     join: publicProcedure
       .input(z.object({
         email: z.string().email(),
