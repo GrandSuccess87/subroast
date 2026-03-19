@@ -727,3 +727,6 @@
 ### See How It Works CTA + Nav Highlight (v6.31)
 - [x] Wire "See how it works" button to scroll to the Lead Intelligence section (smooth scroll with scrollIntoView)
 - [x] Add Lead Intelligence section to IntersectionObserver so its nav item highlights when in view (rootMargin widened to -20% 0px -60% 0px)
+
+### See How It Works Scroll Fix (v6.32)
+- [x] Fix "See how it works" button — switched from scrollIntoView to window.scrollTo({ top: el.getBoundingClientRect().top + scrollY, behavior: 'smooth' }) for reliable window-level scroll

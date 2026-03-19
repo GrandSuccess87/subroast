@@ -753,7 +753,11 @@ export default function Home() {
               href={href}
               onClick={(e) => {
                 e.preventDefault();
-                document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+                const target = document.getElementById(id);
+                if (target) {
+                  const top = target.getBoundingClientRect().top + window.scrollY;
+                  window.scrollTo({ top, behavior: "smooth" });
+                }
               }}
               style={{
                 fontFamily: "var(--font-mono)",
@@ -940,7 +944,11 @@ export default function Home() {
                   style={{ position: "relative", zIndex: 1 }}
                   onClick={(e) => {
                     e.preventDefault();
-                    document.getElementById("lead-intelligence")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    const el = document.getElementById("lead-intelligence");
+                    if (el) {
+                      const top = el.getBoundingClientRect().top + window.scrollY;
+                      window.scrollTo({ top, behavior: "smooth" });
+                    }
                   }}
                 >
                   See how it works
