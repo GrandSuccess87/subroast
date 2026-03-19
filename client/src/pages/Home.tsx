@@ -1002,7 +1002,7 @@ export default function Home() {
               </div>
 
               {/* Animated demo panel — inline */}
-              <div style={{ width: "100%", minWidth: 0, overflow: "hidden" }}>
+              <div id="lead-intelligence" style={{ width: "100%", minWidth: 0, overflow: "hidden" }}>
                 <HeroDemoPanel />
               </div>
             </div>
