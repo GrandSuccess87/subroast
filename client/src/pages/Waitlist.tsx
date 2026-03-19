@@ -925,7 +925,7 @@ export default function Waitlist() {
 
         <div className="container relative w-full" style={{ minWidth: 0 }}>
           <div
-            className="flex flex-col items-center py-20 lg:py-28"
+            className="flex flex-col items-center py-8 sm:py-14 lg:py-20"
             style={{ minWidth: 0, overflow: "hidden" }}
           >
             {/* CENTERED: editorial copy */}
@@ -938,12 +938,12 @@ export default function Waitlist() {
               </div>
 
               {/* Waitlist badge — centered */}
-              <div
+            <div
                 className="hero-eyebrow-animate"
                 style={{
                   display: "flex",
                   justifyContent: "center",
-                  marginBottom: "1.5rem",
+                  marginBottom: "1rem",
                 }}
               >
                 <div
@@ -964,7 +964,7 @@ export default function Waitlist() {
               </div>
 
               {/* Display headline */}
-              <h1 className="display-xl mb-6 hero-headline-animate" style={{ textAlign: "center" }}>
+              <h1 className="display-xl mb-4 hero-headline-animate" style={{ textAlign: "center" }}>
                 Stop guessing.
                 <br />
                 <span style={{ color: "oklch(0.88 0.025 85)" }}>
@@ -979,7 +979,7 @@ export default function Waitlist() {
                   width: "4rem",
                   height: "0.5px",
                   background: "oklch(0.88 0.025 85 / 0.6)",
-                  marginBottom: "2rem",
+                  marginBottom: "1rem",
                   marginLeft: "auto",
                   marginRight: "auto",
                 }}
@@ -993,9 +993,9 @@ export default function Waitlist() {
                   fontSize: "1rem",
                   fontWeight: 300,
                   color: "oklch(0.62 0.006 80)",
-                  lineHeight: 1.8,
+                  lineHeight: 1.7,
                   maxWidth: "48ch",
-                  marginBottom: "2.5rem",
+                  marginBottom: "1.5rem",
                   textAlign: "center",
                   marginLeft: "auto",
                   marginRight: "auto",
