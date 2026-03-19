@@ -785,3 +785,7 @@
 - [x] Remove "Join Waitlist" button from homepage nav top bar
 - [x] Update pricing plan CTA buttons to "Start Free Trial (Early Access)"
 - [x] Fix WaitlistGateModal content overflow/padding — reduced side padding to 1.25rem, added boxSizing:border-box on both wrapper and panel
+
+### Pricing + Nav CTA (v6.48)
+- [x] Mark "One-click send via Chrome extension", "DM template library", "Advanced analytics" as Coming Soon in pricing feature lists (dimmed text + amber "Soon" badge)
+- [x] Rename homepage nav "Begin" button to "Login" (still links to getLoginUrl())

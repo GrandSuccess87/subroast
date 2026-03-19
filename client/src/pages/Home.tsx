@@ -905,7 +905,7 @@ export default function Home() {
           {/* CTAs */}
           <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
             <a href={getLoginUrl()} className="btn-luxury">
-              Begin
+              Login
             </a>
           </div>
         </div>
@@ -1886,9 +1886,9 @@ const HOME_PLANS = [
       "Unlimited outreach campaigns",
       "Lead sync: every 4 hours (6× daily)",
       "App Validation campaigns",
-      "One-click send via Chrome extension",
-      "DM template library",
-      "Advanced analytics",
+      "One-click send via Chrome extension — coming soon",
+      "DM template library — coming soon",
+      "Advanced analytics — coming soon",
     ],
     popular: true,
   },
@@ -1994,14 +1994,33 @@ function HomePricingSection() {
                 </div>
                 {/* Features */}
                 <ul style={{ listStyle: "none", padding: 0, margin: "0 0 2rem", flex: 1, display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-                  {plan.features.map((feature) => (
-                    <li key={feature} style={{ display: "flex", alignItems: "flex-start", gap: "0.65rem", fontSize: "0.82rem", color: "oklch(0.93 0.010 80)", lineHeight: 1.5 }}>
-                      <span style={{ width: "14px", height: "14px", border: "0.5px solid oklch(0.88 0.025 85 / 0.35)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: "1px" }}>
-                        <Check size={8} color="oklch(0.88 0.025 85)" />
-                      </span>
-                      {feature}
-                    </li>
-                  ))}
+                  {plan.features.map((feature) => {
+                    const isComingSoon = feature.endsWith(" — coming soon");
+                    const label = isComingSoon ? feature.replace(" — coming soon", "") : feature;
+                    return (
+                      <li key={feature} style={{ display: "flex", alignItems: "flex-start", gap: "0.65rem", fontSize: "0.82rem", color: isComingSoon ? "oklch(0.45 0 0)" : "oklch(0.93 0.010 80)", lineHeight: 1.5 }}>
+                        <span style={{ width: "14px", height: "14px", border: `0.5px solid ${isComingSoon ? "oklch(0.28 0 0)" : "oklch(0.88 0.025 85 / 0.35)"}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: "1px" }}>
+                          <Check size={8} color={isComingSoon ? "oklch(0.35 0 0)" : "oklch(0.88 0.025 85)"} />
+                        </span>
+                        <span style={{ display: "flex", alignItems: "center", gap: "0.4rem", flexWrap: "wrap" }}>
+                          {label}
+                          {isComingSoon && (
+                            <span style={{
+                              fontFamily: "var(--font-mono)",
+                              fontSize: "0.48rem",
+                              letterSpacing: "0.12em",
+                              textTransform: "uppercase",
+                              color: "oklch(0.78 0.14 65)",
+                              border: "0.5px solid oklch(0.78 0.14 65 / 0.35)",
+                              padding: "0.1rem 0.35rem",
+                            }}>
+                              Soon
+                            </span>
+                          )}
+                        </span>
+                      </li>
+                    );
+                  })}
                 </ul>
                 {/* CTA */}
                 <button
