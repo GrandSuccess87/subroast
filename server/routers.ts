@@ -7,7 +7,7 @@ import { invokeLLM } from "./_core/llm";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { getDb } from "./db";
-import { redditAccounts } from "../drizzle/schema";
+import { redditAccounts, waitlistSignups } from "../drizzle/schema";
 import {
   cancelScheduledPost,
   createDmCampaign,
@@ -587,6 +587,32 @@ export const appRouter = router({
   feedback: feedbackRouter,
   history: historyRouter,
   settings: settingsRouter,
+  waitlist: router({
+    join: publicProcedure
+      .input(z.object({
+        email: z.string().email(),
+        name: z.string().max(200).optional(),
+        source: z.enum(["header", "footer", "home_header", "home_footer"]),
+      }))
+      .mutation(async ({ input }) => {
+        const db = await getDb();
+        if (db) {
+          // Upsert — ignore duplicate email+source combinations
+          await db.insert(waitlistSignups).values({
+            email: input.email,
+            name: input.name ?? null,
+            source: input.source,
+          }).onDuplicateKeyUpdate({ set: { email: input.email } }).catch(() => {});
+        }
+        // Notify owner
+        const { notifyOwner } = await import("./_core/notification");
+        await notifyOwner({
+          title: "New Waitlist Signup",
+          content: `${input.name ? input.name + " (" + input.email + ")" : input.email} joined the waitlist via ${input.source}.`,
+        }).catch(() => {});
+        return { success: true };
+      }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;

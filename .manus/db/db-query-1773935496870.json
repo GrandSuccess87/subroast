@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE `waitlist_signups` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`email` varchar(320) NOT NULL,\n\t`name` varchar(200),\n\t`source` enum('header','footer','home_header','home_footer') NOT NULL,\n\t`createdAt` timestamp NOT NULL DEFAULT (now()),\n\tCONSTRAINT `waitlist_signups_id` PRIMARY KEY(`id`)\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute CREATE TABLE `waitlist_signups` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`email` varchar(320) NOT NULL,\n\t`name` varchar(200),\n\t`source` enum('header','footer','home_header','home_footer') NOT NULL,\n\t`createdAt` timestamp NOT NULL DEFAULT (now()),\n\tCONSTRAINT `waitlist_signups_id` PRIMARY KEY(`id`)\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 833
+}

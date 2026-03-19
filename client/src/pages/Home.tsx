@@ -1314,7 +1314,7 @@ function HeroDemoPanel() {
             style={{
               background: "oklch(0.12 0.007 60)",
               border: "0.5px solid oklch(0.22 0.007 60)",
-              minHeight: "340px",
+              height: "420px",
               width: "100%",
               maxWidth: "100%",
               position: "relative",

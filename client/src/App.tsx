@@ -14,6 +14,7 @@ import SettingsPage from "./pages/SettingsPage";
 import Pricing from "./pages/Pricing";
 import BillingSuccess from "./pages/BillingSuccess";
 import FeedbackPage from "./pages/Feedback";
+import Waitlist from "./pages/Waitlist";
 
 function Router() {
   return (
@@ -28,6 +29,7 @@ function Router() {
       <Route path="/pricing" component={Pricing} />
       <Route path="/billing/success" component={BillingSuccess} />
       <Route path="/dashboard/feedback" component={FeedbackPage} />
+      <Route path="/waitlist" component={Waitlist} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>

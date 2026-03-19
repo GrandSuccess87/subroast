@@ -730,3 +730,12 @@
 
 ### See How It Works Scroll Fix (v6.32)
 - [x] Fix "See how it works" button — switched from scrollIntoView to window.scrollTo({ top: el.getBoundingClientRect().top + scrollY, behavior: 'smooth' }) for reliable window-level scroll
+
+### Waitlist Page + Demo Height Fix (v6.34)
+- [x] Add waitlist_signups table to DB schema (email, name, source enum, createdAt)
+- [x] Add joinWaitlist tRPC procedure with owner notification
+- [x] Build /waitlist page — mirrors homepage, no pricing, no free trial CTAs, email capture form with animated confirmation
+- [x] Add source tracking: header/footer on /waitlist, home_header/home_footer on /
+- [x] Fix HeroDemoPanel vertical height shifting — container has fixed height:420px + overflow:hidden (already in place from v6.30)
+- [x] Register /waitlist route in App.tsx
+- [x] Write vitest tests for waitlist.join procedure (6 tests, all passing)

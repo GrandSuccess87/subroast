@@ -253,3 +253,14 @@ export const feedback = mysqlTable("feedback", {
 
 export type Feedback = typeof feedback.$inferSelect;
 export type InsertFeedback = typeof feedback.$inferInsert;
+
+// ─── Waitlist Signups ─────────────────────────────────────────────────────────
+export const waitlistSignups = mysqlTable("waitlist_signups", {
+  id: int("id").autoincrement().primaryKey(),
+  email: varchar("email", { length: 320 }).notNull(),
+  name: varchar("name", { length: 200 }),
+  source: mysqlEnum("source", ["header", "footer", "home_header", "home_footer"]).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type WaitlistSignup = typeof waitlistSignups.$inferSelect;
+export type InsertWaitlistSignup = typeof waitlistSignups.$inferInsert;
