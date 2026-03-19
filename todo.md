@@ -758,3 +758,6 @@
 - [x] Center "AI Intelligence for Reddit" eyebrow on /waitlist (confirmed centered with textAlign:center)
 - [x] Add live waitlist counter above the hero form on /waitlist (amber pill, auto-refreshes every 30s)
 - [x] Add compact waitlist form (name + email + CTA) to homepage footer (two-col layout with copy on left, form on right)
+
+### Section Swap (v6.38)
+- [x] Swap "What makes us different" and "How it works" section order on /waitlist

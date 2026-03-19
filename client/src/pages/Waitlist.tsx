@@ -1256,7 +1256,45 @@ export default function Waitlist() {
         </div>
       </section>
 
-      {/* ── WHAT MAKES US DIFFERENT ── */}
+      {/* ── PROCESS (was: How it works) ── */}
+      <section
+        id="how-it-works-steps"
+        style={{
+          paddingTop: "clamp(5rem, 10vw, 9rem)",
+          paddingBottom: "clamp(5rem, 10vw, 9rem)",
+          borderBottom: "0.5px solid oklch(0.18 0.007 60)",
+        }}
+      >
+        <div className="container max-w-3xl">
+          <p className="eyebrow mb-12">How it works</p>
+          {[
+            {
+              n: "01",
+              title: "Connect your Reddit account",
+              body: "Link your existing Reddit account via OAuth. SubRoast never stores your password — it uses a secure token that you can revoke at any time.",
+            },
+            {
+              n: "02",
+              title: "Define your target audience",
+              body: "Tell SubRoast which subreddits to monitor and what kind of posts signal buying intent for your product. The AI learns from your feedback over time.",
+            },
+            {
+              n: "03",
+              title: "Review AI-drafted outreach",
+              body: "Every lead arrives with a personalised DM and a public comment draft. You approve, edit, or skip — SubRoast never sends without your explicit review.",
+            },
+            {
+              n: "04",
+              title: "Post with confidence",
+              body: "Use the Draft & Roast tool to score any post before publishing. Get a virality rating, clarity score, and a fully rewritten version in seconds.",
+            },
+          ].map(({ n, title, body }, i, arr) => (
+            <ProcessStep key={n} n={n} title={title} body={body} hasBorder={i < arr.length - 1} delay={i * 80} />
+          ))}
+        </div>
+      </section>
+
+      {/* ── WHAT MAKES US DIFFERENT (was: Process position) ── */}
       <DifferentiatorsSection />
 
       {/* ── POST-DIFFERENTIATORS CTA ── */}
@@ -1333,44 +1371,6 @@ export default function Waitlist() {
           >
             Free to join · No spam · Unsubscribe any time
           </p>
-        </div>
-      </section>
-
-      {/* ── PROCESS ── */}
-      <section
-        id="how-it-works-steps"
-        style={{
-          paddingTop: "clamp(5rem, 10vw, 9rem)",
-          paddingBottom: "clamp(5rem, 10vw, 9rem)",
-          borderBottom: "0.5px solid oklch(0.18 0.007 60)",
-        }}
-      >
-        <div className="container max-w-3xl">
-          <p className="eyebrow mb-12">How it works</p>
-          {[
-            {
-              n: "01",
-              title: "Connect your Reddit account",
-              body: "Link your existing Reddit account via OAuth. SubRoast never stores your password — it uses a secure token that you can revoke at any time.",
-            },
-            {
-              n: "02",
-              title: "Define your target audience",
-              body: "Tell SubRoast which subreddits to monitor and what kind of posts signal buying intent for your product. The AI learns from your feedback over time.",
-            },
-            {
-              n: "03",
-              title: "Review AI-drafted outreach",
-              body: "Every lead arrives with a personalised DM and a public comment draft. You approve, edit, or skip — SubRoast never sends without your explicit review.",
-            },
-            {
-              n: "04",
-              title: "Post with confidence",
-              body: "Use the Draft & Roast tool to score any post before publishing. Get a virality rating, clarity score, and a fully rewritten version in seconds.",
-            },
-          ].map(({ n, title, body }, i, arr) => (
-            <ProcessStep key={n} n={n} title={title} body={body} hasBorder={i < arr.length - 1} delay={i * 80} />
-          ))}
         </div>
       </section>
 
