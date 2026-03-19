@@ -966,7 +966,7 @@ export default function Home() {
             <div ref={heroRef}>
               {/* Eyebrow */}
               <p className="eyebrow mb-8 hero-eyebrow-animate" style={{ textAlign: "center" }}>
-                AI Intelligence for Reddit
+                For Indie Founders
               </p>
 
               {/* Display headline */}
