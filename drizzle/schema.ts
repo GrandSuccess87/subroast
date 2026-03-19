@@ -228,6 +228,7 @@ export const outreachLeads = mysqlTable("outreach_leads", {
   status: mysqlEnum("status", ["new", "dm_generated", "queued", "sent", "skipped", "failed"]).default("new").notNull(),
   sentAt: bigint("sentAt", { mode: "number" }),
   errorMessage: text("errorMessage"),
+  isFavorited: boolean("isFavorited").default(false).notNull(),
   discoveredAt: bigint("discoveredAt", { mode: "number" }).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),

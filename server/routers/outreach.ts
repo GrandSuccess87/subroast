@@ -1142,4 +1142,23 @@ spamFlags should be a list of specific signals found (empty array if none). Each
 
       return { success: true, spamScore: parsed.spamScore, spamFlags: parsed.spamFlags };
     }),
+
+  // ── Toggle Favorite Lead ─────────────────────────────────────────────────────────────────────────
+
+  toggleFavorite: protectedProcedure
+    .input(z.object({ leadId: z.number(), isFavorited: z.boolean() }))
+    .mutation(async ({ ctx, input }) => {
+      const leads = await getOutreachLeadsByUserId(ctx.user.id);
+      const lead = leads.find((l) => l.id === input.leadId);
+      if (!lead) throw new TRPCError({ code: "NOT_FOUND" });
+      const db = await getDb();
+      if (db) {
+        const { outreachLeads: leadsTable } = await import("../../drizzle/schema");
+        await db
+          .update(leadsTable)
+          .set({ isFavorited: input.isFavorited })
+          .where(eq(leadsTable.id, input.leadId));
+      }
+      return { success: true, isFavorited: input.isFavorited };
+    }),
 });

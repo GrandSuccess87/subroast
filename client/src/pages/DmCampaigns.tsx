@@ -88,6 +88,7 @@ type Lead = {
   pipelineStage?: "new" | "replied" | "interested" | "converted" | "skipped" | null;
   commentDraft?: string | null; commentSentAt?: number | null;
   spamScore?: number | null; spamFlags?: string | null;
+  isFavorited?: boolean;
 };
 
 // ─── Shared input style ───────────────────────────────────────────────────────
@@ -600,13 +601,14 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
 }
 
 // ─── Lead card ────────────────────────────────────────────────────────────────
-function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue, onUpdateDraft, onRoast, onGenerateComment, onSendComment, onMarkContacted, onReDraftDm, onCheckSpam, isChaining }: {
+function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue, onUpdateDraft, onRoast, onGenerateComment, onSendComment, onMarkContacted, onReDraftDm, onCheckSpam, isChaining, onToggleFavorite }: {
   lead: Lead; onGenerateDm: (id: number) => void; onSendDm: (id: number) => void;
   onSkip: (id: number) => void; onQueue: (id: number) => void; onCancelQueue: (id: number) => void;
   onUpdateDraft: (id: number, draft: string) => void; onRoast: (id: number) => void;
   onGenerateComment: (id: number) => void; onSendComment: (id: number) => void;
   onMarkContacted: (id: number) => void; onReDraftDm: (id: number) => void;
   onCheckSpam: (id: number) => void; isChaining: boolean;
+  onToggleFavorite: (id: number, isFavorited: boolean) => void;
 }) {
   const [expandedDm, setExpandedDm] = useState(false);
   const [expandedComment, setExpandedComment] = useState(false);
@@ -660,6 +662,26 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
         {/* Header */}
         <div style={{ marginBottom: "0.75rem" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", flexWrap: "wrap", marginBottom: "0.5rem" }}>
+            {/* Favorite toggle */}
+            <button
+              onClick={() => onToggleFavorite(lead.id, !lead.isFavorited)}
+              title={lead.isFavorited ? "Remove from favorites" : "Save as favorite"}
+              style={{
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                padding: "0.1rem 0.2rem",
+                color: lead.isFavorited ? "oklch(0.78 0.14 65)" : MUTED,
+                fontSize: "0.9rem",
+                lineHeight: 1,
+                transition: "color 0.15s, transform 0.15s",
+                flexShrink: 0,
+              }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.2)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)"; }}
+            >
+              {lead.isFavorited ? "★" : "☆"}
+            </button>
             <span style={{ fontFamily: FONT_MONO, fontSize: "0.62rem", color: MUTED }}>r/{lead.subreddit}</span>
             <MatchBadge score={lead.matchScore} />
             {lead.intentType && <IntentBadge intent={lead.intentType} />}
@@ -960,6 +982,21 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
   const markContacted = trpc.outreach.updatePipelineStage.useMutation({ onSuccess: () => { toast.success("Lead marked as contacted!"); utils.outreach.getLeads.invalidate({ campaignId: campaign.id }); }, onError: (err) => toast.error(err.message) });
   const updateCampaign = trpc.outreach.updateCampaign.useMutation({ onSuccess: () => { toast.success("Campaign updated"); utils.outreach.listCampaigns.invalidate(); }, onError: (err) => toast.error(err.message) });
   const scoreSpamRisk = trpc.outreach.scoreSpamRisk.useMutation({ onSuccess: (data) => { toast.success(`Spam check complete — score: ${data.spamScore}/100`); utils.outreach.getLeads.invalidate({ campaignId: campaign.id }); }, onError: (err) => toast.error(err.message) });
+  const toggleFavorite = trpc.outreach.toggleFavorite.useMutation({
+    onMutate: async ({ leadId, isFavorited }) => {
+      await utils.outreach.getLeads.cancel({ campaignId: campaign.id });
+      const prev = utils.outreach.getLeads.getData({ campaignId: campaign.id });
+      utils.outreach.getLeads.setData({ campaignId: campaign.id }, (old) =>
+        old ? old.map((l) => l.id === leadId ? { ...l, isFavorited } : l) : old
+      );
+      return { prev };
+    },
+    onError: (_err, _vars, ctx) => {
+      if (ctx?.prev) utils.outreach.getLeads.setData({ campaignId: campaign.id }, ctx.prev);
+      toast.error("Failed to update favorite");
+    },
+    onSettled: () => utils.outreach.getLeads.invalidate({ campaignId: campaign.id }),
+  });
 
   const filteredLeads = leads.filter((l) => activeFilter === "all" || l.status === activeFilter);
   const filterCounts = { all: leads.length, new: leads.filter((l) => l.status === "new").length, dm_generated: leads.filter((l) => l.status === "dm_generated").length, queued: leads.filter((l) => l.status === "queued").length, sent: leads.filter((l) => l.status === "sent").length, skipped: leads.filter((l) => l.status === "skipped").length };
@@ -1152,6 +1189,7 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
               onReDraftDm={(id) => generateDm.mutate({ leadId: id })}
               onCheckSpam={(id) => scoreSpamRisk.mutate({ leadId: id })}
               isChaining={chainLeadIdRef.current === lead.id}
+              onToggleFavorite={(id, fav) => toggleFavorite.mutate({ leadId: id, isFavorited: fav })}
             />
           ))}
         </div>

@@ -1255,7 +1255,7 @@ export default function Home() {
       <CtaSection onOpenModal={() => setModalOpen(true)} />
 
       {/* ── WHAT'S COMING ── */}
-      <HomeWhatsComingSection />
+      <HomeWhatsComingSection onOpenModal={() => setModalOpen(true)} />
 
       {/* ── PRICING ── */}
       <HomePricingSection />
@@ -1898,7 +1898,7 @@ const HOME_PLANS = [
 ];
 
 /* ── What's Coming ── */
-function HomeWhatsComingSection() {
+function HomeWhatsComingSection({ onOpenModal }: { onOpenModal: () => void }) {
   const ref = useFadeUp();
   const items = [
     {
@@ -2062,22 +2062,26 @@ function HomeWhatsComingSection() {
             >
               Want early access to these features?
             </p>
-            <a
-              href="/waitlist"
+            <button
+              onClick={onOpenModal}
               style={{
                 fontFamily: "var(--font-mono)",
                 fontSize: "0.62rem",
                 letterSpacing: "0.14em",
                 textTransform: "uppercase",
                 color: "oklch(0.78 0.14 65)",
-                textDecoration: "none",
+                background: "transparent",
+                border: "none",
                 borderBottom: "0.5px solid oklch(0.78 0.14 65 / 0.5)",
                 paddingBottom: "0.1rem",
+                paddingLeft: 0,
+                paddingRight: 0,
+                cursor: "pointer",
                 transition: "color 0.2s, border-color 0.2s",
               }}
             >
               Join the waitlist →
-            </a>
+            </button>
           </div>
         </div>
       </div>
