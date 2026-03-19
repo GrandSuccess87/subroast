@@ -883,7 +883,7 @@ export default function Home() {
             {/* LEFT: editorial copy */}
             <div ref={heroRef}>
               {/* Eyebrow */}
-              <p className="eyebrow mb-8 hero-eyebrow-animate">
+              <p className="eyebrow mb-8 hero-eyebrow-animate" style={{ textAlign: "center" }}>
                 AI Intelligence for Reddit
               </p>
 

@@ -739,3 +739,13 @@
 - [x] Fix HeroDemoPanel vertical height shifting — container has fixed height:420px + overflow:hidden (already in place from v6.30)
 - [x] Register /waitlist route in App.tsx
 - [x] Write vitest tests for waitlist.join procedure (6 tests, all passing)
+
+### Waitlist Page Polish (v6.35)
+- [x] Remove nav header email form — replaced with "Join waitlist" anchor link
+- [x] Remove footer email form — footer now just shows wordmark + copyright
+- [x] Fix "See how it works" scroll — uses ref + window.scrollTo({ behavior: smooth }) to scroll to Lead Intelligence panel
+- [x] Fix content clipping — added overflowX:hidden to root, minWidth:0 to all grid children, overflow:hidden on all panels
+- [x] Form fields stacked vertically (name → email → CTA button), all full-width, name + email both required
+- [x] Center "AI Intelligence for Reddit" eyebrow on both /waitlist and homepage hero
+- [x] Add social proof (Early Signal) section after Use Cases — two X quotes centered
+- [x] Add "What makes us different" section with 6 differentiator cards in 3-col grid

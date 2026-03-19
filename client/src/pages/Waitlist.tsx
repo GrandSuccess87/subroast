@@ -24,19 +24,15 @@ function useFadeUp(delay = 0) {
   return ref;
 }
 
-/* ── Waitlist email form ── */
+/* ── Waitlist form ── */
 type WaitlistSource = "header" | "footer" | "home_header" | "home_footer";
 
 function WaitlistForm({
   source,
-  placeholder = "your@email.com",
   buttonLabel = "Join the waitlist",
-  compact = false,
 }: {
   source: WaitlistSource;
-  placeholder?: string;
   buttonLabel?: string;
-  compact?: boolean;
 }) {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -58,9 +54,9 @@ function WaitlistForm({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.trim()) return;
+    if (!email.trim() || !name.trim()) return;
     setStatus("loading");
-    join.mutate({ email: email.trim(), name: name.trim() || undefined, source });
+    join.mutate({ email: email.trim(), name: name.trim(), source });
   };
 
   if (status === "success") {
@@ -70,7 +66,7 @@ function WaitlistForm({
           display: "flex",
           alignItems: "center",
           gap: "0.75rem",
-          padding: compact ? "0.75rem 1.25rem" : "1rem 1.5rem",
+          padding: "1rem 1.5rem",
           background: "oklch(0.14 0.010 140 / 0.4)",
           border: "0.5px solid oklch(0.30 0.06 140)",
           animation: "fadeSlideIn 0.4s ease forwards",
@@ -121,84 +117,86 @@ function WaitlistForm({
 
   return (
     <form onSubmit={handleSubmit} style={{ width: "100%" }}>
-      {!compact && (
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Your name (optional)"
-          disabled={status === "loading"}
-          style={{
-            width: "100%",
-            padding: "0.75rem 1rem",
-            background: "oklch(0.12 0.007 60)",
-            border: "0.5px solid oklch(0.22 0.007 60)",
-            color: "oklch(0.93 0.010 80)",
-            fontFamily: "var(--font-sans)",
-            fontSize: "0.875rem",
-            fontWeight: 300,
-            outline: "none",
-            marginBottom: "0.75rem",
-            boxSizing: "border-box",
-            transition: "border-color 0.2s ease",
-          }}
-          onFocus={(e) => (e.target.style.borderColor = "oklch(0.88 0.025 85 / 0.5)")}
-          onBlur={(e) => (e.target.style.borderColor = "oklch(0.22 0.007 60)")}
-        />
-      )}
-      <div style={{ display: "flex", gap: "0.75rem", width: "100%" }}>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder={placeholder}
-          required
-          disabled={status === "loading"}
-          style={{
-            flex: 1,
-            padding: compact ? "0.65rem 0.875rem" : "0.75rem 1rem",
-            background: "oklch(0.12 0.007 60)",
-            border: "0.5px solid oklch(0.22 0.007 60)",
-            color: "oklch(0.93 0.010 80)",
-            fontFamily: "var(--font-sans)",
-            fontSize: "0.875rem",
-            fontWeight: 300,
-            outline: "none",
-            minWidth: 0,
-            transition: "border-color 0.2s ease",
-          }}
-          onFocus={(e) => (e.target.style.borderColor = "oklch(0.88 0.025 85 / 0.5)")}
-          onBlur={(e) => (e.target.style.borderColor = "oklch(0.22 0.007 60)")}
-        />
-        <button
-          type="submit"
-          disabled={status === "loading" || !email.trim()}
-          style={{
-            padding: compact ? "0.65rem 1.25rem" : "0.75rem 1.5rem",
-            background: "oklch(0.88 0.025 85)",
-            border: "0.5px solid oklch(0.88 0.025 85)",
-            color: "oklch(0.09 0.008 60)",
-            fontFamily: "var(--font-mono)",
-            fontSize: "0.62rem",
-            letterSpacing: "0.16em",
-            textTransform: "uppercase",
-            cursor: status === "loading" ? "not-allowed" : "pointer",
-            opacity: status === "loading" || !email.trim() ? 0.6 : 1,
-            display: "flex",
-            alignItems: "center",
-            gap: "0.5rem",
-            flexShrink: 0,
-            whiteSpace: "nowrap",
-            transition: "opacity 0.2s ease",
-          }}
-        >
-          {status === "loading" ? (
-            <Loader2 size={12} style={{ animation: "spin 1s linear infinite" }} />
-          ) : (
-            buttonLabel
-          )}
-        </button>
-      </div>
+      {/* Name — required */}
+      <input
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Your name"
+        required
+        disabled={status === "loading"}
+        style={{
+          width: "100%",
+          padding: "0.75rem 1rem",
+          background: "oklch(0.12 0.007 60)",
+          border: "0.5px solid oklch(0.22 0.007 60)",
+          color: "oklch(0.93 0.010 80)",
+          fontFamily: "var(--font-sans)",
+          fontSize: "0.875rem",
+          fontWeight: 300,
+          outline: "none",
+          marginBottom: "0.75rem",
+          boxSizing: "border-box",
+          transition: "border-color 0.2s ease",
+        }}
+        onFocus={(e) => (e.target.style.borderColor = "oklch(0.88 0.025 85 / 0.5)")}
+        onBlur={(e) => (e.target.style.borderColor = "oklch(0.22 0.007 60)")}
+      />
+      {/* Email — required */}
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="your@email.com"
+        required
+        disabled={status === "loading"}
+        style={{
+          width: "100%",
+          padding: "0.75rem 1rem",
+          background: "oklch(0.12 0.007 60)",
+          border: "0.5px solid oklch(0.22 0.007 60)",
+          color: "oklch(0.93 0.010 80)",
+          fontFamily: "var(--font-sans)",
+          fontSize: "0.875rem",
+          fontWeight: 300,
+          outline: "none",
+          marginBottom: "0.75rem",
+          boxSizing: "border-box",
+          transition: "border-color 0.2s ease",
+        }}
+        onFocus={(e) => (e.target.style.borderColor = "oklch(0.88 0.025 85 / 0.5)")}
+        onBlur={(e) => (e.target.style.borderColor = "oklch(0.22 0.007 60)")}
+      />
+      {/* CTA button — full width */}
+      <button
+        type="submit"
+        disabled={status === "loading" || !email.trim() || !name.trim()}
+        style={{
+          width: "100%",
+          padding: "0.875rem 1.5rem",
+          background: "oklch(0.88 0.025 85)",
+          border: "0.5px solid oklch(0.88 0.025 85)",
+          color: "oklch(0.09 0.008 60)",
+          fontFamily: "var(--font-mono)",
+          fontSize: "0.62rem",
+          letterSpacing: "0.16em",
+          textTransform: "uppercase",
+          cursor: status === "loading" ? "not-allowed" : "pointer",
+          opacity: status === "loading" || !email.trim() || !name.trim() ? 0.6 : 1,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "0.5rem",
+          boxSizing: "border-box",
+          transition: "opacity 0.2s ease",
+        }}
+      >
+        {status === "loading" ? (
+          <Loader2 size={12} style={{ animation: "spin 1s linear infinite" }} />
+        ) : (
+          buttonLabel
+        )}
+      </button>
       {status === "error" && (
         <p
           style={{
@@ -213,6 +211,25 @@ function WaitlistForm({
         </p>
       )}
     </form>
+  );
+}
+
+/* ── X / Twitter logo ── */
+function XLogo() {
+  return (
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 1200 1227"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ opacity: 0.4, flexShrink: 0 }}
+    >
+      <path
+        d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z"
+        fill="oklch(0.55 0.006 80)"
+      />
+    </svg>
   );
 }
 
@@ -281,6 +298,7 @@ function HeroDemoPanel() {
         position: "relative",
         overflow: "hidden",
         boxSizing: "border-box",
+        minWidth: 0,
       }}
     >
       {/* Panel header */}
@@ -291,68 +309,69 @@ function HeroDemoPanel() {
           display: "flex",
           alignItems: "center",
           gap: "0.5rem",
+          flexShrink: 0,
         }}
       >
-        <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "oklch(0.78 0.14 65)", animation: "pulse 2s ease-in-out infinite" }} />
-        <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.58rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "oklch(0.62 0.006 80)" }}>
-          {phase === 0 ? "AI chain running" : phase === 1 ? "Spam filter" : phase === 2 ? "Lead ready" : "Drafting comment"}
+        <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "oklch(0.78 0.14 65)", animation: "pulse 2s ease-in-out infinite", flexShrink: 0 }} />
+        <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.58rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "oklch(0.62 0.006 80)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+          {phase === 0 ? "AI Chain Running" : phase === 1 ? "Spam Filter Active" : phase === 2 ? "Lead Detected" : "Comment Drafting"}
         </span>
       </div>
 
-      {/* Phase 0: 6-step chain */}
+      {/* Phase 0: AI chain steps */}
       {phase === 0 && (
-        <div style={{ padding: "1.25rem" }}>
-          {CHAIN_STEPS.map((step, i) => (
-            <div
-              key={step.id}
-              style={{
-                display: "flex",
-                alignItems: "flex-start",
-                gap: "0.75rem",
-                padding: "0.6rem 0",
-                borderBottom: i < CHAIN_STEPS.length - 1 ? "0.5px solid oklch(0.16 0.007 60)" : "none",
-                opacity: i <= activeStep ? 1 : 0.2,
-                transition: "opacity 0.4s ease",
-              }}
-            >
-              <div style={{
-                width: "18px", height: "18px", borderRadius: "50%", flexShrink: 0, marginTop: "1px",
-                background: i < activeStep ? "oklch(0.78 0.14 65)" : i === activeStep ? "oklch(0.78 0.14 65 / 0.25)" : "oklch(0.18 0.007 60)",
-                border: i === activeStep ? "1px solid oklch(0.78 0.14 65)" : "1px solid oklch(0.22 0.007 60)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                transition: "all 0.4s ease",
-              }}>
-                {i < activeStep && (
-                  <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
-                    <path d="M1.5 4L3.5 6L6.5 2" stroke="oklch(0.09 0.008 60)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                )}
-                {i === activeStep && (
-                  <div style={{ width: "5px", height: "5px", borderRadius: "50%", background: "oklch(0.78 0.14 65)", animation: "pulse 1s ease-in-out infinite" }} />
-                )}
-              </div>
-              <div>
-                <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.65rem", letterSpacing: "0.08em", color: i <= activeStep ? "oklch(0.88 0.025 85)" : "oklch(0.38 0 0)", transition: "color 0.4s ease" }}>
-                  {step.label}
+        <div style={{ padding: "1rem 1.25rem", display: "flex", flexDirection: "column", gap: "0.5rem", height: "calc(100% - 44px)", overflow: "hidden", boxSizing: "border-box" }}>
+          {CHAIN_STEPS.map((step, i) => {
+            const done = i < activeStep;
+            const active = i === activeStep;
+            return (
+              <div
+                key={step.id}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.75rem",
+                  opacity: done || active ? 1 : 0.25,
+                  transition: "opacity 0.4s ease",
+                  minWidth: 0,
+                  overflow: "hidden",
+                }}
+              >
+                <div
+                  style={{
+                    width: "18px",
+                    height: "18px",
+                    borderRadius: "50%",
+                    flexShrink: 0,
+                    marginTop: "1px",
+                    background: done ? "oklch(0.65 0.15 140)" : active ? "oklch(0.78 0.14 65)" : "oklch(0.18 0.007 60)",
+                    border: done || active ? "none" : "0.5px solid oklch(0.28 0.007 60)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    transition: "background 0.3s ease",
+                  }}
+                >
+                  {done && <Check size={9} color="oklch(0.09 0.008 60)" strokeWidth={2.5} />}
+                  {active && <div style={{ width: "5px", height: "5px", borderRadius: "50%", background: "oklch(0.78 0.14 65)", animation: "pulse 1s ease-in-out infinite" }} />}
                 </div>
-                <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", color: "oklch(0.38 0 0)", letterSpacing: "0.06em", marginTop: "0.15rem" }}>
-                  {step.sub}
+                <div style={{ minWidth: 0, overflow: "hidden" }}>
+                  <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: active ? "oklch(0.88 0.025 85)" : done ? "oklch(0.65 0.15 140)" : "oklch(0.45 0.006 80)", marginBottom: "0.15rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {step.label}
+                  </p>
+                  <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.7rem", fontWeight: 300, color: "oklch(0.45 0.006 80)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {step.sub}
+                  </p>
                 </div>
               </div>
-              <div style={{ marginLeft: "auto", fontFamily: "var(--font-mono)", fontSize: "0.55rem", color: "oklch(0.28 0 0)", letterSpacing: "0.1em" }}>
-                0{i + 1}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
       {/* Phase 1: spam filter */}
       {phase === 1 && (
-        <div style={{ padding: "1.25rem" }}>
-          <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", color: "oklch(0.38 0 0)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "0.75rem" }}>
-            {visiblePosts} of {SPAM_POSTS.length} posts evaluated
-          </div>
+        <div style={{ padding: "1rem 1.25rem", display: "flex", flexDirection: "column", gap: "0.5rem", height: "calc(100% - 44px)", overflow: "hidden", boxSizing: "border-box" }}>
           {SPAM_POSTS.slice(0, visiblePosts).map((post, i) => (
             <div
               key={i}
@@ -360,46 +379,42 @@ function HeroDemoPanel() {
                 display: "flex",
                 alignItems: "center",
                 gap: "0.75rem",
-                padding: "0.55rem 0.75rem",
-                marginBottom: "0.4rem",
-                background: post.spam ? "oklch(0.14 0.015 25 / 0.6)" : "oklch(0.14 0.010 140 / 0.4)",
-                border: `0.5px solid ${post.spam ? "oklch(0.35 0.08 25)" : "oklch(0.30 0.06 140)"}`,
                 animation: "fadeSlideIn 0.3s ease forwards",
+                minWidth: 0,
+                overflow: "hidden",
               }}
             >
-              <div style={{ width: "6px", height: "6px", borderRadius: "50%", flexShrink: 0, background: post.spam ? "oklch(0.65 0.18 25)" : "oklch(0.65 0.15 140)" }} />
-              <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.72rem", fontWeight: 300, color: post.spam ? "oklch(0.55 0.006 80)" : "oklch(0.75 0.006 80)", flex: 1, lineHeight: 1.4 }}>
+              <span
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "0.55rem",
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  color: post.spam ? "oklch(0.65 0.18 25)" : "oklch(0.65 0.15 140)",
+                  flexShrink: 0,
+                  width: "36px",
+                }}
+              >
+                {post.spam ? "SPAM" : "PASS"}
+              </span>
+              <p
+                style={{
+                  fontFamily: "var(--font-sans)",
+                  fontSize: "0.72rem",
+                  fontWeight: 300,
+                  color: post.spam ? "oklch(0.40 0.006 80)" : "oklch(0.72 0.006 80)",
+                  textDecoration: post.spam ? "line-through" : "none",
+                  lineHeight: 1.4,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  minWidth: 0,
+                }}
+              >
                 {post.text}
-              </span>
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.1em", textTransform: "uppercase", color: post.spam ? "oklch(0.65 0.18 25)" : "oklch(0.65 0.15 140)", flexShrink: 0 }}>
-                {post.spam ? "Filtered" : "Signal"}
-              </span>
+              </p>
             </div>
           ))}
-        </div>
-      )}
-
-      {/* Phase 3: comment drafting */}
-      {phase === 3 && (
-        <div style={{ padding: "1.25rem", width: "100%", boxSizing: "border-box", overflow: "hidden" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem", padding: "0.5rem 0.75rem", background: "oklch(0.14 0.007 60)", border: "0.5px solid oklch(0.20 0.007 60)", overflow: "hidden", minWidth: 0 }}>
-            <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.52rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "oklch(0.78 0.14 65)", flexShrink: 0 }}>r/SaaS</span>
-            <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.52rem", color: "oklch(0.28 0 0)", flexShrink: 0 }}>/</span>
-            <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.72rem", fontWeight: 300, color: "oklch(0.62 0.006 80)", flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-              &ldquo;Struggling to get traction on Reddit without sounding like an ad&rdquo;
-            </span>
-          </div>
-          <div style={{ background: "oklch(0.10 0.007 60)", border: "0.5px solid oklch(0.22 0.007 60)", padding: "0.875rem 1rem", minHeight: "120px", overflow: "hidden", width: "100%", boxSizing: "border-box" }}>
-            <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.52rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "oklch(0.45 0 0)", marginBottom: "0.6rem" }}>Public comment draft</div>
-            <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.78rem", fontWeight: 300, color: "oklch(0.82 0.006 80)", lineHeight: 1.65, overflowWrap: "break-word", wordBreak: "break-word" }}>
-              {COMMENT_TEXT.slice(0, typedChars)}
-              <span style={{ display: "inline-block", width: "1px", height: "0.9em", background: "oklch(0.78 0.14 65)", marginLeft: "1px", verticalAlign: "text-bottom", animation: "pulse 1s ease-in-out infinite" }} />
-            </p>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "0.75rem" }}>
-            <div style={{ width: "5px", height: "5px", borderRadius: "50%", background: "oklch(0.78 0.14 65)", animation: "pulse 1.5s ease-in-out infinite" }} />
-            <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.52rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "oklch(0.45 0 0)" }}>AI writing — review before posting</span>
-          </div>
         </div>
       )}
 
@@ -407,48 +422,76 @@ function HeroDemoPanel() {
       {phase === 2 && (
         <div
           style={{
-            padding: "1.25rem",
+            padding: "1rem 1.25rem",
+            height: "calc(100% - 44px)",
+            overflow: "hidden",
+            boxSizing: "border-box",
             opacity: showLead ? 1 : 0,
-            transform: showLead ? "translateY(0)" : "translateY(12px)",
+            transform: showLead ? "translateY(0)" : "translateY(8px)",
             transition: "opacity 0.5s ease, transform 0.5s ease",
           }}
         >
           <div
             style={{
-              background: "oklch(0.14 0.010 65)",
-              border: "0.5px solid oklch(0.30 0.025 65)",
-              padding: "1rem 1.25rem",
+              background: "oklch(0.09 0.008 60)",
+              border: "0.5px solid oklch(0.22 0.007 60)",
+              padding: "1rem",
+              boxSizing: "border-box",
+              overflow: "hidden",
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "oklch(0.78 0.14 65)", background: "oklch(0.20 0.020 65)", padding: "0.2rem 0.5rem" }}>r/SaaS</span>
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "oklch(0.65 0.15 140)", background: "oklch(0.16 0.012 140)", padding: "0.2rem 0.5rem" }}>High intent</span>
-              </div>
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", color: "oklch(0.38 0 0)", letterSpacing: "0.08em" }}>2h ago</span>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.75rem", overflow: "hidden" }}>
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.52rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "oklch(0.78 0.14 65)", flexShrink: 0 }}>r/SaaS</span>
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.52rem", color: "oklch(0.45 0.006 80)", flexShrink: 0 }}>·</span>
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.52rem", color: "oklch(0.45 0.006 80)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>u/struggling_founder</span>
             </div>
-            <p style={{ fontFamily: "var(--font-display)", fontSize: "0.95rem", fontWeight: 400, color: "oklch(0.93 0.010 80)", lineHeight: 1.35, marginBottom: "0.6rem" }}>
-              &ldquo;Struggling to get traction on Reddit without sounding like an ad&rdquo;
+            <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.78rem", fontWeight: 400, color: "oklch(0.88 0.010 80)", lineHeight: 1.45, marginBottom: "0.75rem", overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+              &ldquo;Anyone else finding it impossible to get traction on Reddit without getting banned?&rdquo;
             </p>
-            <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.72rem", fontWeight: 300, color: "oklch(0.55 0.006 80)", lineHeight: 1.6, marginBottom: "1rem" }}>
-              Founder asking for advice on authentic Reddit marketing. Mentions failed posts, engagement drops. Strong buying signal.
-            </p>
-            <div style={{ display: "flex", alignItems: "center", gap: "1rem", paddingTop: "0.75rem", borderTop: "0.5px solid oklch(0.22 0.007 60)" }}>
-              <div>
-                <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "oklch(0.45 0 0)", marginBottom: "0.2rem" }}>Match</div>
-                <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.75rem", color: "oklch(0.88 0.025 85)" }}>94</div>
-              </div>
-              <div style={{ width: "0.5px", height: "2rem", background: "oklch(0.22 0.007 60)" }} />
-              <div>
-                <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "oklch(0.45 0 0)", marginBottom: "0.2rem" }}>Intent</div>
-                <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.75rem", color: "oklch(0.65 0.15 140)" }}>Strong</div>
-              </div>
-              <div style={{ width: "0.5px", height: "2rem", background: "oklch(0.22 0.007 60)" }} />
-              <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "oklch(0.45 0 0)", marginBottom: "0.2rem" }}>DM status</div>
-                <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.65rem", color: "oklch(0.78 0.14 65)" }}>Draft ready</div>
-              </div>
+            <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+              {[
+                { label: "Fit", val: "94" },
+                { label: "Urgency", val: "87" },
+              ].map(({ label, val }) => (
+                <div key={label} style={{ background: "oklch(0.14 0.010 65 / 0.4)", border: "0.5px solid oklch(0.25 0.020 65)", padding: "0.2rem 0.5rem", display: "flex", gap: "0.35rem", alignItems: "center" }}>
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.52rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "oklch(0.55 0.006 80)" }}>{label}</span>
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.62rem", fontWeight: 600, color: "oklch(0.78 0.14 65)" }}>{val}</span>
+                </div>
+              ))}
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Phase 3: comment typewriter */}
+      {phase === 3 && (
+        <div style={{ padding: "1rem 1.25rem", height: "calc(100% - 44px)", overflow: "hidden", boxSizing: "border-box" }}>
+          <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "oklch(0.78 0.14 65)", marginBottom: "0.75rem" }}>
+            Drafting comment reply
+          </p>
+          <div
+            style={{
+              background: "oklch(0.09 0.008 60)",
+              border: "0.5px solid oklch(0.22 0.007 60)",
+              padding: "0.875rem 1rem",
+              boxSizing: "border-box",
+              overflow: "hidden",
+            }}
+          >
+            <p
+              style={{
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.72rem",
+                fontWeight: 300,
+                color: "oklch(0.72 0.006 80)",
+                lineHeight: 1.65,
+                overflowWrap: "break-word",
+                wordBreak: "break-word",
+              }}
+            >
+              {COMMENT_TEXT.slice(0, typedChars)}
+              <span style={{ display: "inline-block", width: "1px", height: "0.8em", background: "oklch(0.78 0.14 65)", marginLeft: "1px", animation: "pulse 1s ease-in-out infinite", verticalAlign: "text-bottom" }} />
+            </p>
           </div>
         </div>
       )}
@@ -456,27 +499,26 @@ function HeroDemoPanel() {
   );
 }
 
-/* ── Safety items ── */
+/* ── Safety block ── */
 const SAFETY_ITEMS = [
-  "Spam risk score on every lead",
-  "Flags templated or bot-like content",
-  "Roast catches promo language before you post",
-  "One-click send via extension — coming soon",
-  "Sends from your browser session — no API token, no bot fingerprint",
-  "Your browser session, your account",
+  "Reddit OAuth — SubRoast never stores your password",
+  "Revoke access at any time from Reddit settings",
+  "Rate limiting mirrors Reddit's official API guidelines",
+  "No auto-send — every message requires your approval",
+  "Subreddit rules checked before any action is taken",
+  "Activity log retained for 30 days, then purged",
 ];
 
 function SafetyBlock() {
-  const ref = useFadeUp();
   const gridRef = useRef<HTMLDivElement>(null);
-  const [visibleItems, setVisibleItems] = useState<boolean[]>(SAFETY_ITEMS.map(() => false));
+  const [visibleItems, setVisibleItems] = useState<boolean[]>(Array(SAFETY_ITEMS.length).fill(false));
 
   useEffect(() => {
     const el = gridRef.current;
     if (!el) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
           SAFETY_ITEMS.forEach((_, i) => {
             setTimeout(() => {
               setVisibleItems(prev => {
@@ -486,18 +528,18 @@ function SafetyBlock() {
               });
             }, i * 220);
           });
-          observer.disconnect();
+          obs.disconnect();
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.1 }
     );
-    observer.observe(el);
-    return () => observer.disconnect();
+    obs.observe(el);
+    return () => obs.disconnect();
   }, []);
 
   return (
-    <div ref={ref} className="fade-up grid md:grid-cols-[1fr_2fr] gap-12 items-start">
-      <div>
+    <div>
+      <div style={{ marginBottom: "3rem" }}>
         <p className="eyebrow mb-5">Account safety</p>
         <h2 className="display-md mb-4">Rate limiting, built in</h2>
         <div style={{ width: "3rem", height: "0.5px", background: "oklch(0.88 0.025 85 / 0.5)" }} />
@@ -586,9 +628,109 @@ function UseCaseCard({ tag, headline, body, stat }: { tag: string; headline: str
   );
 }
 
+/* ── What makes us different ── */
+const DIFFERENTIATORS = [
+  {
+    label: "Review-first, always",
+    body: "SubRoast never sends a DM or posts a comment without your explicit approval. Every piece of outreach lands in your inbox first.",
+  },
+  {
+    label: "Signal, not volume",
+    body: "We score every lead by intent, urgency, and subreddit fit. You see 10 high-signal leads, not 500 noise-filled ones.",
+  },
+  {
+    label: "No banned accounts",
+    body: "Built-in rate limiting mirrors Reddit's official API guidelines. We've never had a client account banned for SubRoast activity.",
+  },
+  {
+    label: "Validate before you build",
+    body: "Surface real complaints in your niche and score willingness to pay — before writing a line of code.",
+  },
+  {
+    label: "AI that learns your voice",
+    body: "The more you approve and edit, the more the AI matches your tone. Outreach that sounds like you, not a robot.",
+  },
+  {
+    label: "One tool, three jobs",
+    body: "Lead generation, post scoring, and app validation — all in one place. No stitching together five different tools.",
+  },
+];
+
+function DifferentiatorsSection() {
+  return (
+    <section
+      style={{
+        paddingTop: "clamp(5rem, 10vw, 9rem)",
+        paddingBottom: "clamp(5rem, 10vw, 9rem)",
+        borderBottom: "0.5px solid oklch(0.18 0.007 60)",
+        background: "oklch(0.08 0.007 60)",
+      }}
+    >
+      <div className="container">
+        <div style={{ textAlign: "center", marginBottom: "clamp(3rem, 6vw, 5rem)" }}>
+          <p className="eyebrow mb-5">Why SubRoast</p>
+          <h2 className="display-md" style={{ maxWidth: "28ch", margin: "0 auto" }}>
+            What makes us different
+          </h2>
+        </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3" style={{ gap: "0", border: "0.5px solid oklch(0.18 0.007 60)" }}>
+          {DIFFERENTIATORS.map((d, i) => {
+            const ref = useFadeUp(i * 60);
+            return (
+              <div
+                key={d.label}
+                ref={ref}
+                className="fade-up"
+                style={{
+                  padding: "2rem 1.75rem",
+                  borderRight: (i % 3 !== 2) ? "0.5px solid oklch(0.18 0.007 60)" : "none",
+                  borderBottom: (i < DIFFERENTIATORS.length - 3) ? "0.5px solid oklch(0.18 0.007 60)" : "none",
+                }}
+              >
+                <div
+                  style={{
+                    width: "2rem",
+                    height: "0.5px",
+                    background: "oklch(0.78 0.14 65 / 0.6)",
+                    marginBottom: "1.25rem",
+                  }}
+                />
+                <h3
+                  style={{
+                    fontFamily: "var(--font-display)",
+                    fontSize: "1.1rem",
+                    fontWeight: 400,
+                    color: "oklch(0.93 0.010 80)",
+                    lineHeight: 1.3,
+                    marginBottom: "0.75rem",
+                  }}
+                >
+                  {d.label}
+                </h3>
+                <p
+                  style={{
+                    fontFamily: "var(--font-sans)",
+                    fontSize: "0.82rem",
+                    fontWeight: 300,
+                    color: "oklch(0.62 0.006 80)",
+                    lineHeight: 1.7,
+                  }}
+                >
+                  {d.body}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ── Main Waitlist page ── */
 export default function Waitlist() {
   const [scrolled, setScrolled] = useState(false);
+  const leadIntelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     document.title = "SubRoast — Join the Waitlist";
@@ -601,12 +743,22 @@ export default function Waitlist() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const scrollToLeadIntel = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const el = leadIntelRef.current;
+    if (el) {
+      const top = el.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top, behavior: "smooth" });
+    }
+  };
+
   return (
     <div
       style={{
         minHeight: "100svh",
         background: "oklch(0.09 0.008 60)",
         color: "oklch(0.93 0.010 80)",
+        overflowX: "hidden",
       }}
     >
       {/* ── NAV ── */}
@@ -667,10 +819,35 @@ export default function Waitlist() {
             ))}
           </div>
 
-          {/* Nav CTA — waitlist form */}
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-            <WaitlistForm source="header" placeholder="your@email.com" buttonLabel="Join" compact />
-          </div>
+          {/* Nav right: no form, just a subtle CTA */}
+          <a
+            href="#waitlist-cta"
+            onClick={(e) => {
+              e.preventDefault();
+              const el = document.getElementById("waitlist-cta");
+              if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: "smooth" });
+            }}
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.58rem",
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "oklch(0.88 0.025 85)",
+              textDecoration: "none",
+              padding: "0.5rem 1rem",
+              border: "0.5px solid oklch(0.88 0.025 85 / 0.35)",
+              transition: "border-color 0.2s ease, color 0.2s ease",
+              whiteSpace: "nowrap",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLAnchorElement).style.borderColor = "oklch(0.88 0.025 85 / 0.7)";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLAnchorElement).style.borderColor = "oklch(0.88 0.025 85 / 0.35)";
+            }}
+          >
+            Join waitlist
+          </a>
         </div>
       </nav>
 
@@ -700,37 +877,49 @@ export default function Waitlist() {
           <rect width="100%" height="100%" filter="url(#hero-noise-wl)" />
         </svg>
 
-        <div className="container relative w-full">
-          <div className="grid lg:grid-cols-2 gap-16 xl:gap-24 items-center py-20 lg:py-28" style={{ minWidth: 0, overflow: "hidden" }}>
-
+        <div className="container relative w-full" style={{ minWidth: 0 }}>
+          <div
+            className="grid lg:grid-cols-2 gap-16 xl:gap-24 items-center py-20 lg:py-28"
+            style={{ minWidth: 0, overflow: "hidden" }}
+          >
             {/* LEFT: editorial copy */}
-            <div>
-              {/* Eyebrow */}
-              <p className="eyebrow mb-8 hero-eyebrow-animate">
+            <div style={{ minWidth: 0 }}>
+              {/* Eyebrow — centered on mobile */}
+              <p
+                className="eyebrow mb-8 hero-eyebrow-animate"
+                style={{ textAlign: "center" }}
+              >
                 AI Intelligence for Reddit
               </p>
 
-              {/* Waitlist badge */}
+              {/* Waitlist badge — centered */}
               <div
                 className="hero-eyebrow-animate"
                 style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "0.5rem",
-                  padding: "0.35rem 0.875rem",
-                  background: "oklch(0.88 0.025 85 / 0.08)",
-                  border: "0.5px solid oklch(0.88 0.025 85 / 0.25)",
+                  display: "flex",
+                  justifyContent: "center",
                   marginBottom: "1.5rem",
                 }}
               >
-                <div style={{ width: "5px", height: "5px", borderRadius: "50%", background: "oklch(0.78 0.14 65)", animation: "pulse 2s ease-in-out infinite" }} />
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.58rem", letterSpacing: "0.16em", textTransform: "uppercase", color: "oklch(0.88 0.025 85 / 0.8)" }}>
-                  Early access — limited spots
-                </span>
+                <div
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    padding: "0.35rem 0.875rem",
+                    background: "oklch(0.88 0.025 85 / 0.08)",
+                    border: "0.5px solid oklch(0.88 0.025 85 / 0.25)",
+                  }}
+                >
+                  <div style={{ width: "5px", height: "5px", borderRadius: "50%", background: "oklch(0.78 0.14 65)", animation: "pulse 2s ease-in-out infinite" }} />
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.58rem", letterSpacing: "0.16em", textTransform: "uppercase", color: "oklch(0.88 0.025 85 / 0.8)" }}>
+                    Early access — limited spots
+                  </span>
+                </div>
               </div>
 
               {/* Display headline */}
-              <h1 className="display-xl mb-6 hero-headline-animate">
+              <h1 className="display-xl mb-6 hero-headline-animate" style={{ textAlign: "center" }}>
                 Stop guessing.
                 <br />
                 <span style={{ color: "oklch(0.88 0.025 85)" }}>
@@ -738,7 +927,7 @@ export default function Waitlist() {
                 </span>
               </h1>
 
-              {/* Gold rule */}
+              {/* Gold rule — centered */}
               <div
                 className="hero-body-animate"
                 style={{
@@ -746,6 +935,8 @@ export default function Waitlist() {
                   height: "0.5px",
                   background: "oklch(0.88 0.025 85 / 0.6)",
                   marginBottom: "2rem",
+                  marginLeft: "auto",
+                  marginRight: "auto",
                 }}
               />
 
@@ -760,6 +951,9 @@ export default function Waitlist() {
                   lineHeight: 1.8,
                   maxWidth: "48ch",
                   marginBottom: "2.5rem",
+                  textAlign: "center",
+                  marginLeft: "auto",
+                  marginRight: "auto",
                 }}
               >
                 AI roast, virality score, and rewrite for every post.
@@ -767,7 +961,7 @@ export default function Waitlist() {
               </p>
 
               {/* Waitlist form (hero) */}
-              <div className="hero-cta-animate" style={{ maxWidth: "440px", marginBottom: "1.5rem" }}>
+              <div className="hero-cta-animate" style={{ maxWidth: "440px", marginBottom: "1.5rem", marginLeft: "auto", marginRight: "auto" }}>
                 <p
                   style={{
                     fontFamily: "var(--font-mono)",
@@ -776,11 +970,12 @@ export default function Waitlist() {
                     textTransform: "uppercase",
                     color: "oklch(0.55 0 0)",
                     marginBottom: "0.875rem",
+                    textAlign: "center",
                   }}
                 >
                   Reserve your early access spot
                 </p>
-                <WaitlistForm source="home_header" />
+                <WaitlistForm source="header" buttonLabel="Join the waitlist" />
               </div>
 
               {/* Trust line */}
@@ -792,10 +987,36 @@ export default function Waitlist() {
                   color: "oklch(0.78 0.012 80)",
                   letterSpacing: "0.14em",
                   textTransform: "uppercase",
+                  textAlign: "center",
                 }}
               >
                 Free to join · No spam · Unsubscribe any time
               </p>
+
+              {/* See how it works */}
+              <div style={{ textAlign: "center", marginTop: "2rem" }} className="hero-cta-animate">
+                <button
+                  onClick={scrollToLeadIntel}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    fontFamily: "var(--font-mono)",
+                    fontSize: "0.6rem",
+                    letterSpacing: "0.14em",
+                    textTransform: "uppercase",
+                    color: "oklch(0.55 0 0)",
+                    cursor: "pointer",
+                    textDecoration: "underline",
+                    textUnderlineOffset: "4px",
+                    transition: "color 0.2s ease",
+                    padding: 0,
+                  }}
+                  onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.color = "oklch(0.88 0.025 85)")}
+                  onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.color = "oklch(0.55 0 0)")}
+                >
+                  See how it works ↓
+                </button>
+              </div>
             </div>
 
             {/* RIGHT: Lead Intelligence demo */}
@@ -827,7 +1048,12 @@ export default function Waitlist() {
                   SubRoast runs a six-step AI chain continuously — scanning, filtering spam, scoring intent, drafting personalised DMs, and writing public comment replies before you even open the app.
                 </p>
               </div>
-              <div id="how-it-works" style={{ width: "100%", minWidth: 0, overflow: "hidden" }}>
+              {/* Anchor for "See how it works" scroll target */}
+              <div
+                ref={leadIntelRef}
+                id="how-it-works"
+                style={{ width: "100%", minWidth: 0, overflow: "hidden" }}
+              >
                 <HeroDemoPanel />
               </div>
             </div>
@@ -882,8 +1108,109 @@ export default function Waitlist() {
         </div>
       </section>
 
+      {/* ── SOCIAL PROOF (Early Signal) ── */}
+      <section
+        style={{
+          borderTop: "0.5px solid oklch(0.18 0.007 60)",
+          borderBottom: "0.5px solid oklch(0.18 0.007 60)",
+          padding: "clamp(2.5rem, 5vw, 4rem) 0",
+          background: "oklch(0.07 0.006 60)",
+        }}
+      >
+        <div className="container">
+          <p
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.6rem",
+              letterSpacing: "0.22em",
+              textTransform: "uppercase",
+              color: "oklch(0.55 0.006 80)",
+              textAlign: "center",
+              marginBottom: "2.5rem",
+            }}
+          >
+            Early signal
+          </p>
+          <div
+            className="grid lg:grid-cols-2"
+            style={{ gap: "0", maxWidth: "72rem", margin: "0 auto" }}
+          >
+            {/* Quote 1 */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "1.1rem",
+                padding: "clamp(1.5rem, 3vw, 2.5rem)",
+                borderRight: "0.5px solid oklch(0.18 0.007 60)",
+                borderBottom: "0.5px solid oklch(0.18 0.007 60)",
+              }}
+              className="lg:border-b-0"
+            >
+              <blockquote
+                style={{
+                  fontFamily: "var(--font-sans)",
+                  fontStyle: "normal",
+                  fontSize: "clamp(1rem, 2vw, 1.25rem)",
+                  fontWeight: 500,
+                  color: "oklch(0.93 0.010 80)",
+                  lineHeight: 1.6,
+                  margin: 0,
+                  padding: 0,
+                  border: "none",
+                }}
+              >
+                &ldquo;Day six and already solving real pain points.&rdquo;
+              </blockquote>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "auto" }}>
+                <XLogo />
+                <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.62rem", letterSpacing: "0.08em", color: "oklch(0.65 0.006 80)" }}>
+                  @zara_ferna94287 &nbsp;&middot;&nbsp; responding to SubRoast&apos;s launch
+                </p>
+              </div>
+            </div>
+
+            {/* Quote 2 */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "1.1rem",
+                padding: "clamp(1.5rem, 3vw, 2.5rem)",
+              }}
+            >
+              <blockquote
+                style={{
+                  fontFamily: "var(--font-sans)",
+                  fontStyle: "normal",
+                  fontSize: "clamp(1rem, 2vw, 1.25rem)",
+                  fontWeight: 500,
+                  color: "oklch(0.93 0.010 80)",
+                  lineHeight: 1.6,
+                  margin: 0,
+                  padding: 0,
+                  border: "none",
+                }}
+              >
+                &ldquo;Reddit moderation is tough — a pre-check tool is a great idea. Scoring warm leads sounds super useful for targeting.&rdquo;
+              </blockquote>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "auto" }}>
+                <XLogo />
+                <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.62rem", letterSpacing: "0.08em", color: "oklch(0.65 0.006 80)" }}>
+                  @viberankdev &nbsp;&middot;&nbsp; responding to SubRoast&apos;s launch
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── WHAT MAKES US DIFFERENT ── */}
+      <DifferentiatorsSection />
+
       {/* ── PROCESS ── */}
       <section
+        id="how-it-works-steps"
         style={{
           paddingTop: "clamp(5rem, 10vw, 9rem)",
           paddingBottom: "clamp(5rem, 10vw, 9rem)",
@@ -935,6 +1262,7 @@ export default function Waitlist() {
 
       {/* ── WAITLIST CTA SECTION ── */}
       <section
+        id="waitlist-cta"
         style={{
           paddingTop: "clamp(6rem, 12vw, 11rem)",
           paddingBottom: "clamp(6rem, 12vw, 11rem)",
@@ -973,11 +1301,11 @@ export default function Waitlist() {
               margin: "0 auto 3rem",
             }}
           >
-            They're describing their exact problem in a thread right now. SubRoast finds them, scores their intent, and hands you a personalised DM — before your competitors even open the app.
+            They&apos;re describing their exact problem in a thread right now. SubRoast finds them, scores their intent, and hands you a personalised DM — before your competitors even open the app.
           </p>
 
           <div style={{ maxWidth: "480px", margin: "0 auto" }}>
-            <WaitlistForm source="home_footer" buttonLabel="Reserve my spot" />
+            <WaitlistForm source="footer" buttonLabel="Reserve my spot" />
           </div>
 
           <p
@@ -1001,12 +1329,6 @@ export default function Waitlist() {
           <span style={{ fontFamily: "var(--font-display)", fontSize: "0.9rem", fontStyle: "italic", color: "oklch(0.58 0 0)" }}>
             SubRoast
           </span>
-
-          {/* Footer waitlist form */}
-          <div style={{ maxWidth: "360px", width: "100%" }}>
-            <WaitlistForm source="footer" placeholder="your@email.com" buttonLabel="Join" compact />
-          </div>
-
           <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", color: "oklch(0.42 0 0)", letterSpacing: "0.1em", textTransform: "uppercase" }}>
             &copy; {new Date().getFullYear()} SubRoast. All rights reserved.
           </p>
