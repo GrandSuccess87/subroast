@@ -456,7 +456,7 @@ function DashboardLayoutContent({
             </button>
           </div>
         )}
-        <main className="flex-1 p-6">{children}</main>
+        <main className="flex-1 p-6" style={{ overflowX: "hidden", minWidth: 0 }}>{children}</main>
       </SidebarInset>
     </>
   );

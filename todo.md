@@ -794,10 +794,10 @@
 - [x] Add "What's Coming" section to homepage teasing Chrome extension, DM template library, Advanced analytics (3 cards with Q2/Q3 2026 ETAs + Join waitlist CTA link)
 
 ### Favorites + Modal CTA + Padding Fixes (v6.50)
-- [ ] Add isFavorited column to leads table in schema + migration
-- [ ] Add leads.toggleFavorite tRPC procedure
-- [ ] Add heart/star toggle button to lead cards in the UI
-- [ ] Fix roadmap "Join the waitlist" CTA to open WaitlistGateModal instead of redirecting to /waitlist
-- [ ] Push project to GitHub
-- [ ] Fix homepage right-side padding overflow
-- [ ] Fix dashboard campaign count cutoff on mobile/narrow screens
+- [x] Add isFavorited column to leads table in schema + migration (ALTER TABLE)
+- [x] Add outreach.toggleFavorite tRPC procedure (optimistic update)
+- [x] Add heart button to lead cards in the UI (filled/unfilled, amber when favorited)
+- [x] Fix roadmap "Join the waitlist" CTA to open WaitlistGateModal instead of redirecting to /waitlist
+- [x] Push project to GitHub (commit a3f074c)
+- [x] Fix homepage right-side padding overflow (overflowX:hidden on outermost div)
+- [x] Fix dashboard campaign count cutoff — stats row now flexWrap:wrap, main content area has overflowX:hidden

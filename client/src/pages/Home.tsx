@@ -861,6 +861,7 @@ export default function Home() {
         minHeight: "100svh",
         background: "oklch(0.09 0.008 60)",
         color: "oklch(0.93 0.010 80)",
+        overflowX: "hidden",
       }}
     >
       <WaitlistGateModal open={modalOpen} onClose={() => setModalOpen(false)} />

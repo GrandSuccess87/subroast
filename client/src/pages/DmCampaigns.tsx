@@ -1229,7 +1229,7 @@ export default function DmCampaigns() {
 
   return (
     <DashboardLayout>
-      <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+      <div style={{ maxWidth: "800px", margin: "0 auto", width: "100%", boxSizing: "border-box" }}>
         {/* Header */}
         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "2.5rem" }}>
           <div>
@@ -1307,7 +1307,7 @@ export default function DmCampaigns() {
                     )}
                   </div>
                   <p style={{ fontSize: "0.78rem", color: MUTED, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", marginBottom: "0.5rem" }}>{campaign.offering.slice(0, 80)}</p>
-                  <div style={{ display: "flex", alignItems: "center", gap: "1.5rem", fontFamily: FONT_MONO, fontSize: "0.58rem", color: MUTED }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem 1.5rem", fontFamily: FONT_MONO, fontSize: "0.58rem", color: MUTED, flexWrap: "wrap" }}>
                     <span>{campaign.subreddits.length} subreddits</span>
                     <span>{campaign.keywords.length} keywords</span>
                     <span style={{ color: IVORY }}>{campaign.leadsFound} leads found</span>
