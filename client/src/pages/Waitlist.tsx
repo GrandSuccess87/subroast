@@ -925,11 +925,11 @@ export default function Waitlist() {
 
         <div className="container relative w-full" style={{ minWidth: 0 }}>
           <div
-            className="grid lg:grid-cols-2 gap-16 xl:gap-24 items-center py-20 lg:py-28"
+            className="flex flex-col items-center py-20 lg:py-28"
             style={{ minWidth: 0, overflow: "hidden" }}
           >
-            {/* LEFT: editorial copy */}
-            <div style={{ minWidth: 0 }}>
+            {/* CENTERED: editorial copy */}
+            <div style={{ minWidth: 0, width: "100%" }}>
               {/* Eyebrow — centered */}
               <p
                 className="eyebrow mb-4 hero-eyebrow-animate"
@@ -1070,9 +1070,9 @@ export default function Waitlist() {
               </div>
             </div>
 
-            {/* RIGHT: Lead Intelligence demo */}
-            <div className="hero-cta-animate" style={{ minWidth: 0, overflow: "hidden", width: "100%" }}>
-              <div style={{ marginBottom: "1.5rem" }}>
+            {/* LEAD INTELLIGENCE DEMO — full width below copy */}
+            <div className="hero-cta-animate" style={{ minWidth: 0, overflow: "hidden", width: "100%", marginTop: "3.5rem" }}>
+              <div style={{ marginBottom: "1.5rem", textAlign: "center" }}>
                 <p className="eyebrow mb-3" style={{ color: "oklch(0.88 0.025 85 / 0.7)" }}>Lead Intelligence</p>
                 <h2
                   style={{
@@ -1093,7 +1093,8 @@ export default function Waitlist() {
                     fontWeight: 300,
                     color: "oklch(0.55 0.006 80)",
                     lineHeight: 1.7,
-                    maxWidth: "44ch",
+                    maxWidth: "56ch",
+                    margin: "0 auto",
                   }}
                 >
                   SubRoast runs a six-step AI chain continuously — scanning, filtering spam, scoring intent, drafting personalised DMs, and writing public comment replies before you even open the app.
