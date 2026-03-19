@@ -749,3 +749,6 @@
 - [x] Center "AI Intelligence for Reddit" eyebrow on both /waitlist and homepage hero
 - [x] Add social proof (Early Signal) section after Use Cases — two X quotes centered
 - [x] Add "What makes us different" section with 6 differentiator cards in 3-col grid
+
+### Post-Differentiators CTA (v6.36)
+- [x] Add "Join the waitlist" CTA button strip immediately after the What Makes Us Different section on /waitlist

@@ -1208,6 +1208,83 @@ export default function Waitlist() {
       {/* ── WHAT MAKES US DIFFERENT ── */}
       <DifferentiatorsSection />
 
+      {/* ── POST-DIFFERENTIATORS CTA ── */}
+      <section
+        style={{
+          padding: "clamp(3.5rem, 7vw, 5.5rem) 0",
+          borderBottom: "0.5px solid oklch(0.18 0.007 60)",
+          background: "oklch(0.09 0.008 60)",
+          textAlign: "center",
+        }}
+      >
+        <div className="container">
+          <p
+            style={{
+              fontFamily: "var(--font-sans)",
+              fontSize: "clamp(1rem, 2vw, 1.2rem)",
+              fontWeight: 300,
+              color: "oklch(0.72 0.006 80)",
+              lineHeight: 1.7,
+              maxWidth: "44ch",
+              margin: "0 auto 2.5rem",
+            }}
+          >
+            Ready to find your next customer on Reddit?<br />
+            <span style={{ color: "oklch(0.93 0.010 80)", fontWeight: 400 }}>Join the waitlist — it&rsquo;s free.</span>
+          </p>
+          <a
+            href="#waitlist-cta"
+            onClick={(e) => {
+              e.preventDefault();
+              const el = document.getElementById("waitlist-cta");
+              if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: "smooth" });
+            }}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.6rem",
+              padding: "0.875rem 2.5rem",
+              background: "oklch(0.88 0.025 85)",
+              border: "0.5px solid oklch(0.88 0.025 85)",
+              color: "oklch(0.09 0.008 60)",
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.62rem",
+              letterSpacing: "0.16em",
+              textTransform: "uppercase",
+              textDecoration: "none",
+              cursor: "pointer",
+              transition: "opacity 0.2s ease",
+            }}
+            onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.opacity = "0.85")}
+            onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.opacity = "1")}
+          >
+            <div
+              style={{
+                width: "5px",
+                height: "5px",
+                borderRadius: "50%",
+                background: "oklch(0.09 0.008 60)",
+                flexShrink: 0,
+                animation: "pulse 2s ease-in-out infinite",
+              }}
+            />
+            Join the waitlist
+          </a>
+          <p
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.58rem",
+              color: "oklch(0.45 0 0)",
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              marginTop: "1.25rem",
+            }}
+          >
+            Free to join · No spam · Unsubscribe any time
+          </p>
+        </div>
+      </section>
+
       {/* ── PROCESS ── */}
       <section
         id="how-it-works-steps"
