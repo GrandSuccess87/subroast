@@ -801,3 +801,12 @@
 - [x] Push project to GitHub (commit a3f074c)
 - [x] Fix homepage right-side padding overflow (overflowX:hidden on outermost div)
 - [x] Fix dashboard campaign count cutoff — stats row now flexWrap:wrap, main content area has overflowX:hidden
+
+### UX Clarity Pass — v6.51 (UX Specialist Feedback)
+- [x] Rewrite hero headline: pain-point-first ("Tired of spending hours hunting for your next lead in a Reddit thread?")
+- [x] Rewrite hero sub-headline: single sentence anchoring the product + audience
+- [x] Trim hero body paragraph to one sentence (remove multi-idea list)
+- [x] Add compact 3-step "How it works" strip directly below the hero (Find → Score → Outreach)
+- [x] Trim VideoSection (AI Analysis) intro copy to one sentence
+- [x] Trim right-side hero panel sub-copy to one sentence
+- [x] Update Use Cases section headline to one clear idea

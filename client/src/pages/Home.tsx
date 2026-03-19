@@ -561,7 +561,18 @@ function VideoSection() {
             The intelligence report
           </h2>
           <div className="rule-gold mb-6" style={{ width: "3rem" }} />
-
+          <p
+            style={{
+              fontFamily: "var(--font-sans)",
+              fontSize: "1rem",
+              fontWeight: 300,
+              color: "oklch(0.62 0.006 80)",
+              lineHeight: 1.75,
+              maxWidth: "44ch",
+            }}
+          >
+            Paste your draft and get a clarity score, subreddit fit rating, virality score, and a fully rewritten version — in seconds.
+          </p>
         </div>
 
               {/* Intelligence Report Mockup — full-width showcase */}
@@ -960,10 +971,10 @@ export default function Home() {
 
               {/* Display headline */}
               <h1 className="display-xl mb-6 hero-headline-animate">
-                Stop guessing.
+                Tired of spending hours
                 <br />
                 <span style={{ color: "oklch(0.88 0.025 85)" }}>
-                  Start winning.
+                  hunting for leads on Reddit?
                 </span>
               </h1>
 
@@ -991,8 +1002,7 @@ export default function Home() {
                   marginBottom: "3rem",
                 }}
               >
-                AI roast, virality score, and rewrite for every post.
-                Warm leads found, outreach drafted, validation signals surfaced — automatically.
+                SubRoast monitors Reddit for people describing your exact problem, scores their intent, and drafts a personalised outreach message — before you even open the app.
               </p>
 
               {/* CTAs */}
@@ -1072,7 +1082,7 @@ export default function Home() {
                     maxWidth: "44ch",
                   }}
                 >
-                  SubRoast runs a six-step AI chain continuously — scanning, filtering spam, scoring intent, drafting personalised DMs, and writing public comment replies before you even open the app.
+                  A six-step AI chain runs continuously — so warm leads and ready-to-send drafts are waiting for you each time you log in.
                 </p>
               </div>
 
@@ -1094,6 +1104,98 @@ export default function Home() {
         />
       </section>
 
+      {/* ── HOW IT WORKS (3-step strip) ── */}
+      <section
+        style={{
+          borderTop: "0.5px solid oklch(0.18 0.007 60)",
+          borderBottom: "0.5px solid oklch(0.18 0.007 60)",
+          background: "oklch(0.10 0.007 60)",
+          padding: "clamp(3rem, 6vw, 5rem) 0",
+        }}
+      >
+        <div className="container">
+          <p
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.6rem",
+              letterSpacing: "0.22em",
+              textTransform: "uppercase",
+              color: "oklch(0.55 0.006 80)",
+              textAlign: "center",
+              marginBottom: "2.5rem",
+            }}
+          >
+            How it works
+          </p>
+          <div
+            className="grid md:grid-cols-3"
+            style={{ borderTop: "0.5px solid oklch(0.18 0.007 60)", borderLeft: "0.5px solid oklch(0.18 0.007 60)" }}
+          >
+            {[
+              {
+                num: "01",
+                title: "Find",
+                body: "SubRoast scans your target subreddits and surfaces posts from people describing the exact problem you solve.",
+              },
+              {
+                num: "02",
+                title: "Score",
+                body: "Each lead is scored for intent, urgency, and subreddit fit — so you only see the ones worth your time.",
+              },
+              {
+                num: "03",
+                title: "Outreach",
+                body: "A personalised DM draft is ready before you open the app. Review, copy, and send in seconds.",
+              },
+            ].map(({ num, title, body }) => (
+              <div
+                key={num}
+                style={{
+                  padding: "clamp(1.75rem, 3vw, 2.5rem)",
+                  borderRight: "0.5px solid oklch(0.18 0.007 60)",
+                  borderBottom: "0.5px solid oklch(0.18 0.007 60)",
+                }}
+              >
+                <div
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: "0.58rem",
+                    letterSpacing: "0.18em",
+                    color: "oklch(0.88 0.025 85 / 0.5)",
+                    marginBottom: "0.75rem",
+                  }}
+                >
+                  {num}
+                </div>
+                <div
+                  style={{
+                    fontFamily: "var(--font-display)",
+                    fontSize: "1.35rem",
+                    fontWeight: 400,
+                    color: "oklch(0.93 0.010 80)",
+                    lineHeight: 1.2,
+                    marginBottom: "0.875rem",
+                  }}
+                >
+                  {title}
+                </div>
+                <div
+                  style={{
+                    fontFamily: "var(--font-sans)",
+                    fontSize: "0.875rem",
+                    fontWeight: 300,
+                    color: "oklch(0.55 0.006 80)",
+                    lineHeight: 1.75,
+                  }}
+                >
+                  {body}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── DEMO VIDEO ── */}
       <VideoSection />
 
@@ -1109,7 +1211,7 @@ export default function Home() {
         <div className="container">
           <p className="eyebrow mb-5">Use Cases</p>
           <h2 className="display-md mb-12" style={{ maxWidth: "22ch" }}>
-            Three ways founders use SubRoast
+            One tool, three jobs
           </h2>
           <div className="grid lg:grid-cols-3 gap-px" style={{ border: "0.5px solid oklch(0.18 0.007 60)" }}>
             {[
