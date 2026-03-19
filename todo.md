@@ -789,3 +789,6 @@
 ### Pricing + Nav CTA (v6.48)
 - [x] Mark "One-click send via Chrome extension", "DM template library", "Advanced analytics" as Coming Soon in pricing feature lists (dimmed text + amber "Soon" badge)
 - [x] Rename homepage nav "Begin" button to "Login" (still links to getLoginUrl())
+
+### What's Coming Section (v6.49)
+- [x] Add "What's Coming" section to homepage teasing Chrome extension, DM template library, Advanced analytics (3 cards with Q2/Q3 2026 ETAs + Join waitlist CTA link)

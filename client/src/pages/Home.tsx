@@ -1254,6 +1254,9 @@ export default function Home() {
       {/* ── CTA ── */}
       <CtaSection onOpenModal={() => setModalOpen(true)} />
 
+      {/* ── WHAT'S COMING ── */}
+      <HomeWhatsComingSection />
+
       {/* ── PRICING ── */}
       <HomePricingSection />
 
@@ -1893,6 +1896,194 @@ const HOME_PLANS = [
     popular: true,
   },
 ];
+
+/* ── What's Coming ── */
+function HomeWhatsComingSection() {
+  const ref = useFadeUp();
+  const items = [
+    {
+      icon: "⚡",
+      title: "One-click send via Chrome extension",
+      description:
+        "Send personalised DMs directly from Reddit without leaving the page. Spot a lead, click once, done.",
+      eta: "Q2 2026",
+    },
+    {
+      icon: "✉️",
+      title: "DM template library",
+      description:
+        "A curated library of high-converting outreach templates, organised by use case and subreddit type.",
+      eta: "Q2 2026",
+    },
+    {
+      icon: "📊",
+      title: "Advanced analytics",
+      description:
+        "Track reply rates, conversion funnels, and subreddit performance across all your campaigns in one view.",
+      eta: "Q3 2026",
+    },
+  ];
+
+  return (
+    <section
+      style={{
+        paddingTop: "clamp(5rem, 10vw, 9rem)",
+        paddingBottom: "clamp(5rem, 10vw, 9rem)",
+        borderBottom: "0.5px solid oklch(0.18 0.007 60)",
+        background: "oklch(0.065 0.007 60)",
+      }}
+    >
+      <div className="container max-w-5xl">
+        <div ref={ref} className="fade-up">
+          {/* Header */}
+          <div style={{ textAlign: "center", marginBottom: "clamp(2.5rem, 5vw, 4rem)" }}>
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: "1.25rem" }}>
+              <span className="eyebrow">On the roadmap</span>
+            </div>
+            <h2
+              style={{
+                fontFamily: "var(--font-display)",
+                fontSize: "clamp(2rem, 4vw, 3rem)",
+                fontWeight: 300,
+                fontStyle: "italic",
+                color: "oklch(0.93 0.010 80)",
+                lineHeight: 1.15,
+                marginBottom: "1rem",
+              }}
+            >
+              What's coming next.
+            </h2>
+            <p
+              style={{
+                fontFamily: "var(--font-body)",
+                fontSize: "clamp(0.9rem, 1.5vw, 1.05rem)",
+                color: "oklch(0.62 0.006 80)",
+                maxWidth: "36rem",
+                margin: "0 auto",
+                lineHeight: 1.7,
+              }}
+            >
+              We're building fast. Join the waitlist to get early access and shape what we build next.
+            </p>
+          </div>
+
+          {/* Cards */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+              gap: "1.5rem",
+            }}
+          >
+            {items.map((item) => (
+              <div
+                key={item.title}
+                style={{
+                  border: "0.5px solid oklch(0.22 0.007 60)",
+                  padding: "2rem 1.75rem",
+                  background: "oklch(0.09 0.007 60)",
+                  position: "relative",
+                  overflow: "hidden",
+                }}
+              >
+                {/* Coming Soon ribbon */}
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "1rem",
+                    right: "1rem",
+                    fontFamily: "var(--font-mono)",
+                    fontSize: "0.5rem",
+                    letterSpacing: "0.14em",
+                    textTransform: "uppercase",
+                    color: "oklch(0.78 0.14 65)",
+                    border: "0.5px solid oklch(0.78 0.14 65 / 0.4)",
+                    padding: "0.2rem 0.5rem",
+                    background: "oklch(0.78 0.14 65 / 0.06)",
+                  }}
+                >
+                  {item.eta}
+                </div>
+
+                {/* Icon */}
+                <div
+                  style={{
+                    fontSize: "1.6rem",
+                    marginBottom: "1rem",
+                    lineHeight: 1,
+                  }}
+                >
+                  {item.icon}
+                </div>
+
+                {/* Title */}
+                <h3
+                  style={{
+                    fontFamily: "var(--font-display)",
+                    fontSize: "1.05rem",
+                    fontWeight: 400,
+                    fontStyle: "italic",
+                    color: "oklch(0.90 0.010 80)",
+                    marginBottom: "0.6rem",
+                    lineHeight: 1.3,
+                    paddingRight: "3.5rem",
+                  }}
+                >
+                  {item.title}
+                </h3>
+
+                {/* Description */}
+                <p
+                  style={{
+                    fontFamily: "var(--font-body)",
+                    fontSize: "0.82rem",
+                    color: "oklch(0.52 0.006 80)",
+                    lineHeight: 1.65,
+                    margin: 0,
+                  }}
+                >
+                  {item.description}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* Subtle CTA */}
+          <div style={{ textAlign: "center", marginTop: "3rem" }}>
+            <p
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.62rem",
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: "oklch(0.45 0.006 80)",
+                marginBottom: "1rem",
+              }}
+            >
+              Want early access to these features?
+            </p>
+            <a
+              href="/waitlist"
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.62rem",
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                color: "oklch(0.78 0.14 65)",
+                textDecoration: "none",
+                borderBottom: "0.5px solid oklch(0.78 0.14 65 / 0.5)",
+                paddingBottom: "0.1rem",
+                transition: "color 0.2s, border-color 0.2s",
+              }}
+            >
+              Join the waitlist →
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 function HomePricingSection() {
   const ref = useFadeUp();
