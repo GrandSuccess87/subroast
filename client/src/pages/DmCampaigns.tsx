@@ -890,7 +890,10 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
   const chainLeadIdRef = useRef<number | null>(null);
   const [showEdit, setShowEdit] = useState(false);
 
-  const { data: leads = [], isLoading: leadsLoading } = trpc.outreach.getLeads.useQuery({ campaignId: campaign.id });
+  const { data: leads = [], isLoading: leadsLoading } = trpc.outreach.getLeads.useQuery(
+    { campaignId: campaign.id },
+    { refetchInterval: 60_000 }
+  );
   const { data: rateLimits } = trpc.reddit.getRateLimitStatus.useQuery();
 
   const syncLeads = trpc.outreach.syncLeads.useMutation({

@@ -708,3 +708,8 @@
 ### FAQ Accordion + Active Nav Highlight (v6.27)
 - [x] Add FAQ accordion (3-4 Q&As) below pricing cards in HomePricingSection
 - [x] Add IntersectionObserver active nav link highlighting on scroll
+
+### Leads Auto-Refresh + Backfill (v6.28)
+- [x] Add refetchInterval (60s) to getLeads query in CampaignDetail so new leads appear automatically
+- [ ] Push changes to GitHub
+- [ ] Force backfill sync for Campaign 30001 (App Validation Complaint Mining) to catch up from 3/17

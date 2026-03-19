@@ -1,0 +1,35 @@
+{
+  "query": "\nSELECT campaignId, COUNT(*) as total,\n  MIN(FROM_UNIXTIME(discoveredAt/1000)) as earliest,\n  MAX(FROM_UNIXTIME(discoveredAt/1000)) as latest\nFROM outreach_leads\nGROUP BY campaignId;\n\nSELECT id, campaignId, postTitle, status, FROM_UNIXTIME(discoveredAt/1000) as discovered\nFROM outreach_leads\nWHERE campaignId = 1\nORDER BY discoveredAt DESC\nLIMIT 5;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute \nSELECT campaignId, COUNT(*) as total,\n  MIN(FROM_UNIXTIME(discoveredAt/1000)) as earliest,\n  MAX(FROM_UNIXTIME(discoveredAt/1000)) as latest\nFROM outreach_leads\nGROUP BY campaignId;\n\nSELECT id, campaignId, postTitle, status, FROM_UNIXTIME(discoveredAt/1000) as discovered\nFROM outreach_leads\nWHERE campaignId = 1\nORDER BY discoveredAt DESC\nLIMIT 5;\n",
+  "rows": [
+    {
+      "campaignId": "30001",
+      "total": "104",
+      "earliest": "2026-03-17 06:22:38.4520",
+      "latest": "2026-03-17 06:22:46.3200"
+    },
+    {
+      "campaignId": "60001",
+      "total": "75",
+      "earliest": "2026-03-17 06:45:33.2200",
+      "latest": "2026-03-18 03:27:02.5300"
+    },
+    {
+      "campaignId": "1",
+      "total": "198",
+      "earliest": "2026-02-28 05:58:47.2130",
+      "latest": "2026-03-18 03:26:06.1670"
+    }
+  ],
+  "messages": [
+    "id\tcampaignId\tpostTitle\tstatus\tdiscovered",
+    "210248\t1\tWhy do we take advice from people with zero skin in the game? My exhausting hackathon experience.\tnew\t2026-03-18 03:26:06.1670",
+    "210232\t1\tBuilt an AI SEO tool for those who don't feel like blogging\tnew\t2026-03-18 03:26:01.4040",
+    "210227\t1\tbuilding my SaaS, basically no customers, trying to figure out wtf I'm doing wrong\tnew\t2026-03-18 03:26:00.4420",
+    "210150\t1\tB2B Social media posting?\tnew\t2026-03-17 23:25:04.3070",
+    "210124\t1\tThinking of sharing SaaS ideas for people to build it\tnew\t2026-03-17 23:25:01.2270"
+  ],
+  "stdout": "campaignId\ttotal\tearliest\tlatest\n30001\t104\t2026-03-17 06:22:38.4520\t2026-03-17 06:22:46.3200\n60001\t75\t2026-03-17 06:45:33.2200\t2026-03-18 03:27:02.5300\n1\t198\t2026-02-28 05:58:47.2130\t2026-03-18 03:26:06.1670\nid\tcampaignId\tpostTitle\tstatus\tdiscovered\n210248\t1\tWhy do we take advice from people with zero skin in the game? My exhausting hackathon experience.\tnew\t2026-03-18 03:26:06.1670\n210232\t1\tBuilt an AI SEO tool for those who don't feel like blogging\tnew\t2026-03-18 03:26:01.4040\n210227\t1\tbuilding my SaaS, basically no customers, trying to figure out wtf I'm doing wrong\tnew\t2026-03-18 03:26:00.4420\n210150\t1\tB2B Social media posting?\tnew\t2026-03-17 23:25:04.3070\n210124\t1\tThinking of sharing SaaS ideas for people to build it\tnew\t2026-03-17 23:25:01.2270\n",
+  "stderr": "",
+  "execution_time_ms": 75
+}
