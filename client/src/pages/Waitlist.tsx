@@ -937,11 +937,6 @@ export default function Waitlist() {
                 </p>
               </div>
 
-              {/* Live counter */}
-              <div className="hero-eyebrow-animate" style={{ display: "flex", justifyContent: "center", marginBottom: "0.75rem" }}>
-                <WaitlistCounter />
-              </div>
-
               {/* Waitlist badge — centered */}
               <div
                 className="hero-eyebrow-animate"
@@ -1026,6 +1021,11 @@ export default function Waitlist() {
                   Reserve your early access spot
                 </p>
                 <WaitlistForm source="header" buttonLabel="Join the waitlist" />
+              </div>
+
+              {/* Live counter */}
+              <div className="hero-cta-animate" style={{ display: "flex", justifyContent: "center", marginBottom: "0.75rem" }}>
+                <WaitlistCounter />
               </div>
 
               {/* Trust line */}
