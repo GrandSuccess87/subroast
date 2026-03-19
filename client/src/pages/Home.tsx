@@ -1250,7 +1250,7 @@ export default function Home() {
 
       {/* ── FOOTER ── */}
       <footer style={{ borderTop: "0.5px solid oklch(0.18 0.007 60)" }}>
-        {/* Waitlist strip */}
+        {/* Waitlist strip — commented out, re-enable when ready
         <div
           style={{
             borderBottom: "0.5px solid oklch(0.18 0.007 60)",
@@ -1260,7 +1260,6 @@ export default function Home() {
         >
           <div className="container">
             <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
-              {/* Left: copy */}
               <div>
                 <p className="eyebrow mb-4">Not ready to start a trial?</p>
                 <h2
@@ -1288,16 +1287,16 @@ export default function Home() {
                     maxWidth: "38ch",
                   }}
                 >
-                  We&rsquo;ll notify you when early access opens. Free to join, no spam, unsubscribe any time.
+                  We'll notify you when early access opens. Free to join, no spam, unsubscribe any time.
                 </p>
               </div>
-              {/* Right: form */}
               <div>
                 <HomeWaitlistForm source="home_footer" />
               </div>
             </div>
           </div>
         </div>
+        */}
         {/* Bottom bar */}
         <div style={{ padding: "1.75rem 0" }}>
           <div className="container flex flex-col sm:flex-row items-center justify-between gap-4">
