@@ -899,10 +899,37 @@ export default function Home() {
           {/* Nav links */}
           <NavLinks />
 
-          {/* CTA */}
-          <a href={getLoginUrl()} className="btn-luxury">
-            Begin
-          </a>
+          {/* CTAs */}
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            <a
+              href="/waitlist"
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.58rem",
+                fontWeight: 300,
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                color: "oklch(0.55 0 0)",
+                textDecoration: "none",
+                border: "0.5px solid oklch(0.28 0.007 60)",
+                padding: "0.45rem 0.875rem",
+                transition: "color 0.2s ease, border-color 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.color = "oklch(0.88 0.025 85)";
+                (e.currentTarget as HTMLAnchorElement).style.borderColor = "oklch(0.88 0.025 85 / 0.4)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.color = "oklch(0.55 0 0)";
+                (e.currentTarget as HTMLAnchorElement).style.borderColor = "oklch(0.28 0.007 60)";
+              }}
+            >
+              Join Waitlist
+            </a>
+            <a href={getLoginUrl()} className="btn-luxury">
+              Begin
+            </a>
+          </div>
         </div>
       </nav>
 

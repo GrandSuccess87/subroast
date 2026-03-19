@@ -761,3 +761,7 @@
 
 ### Section Swap (v6.38)
 - [x] Swap "What makes us different" and "How it works" section order on /waitlist
+
+### Eyebrow centering + homepage nav (v6.41)
+- [x] Fix "AI Intelligence for Reddit" eyebrow truly centered on /waitlist (wrapped in textAlign:center div since .eyebrow is inline-block)
+- [x] Add subtle "Join Waitlist" secondary link to homepage nav (muted border button, sits left of Begin CTA)

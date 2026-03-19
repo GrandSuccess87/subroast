@@ -931,12 +931,11 @@ export default function Waitlist() {
             {/* CENTERED: editorial copy */}
             <div style={{ minWidth: 0, width: "100%" }}>
               {/* Eyebrow — centered */}
-              <p
-                className="eyebrow mb-4 hero-eyebrow-animate"
-                style={{ textAlign: "center" }}
-              >
-                AI Intelligence for Reddit
-              </p>
+              <div style={{ textAlign: "center" }} className="hero-eyebrow-animate">
+                <p className="eyebrow mb-4">
+                  AI Intelligence for Reddit
+                </p>
+              </div>
 
               {/* Live counter */}
               <div className="hero-eyebrow-animate" style={{ display: "flex", justifyContent: "center", marginBottom: "0.75rem" }}>
