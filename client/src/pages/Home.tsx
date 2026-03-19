@@ -2,6 +2,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 import { DashboardLayoutSkeleton } from "@/components/DashboardLayoutSkeleton";
 import { ArchitecturalIllustration } from "@/components/ArchitecturalIllustration";
+import WaitlistGateModal from "@/components/WaitlistGateModal";
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
@@ -768,6 +769,7 @@ export default function Home() {
   const [, setLocation] = useLocation();
   const heroRef = useRef<HTMLDivElement>(null);
   const [scrolled, setScrolled] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   // Set SEO-optimised page title (30–60 chars)
   useEffect(() => {
@@ -861,6 +863,7 @@ export default function Home() {
         color: "oklch(0.93 0.010 80)",
       }}
     >
+      <WaitlistGateModal open={modalOpen} onClose={() => setModalOpen(false)} />
       {/* ── NAV ── */}
       <nav
         className="sticky top-0 z-50"
@@ -1027,9 +1030,13 @@ export default function Home() {
                     zIndex: 0,
                   }}
                 />
-                <a href={getLoginUrl()} className="btn-luxury-primary" style={{ position: "relative", zIndex: 1, textAlign: "center", justifyContent: "center" }}>
-                  Begin free trial
-                </a>
+                <button
+                  onClick={() => setModalOpen(true)}
+                  className="btn-luxury-primary"
+                  style={{ position: "relative", zIndex: 1, textAlign: "center", justifyContent: "center", border: "none", cursor: "pointer" }}
+                >
+                  Join the waitlist
+                </button>
                 <a
                   href="#lead-intelligence"
                   className="btn-luxury"
@@ -1270,7 +1277,7 @@ export default function Home() {
       </section>
 
       {/* ── CTA ── */}
-      <CtaSection />
+      <CtaSection onOpenModal={() => setModalOpen(true)} />
 
       {/* ── PRICING ── */}
       <HomePricingSection />
@@ -1802,7 +1809,7 @@ function SafetyBlock() {
 }
 
 /* ── CTA section (extracted to avoid hook-in-loop) ── */
-function CtaSection() {
+function CtaSection({ onOpenModal }: { onOpenModal: () => void }) {
   const ref = useFadeUp();
   return (
     <section
@@ -1850,9 +1857,13 @@ function CtaSection() {
           They're describing their exact problem in a thread right now. SubRoast finds them, scores their intent, and hands you a personalised DM — before your competitors even open the app.
         </p>
 
-        <a href={getLoginUrl()} className="btn-luxury-primary" style={{ marginBottom: "0" }}>
-          Begin free trial — seven days
-        </a>
+        <button
+          onClick={onOpenModal}
+          className="btn-luxury-primary"
+          style={{ marginBottom: "0", border: "none", cursor: "pointer" }}
+        >
+          Join the waitlist
+        </button>
         <p
           style={{
             fontFamily: "var(--font-mono)",

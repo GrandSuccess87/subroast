@@ -259,7 +259,7 @@ export const waitlistSignups = mysqlTable("waitlist_signups", {
   id: int("id").autoincrement().primaryKey(),
   email: varchar("email", { length: 320 }).notNull(),
   name: varchar("name", { length: 200 }),
-  source: mysqlEnum("source", ["header", "footer", "home_header", "home_footer"]).notNull(),
+  source: mysqlEnum("source", ["header", "footer", "home_header", "home_footer", "home_modal"]).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 export type WaitlistSignup = typeof waitlistSignups.$inferSelect;

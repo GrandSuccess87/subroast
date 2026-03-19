@@ -599,7 +599,7 @@ export const appRouter = router({
       .input(z.object({
         email: z.string().email(),
         name: z.string().max(200).optional(),
-        source: z.enum(["header", "footer", "home_header", "home_footer"]),
+        source: z.enum(["header", "footer", "home_header", "home_footer", "home_modal"]),
       }))
       .mutation(async ({ input }) => {
         const db = await getDb();

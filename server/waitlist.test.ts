@@ -75,7 +75,7 @@ describe("waitlist.join", () => {
     const ctx = createPublicContext();
     const caller = appRouter.createCaller(ctx);
 
-    const sources = ["header", "footer", "home_header", "home_footer"] as const;
+    const sources = ["header", "footer", "home_header", "home_footer", "home_modal"] as const;
 
     for (const source of sources) {
       const result = await caller.waitlist.join({

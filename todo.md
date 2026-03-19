@@ -765,3 +765,18 @@
 ### Eyebrow centering + homepage nav (v6.41)
 - [x] Fix "AI Intelligence for Reddit" eyebrow truly centered on /waitlist (wrapped in textAlign:center div since .eyebrow is inline-block)
 - [x] Add subtle "Join Waitlist" secondary link to homepage nav (muted border button, sits left of Begin CTA)
+
+### Waitlist Gate Modal + Nav Button Fix (v6.46)
+- [ ] Fix Join Waitlist nav button on /waitlist — debug why it never becomes visible
+- [ ] Build WaitlistGateModal: email form → animated "approved" state → "Start your 7-day trial" CTA
+- [ ] Replace all homepage primary CTAs (hero, pricing, footer) with WaitlistGateModal trigger
+- [ ] Keep 7-day trial link inside the modal approved state only (not exposed directly)
+
+### Waitlist Gate Modal + Nav Button Fix (v6.46)
+- [x] Fix Join Waitlist nav button on /waitlist — switched to IntersectionObserver on sentinel div; fixed CSS animation fill-mode conflict by using wrapper div for opacity
+- [x] Add home_modal source to waitlist_signups enum (DB + schema + router + tests)
+- [x] Build WaitlistGateModal component: name+email form → submitting state → approved state with confetti + "Begin free trial" CTA
+- [x] Replace homepage hero primary CTA with WaitlistGateModal trigger ("Join the waitlist")
+- [x] Replace homepage CtaSection primary CTA with WaitlistGateModal trigger ("Join the waitlist")
+- [x] Pricing section kept visible (users can still see plans, but trial entry is gated through modal)
+- [x] All 104 tests passing

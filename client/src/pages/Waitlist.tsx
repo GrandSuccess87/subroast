@@ -778,7 +778,7 @@ export default function Waitlist() {
   const [scrolled, setScrolled] = useState(false);
   const [pastHero, setPastHero] = useState(false);
   const leadIntelRef = useRef<HTMLDivElement>(null);
-  const heroFormRef = useRef<HTMLDivElement>(null);
+  const heroSentinelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     document.title = "SubRoast — Join the Waitlist";
@@ -786,15 +786,22 @@ export default function Waitlist() {
   }, []);
 
   useEffect(() => {
-    const onScroll = () => {
-      const y = window.scrollY;
-      setScrolled(y > 40);
-      // Show nav CTA once user has scrolled past ~80% of the viewport height
-      // (i.e. the hero form is no longer visible)
-      setPastHero(y > window.innerHeight * 0.75);
-    };
+    const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Use IntersectionObserver on a sentinel placed right after the hero form
+  // When sentinel leaves the viewport (scrolled past), show the nav CTA
+  useEffect(() => {
+    const sentinel = heroSentinelRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setPastHero(!entry.isIntersecting),
+      { threshold: 0, rootMargin: "0px" }
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
   }, []);
 
   const scrollToLeadIntel = (e: React.MouseEvent) => {
@@ -1024,7 +1031,7 @@ export default function Waitlist() {
               </p>
 
               {/* Waitlist form (hero) */}
-              <div ref={heroFormRef} className="hero-cta-animate" style={{ maxWidth: "440px", marginBottom: "1.5rem", marginLeft: "auto", marginRight: "auto" }}>
+              <div className="hero-cta-animate" style={{ maxWidth: "440px", marginBottom: "1.5rem", marginLeft: "auto", marginRight: "auto" }}>
                 <p
                   style={{
                     fontFamily: "var(--font-mono)",
@@ -1060,6 +1067,9 @@ export default function Waitlist() {
               >
                 Free to join · No spam · Unsubscribe any time
               </p>
+
+              {/* Sentinel: when this leaves viewport, nav CTA fades in */}
+              <div ref={heroSentinelRef} style={{ height: "1px", marginTop: "0.5rem" }} />
 
               {/* See how it works */}
               <div style={{ textAlign: "center", marginTop: "2rem" }} className="hero-cta-animate">
