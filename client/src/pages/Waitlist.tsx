@@ -776,7 +776,9 @@ function WaitlistCounter() {
 /* ── Main Waitlist page ── */
 export default function Waitlist() {
   const [scrolled, setScrolled] = useState(false);
+  const [pastHero, setPastHero] = useState(false);
   const leadIntelRef = useRef<HTMLDivElement>(null);
+  const heroFormRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     document.title = "SubRoast — Join the Waitlist";
@@ -784,7 +786,13 @@ export default function Waitlist() {
   }, []);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 40);
+      if (heroFormRef.current) {
+        const formBottom = heroFormRef.current.getBoundingClientRect().bottom;
+        setPastHero(formBottom < 0);
+      }
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -865,7 +873,7 @@ export default function Waitlist() {
             ))}
           </div>
 
-          {/* Nav right: no form, just a subtle CTA */}
+          {/* Nav right: fade in after scrolling past hero form */}
           <a
             href="#waitlist-cta"
             onClick={(e) => {
@@ -882,8 +890,10 @@ export default function Waitlist() {
               textDecoration: "none",
               padding: "0.5rem 1rem",
               border: "0.5px solid oklch(0.88 0.025 85 / 0.35)",
-              transition: "border-color 0.2s ease, color 0.2s ease",
               whiteSpace: "nowrap",
+              opacity: pastHero ? 1 : 0,
+              pointerEvents: pastHero ? "auto" : "none",
+              transition: "opacity 0.4s ease, border-color 0.2s ease",
             }}
             onMouseEnter={(e) => {
               (e.currentTarget as HTMLAnchorElement).style.borderColor = "oklch(0.88 0.025 85 / 0.7)";
@@ -1006,7 +1016,7 @@ export default function Waitlist() {
               </p>
 
               {/* Waitlist form (hero) */}
-              <div className="hero-cta-animate" style={{ maxWidth: "440px", marginBottom: "1.5rem", marginLeft: "auto", marginRight: "auto" }}>
+              <div ref={heroFormRef} className="hero-cta-animate" style={{ maxWidth: "440px", marginBottom: "1.5rem", marginLeft: "auto", marginRight: "auto" }}>
                 <p
                   style={{
                     fontFamily: "var(--font-mono)",
