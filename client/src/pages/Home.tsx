@@ -1017,7 +1017,7 @@ export default function Home() {
                   }}
                 />
                 <a
-                  href="/onboarding"
+                  href={getLoginUrl("/onboarding")}
                   className="btn-luxury-primary"
                   style={{ position: "relative", zIndex: 1, textAlign: "center", justifyContent: "center", textDecoration: "none", display: "inline-flex", alignItems: "center" }}
                 >
@@ -1938,7 +1938,7 @@ function CtaSection({ onOpenModal }: { onOpenModal: () => void }) {
         </p>
 
         <a
-          href="/onboarding"
+          href={getLoginUrl("/onboarding")}
           className="btn-luxury-primary"
           style={{ marginBottom: "0", textDecoration: "none", display: "inline-flex", alignItems: "center" }}
         >
@@ -2165,7 +2165,7 @@ function HomeWhatsComingSection({ onOpenModal }: { onOpenModal: () => void }) {
               Want early access to these features?
             </p>
             <a
-              href="/onboarding"
+              href={getLoginUrl("/onboarding")}
               style={{
                 fontFamily: "var(--font-mono)",
                 fontSize: "0.62rem",

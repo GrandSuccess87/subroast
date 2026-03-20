@@ -845,3 +845,8 @@
 - [x] Remove "Join the waitlist →" CTA from homepage
 - [x] Increase "How it works" section heading/label font size by ~8px
 - [x] Increase "Early signal" section heading/label font size by ~8px
+
+### Auth Flow Fix v6.62
+- [x] Update getLoginUrl to accept a returnPath parameter
+- [x] Homepage CTAs call getLoginUrl("/onboarding") so OAuth redirects back to /onboarding after signup
+- [x] OAuth callback: new users (onboardingCompletedAt null) → /onboarding; returning users → /dashboard or returnPath

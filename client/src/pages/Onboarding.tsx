@@ -478,7 +478,7 @@ export default function Onboarding() {
     if (!qualStatus) return;
     // Already completed → go to dashboard
     if (qualStatus.completed) {
-      navigate("/");
+      navigate("/dashboard");
       return;
     }
     // Resume from last saved step
@@ -498,7 +498,7 @@ export default function Onboarding() {
 
   const saveStep = trpc.onboarding.saveStep.useMutation();
   const complete = trpc.onboarding.complete.useMutation({
-    onSuccess: () => navigate("/"),
+    onSuccess: () => navigate("/dashboard"),
   });
 
   const handleNext = async (nextStep: number, payload?: Parameters<typeof saveStep.mutate>[0]) => {
@@ -537,7 +537,7 @@ export default function Onboarding() {
   }
 
   if (!user) {
-    window.location.href = getLoginUrl();
+    window.location.href = getLoginUrl("/onboarding");
     return null;
   }
 

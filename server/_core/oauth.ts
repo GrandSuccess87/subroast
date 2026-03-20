@@ -21,6 +21,22 @@ export function registerOAuthRoutes(app: Express) {
     }
 
     try {
+      // Parse origin and returnPath from state (JSON encoded by frontend)
+      let redirectOrigin = `${req.protocol}://${req.get("host")}`;
+      let returnPath = "/";
+      try {
+        const decoded = JSON.parse(Buffer.from(state, "base64").toString("utf-8"));
+        if (decoded.origin) redirectOrigin = decoded.origin;
+        if (decoded.returnPath) returnPath = decoded.returnPath;
+      } catch {
+        // Legacy state format (plain base64 of redirectUri) — fall back gracefully
+        try {
+          const legacyUri = Buffer.from(state, "base64").toString("utf-8");
+          const parsed = new URL(legacyUri);
+          redirectOrigin = parsed.origin;
+        } catch { /* ignore */ }
+      }
+
       const tokenResponse = await sdk.exchangeCodeForToken(code, state);
       const userInfo = await sdk.getUserInfo(tokenResponse.accessToken);
 
@@ -58,7 +74,23 @@ export function registerOAuthRoutes(app: Express) {
       const cookieOptions = getSessionCookieOptions(req);
       res.cookie(COOKIE_NAME, sessionToken, { ...cookieOptions, maxAge: ONE_YEAR_MS });
 
-      res.redirect(302, "/");
+      // New users always go to /onboarding; returning users go to returnPath or /dashboard
+      let finalPath: string;
+      if (isNewUser) {
+        finalPath = "/onboarding";
+      } else {
+        // Check if returning user has completed onboarding
+        const freshUser = await db.getUserByOpenId(userInfo.openId);
+        const onboardingDone = !!(freshUser as Record<string, unknown>)?.onboardingCompletedAt;
+        if (!onboardingDone) {
+          finalPath = "/onboarding";
+        } else {
+          // Honour the returnPath from state (e.g. /dashboard) but only allow same-origin paths
+          finalPath = returnPath.startsWith("/") ? returnPath : "/dashboard";
+        }
+      }
+
+      res.redirect(302, `${redirectOrigin}${finalPath}`);
     } catch (error) {
       console.error("[OAuth] Callback failed", error);
       res.status(500).json({ error: "OAuth callback failed" });
