@@ -146,7 +146,7 @@ export const onboardingRouter = router({
         painPoints: z.array(z.string()).optional(),
         painPointsOther: z.string().max(512).optional(),
         successDefinition: z.string().max(2000).optional(),
-        willingnessToPay: z.enum(["yes", "maybe", "no"]).optional(),
+        willingnessToPay: z.enum(["under_20", "20_39", "40_59", "60_plus", "need_results", "yes", "maybe", "no"]).optional(),
         additionalNotes: z.string().max(2000).optional(),
       })
     )
@@ -182,7 +182,7 @@ export const onboardingRouter = router({
         painPoints: z.array(z.string()),
         painPointsOther: z.string().max(512).optional(),
         successDefinition: z.string().min(1).max(2000),
-        willingnessToPay: z.enum(["yes", "maybe", "no"]),
+        willingnessToPay: z.enum(["under_20", "20_39", "40_59", "60_plus", "need_results", "yes", "maybe", "no"]),
         additionalNotes: z.string().max(2000).optional(),
       })
     )

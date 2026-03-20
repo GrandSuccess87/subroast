@@ -860,3 +860,7 @@
 - [x] Hide "Get Early Access →" CTA in What's Coming section
 - [x] Update hero headline to "Find high-intent Reddit posts and turn them into customers."
 - [x] Update hero sub-headline to "We scan Reddit for buying signals, filter out noise, and draft replies and outreach so you can turn interest into customers faster."
+
+### WTP + Hero Fix v6.65
+- [x] Update onboarding WTP question framing and tiered price anchors
+- [x] Fix hero "See how it works" button clipping above the fold

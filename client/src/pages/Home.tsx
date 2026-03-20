@@ -959,7 +959,7 @@ export default function Home() {
         </svg>
 
         <div className="container relative w-full">
-          <div className="grid lg:grid-cols-2 gap-16 xl:gap-24 items-center py-20 lg:py-28" style={{ minWidth: 0, overflow: "hidden" }}>
+          <div className="grid lg:grid-cols-2 gap-16 xl:gap-24 items-center py-12 lg:py-16" style={{ minWidth: 0, overflow: "hidden" }}>
 
             {/* LEFT: editorial copy */}
             <div ref={heroRef}>

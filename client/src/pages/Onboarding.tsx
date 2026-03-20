@@ -344,6 +344,8 @@ function Step4({
 }
 
 // ─── Step 5: Willingness to pay + notes ──────────────────────────────────────
+type WtpValue = "under_20" | "20_39" | "40_59" | "60_plus" | "need_results";
+
 function Step5({
   wtp,
   notes,
@@ -353,18 +355,20 @@ function Step5({
   onBack,
   isLoading,
 }: {
-  wtp: "yes" | "maybe" | "no" | "";
+  wtp: WtpValue | "";
   notes: string;
-  onWtpChange: (v: "yes" | "maybe" | "no") => void;
+  onWtpChange: (v: WtpValue) => void;
   onNotesChange: (v: string) => void;
   onSubmit: () => void;
   onBack: () => void;
   isLoading: boolean;
 }) {
-  const WTP_OPTIONS: { value: "yes" | "maybe" | "no"; label: string }[] = [
-    { value: "yes", label: "Yes" },
-    { value: "maybe", label: "Maybe" },
-    { value: "no", label: "No" },
+  const WTP_OPTIONS: { value: WtpValue; label: string }[] = [
+    { value: "under_20", label: "Less than $20/mo" },
+    { value: "20_39", label: "$20–$39/mo" },
+    { value: "40_59", label: "$40–$59/mo" },
+    { value: "60_plus", label: "$60+/mo" },
+    { value: "need_results", label: "I'd pay more if it consistently worked" },
   ];
 
   return (
@@ -374,26 +378,27 @@ function Step5({
         One last question.
       </h2>
       <p style={{ fontFamily: FONT_SANS, fontSize: "0.875rem", color: MUTED, lineHeight: 1.7, marginBottom: "1.75rem" }}>
-        If SubRoast consistently helped you get leads or replies, would you pay ~$39/month for it?
+        If SubRoast consistently helped you find high-intent leads that could turn into customers, what would you pay for it?
       </p>
 
-      <div style={{ display: "flex", gap: "0.75rem", marginBottom: "1.5rem" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginBottom: "1.5rem" }}>
         {WTP_OPTIONS.map((opt) => (
           <button
             key={opt.value}
             onClick={() => onWtpChange(opt.value)}
             style={{
-              flex: 1,
-              padding: "0.85rem 1rem",
+              width: "100%",
+              padding: "0.85rem 1.25rem",
               background: wtp === opt.value ? SURFACE_RAISED : SURFACE,
               border: `0.5px solid ${wtp === opt.value ? IVORY : BORDER}`,
               color: wtp === opt.value ? IVORY : FOREGROUND,
               fontFamily: FONT_MONO,
               fontSize: "0.7rem",
-              letterSpacing: "0.12em",
+              letterSpacing: "0.1em",
               textTransform: "uppercase",
               cursor: "pointer",
               transition: "border-color 0.2s, color 0.2s",
+              textAlign: "left",
             }}
           >
             {opt.label}
@@ -466,7 +471,7 @@ export default function Onboarding() {
   const [painPoints, setPainPoints] = useState<string[]>([]);
   const [painPointsOther, setPainPointsOther] = useState("");
   const [successDefinition, setSuccessDefinition] = useState("");
-  const [willingnessToPay, setWillingnessToPay] = useState<"yes" | "maybe" | "no" | "">("");
+  const [willingnessToPay, setWillingnessToPay] = useState<WtpValue | "">("");
   const [additionalNotes, setAdditionalNotes] = useState("");
 
   // Load existing progress
@@ -491,7 +496,7 @@ export default function Onboarding() {
       if (d.painPoints?.length) setPainPoints(d.painPoints);
       if (d.painPointsOther) setPainPointsOther(d.painPointsOther);
       if (d.successDefinition) setSuccessDefinition(d.successDefinition);
-      if (d.willingnessToPay) setWillingnessToPay(d.willingnessToPay);
+      if (d.willingnessToPay) setWillingnessToPay(d.willingnessToPay as WtpValue);
       if (d.additionalNotes) setAdditionalNotes(d.additionalNotes);
     }
   }, [qualStatus, navigate]);

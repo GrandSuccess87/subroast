@@ -34,7 +34,7 @@ export const users = mysqlTable("users", {
   painPoints: text("painPoints"),                                  // JSON array of selected pain point keys
   painPointsOther: varchar("painPointsOther", { length: 512 }),   // free text for "other" pain point
   successDefinition: text("successDefinition"),                   // required short text
-  willingnessToPay: mysqlEnum("willingnessToPay", ["yes", "maybe", "no"]), // Step 5
+  willingnessToPay: mysqlEnum("willingnessToPay", ["under_20", "20_39", "40_59", "60_plus", "need_results", "yes", "maybe", "no"]), // Step 5 — tiered price anchors
   additionalNotes: text("additionalNotes"),                       // optional
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),

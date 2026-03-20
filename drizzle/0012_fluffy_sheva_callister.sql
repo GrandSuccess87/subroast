@@ -1,0 +1,1 @@
+ALTER TABLE `users` MODIFY COLUMN `willingnessToPay` enum('under_20','20_39','40_59','60_plus','need_results','yes','maybe','no');
