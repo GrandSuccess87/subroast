@@ -838,3 +838,10 @@
 - [x] Gate dashboard: redirect to /onboarding if onboarding_completed_at is null
 - [x] Resume onboarding on re-login if incomplete (save step progress)
 - [x] After completion → redirect to dashboard with early access banner
+
+### UX Fixes v6.61
+- [x] Fix onboarding logo not rendering (use CDN URL instead of /favicon.ico)
+- [x] Update all homepage CTAs to redirect to /onboarding instead of login/waitlist
+- [x] Remove "Join the waitlist →" CTA from homepage
+- [x] Increase "How it works" section heading/label font size by ~8px
+- [x] Increase "Early signal" section heading/label font size by ~8px

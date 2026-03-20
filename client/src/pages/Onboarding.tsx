@@ -563,7 +563,7 @@ export default function Onboarding() {
       >
         {/* Logo */}
         <div style={{ marginBottom: "2rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-          <img src="/favicon.ico" alt="SubRoast" style={{ width: "20px", height: "20px", objectFit: "contain" }} />
+          <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663208942813/D6eMQgvSZZr9tsyS9zVhzn/subroast-logo-debossed_490a86ef.png" alt="SubRoast" style={{ width: "28px", height: "28px", objectFit: "contain" }} />
           <span style={{ fontFamily: FONT_MONO, fontSize: "0.65rem", letterSpacing: "0.22em", textTransform: "uppercase", color: IVORY }}>SubRoast</span>
         </div>
 

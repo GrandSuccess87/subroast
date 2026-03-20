@@ -1016,13 +1016,13 @@ export default function Home() {
                     zIndex: 0,
                   }}
                 />
-                <button
-                  onClick={() => setModalOpen(true)}
+                <a
+                  href="/onboarding"
                   className="btn-luxury-primary"
-                  style={{ position: "relative", zIndex: 1, textAlign: "center", justifyContent: "center", border: "none", cursor: "pointer" }}
+                  style={{ position: "relative", zIndex: 1, textAlign: "center", justifyContent: "center", textDecoration: "none", display: "inline-flex", alignItems: "center" }}
                 >
                   Get Early Access
-                </button>
+                </a>
                 <a
                   href="#lead-intelligence"
                   className="btn-luxury"
@@ -1116,7 +1116,7 @@ export default function Home() {
           <p
             style={{
               fontFamily: "var(--font-mono)",
-              fontSize: "0.6rem",
+              fontSize: "0.75rem",
               letterSpacing: "0.22em",
               textTransform: "uppercase",
               color: "oklch(0.55 0.006 80)",
@@ -1253,7 +1253,7 @@ export default function Home() {
           <p
             style={{
               fontFamily: "var(--font-mono)",
-              fontSize: "0.6rem",
+              fontSize: "0.75rem",
               letterSpacing: "0.22em",
               textTransform: "uppercase",
               color: "oklch(0.55 0.006 80)",
@@ -1937,13 +1937,13 @@ function CtaSection({ onOpenModal }: { onOpenModal: () => void }) {
           They're describing their exact problem in a thread right now. SubRoast finds them, scores their intent, and hands you a personalised DM — before your competitors even open the app.
         </p>
 
-        <button
-          onClick={onOpenModal}
+        <a
+          href="/onboarding"
           className="btn-luxury-primary"
-          style={{ marginBottom: "0", border: "none", cursor: "pointer" }}
+          style={{ marginBottom: "0", textDecoration: "none", display: "inline-flex", alignItems: "center" }}
         >
           Get Early Access
-        </button>
+        </a>
         <p
           style={{
             fontFamily: "var(--font-mono)",
@@ -2065,7 +2065,7 @@ function HomeWhatsComingSection({ onOpenModal }: { onOpenModal: () => void }) {
                 lineHeight: 1.7,
               }}
             >
-              We're building fast. Join the waitlist to get early access and shape what we build next.
+              We're building fast. Get early access and shape what we build next.
             </p>
           </div>
 
@@ -2164,8 +2164,8 @@ function HomeWhatsComingSection({ onOpenModal }: { onOpenModal: () => void }) {
             >
               Want early access to these features?
             </p>
-            <button
-              onClick={onOpenModal}
+            <a
+              href="/onboarding"
               style={{
                 fontFamily: "var(--font-mono)",
                 fontSize: "0.62rem",
@@ -2180,10 +2180,12 @@ function HomeWhatsComingSection({ onOpenModal }: { onOpenModal: () => void }) {
                 paddingRight: 0,
                 cursor: "pointer",
                 transition: "color 0.2s, border-color 0.2s",
+                textDecoration: "none",
+                display: "inline-block",
               }}
             >
-              Join the waitlist →
-            </button>
+              Get Early Access →
+            </a>
           </div>
         </div>
       </div>
