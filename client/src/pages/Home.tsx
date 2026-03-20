@@ -970,10 +970,10 @@ export default function Home() {
 
               {/* Display headline */}
               <h1 className="display-xl mb-6 hero-headline-animate">
-                Tired of spending hours
+                Find high-intent Reddit posts
                 <br />
                 <span style={{ color: "oklch(0.88 0.025 85)" }}>
-                  hunting for leads on Reddit?
+                  and turn them into customers.
                 </span>
               </h1>
 
@@ -1001,7 +1001,7 @@ export default function Home() {
                   marginBottom: "3rem",
                 }}
               >
-                SubRoast monitors Reddit for people describing your exact problem, scores their intent, and drafts a personalised outreach message — before you even open the app.
+                We scan Reddit for buying signals, filter out noise, and draft replies and outreach so you can turn interest into customers faster.
               </p>
 
               {/* CTAs */}
@@ -2165,40 +2165,14 @@ function HomeWhatsComingSection({ onOpenModal }: { onOpenModal: () => void }) {
 
           {/* Subtle CTA */}
           <div style={{ textAlign: "center", marginTop: "3rem" }}>
-            <p
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "0.62rem",
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                color: "oklch(0.45 0.006 80)",
-                marginBottom: "1rem",
-              }}
-            >
+            {/* CTA hidden during validation mode — re-enable when ready
+            <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "oklch(0.45 0.006 80)", marginBottom: "1rem" }}>
               Want early access to these features?
             </p>
-            <a
-              href={getLoginUrl("/onboarding")}
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "0.62rem",
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                color: "oklch(0.78 0.14 65)",
-                background: "transparent",
-                border: "none",
-                borderBottom: "0.5px solid oklch(0.78 0.14 65 / 0.5)",
-                paddingBottom: "0.1rem",
-                paddingLeft: 0,
-                paddingRight: 0,
-                cursor: "pointer",
-                transition: "color 0.2s, border-color 0.2s",
-                textDecoration: "none",
-                display: "inline-block",
-              }}
-            >
+            <a href={getLoginUrl("/onboarding")} style={{ fontFamily: "var(--font-mono)", fontSize: "0.62rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "oklch(0.78 0.14 65)", background: "transparent", border: "none", borderBottom: "0.5px solid oklch(0.78 0.14 65 / 0.5)", paddingBottom: "0.1rem", paddingLeft: 0, paddingRight: 0, cursor: "pointer", transition: "color 0.2s, border-color 0.2s", textDecoration: "none", display: "inline-block" }}>
               Get Early Access →
             </a>
+            */}
           </div>
         </div>
       </div>

@@ -855,3 +855,8 @@
 - [x] Hide HomePricingSection on homepage, replace with "Free during beta" badge block
 - [x] Hide /pricing nav link from header and sidebar
 - [x] Update Pricing page to show beta message instead of plan cards
+
+### Copy Pass v6.64
+- [x] Hide "Get Early Access →" CTA in What's Coming section
+- [x] Update hero headline to "Find high-intent Reddit posts and turn them into customers."
+- [x] Update hero sub-headline to "We scan Reddit for buying signals, filter out noise, and draft replies and outreach so you can turn interest into customers faster."
