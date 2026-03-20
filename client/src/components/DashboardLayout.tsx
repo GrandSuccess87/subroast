@@ -238,14 +238,37 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <SidebarProvider
-      style={{ "--sidebar-width": `${sidebarWidth}px` } as CSSProperties}
-    >
-      <DashboardLayoutContent setSidebarWidth={setSidebarWidth}>
-        {children}
-      </DashboardLayoutContent>
-    </SidebarProvider>
+    <OnboardingGate>
+      <SidebarProvider
+        style={{ "--sidebar-width": `${sidebarWidth}px` } as CSSProperties}
+      >
+        <DashboardLayoutContent setSidebarWidth={setSidebarWidth}>
+          {children}
+        </DashboardLayoutContent>
+      </SidebarProvider>
+    </OnboardingGate>
   );
+}
+
+/**
+ * Checks whether the signed-in user has completed qualification onboarding.
+ * If not, redirects to /onboarding. Renders children only once confirmed.
+ */
+function OnboardingGate({ children }: { children: React.ReactNode }) {
+  const [, navigate] = useLocation();
+  const { data, isLoading } = trpc.onboarding.getQualificationStatus.useQuery();
+
+  useEffect(() => {
+    if (!isLoading && data && !data.completed) {
+      navigate("/onboarding");
+    }
+  }, [isLoading, data, navigate]);
+
+  if (isLoading || (data && !data.completed)) {
+    return <DashboardLayoutSkeleton />;
+  }
+
+  return <>{children}</>;
 }
 
 function DashboardLayoutContent({

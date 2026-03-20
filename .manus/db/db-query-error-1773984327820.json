@@ -1,0 +1,8 @@
+{
+  "query": "ALTER TABLE `waitlist_signups` MODIFY COLUMN `source` enum('header','footer','home_header','home_footer','home_modal') NOT NULL;\nALTER TABLE `outreach_leads` ADD `isFavorited` boolean DEFAULT false NOT NULL;\nALTER TABLE `users` ADD `onboardingStep` int DEFAULT 0;\nALTER TABLE `users` ADD `onboardingCompletedAt` bigint;\nALTER TABLE `users` ADD `currentTool` varchar(128);\nALTER TABLE `users` ADD `currentToolOther` varchar(256);\nALTER TABLE `users` ADD `painPoints` text;\nALTER TABLE `users` ADD `painPointsOther` varchar(512);\nALTER TABLE `users` ADD `successDefinition` text;\nALTER TABLE `users` ADD `willingnessToPay` enum('yes','maybe','no');\nALTER TABLE `users` ADD `additionalNotes` text;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute ALTER TABLE `waitlist_signups` MODIFY COLUMN `source` enum('header','footer','home_header','home_footer','home_modal') NOT NULL;\nALTER TABLE `outreach_leads` ADD `isFavorited` boolean DEFAULT false NOT NULL;\nALTER TABLE `users` ADD `onboardingStep` int DEFAULT 0;\nALTER TABLE `users` ADD `onboardingCompletedAt` bigint;\nALTER TABLE `users` ADD `currentTool` varchar(128);\nALTER TABLE `users` ADD `currentToolOther` varchar(256);\nALTER TABLE `users` ADD `painPoints` text;\nALTER TABLE `users` ADD `painPointsOther` varchar(512);\nALTER TABLE `users` ADD `successDefinition` text;\nALTER TABLE `users` ADD `willingnessToPay` enum('yes','maybe','no');\nALTER TABLE `users` ADD `additionalNotes` text;",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1060 (42S21) at line 2: Duplicate column name 'isFavorited'"
+  ]
+}

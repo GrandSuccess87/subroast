@@ -824,3 +824,17 @@
 - [x] Dashboard: "Upgrade for unlimited campaigns" → soft beta limit message
 - [x] DashboardLayout: replace trial countdown with early-access banner
 - [x] Add persistent in-product early access banner to DashboardLayout
+
+### Onboarding Qualification Flow (v6.6x)
+- [x] Extend users table with onboarding fields (current_tool, pain_points, success_definition, willingness_to_pay, additional_notes, onboarding_completed_at)
+- [x] Apply DB migration via webdev_execute_sql
+- [x] Add tRPC procedures: onboarding.saveStep, onboarding.complete, onboarding.getStatus
+- [x] Build /onboarding page — 5 steps with progress indicator
+- [x] Step 1: Name + email (prefilled from auth)
+- [x] Step 2: Current tool (single select + optional other text)
+- [x] Step 3: Pain points (multi-select + optional other text)
+- [x] Step 4: Success definition (short text, required)
+- [x] Step 5: Willingness to pay (Yes / Maybe / No) + optional notes
+- [x] Gate dashboard: redirect to /onboarding if onboarding_completed_at is null
+- [x] Resume onboarding on re-login if incomplete (save step progress)
+- [x] After completion → redirect to dashboard with early access banner

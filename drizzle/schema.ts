@@ -26,6 +26,16 @@ export const users = mysqlTable("users", {
   subscriptionStatus: mysqlEnum("subscriptionStatus", ["active", "trialing", "past_due", "canceled", "none"]).default("none").notNull(),
   trialReminderSentAt: bigint("trialReminderSentAt", { mode: "number" }), // unix ms
   onboardingDismissedAt: bigint("onboardingDismissedAt", { mode: "number" }), // unix ms — set when user dismisses checklist
+  // Qualification onboarding
+  onboardingStep: int("onboardingStep").default(0),               // last completed step (0 = not started)
+  onboardingCompletedAt: bigint("onboardingCompletedAt", { mode: "number" }), // unix ms — null until all steps done
+  currentTool: varchar("currentTool", { length: 128 }),           // e.g. "manual_outreach", "chatgpt", "other"
+  currentToolOther: varchar("currentToolOther", { length: 256 }), // free text when currentTool = "other"
+  painPoints: text("painPoints"),                                  // JSON array of selected pain point keys
+  painPointsOther: varchar("painPointsOther", { length: 512 }),   // free text for "other" pain point
+  successDefinition: text("successDefinition"),                   // required short text
+  willingnessToPay: mysqlEnum("willingnessToPay", ["yes", "maybe", "no"]), // Step 5
+  additionalNotes: text("additionalNotes"),                       // optional
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
