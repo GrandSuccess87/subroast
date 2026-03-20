@@ -850,3 +850,8 @@
 - [x] Update getLoginUrl to accept a returnPath parameter
 - [x] Homepage CTAs call getLoginUrl("/onboarding") so OAuth redirects back to /onboarding after signup
 - [x] OAuth callback: new users (onboardingCompletedAt null) → /onboarding; returning users → /dashboard or returnPath
+
+### Validation Mode v6.63
+- [x] Hide HomePricingSection on homepage, replace with "Free during beta" badge block
+- [x] Hide /pricing nav link from header and sidebar
+- [x] Update Pricing page to show beta message instead of plan cards

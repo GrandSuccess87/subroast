@@ -818,7 +818,6 @@ export default function Home() {
     const links = [
       { href: "#lead-intelligence", label: "How It Works" },
       { href: "#safety", label: "Account Safety" },
-      { href: "#pricing", label: "Pricing" },
     ];
     return (
       <div className="hidden md:flex items-center gap-8">
@@ -1359,8 +1358,23 @@ export default function Home() {
       {/* ── WHAT'S COMING ── */}
       <HomeWhatsComingSection onOpenModal={() => setModalOpen(true)} />
 
-      {/* ── PRICING ── */}
-      <HomePricingSection />
+      {/* ── BETA BADGE ── */}
+      <section id="pricing" style={{ padding: "clamp(3rem, 6vw, 5rem) 0", background: "oklch(0.07 0.007 60)", borderTop: "0.5px solid oklch(0.18 0.007 60)" }}>
+        <div className="container" style={{ textAlign: "center" }}>
+          <div style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", gap: "1.2rem" }}>
+            <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "oklch(0.78 0.14 65)", background: "oklch(0.78 0.14 65 / 0.08)", border: "0.5px solid oklch(0.78 0.14 65 / 0.25)", padding: "0.35rem 0.9rem", borderRadius: "2px" }}>Early Access</span>
+            <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 400, color: "oklch(0.93 0.025 60)", margin: 0, lineHeight: 1.15 }}>Free during beta</h2>
+            <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.7rem", letterSpacing: "0.08em", color: "oklch(0.6 0.02 60)", margin: 0, maxWidth: "32ch", lineHeight: 1.7 }}>Full access. No credit card. No commitment.<br />Pricing unlocks after Reddit API approval.</p>
+            <a
+              href={getLoginUrl("/onboarding")}
+              className="btn-luxury-primary"
+              style={{ marginTop: "0.5rem", textDecoration: "none", display: "inline-flex", alignItems: "center" }}
+            >
+              Get Early Access
+            </a>
+          </div>
+        </div>
+      </section>
 
       {/* ── FOOTER ── */}
       <footer style={{ borderTop: "0.5px solid oklch(0.18 0.007 60)" }}>
@@ -1419,7 +1433,6 @@ export default function Home() {
             </span>
             <div className="flex items-center gap-6">
               {[
-                { href: "#pricing", label: "Pricing" },
                 { href: "/dashboard/feedback", label: "Feedback" },
               ].map(({ href, label }) => (
                 <a
