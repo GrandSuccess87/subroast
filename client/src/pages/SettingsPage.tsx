@@ -172,7 +172,7 @@ export default function SettingsPage() {
                       onClick={() => navigate("/pricing")}
                       style={{ padding: "0.65rem 1.25rem", background: "transparent", border: `0.5px solid oklch(0.88 0.025 85 / 0.35)`, color: IVORY, fontFamily: FONT_MONO, fontSize: "0.62rem", letterSpacing: "0.18em", textTransform: "uppercase", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.4rem" }}
                     >
-                      <Zap size={11} /> Upgrade to Growth
+                      <Zap size={11} /> Get priority access
                     </button>
                   )}
                 </div>

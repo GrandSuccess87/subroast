@@ -47,24 +47,24 @@ const PLANS = [
 
 const FAQS = [
   {
-    q: "Do I need a credit card for the free trial?",
-    a: "Yes — Stripe requires a card to start the trial, but you won't be charged until Day 7. You'll receive a reminder on Day 6 so you have time to cancel.",
+    q: "Do I need a credit card to get started?",
+    a: "No — SubRoast is completely free during the beta. No credit card, no payment details required. Just sign up and start finding leads.",
   },
   {
-    q: "What happens after the trial ends?",
-    a: "You'll be automatically charged for the plan you selected. You can cancel anytime from Settings → Manage Billing before the trial ends.",
+    q: "When will paid plans launch?",
+    a: "We are completing Reddit's commercial API approval process. Paid plans will launch once that approval is in place. Early-access users will be the first to know and will receive a locked-in early-adopter price.",
   },
   {
-    q: "Can I switch plans?",
-    a: "Yes. You can upgrade from Starter to Growth at any time from Settings → Manage Billing. Stripe prorates the difference.",
+    q: "Will my early-access price be locked in?",
+    a: "Yes. Founders who join during the beta will receive a discounted early-adopter rate that is locked in for the lifetime of their subscription.",
   },
   {
-    q: "What is the campaign limit on Starter?",
-    a: "Starter includes 1 active outreach campaign. Upgrade to Growth for unlimited campaigns.",
+    q: "What are the usage limits during beta?",
+    a: "Beta users get generous daily limits across all features. When you reach a limit you'll see a clear message — full access unlocks when paid plans launch.",
   },
   {
-    q: "Is this month-to-month?",
-    a: "Yes — all plans are billed monthly with no long-term contracts. Cancel anytime.",
+    q: "Is this month-to-month when paid plans launch?",
+    a: "Yes — all plans will be billed monthly with no long-term contracts. Cancel anytime, no questions asked.",
   },
 ];
 
@@ -207,10 +207,9 @@ export default function Pricing() {
               lineHeight: 1.7,
             }}
           >
-            Begin with a 7-day free trial. No commitment required.
-            Cancel from Settings at any time.
+            Free during beta. No credit card required.
           </p>
-          {/* Trial badge */}
+          {/* Beta badge */}
           <div
             style={{
               display: "inline-flex",
@@ -226,7 +225,7 @@ export default function Pricing() {
             }}
           >
             <Check size={10} />
-            7-day free trial · Cancel anytime
+            Free during beta · Full access unlocking soon
           </div>
         </div>
 
@@ -342,7 +341,7 @@ export default function Pricing() {
                       marginTop: "0.4rem",
                     }}
                   >
-                    After 7-day free trial
+                    Free during beta
                   </p>
                 </div>
 

@@ -42,10 +42,10 @@ export default function BillingSuccess() {
           You're all set.
         </h1>
         <p style={{ fontSize: "0.85rem", color: MUTED, lineHeight: 1.7, marginBottom: "0.4rem" }}>
-          Your 7-day free trial has started. You won't be charged until Day 7.
+          You’re in. Welcome to early access — full plans unlocking soon.
         </p>
         <p style={{ fontFamily: FONT_MONO, fontSize: "0.62rem", color: MUTED, letterSpacing: "0.08em", marginBottom: "2.5rem" }}>
-          We'll send you a reminder on Day 6 so you have time to cancel if needed.
+          No credit card required. No time limit. Just start finding leads.
         </p>
 
         {/* Steps */}

@@ -1021,7 +1021,7 @@ export default function Home() {
                   className="btn-luxury-primary"
                   style={{ position: "relative", zIndex: 1, textAlign: "center", justifyContent: "center", border: "none", cursor: "pointer" }}
                 >
-                  Join the waitlist
+                  Get Early Access
                 </button>
                 <a
                   href="#lead-intelligence"
@@ -1051,10 +1051,9 @@ export default function Home() {
                   textTransform: "uppercase",
                 }}
               >
-                Seven days complimentary · No card required · Cancel at any time
+                Start your free trial instantly · No credit card required
               </p>
             </div>
-
             {/* RIGHT: Lead Intelligence section + animated demo */}
             <div className="hero-cta-animate" style={{ minWidth: 0, overflow: "hidden", width: "100%" }}>
               {/* Section header */}
@@ -1943,7 +1942,7 @@ function CtaSection({ onOpenModal }: { onOpenModal: () => void }) {
           className="btn-luxury-primary"
           style={{ marginBottom: "0", border: "none", cursor: "pointer" }}
         >
-          Join the waitlist
+          Get Early Access
         </button>
         <p
           style={{
@@ -1955,7 +1954,7 @@ function CtaSection({ onOpenModal }: { onOpenModal: () => void }) {
             marginTop: "1.5rem",
           }}
         >
-          No credit card required · Cancel at any time
+          Free during beta · No credit card required
         </p>
       </div>
     </section>
@@ -2239,7 +2238,7 @@ function HomePricingSection() {
           </h2>
           <div className="rule-gold mx-auto mb-6" style={{ width: "3rem" }} />
           <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.9375rem", fontWeight: 300, color: "oklch(0.62 0.006 80)", lineHeight: 1.75, maxWidth: "40ch", margin: "0 auto" }}>
-            Begin with a 7-day free trial. No commitment required.
+            Free during beta. No credit card required.
           </p>
         </div>
 
@@ -2287,7 +2286,7 @@ function HomePricingSection() {
                     <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.7rem", color: "oklch(0.62 0.006 80)", letterSpacing: "0.08em" }}>/ month</span>
                   </div>
                   <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", color: "oklch(0.62 0.006 80)", letterSpacing: "0.1em", marginTop: "0.35rem" }}>
-                    After 7-day free trial
+                    Free during beta
                   </p>
                 </div>
                 {/* Features */}
@@ -2346,7 +2345,7 @@ function HomePricingSection() {
                   {isLoading ? (
                     <><Loader2 size={12} style={{ animation: "spin 1s linear infinite" }} /> Opening checkout…</>
                   ) : (
-                    "Start Free Trial (Early Access)"
+                    "Start Free Access"
                   )}
                 </button>
               </div>
@@ -2356,9 +2355,8 @@ function HomePricingSection() {
 
         {/* Trust line */}
         <p style={{ textAlign: "center", fontFamily: "var(--font-mono)", fontSize: "0.58rem", color: "oklch(0.42 0 0)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "4rem" }}>
-          Seven days complimentary · No card required · Cancel at any time
+           Free during beta · No credit card required
         </p>
-
         {/* FAQ accordion */}
         <PricingFAQ />
       </div>
@@ -2368,20 +2366,20 @@ function HomePricingSection() {
 
 const PRICING_FAQS = [
   {
-    q: "Do I need a credit card for the free trial?",
-    a: "Yes — Stripe requires a card to start the trial, but you won’t be charged until Day 7. You’ll receive a reminder on Day 6 so you have time to cancel.",
+    q: "Do I need a credit card to get started?",
+    a: "No — SubRoast is completely free during the beta. No credit card, no payment details required. Just sign up and start finding leads.",
   },
   {
-    q: "What happens after the trial ends?",
-    a: "You’ll be automatically charged for the plan you selected. You can cancel anytime from Settings → Manage Billing before the trial ends.",
+    q: "When will paid plans launch?",
+    a: "We are completing Reddit's commercial API approval process. Paid plans will launch once that approval is in place. Early-access users will be the first to know and will receive a locked-in early-adopter price.",
   },
   {
-    q: "Can I switch plans?",
-    a: "Yes. You can upgrade from Starter to Growth at any time from Settings → Manage Billing. Stripe prorates the difference automatically.",
+    q: "Will my early-access price be locked in?",
+    a: "Yes. Founders who join during the beta will receive a discounted early-adopter rate that is locked in for the lifetime of their subscription.",
   },
   {
-    q: "Is this month-to-month?",
-    a: "Yes — all plans are billed monthly with no long-term contracts. Cancel anytime, no questions asked.",
+    q: "Is this month-to-month when paid plans launch?",
+    a: "Yes — all plans will be billed monthly with no long-term contracts. Cancel anytime, no questions asked.",
   },
 ];
 

@@ -178,7 +178,7 @@ export default function Dashboard() {
           >
             <AlertTriangle size={13} style={{ flexShrink: 0 }} />
             <span>
-              You've reached the {campaignLimit}-campaign limit on your current plan.{" "}
+              Free during beta — full access unlocking soon.{" "}
               <button
                 onClick={() => setLocation("/pricing")}
                 style={{
@@ -193,7 +193,7 @@ export default function Dashboard() {
                   padding: 0,
                 }}
               >
-                Upgrade for unlimited campaigns
+                Get priority access
               </button>.
             </span>
           </div>

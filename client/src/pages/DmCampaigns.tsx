@@ -329,11 +329,11 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
     onSuccess: () => { toast.success("Campaign created!"); utils.outreach.listCampaigns.invalidate(); onSuccess(); },
     onError: (err) => {
       if (err.message === "CAMPAIGN_LIMIT_REACHED") {
-        toast.error("Campaign limit reached. Upgrade to Growth for unlimited campaigns.", { action: { label: "Upgrade", onClick: () => navigate("/pricing") }, duration: 8000 });
+        toast.error("Free during beta — full access unlocking soon.", { action: { label: "Get priority access", onClick: () => navigate("/pricing") }, duration: 8000 });
       } else if (err.message === "UPGRADE_REQUIRED") {
-        toast.error("Start a free trial to create campaigns.", { action: { label: "View Plans", onClick: () => navigate("/pricing") }, duration: 8000 });
+        toast.error("Free during beta — full access unlocking soon.", { action: { label: "Get priority access", onClick: () => navigate("/pricing") }, duration: 8000 });
       } else if (err.message === "VALIDATION_REQUIRES_GROWTH") {
-        toast.error("App Validation campaigns require the Growth plan.", { action: { label: "Upgrade", onClick: () => navigate("/pricing") }, duration: 8000 });
+        toast.error("Free during beta — full access unlocking soon.", { action: { label: "Get priority access", onClick: () => navigate("/pricing") }, duration: 8000 });
       } else {
         toast.error(err.message);
       }
@@ -1247,15 +1247,15 @@ export default function DmCampaigns() {
           )}
         </div>
 
-        {/* Upgrade banner */}
+        {/* Beta limit banner */}
         {!showNewForm && atLimit && (
           <div style={{ display: "flex", alignItems: "center", gap: "1rem", padding: "1rem 1.25rem", border: `0.5px solid oklch(0.78 0.14 65 / 0.35)`, background: "oklch(0.78 0.14 65 / 0.04)", marginBottom: "1.5rem" }}>
             <div style={{ flex: 1 }}>
-              <p style={{ fontFamily: FONT_MONO, fontSize: "0.65rem", letterSpacing: "0.1em", textTransform: "uppercase", color: AMBER, marginBottom: "0.25rem" }}>Starter plan — 1 campaign limit</p>
-              <p style={{ fontSize: "0.78rem", color: MUTED, lineHeight: 1.5 }}>Upgrade to Growth for unlimited campaigns, priority sync, and DM templates.</p>
+              <p style={{ fontFamily: FONT_MONO, fontSize: "0.65rem", letterSpacing: "0.1em", textTransform: "uppercase", color: AMBER, marginBottom: "0.25rem" }}>Free during beta</p>
+              <p style={{ fontSize: "0.78rem", color: MUTED, lineHeight: 1.5 }}>Full access — unlimited campaigns, priority sync, and DM templates — unlocking soon.</p>
             </div>
             <button onClick={() => navigate("/pricing")} style={{ padding: "0.6rem 1.1rem", background: AMBER, border: `0.5px solid ${AMBER}`, color: BG, fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.15em", textTransform: "uppercase", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.3rem", flexShrink: 0 }}>
-              <Zap size={10} /> Upgrade
+              <Zap size={10} /> Get priority access
             </button>
           </div>
         )}

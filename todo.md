@@ -810,3 +810,17 @@
 - [x] Trim VideoSection (AI Analysis) intro copy to one sentence
 - [x] Trim right-side hero panel sub-copy to one sentence
 - [x] Update Use Cases section headline to one clear idea
+
+### Soft-Paywall / Early-Access CTA Strategy
+- [x] Hero CTA: "Join the waitlist" → "Get Early Access"
+- [x] Hero trust line: update to "Start your free trial instantly • No credit card required"
+- [x] Mid-page CTA strip: "Join the waitlist" → "Get Early Access"
+- [x] Mid-page trust line: "No credit card required · Cancel at any time" → "Free during beta • No credit card required"
+- [x] Pricing CTA: "Start Free Trial (Early Access)" → "Start Free Access"
+- [x] Pricing trust line: "Seven days complimentary · No card required · Cancel at any time" → "Free during beta • No credit card required"
+- [x] Update FAQ: remove card/Stripe/7-day trial references, replace with beta messaging
+- [x] Update Pricing.tsx FAQ to match
+- [x] Dashboard: replace trial-expiry banner with early-access banner
+- [x] Dashboard: "Upgrade for unlimited campaigns" → soft beta limit message
+- [x] DashboardLayout: replace trial countdown with early-access banner
+- [x] Add persistent in-product early access banner to DashboardLayout

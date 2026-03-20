@@ -85,6 +85,66 @@ const DEFAULT_WIDTH = 240;
 const MIN_WIDTH = 200;
 const MAX_WIDTH = 320;
 
+/* ── Early-access banner ── */
+function EarlyAccessBanner() {
+  const [dismissed, setDismissed] = useState(() =>
+    sessionStorage.getItem("ea_banner_dismissed") === "1"
+  );
+  if (dismissed) return null;
+  return (
+    <div
+      style={{
+        background: "oklch(0.14 0.007 60)",
+        borderBottom: "0.5px solid oklch(0.22 0.007 60)",
+        padding: "0.6rem 1.5rem",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: "1rem",
+        flexWrap: "wrap",
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+        <Sparkles
+          style={{ width: "0.875rem", height: "0.875rem", color: "oklch(0.88 0.025 85)", flexShrink: 0 }}
+        />
+        <span
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: "0.65rem",
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+            color: "oklch(0.75 0.010 80)",
+          }}
+        >
+          You’re in early access — full plans unlocking soon
+        </span>
+      </div>
+      <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+        <button
+          onClick={() => {
+            sessionStorage.setItem("ea_banner_dismissed", "1");
+            setDismissed(true);
+          }}
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: "0.6rem",
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+            color: "oklch(0.50 0.006 80)",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            padding: 0,
+          }}
+        >
+          Dismiss
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [sidebarWidth, setSidebarWidth] = useState(() => {
     const saved = localStorage.getItem(SIDEBAR_WIDTH_KEY);
@@ -436,26 +496,8 @@ function DashboardLayoutContent({
             </div>
           </div>
         )}
-        {/* Trial banner */}
-        {subStatus?.isTrialing && subStatus.trialDaysLeft !== undefined && subStatus.trialDaysLeft <= 3 && (
-          <div className="bg-amber-500/10 border-b border-amber-500/20 px-6 py-2.5 flex items-center justify-between gap-4">
-            <div className="flex items-center gap-2 text-sm text-amber-400">
-              <Clock className="w-4 h-4 shrink-0" />
-              <span>
-                {subStatus.trialDaysLeft === 0
-                  ? "Your free trial expires today!"
-                  : `Your free trial expires in ${subStatus.trialDaysLeft} day${subStatus.trialDaysLeft !== 1 ? "s" : ""}.`}
-              </span>
-            </div>
-            <button
-              onClick={() => setLocation("/pricing")}
-              className="text-xs font-medium text-amber-400 hover:text-amber-300 flex items-center gap-1 shrink-0"
-            >
-              <CreditCard className="w-3.5 h-3.5" />
-              Upgrade now
-            </button>
-          </div>
-        )}
+        {/* Early-access banner — persistent during beta */}
+        <EarlyAccessBanner />
         <main className="flex-1 p-6" style={{ overflowX: "hidden", minWidth: 0 }}>{children}</main>
       </SidebarInset>
     </>
