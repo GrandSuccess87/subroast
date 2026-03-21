@@ -1050,7 +1050,7 @@ export default function Home() {
                   textTransform: "uppercase",
                 }}
               >
-                Start your free trial instantly · No credit card required
+                Free during beta · Full access · No credit card · No commitment
               </p>
             </div>
             {/* RIGHT: Lead Intelligence section + animated demo */}
