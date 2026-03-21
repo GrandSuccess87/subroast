@@ -1263,9 +1263,9 @@ export default function Home() {
             Early signal
           </p>
 
-          {/* Two-column grid on desktop, stacked on mobile */}
+          {/* Three-column grid on desktop, stacked on mobile */}
           <div
-            className="grid lg:grid-cols-2"
+            className="grid lg:grid-cols-3"
             style={{ gap: "0", maxWidth: "72rem", margin: "0 auto" }}
           >
             {/* Quote 1 — @zara_ferna94287 */}
@@ -1310,6 +1310,7 @@ export default function Home() {
                 flexDirection: "column",
                 gap: "1.1rem",
                 padding: "clamp(1.5rem, 3vw, 2.5rem)",
+                borderRight: "0.5px solid oklch(0.18 0.007 60)",
               }}
             >
               <blockquote
@@ -1331,6 +1332,38 @@ export default function Home() {
                 <XLogo />
                 <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.62rem", letterSpacing: "0.08em", color: "oklch(0.65 0.006 80)" }}>
                   @viberankdev &nbsp;&middot;&nbsp; responding to SubRoast&apos;s launch
+                </p>
+              </div>
+            </div>
+
+            {/* Quote 3 — @marianbuildapps */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "1.1rem",
+                padding: "clamp(1.5rem, 3vw, 2.5rem)",
+              }}
+            >
+              <blockquote
+                style={{
+                  fontFamily: "var(--font-sans)",
+                  fontStyle: "normal",
+                  fontSize: "clamp(1rem, 2vw, 1.25rem)",
+                  fontWeight: 500,
+                  color: "oklch(0.93 0.010 80)",
+                  lineHeight: 1.6,
+                  margin: 0,
+                  padding: 0,
+                  border: "none",
+                }}
+              >
+                &ldquo;Day 12 and already segmenting users by intent. That&apos;s not a side project, that&apos;s a real business.&rdquo;
+              </blockquote>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "auto" }}>
+                <XLogo />
+                <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.62rem", letterSpacing: "0.08em", color: "oklch(0.65 0.006 80)" }}>
+                  @marianbuildapps
                 </p>
               </div>
             </div>
