@@ -137,8 +137,8 @@ export function ArchitecturalIllustration() {
         <rect x="36" y="103" width="120" height="4" rx="0" fill="oklch(0.93 0.010 80)" fillOpacity="0.7" />
         <rect x="36" y="112" width="96" height="4" rx="0" fill="oklch(0.93 0.010 80)" fillOpacity="0.4" />
         <rect x="36" y="121" width="108" height="4" rx="0" fill="oklch(0.93 0.010 80)" fillOpacity="0.25" />
-        <text x="36" y="150" fontFamily="'JetBrains Mono', monospace" fontSize="5" fill="oklch(0.62 0.006 80)" letterSpacing="0.8">u/struggling_founder · 2h ago</text>
-        <text x="102" y="178" fontFamily="'JetBrains Mono', monospace" fontSize="6" fill="oklch(0.62 0.006 80)" letterSpacing="1.5" textAnchor="middle" opacity="0.7">01 — DETECT</text>
+        <text x="36" y="150" fontFamily="'JetBrains Mono', monospace" fontSize="5" fill="oklch(0.76 0.022 82)" letterSpacing="0.8">u/struggling_founder · 2h ago</text>
+        <text x="102" y="178" fontFamily="'JetBrains Mono', monospace" fontSize="6" fill="oklch(0.76 0.022 82)" letterSpacing="1.5" textAnchor="middle" opacity="0.7">01 — DETECT</text>
       </g>
 
       {/* ── Connector 1→2 — draw in at delay 0.35 ── */}
@@ -164,13 +164,13 @@ export function ArchitecturalIllustration() {
           { label: "SPAM RISK", val: 18, y: 132 },
         ].map(({ label, val, y }) => (
           <g key={label}>
-            <text x="249" y={y + 4} fontFamily="'JetBrains Mono', monospace" fontSize="5" fill="oklch(0.62 0.006 80)" letterSpacing="0.8">{label}</text>
+            <text x="249" y={y + 4} fontFamily="'JetBrains Mono', monospace" fontSize="5" fill="oklch(0.76 0.022 82)" letterSpacing="0.8">{label}</text>
             <rect x="305" y={y} width="60" height="5" rx="0" fill="oklch(0.18 0.007 60)" />
             <rect x="305" y={y} width={60 * val / 100} height="5" rx="0" fill={label === "SPAM RISK" ? "oklch(0.65 0.14 25)" : "oklch(0.88 0.025 85)"} fillOpacity={label === "SPAM RISK" ? 0.8 : 0.6} />
             <text x="370" y={y + 4} fontFamily="'JetBrains Mono', monospace" fontSize="5" fill="oklch(0.88 0.025 85)" letterSpacing="0.5" textAnchor="end" opacity="0.8">{val}</text>
           </g>
         ))}
-        <text x="315" y="178" fontFamily="'JetBrains Mono', monospace" fontSize="6" fill="oklch(0.62 0.006 80)" letterSpacing="1.5" textAnchor="middle" opacity="0.7">02 — ANALYZE</text>
+        <text x="315" y="178" fontFamily="'JetBrains Mono', monospace" fontSize="6" fill="oklch(0.76 0.022 82)" letterSpacing="1.5" textAnchor="middle" opacity="0.7">02 — ANALYZE</text>
       </g>
 
       {/* ── Connector 2→3 — draw in at delay 0.7 ── */}
@@ -215,15 +215,15 @@ export function ArchitecturalIllustration() {
         <text x="582" y="116" fontFamily="'JetBrains Mono', monospace" fontSize="5" fill="oklch(0.60 0.15 240)" letterSpacing="1" textAnchor="middle">HIRING</text>
 
         <text x="460" y="138" fontFamily="'Inter', sans-serif" fontSize="7.5" fill="oklch(0.93 0.010 80)" fontWeight="400" letterSpacing="0.2">Struggling to find early adopters for my analytics SaaS</text>
-        <text x="460" y="150" fontFamily="'Inter', sans-serif" fontSize="6.5" fill="oklch(0.62 0.006 80)" fontWeight="300">u/struggling_founder · r/SaaS · 3h ago</text>
+        <text x="460" y="150" fontFamily="'Inter', sans-serif" fontSize="6.5" fill="oklch(0.76 0.022 82)" fontWeight="300">u/struggling_founder · r/SaaS · 3h ago</text>
 
         <line x1="460" y1="158" x2="736" y2="158" stroke="oklch(0.20 0.007 60)" strokeWidth="0.5" />
 
-        <text x="460" y="170" fontFamily="'JetBrains Mono', monospace" fontSize="5" fill="oklch(0.62 0.006 80)" letterSpacing="1">FIT SCORE</text>
+        <text x="460" y="170" fontFamily="'JetBrains Mono', monospace" fontSize="5" fill="oklch(0.76 0.022 82)" letterSpacing="1">FIT SCORE</text>
         <text x="460" y="182" fontFamily="'JetBrains Mono', monospace" fontSize="11" fill="oklch(0.93 0.010 80)" letterSpacing="-0.5">91</text>
         <rect x="460" y="186" width="80" height="3" rx="0" fill="oklch(0.18 0.007 60)" />
         <rect x="460" y="186" width="73" height="3" rx="0" fill="oklch(0.88 0.025 85)" fillOpacity="0.7" />
-        <text x="560" y="170" fontFamily="'JetBrains Mono', monospace" fontSize="5" fill="oklch(0.62 0.006 80)" letterSpacing="1">URGENCY</text>
+        <text x="560" y="170" fontFamily="'JetBrains Mono', monospace" fontSize="5" fill="oklch(0.76 0.022 82)" letterSpacing="1">URGENCY</text>
         <text x="560" y="182" fontFamily="'JetBrains Mono', monospace" fontSize="11" fill="oklch(0.93 0.010 80)" letterSpacing="-0.5">88</text>
         <rect x="560" y="186" width="80" height="3" rx="0" fill="oklch(0.18 0.007 60)" />
         <rect x="560" y="186" width="70" height="3" rx="0" fill="oklch(0.88 0.025 85)" fillOpacity="0.7" />
@@ -238,9 +238,9 @@ export function ArchitecturalIllustration() {
         <rect x="460" y="244" width="76" height="16" rx="0" fill="oklch(0.88 0.025 85)" fillOpacity="0.12" stroke="oklch(0.88 0.025 85)" strokeWidth="0.5" strokeOpacity="0.4" />
         <text x="498" y="255" fontFamily="'JetBrains Mono', monospace" fontSize="5.5" fill="oklch(0.88 0.025 85)" letterSpacing="1" textAnchor="middle">COPY & OPEN</text>
         <rect x="542" y="244" width="68" height="16" rx="0" fill="transparent" stroke="oklch(0.30 0.007 60)" strokeWidth="0.5" />
-        <text x="576" y="255" fontFamily="'JetBrains Mono', monospace" fontSize="5.5" fill="oklch(0.62 0.006 80)" letterSpacing="1" textAnchor="middle">SPAM CHECK</text>
+        <text x="576" y="255" fontFamily="'JetBrains Mono', monospace" fontSize="5.5" fill="oklch(0.76 0.022 82)" letterSpacing="1" textAnchor="middle">SPAM CHECK</text>
         <rect x="616" y="244" width="56" height="16" rx="0" fill="transparent" stroke="oklch(0.30 0.007 60)" strokeWidth="0.5" />
-        <text x="644" y="255" fontFamily="'JetBrains Mono', monospace" fontSize="5.5" fill="oklch(0.62 0.006 80)" letterSpacing="1" textAnchor="middle">RE-DRAFT</text>
+        <text x="644" y="255" fontFamily="'JetBrains Mono', monospace" fontSize="5.5" fill="oklch(0.76 0.022 82)" letterSpacing="1" textAnchor="middle">RE-DRAFT</text>
 
         {/* Spider graph panel */}
         <rect x="452" y="284" width="292" height="100" rx="0" fill="oklch(0.12 0.007 60)" stroke="oklch(0.20 0.007 60)" strokeWidth="0.5" />
@@ -282,7 +282,7 @@ export function ArchitecturalIllustration() {
           const tip = polarPoint(axisAngles[i], r + 14);
           const lines = label.split("\n");
           return (
-            <text key={i} x={tip.x.toFixed(1)} y={tip.y.toFixed(1)} fontFamily="'JetBrains Mono', monospace" fontSize="5" fill="oklch(0.62 0.006 80)" letterSpacing="0.8" textAnchor="middle" dominantBaseline="middle"
+            <text key={i} x={tip.x.toFixed(1)} y={tip.y.toFixed(1)} fontFamily="'JetBrains Mono', monospace" fontSize="5" fill="oklch(0.76 0.022 82)" letterSpacing="0.8" textAnchor="middle" dominantBaseline="middle"
               style={{ opacity: visible ? 1 : 0, transition: visible ? `opacity 0.4s ease ${1.5 + i * 0.06}s` : "none" }}>
               {lines.map((line, li) => (
                 <tspan key={li} x={tip.x.toFixed(1)} dy={li === 0 ? 0 : 7}>{line}</tspan>
@@ -308,7 +308,7 @@ export function ArchitecturalIllustration() {
       </g>
 
       {/* Spider graph section label */}
-      <text x="152" y="258" fontFamily="'JetBrains Mono', monospace" fontSize="5.5" fill="oklch(0.62 0.006 80)" letterSpacing="1.5" textAnchor="middle"
+      <text x="152" y="258" fontFamily="'JetBrains Mono', monospace" fontSize="5.5" fill="oklch(0.76 0.022 82)" letterSpacing="1.5" textAnchor="middle"
         style={{ opacity: visible ? 0.7 : 0, transition: visible ? "opacity 0.4s ease 0.85s" : "none" }}>ROAST REPORT</text>
       <line x1="28" y1="265" x2="304" y2="265" stroke="oklch(0.88 0.025 85)" strokeWidth="0.4" strokeOpacity="0.12" {...animLine(276, 0.85, 0.6)} />
 

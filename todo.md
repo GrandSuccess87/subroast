@@ -864,3 +864,6 @@
 ### WTP + Hero Fix v6.65
 - [x] Update onboarding WTP question framing and tiered price anchors
 - [x] Fix hero "See how it works" button clipping above the fold
+
+### Secondary Text Color v6.66
+- [x] Apply custom secondary text color oklch(0.76 0.022 82) site-wide

@@ -78,7 +78,7 @@ const BORDER_ACCENT = "oklch(0.88 0.025 85 / 0.35)";
 const IVORY = "oklch(0.88 0.025 85)";
 const IVORY_DIM = "oklch(0.88 0.025 85 / 0.55)";
 const FOREGROUND = "oklch(0.93 0.010 80)";
-const MUTED = "oklch(0.62 0.006 80)";
+const MUTED = "oklch(0.76 0.022 82)";
 
 export default function Pricing() {
   const [, navigate] = useLocation();
