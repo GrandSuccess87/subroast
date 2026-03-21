@@ -1229,7 +1229,7 @@ export default function Home() {
                 tag: "App Validation",
                 headline: "Know if people will pay before you build",
                 body: "Surface real complaints in your niche, score them by signal strength, and validate willingness to pay before writing a line of code.",
-                stat: "48-hour validation framework, built in",
+                stat: "Real market signal — before writing a single line of code",
               },
             ].map(({ tag, headline, body, stat }) => (
               <UseCaseCard key={tag} tag={tag} headline={headline} body={body} stat={stat} />
