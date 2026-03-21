@@ -3,6 +3,7 @@ import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
+import { trackOnboardingStarted, trackOnboardingStep, trackOnboardingCompleted } from "@/lib/analytics";
 
 // ─── Design tokens (match global brand) ──────────────────────────────────────
 const BG = "oklch(0.09 0.008 60)";
@@ -510,11 +511,15 @@ export default function Onboarding() {
     if (payload) {
       await saveStep.mutateAsync(payload);
     }
+    // Fire funnel event: advancing from step 1 → 2 = onboarding started
+    if (nextStep === 2) trackOnboardingStarted();
+    else trackOnboardingStep(nextStep);
     setStep(nextStep);
   };
 
   const handleSubmit = () => {
     if (!willingnessToPay) return;
+    trackOnboardingCompleted(willingnessToPay);
     complete.mutate({
       currentTool,
       currentToolOther: currentToolOther || undefined,

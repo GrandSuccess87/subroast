@@ -1,5 +1,6 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
+import { trackHeroCta, trackMidpageCta, trackFooterCta, trackNavCta } from "@/lib/analytics";
 import { DashboardLayoutSkeleton } from "@/components/DashboardLayoutSkeleton";
 import { ArchitecturalIllustration } from "@/components/ArchitecturalIllustration";
 import WaitlistGateModal from "@/components/WaitlistGateModal";
@@ -915,7 +916,7 @@ export default function Home() {
 
           {/* CTAs */}
           <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-            <a href={getLoginUrl()} className="btn-luxury">
+            <a href={getLoginUrl()} className="btn-luxury" onClick={trackNavCta}>
               Login
             </a>
           </div>
@@ -1019,6 +1020,7 @@ export default function Home() {
                   href={getLoginUrl("/onboarding")}
                   className="btn-luxury-primary"
                   style={{ position: "relative", zIndex: 1, textAlign: "center", justifyContent: "center", textDecoration: "none", display: "inline-flex", alignItems: "center" }}
+                  onClick={trackHeroCta}
                 >
                   Get Early Access
                 </a>
@@ -1402,6 +1404,7 @@ export default function Home() {
               href={getLoginUrl("/onboarding")}
               className="btn-luxury-primary"
               style={{ marginTop: "0.5rem", textDecoration: "none", display: "inline-flex", alignItems: "center" }}
+              onClick={trackMidpageCta}
             >
               Get Early Access
             </a>
@@ -1987,6 +1990,7 @@ function CtaSection({ onOpenModal }: { onOpenModal: () => void }) {
           href={getLoginUrl("/onboarding")}
           className="btn-luxury-primary"
           style={{ marginBottom: "0", textDecoration: "none", display: "inline-flex", alignItems: "center" }}
+          onClick={trackFooterCta}
         >
           Get Early Access
         </a>

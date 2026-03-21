@@ -864,3 +864,9 @@
 ### WTP + Hero Fix v6.65
 - [x] Update onboarding WTP question framing and tiered price anchors
 - [x] Fix hero "See how it works" button clipping above the fold
+
+### Funnel Tracking v6.72
+- [x] Create shared analytics utility client/src/lib/analytics.ts with track() wrapper
+- [x] Add CTA click events: hero_cta_click, midpage_cta_click, footer_cta_click, nav_cta_click
+- [x] Add onboarding funnel events: onboarding_started, onboarding_step_2..5, onboarding_completed
+- [x] Add WTP selection event with price tier as property
