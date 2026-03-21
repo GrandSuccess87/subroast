@@ -1,9 +1,11 @@
 import { Toaster } from "@/components/ui/sonner";
+import { useEffect } from "react";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { trackEverFeaturedVisitIfApplicable } from "@/lib/analytics";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import DraftRoast from "./pages/DraftRoast";
@@ -39,6 +41,11 @@ function Router() {
 }
 
 function App() {
+  useEffect(() => {
+    // Fire once on initial page load — detects UTM source and tracks EverFeatured visits
+    trackEverFeaturedVisitIfApplicable();
+  }, []);
+
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="light">

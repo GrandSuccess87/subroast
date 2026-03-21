@@ -45,3 +45,26 @@ export const trackOnboardingCompleted = (wtpTier: string) =>
   track("onboarding_completed", { wtp_tier: wtpTier });
 export const trackWtpSelected = (tier: string) =>
   track("wtp_selected", { tier });
+
+/** UTM / referral source tracking */
+export const trackReferralSource = (source: string, medium: string, campaign: string) =>
+  track("referral_visit", { source, medium, campaign });
+
+/** Fires once when a visitor arrives from EverFeatured */
+export function trackEverFeaturedVisitIfApplicable(): void {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const source = params.get("utm_source");
+    const medium = params.get("utm_medium") ?? "";
+    const campaign = params.get("utm_campaign") ?? "";
+    if (source === "everfeatured") {
+      track("everfeatured_visit", { medium, campaign });
+      trackReferralSource(source, medium, campaign);
+    } else if (source) {
+      // Track any other UTM source generically too
+      trackReferralSource(source, medium, campaign);
+    }
+  } catch {
+    // Never throw
+  }
+}
