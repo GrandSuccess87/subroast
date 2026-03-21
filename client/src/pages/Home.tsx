@@ -1363,7 +1363,7 @@ export default function Home() {
               <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "auto" }}>
                 <XLogo />
                 <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.62rem", letterSpacing: "0.08em", color: "oklch(0.65 0.006 80)" }}>
-                  @marianbuildapps
+                  @marianbuildapps &nbsp;&middot;&nbsp; responding to SubRoast&apos;s launch
                 </p>
               </div>
             </div>
