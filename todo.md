@@ -870,3 +870,10 @@
 - [x] Add CTA click events: hero_cta_click, midpage_cta_click, footer_cta_click, nav_cta_click
 - [x] Add onboarding funnel events: onboarding_started, onboarding_step_2..5, onboarding_completed
 - [x] Add WTP selection event with price tier as property
+
+### Admin Responses View v6.76
+- [x] Add onboarding.getResponses adminProcedure — fetches all completed onboarding rows sorted by WTP priority (60_plus → need_results → 40_59 → 20_39 → under_20)
+- [x] Build /admin/responses page — stat cards (total, high-intent, pay-if-works, top WTP), search filter, full table with WTP badges, pain point chips, truncated text with tooltips
+- [x] Export CSV button — downloads all responses as subroast-responses-YYYY-MM-DD.csv
+- [x] Register /admin/responses route in App.tsx
+- [x] Vitest tests: FORBIDDEN for non-admin, array return for admin (2 tests passing)

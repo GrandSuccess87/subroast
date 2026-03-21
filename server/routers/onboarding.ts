@@ -1,6 +1,7 @@
+import { desc, isNotNull } from "drizzle-orm";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { protectedProcedure, router } from "../_core/trpc";
+import { adminProcedure, protectedProcedure, router } from "../_core/trpc";
 import { getDb, getRedditAccountByUserId, getOutreachCampaignsByUserId, getOutreachLeadsByUserId, getPostHistoryByUserId } from "../db";
 import { users } from "../../drizzle/schema";
 
@@ -207,4 +208,52 @@ export const onboardingRouter = router({
 
       return { success: true };
     }),
+
+  /**
+   * Admin-only: returns all completed onboarding responses sorted by WTP tier priority.
+   * Priority order: 60_plus → 40_59 → need_results → 20_39 → under_20 → others
+   */
+  getResponses: adminProcedure.query(async () => {
+    const db = await getDb();
+    if (!db) return [];
+
+    const rows = await db
+      .select({
+        id: users.id,
+        name: users.name,
+        email: users.email,
+        currentTool: users.currentTool,
+        currentToolOther: users.currentToolOther,
+        painPoints: users.painPoints,
+        painPointsOther: users.painPointsOther,
+        successDefinition: users.successDefinition,
+        willingnessToPay: users.willingnessToPay,
+        additionalNotes: users.additionalNotes,
+        onboardingCompletedAt: users.onboardingCompletedAt,
+        createdAt: users.createdAt,
+      })
+      .from(users)
+      .where(isNotNull(users.onboardingCompletedAt))
+      .orderBy(desc(users.onboardingCompletedAt));
+
+    // WTP priority sort: highest intent first
+    const wtpOrder: Record<string, number> = {
+      "60_plus": 0,
+      "need_results": 1,
+      "40_59": 2,
+      "20_39": 3,
+      "under_20": 4,
+    };
+
+    return rows
+      .map((r) => ({
+        ...r,
+        painPoints: r.painPoints ? (JSON.parse(r.painPoints) as string[]) : [],
+      }))
+      .sort((a, b) => {
+        const aOrder = wtpOrder[a.willingnessToPay ?? ""] ?? 5;
+        const bOrder = wtpOrder[b.willingnessToPay ?? ""] ?? 5;
+        return aOrder - bOrder;
+      });
+  }),
 });
