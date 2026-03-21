@@ -313,7 +313,7 @@ function HeroDemoPanel() {
         }}
       >
         <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "oklch(0.78 0.14 65)", animation: "pulse 2s ease-in-out infinite", flexShrink: 0 }} />
-        <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.58rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "oklch(0.76 0.022 82)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+        <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.58rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "oklch(0.62 0.006 80)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
           {phase === 0 ? "AI Chain Running" : phase === 1 ? "Spam Filter Active" : phase === 2 ? "Lead Detected" : "Comment Drafting"}
         </span>
       </div>
@@ -618,7 +618,7 @@ function UseCaseCard({ tag, headline, body, stat }: { tag: string; headline: str
       <h3 style={{ fontFamily: "var(--font-display)", fontSize: "1.3rem", fontWeight: 400, color: "oklch(0.93 0.010 80)", lineHeight: 1.25 }}>
         {headline}
       </h3>
-      <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.82rem", fontWeight: 300, color: "oklch(0.76 0.022 82)", lineHeight: 1.7, flex: 1 }}>
+      <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.82rem", fontWeight: 300, color: "oklch(0.62 0.006 80)", lineHeight: 1.7, flex: 1 }}>
         {body}
       </p>
       <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", letterSpacing: "0.1em", color: "oklch(0.55 0 0)", borderTop: "0.5px solid oklch(0.18 0.007 60)", paddingTop: "1rem" }}>
@@ -712,7 +712,7 @@ function DifferentiatorsSection() {
                     fontFamily: "var(--font-sans)",
                     fontSize: "0.82rem",
                     fontWeight: 300,
-                    color: "oklch(0.76 0.022 82)",
+                    color: "oklch(0.62 0.006 80)",
                     lineHeight: 1.7,
                   }}
                 >
@@ -1017,7 +1017,7 @@ export default function Waitlist() {
                   fontFamily: "var(--font-sans)",
                   fontSize: "1rem",
                   fontWeight: 300,
-                  color: "oklch(0.76 0.022 82)",
+                  color: "oklch(0.62 0.006 80)",
                   lineHeight: 1.7,
                   maxWidth: "48ch",
                   marginBottom: "1.5rem",
@@ -1451,7 +1451,7 @@ export default function Waitlist() {
               fontFamily: "var(--font-sans)",
               fontSize: "0.9375rem",
               fontWeight: 300,
-              color: "oklch(0.76 0.022 82)",
+              color: "oklch(0.62 0.006 80)",
               lineHeight: 1.8,
               maxWidth: "46ch",
               margin: "0 auto 3rem",

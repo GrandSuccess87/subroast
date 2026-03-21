@@ -221,7 +221,7 @@ function ReportMockup() {
                 style={{
                   fontFamily: "var(--font-mono)",
                   fontSize: "0.55rem",
-                  color: "oklch(0.76 0.022 82)",
+                  color: "oklch(0.62 0.006 80)",
                   letterSpacing: "0.12em",
                   textTransform: "uppercase",
                   marginTop: "0.35rem",
@@ -320,7 +320,7 @@ function ReportMockup() {
                   fontFamily: "var(--font-sans)",
                   fontSize: "0.7rem",
                   fontWeight: 300,
-                  color: "oklch(0.76 0.022 82)",
+                  color: "oklch(0.62 0.006 80)",
                   lineHeight: 1.6,
                 }}
               >
@@ -566,7 +566,7 @@ function VideoSection() {
               fontFamily: "var(--font-sans)",
               fontSize: "1rem",
               fontWeight: 300,
-              color: "oklch(0.76 0.022 82)",
+              color: "oklch(0.62 0.006 80)",
               lineHeight: 1.75,
               maxWidth: "44ch",
             }}
@@ -626,7 +626,7 @@ function VideoSection() {
                 {[{ label: "Clarity", value: "74", sub: "Moderate" }, { label: "Fit", value: "81", sub: "Strong" }, { label: "Virality", value: "68", sub: "Fair" }].map((s, i) => (
                   <div key={s.label} className="px-5 py-5 text-center" style={{ borderRight: i < 2 ? "0.5px solid oklch(0.20 0.007 60)" : "none" }}>
                     <div style={{ fontFamily: "var(--font-mono)", fontSize: "2rem", fontWeight: 300, color: "oklch(0.88 0.025 85)", lineHeight: 1 }}>{s.value}</div>
-                    <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", color: "oklch(0.76 0.022 82)", letterSpacing: "0.12em", textTransform: "uppercase", marginTop: "0.4rem" }}>{s.label}</div>
+                    <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", color: "oklch(0.62 0.006 80)", letterSpacing: "0.12em", textTransform: "uppercase", marginTop: "0.4rem" }}>{s.label}</div>
                     <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", color: "oklch(0.38 0 0)", letterSpacing: "0.08em", marginTop: "0.15rem" }}>{s.sub}</div>
                   </div>
                 ))}
@@ -657,7 +657,7 @@ function VideoSection() {
                   <div style={{ width: "1px", alignSelf: "stretch", background: "oklch(0.88 0.025 85 / 0.4)", flexShrink: 0 }} />
                   <div>
                     <p className="eyebrow mb-2" style={{ fontSize: "0.58rem", color: "oklch(0.88 0.025 85 / 0.7)" }}>Virality Recommendation</p>
-                    <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", fontWeight: 300, color: "oklch(0.76 0.022 82)", lineHeight: 1.65 }}>
+                    <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", fontWeight: 300, color: "oklch(0.62 0.006 80)", lineHeight: 1.65 }}>
                       Posts opening with “Has anyone…” receive 2.4× more comments on r/SaaS. Optimal posting window: Tuesday–Thursday, 9–11am EST.
                     </p>
                   </div>
@@ -995,7 +995,7 @@ export default function Home() {
                   fontFamily: "var(--font-sans)",
                   fontSize: "1rem",
                   fontWeight: 300,
-                  color: "oklch(0.76 0.022 82)",
+                  color: "oklch(0.62 0.006 80)",
                   lineHeight: 1.8,
                   maxWidth: "48ch",
                   marginBottom: "3rem",
@@ -1444,9 +1444,9 @@ export default function Home() {
                       document.getElementById(href.slice(1))?.scrollIntoView({ behavior: "smooth" });
                     }
                   }}
-                  style={{ fontFamily: "var(--font-mono)", fontSize: "0.58rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "oklch(0.76 0.022 82)", textDecoration: "none", transition: "color 0.3s ease" }}
+                  style={{ fontFamily: "var(--font-mono)", fontSize: "0.58rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "oklch(0.62 0.006 80)", textDecoration: "none", transition: "color 0.3s ease" }}
                   onMouseEnter={(e) => ((e.target as HTMLAnchorElement).style.color = "oklch(0.88 0.025 85)")}
-                  onMouseLeave={(e) => ((e.target as HTMLAnchorElement).style.color = "oklch(0.76 0.022 82)")}
+                  onMouseLeave={(e) => ((e.target as HTMLAnchorElement).style.color = "oklch(0.62 0.006 80)")}
                 >
                   {label}
                 </a>
@@ -1543,7 +1543,7 @@ function HeroDemoPanel() {
               }}
             >
               <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "oklch(0.78 0.14 65)", animation: "pulse 2s ease-in-out infinite" }} />
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.58rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "oklch(0.76 0.022 82)" }}>
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.58rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "oklch(0.62 0.006 80)" }}>
                 {phase === 0 ? "AI chain running" : phase === 1 ? "Spam filter" : phase === 2 ? "Lead ready" : "Drafting comment"}
               </span>
             </div>
@@ -1640,7 +1640,7 @@ function HeroDemoPanel() {
                 <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem", padding: "0.5rem 0.75rem", background: "oklch(0.14 0.007 60)", border: "0.5px solid oklch(0.20 0.007 60)", overflow: "hidden", minWidth: 0 }}>
                   <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.52rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "oklch(0.78 0.14 65)", flexShrink: 0 }}>r/SaaS</span>
                   <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.52rem", color: "oklch(0.28 0 0)", flexShrink: 0 }}>/</span>
-                  <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.72rem", fontWeight: 300, color: "oklch(0.76 0.022 82)", flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.72rem", fontWeight: 300, color: "oklch(0.62 0.006 80)", flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                     &ldquo;Struggling to get traction on Reddit without sounding like an ad&rdquo;
                   </span>
                 </div>
@@ -1702,7 +1702,7 @@ function HeroDemoPanel() {
                   {/* DM preview */}
                   <div style={{ borderTop: "0.5px solid oklch(0.22 0.007 60)", paddingTop: "0.65rem" }}>
                     <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "oklch(0.88 0.025 85 / 0.6)", marginBottom: "0.35rem" }}>Outreach draft ready</p>
-                    <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.72rem", fontWeight: 300, color: "oklch(0.76 0.022 82)", lineHeight: 1.6, fontStyle: "italic" }}>
+                    <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.72rem", fontWeight: 300, color: "oklch(0.62 0.006 80)", lineHeight: 1.6, fontStyle: "italic" }}>
                       "Hey — saw your post about Reddit traction. I built SubRoast specifically for this problem…"
                     </p>
                   </div>
@@ -1737,7 +1737,7 @@ function LeadIntelligenceDemo() {
             <p className="eyebrow mb-5">Lead Intelligence</p>
             <h2 className="display-lg mb-6">From subreddit to warm lead</h2>
             <div className="rule-gold mb-6" style={{ width: "3rem" }} />
-            <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.9375rem", fontWeight: 300, color: "oklch(0.76 0.022 82)", lineHeight: 1.75, maxWidth: "44ch" }}>
+            <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.9375rem", fontWeight: 300, color: "oklch(0.62 0.006 80)", lineHeight: 1.75, maxWidth: "44ch" }}>
               SubRoast runs a six-step AI chain continuously — scanning, filtering spam, scoring intent, drafting personalised DMs, and writing public comment replies before you even open the app.
             </p>
           </div>
@@ -1941,7 +1941,7 @@ function CtaSection({ onOpenModal }: { onOpenModal: () => void }) {
             fontFamily: "var(--font-sans)",
             fontSize: "0.9375rem",
             fontWeight: 300,
-            color: "oklch(0.76 0.022 82)",
+            color: "oklch(0.62 0.006 80)",
             lineHeight: 1.8,
             maxWidth: "46ch",
             margin: "0 auto 3rem",
@@ -2072,7 +2072,7 @@ function HomeWhatsComingSection({ onOpenModal }: { onOpenModal: () => void }) {
               style={{
                 fontFamily: "var(--font-body)",
                 fontSize: "clamp(0.9rem, 1.5vw, 1.05rem)",
-                color: "oklch(0.76 0.022 82)",
+                color: "oklch(0.62 0.006 80)",
                 maxWidth: "36rem",
                 margin: "0 auto",
                 lineHeight: 1.7,
@@ -2226,7 +2226,7 @@ function HomePricingSection() {
             Precision outreach,<br />at any scale.
           </h2>
           <div className="rule-gold mx-auto mb-6" style={{ width: "3rem" }} />
-          <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.9375rem", fontWeight: 300, color: "oklch(0.76 0.022 82)", lineHeight: 1.75, maxWidth: "40ch", margin: "0 auto" }}>
+          <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.9375rem", fontWeight: 300, color: "oklch(0.62 0.006 80)", lineHeight: 1.75, maxWidth: "40ch", margin: "0 auto" }}>
             Free during beta. No credit card required.
           </p>
         </div>
@@ -2256,14 +2256,14 @@ function HomePricingSection() {
                 }}
               >
                 {/* Tier */}
-                <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", letterSpacing: "0.25em", textTransform: "uppercase", color: "oklch(0.76 0.022 82)", marginBottom: "0.75rem" }}>
+                <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", letterSpacing: "0.25em", textTransform: "uppercase", color: "oklch(0.62 0.006 80)", marginBottom: "0.75rem" }}>
                   Tier {plan.tier}
                 </p>
                 {/* Name */}
                 <h3 style={{ fontFamily: "var(--font-display)", fontSize: "2rem", fontWeight: 400, fontStyle: "italic", color: "oklch(0.93 0.010 80)", marginBottom: "0.4rem", lineHeight: 1.1 }}>
                   {plan.name}
                 </h3>
-                <p style={{ fontSize: "0.82rem", color: "oklch(0.76 0.022 82)", marginBottom: "1.75rem", lineHeight: 1.6 }}>
+                <p style={{ fontSize: "0.82rem", color: "oklch(0.62 0.006 80)", marginBottom: "1.75rem", lineHeight: 1.6 }}>
                   {plan.description}
                 </p>
                 {/* Price */}
@@ -2272,9 +2272,9 @@ function HomePricingSection() {
                     <span style={{ fontFamily: "var(--font-mono)", fontSize: "2.5rem", fontWeight: 400, color: "oklch(0.93 0.010 80)", lineHeight: 1 }}>
                       ${plan.price}
                     </span>
-                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.7rem", color: "oklch(0.76 0.022 82)", letterSpacing: "0.08em" }}>/ month</span>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.7rem", color: "oklch(0.62 0.006 80)", letterSpacing: "0.08em" }}>/ month</span>
                   </div>
-                  <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", color: "oklch(0.76 0.022 82)", letterSpacing: "0.1em", marginTop: "0.35rem" }}>
+                  <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", color: "oklch(0.62 0.006 80)", letterSpacing: "0.1em", marginTop: "0.35rem" }}>
                     Free during beta
                   </p>
                 </div>
@@ -2379,7 +2379,7 @@ function PricingFAQ() {
       {/* Divider */}
       <div style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "2.5rem" }}>
         <div style={{ flex: 1, height: "0.5px", background: "oklch(0.22 0.007 60)" }} />
-        <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", letterSpacing: "0.28em", textTransform: "uppercase", color: "oklch(0.76 0.022 82)", whiteSpace: "nowrap" }}>
+        <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", letterSpacing: "0.28em", textTransform: "uppercase", color: "oklch(0.62 0.006 80)", whiteSpace: "nowrap" }}>
           Common Questions
         </p>
         <div style={{ flex: 1, height: "0.5px", background: "oklch(0.22 0.007 60)" }} />
@@ -2414,7 +2414,7 @@ function PricingFAQ() {
               style={{
                 fontFamily: "var(--font-mono)",
                 fontSize: "0.75rem",
-                color: "oklch(0.76 0.022 82)",
+                color: "oklch(0.62 0.006 80)",
                 flexShrink: 0,
                 transform: open === i ? "rotate(45deg)" : "rotate(0deg)",
                 transition: "transform 0.25s ease",
@@ -2431,7 +2431,7 @@ function PricingFAQ() {
               transition: "max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
             }}
           >
-            <p style={{ fontSize: "0.85rem", color: "oklch(0.76 0.022 82)", lineHeight: 1.75, paddingBottom: "1.4rem" }}>
+            <p style={{ fontSize: "0.85rem", color: "oklch(0.62 0.006 80)", lineHeight: 1.75, paddingBottom: "1.4rem" }}>
               {a}
             </p>
           </div>
