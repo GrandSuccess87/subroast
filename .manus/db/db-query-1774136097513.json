@@ -1,0 +1,9 @@
+{
+  "query": "\nSELECT \n  id,\n  name,\n  email,\n  role,\n  loginMethod,\n  createdAt,\n  lastSignedIn,\n  onboardingStep,\n  onboardingCompletedAt,\n  currentTool,\n  currentToolOther,\n  painPoints,\n  painPointsOther,\n  successDefinition,\n  willingnessToPay,\n  additionalNotes\nFROM users\nWHERE createdAt >= '2026-03-21 22:00:00'\n  AND createdAt <= '2026-03-22 02:00:00'\nORDER BY createdAt ASC;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute \nSELECT \n  id,\n  name,\n  email,\n  role,\n  loginMethod,\n  createdAt,\n  lastSignedIn,\n  onboardingStep,\n  onboardingCompletedAt,\n  currentTool,\n  currentToolOther,\n  painPoints,\n  painPointsOther,\n  successDefinition,\n  willingnessToPay,\n  additionalNotes\nFROM users\nWHERE createdAt >= '2026-03-21 22:00:00'\n  AND createdAt <= '2026-03-22 02:00:00'\nORDER BY createdAt ASC;\n",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 54
+}

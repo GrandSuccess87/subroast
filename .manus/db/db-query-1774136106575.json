@@ -1,0 +1,26 @@
+{
+  "query": "\nSELECT 'reddit_accounts' AS source, COUNT(*) AS count FROM reddit_accounts WHERE userId = 1260001\nUNION ALL\nSELECT 'outreach_campaigns', COUNT(*) FROM outreach_campaigns WHERE userId = 1260001\nUNION ALL\nSELECT 'outreach_leads', COUNT(*) FROM outreach_leads WHERE campaignId IN (SELECT id FROM outreach_campaigns WHERE userId = 1260001)\nUNION ALL\nSELECT 'post_history', COUNT(*) FROM post_history WHERE userId = 1260001;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute \nSELECT 'reddit_accounts' AS source, COUNT(*) AS count FROM reddit_accounts WHERE userId = 1260001\nUNION ALL\nSELECT 'outreach_campaigns', COUNT(*) FROM outreach_campaigns WHERE userId = 1260001\nUNION ALL\nSELECT 'outreach_leads', COUNT(*) FROM outreach_leads WHERE campaignId IN (SELECT id FROM outreach_campaigns WHERE userId = 1260001)\nUNION ALL\nSELECT 'post_history', COUNT(*) FROM post_history WHERE userId = 1260001;\n",
+  "rows": [
+    {
+      "source": "post_history",
+      "count": "0"
+    },
+    {
+      "source": "outreach_campaigns",
+      "count": "0"
+    },
+    {
+      "source": "outreach_leads",
+      "count": "0"
+    },
+    {
+      "source": "reddit_accounts",
+      "count": "0"
+    }
+  ],
+  "messages": [],
+  "stdout": "source\tcount\npost_history\t0\noutreach_campaigns\t0\noutreach_leads\t0\nreddit_accounts\t0\n",
+  "stderr": "",
+  "execution_time_ms": 55
+}

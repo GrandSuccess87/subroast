@@ -877,3 +877,17 @@
 - [x] Export CSV button — downloads all responses as subroast-responses-YYYY-MM-DD.csv
 - [x] Register /admin/responses route in App.tsx
 - [x] Vitest tests: FORBIDDEN for non-admin, array return for admin (2 tests passing)
+
+### Homepage Copy & Admin Fixes v6.77
+- [x] Remove "Pricing unlocks after Reddit API approval." line from beta CTA section
+- [x] Update "six-step AI chain runs continuously" copy to accurate "each time you log in, fresh leads are waiting" framing
+- [x] Update How It Works step 03 body copy to "Generate a personalised DM draft in seconds. Review, copy, and send it yourself — no automation required."
+- [x] Update Lead Intelligence section description to accurate framing (no "before you open the app" claim)
+- [x] Admin route: non-admin users silently redirected to /dashboard (no error page shown)
+- [x] Promote owner account (id=1) to admin role in DB
+
+### Lead Signal Intelligence (Backlog)
+- [ ] Campaign intelligence report: show "X warm leads in r/SaaS" summary card on dashboard
+- [ ] Surface posts mentioning target keywords in last 48 hours with match count
+- [ ] "Outreach drafts ready" indicator per campaign when unactioned leads exist
+- [ ] Lead Signal section on homepage accurately reflects this future feature (keep as aspirational)

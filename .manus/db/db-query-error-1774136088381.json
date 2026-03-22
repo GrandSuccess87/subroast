@@ -1,0 +1,8 @@
+{
+  "query": "\nSELECT \n  id,\n  name,\n  email,\n  role,\n  login_method,\n  created_at,\n  last_signed_in,\n  onboarding_step,\n  onboarding_completed_at,\n  current_tool,\n  current_tool_other,\n  pain_points,\n  pain_points_other,\n  success_definition,\n  willingness_to_pay,\n  additional_notes\nFROM users\nWHERE created_at >= '2026-03-21 22:00:00'\n  AND created_at <= '2026-03-22 02:00:00'\nORDER BY created_at ASC;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute \nSELECT \n  id,\n  name,\n  email,\n  role,\n  login_method,\n  created_at,\n  last_signed_in,\n  onboarding_step,\n  onboarding_completed_at,\n  current_tool,\n  current_tool_other,\n  pain_points,\n  pain_points_other,\n  success_definition,\n  willingness_to_pay,\n  additional_notes\nFROM users\nWHERE created_at >= '2026-03-21 22:00:00'\n  AND created_at <= '2026-03-22 02:00:00'\nORDER BY created_at ASC;\n",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1054 (42S22) at line 2: Unknown column 'created_at' in 'where clause'"
+  ]
+}

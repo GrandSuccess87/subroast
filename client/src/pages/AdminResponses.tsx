@@ -19,7 +19,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Download, Search, Users, TrendingUp, DollarSign, AlertCircle } from "lucide-react";
+import { Download, Search, Users, TrendingUp, DollarSign } from "lucide-react";
 
 // ─── WTP helpers ──────────────────────────────────────────────────────────────
 
@@ -180,18 +180,9 @@ export default function AdminResponses() {
   }
 
   if (user.role !== "admin") {
-    return (
-      <div className="min-h-screen bg-[oklch(0.09_0.005_240)] flex items-center justify-center">
-        <div className="flex flex-col items-center gap-3 text-center">
-          <AlertCircle className="w-8 h-8 text-red-400" />
-          <p className="text-white font-medium">Access denied</p>
-          <p className="text-slate-400 text-sm">This page is restricted to admins.</p>
-          <Button variant="outline" onClick={() => navigate("/dashboard")} className="mt-2">
-            Back to dashboard
-          </Button>
-        </div>
-      </div>
-    );
+    // Silently redirect — don't reveal that this route exists
+    navigate("/dashboard");
+    return null;
   }
 
   const rows = responses ?? [];

@@ -1082,7 +1082,7 @@ export default function Home() {
                     maxWidth: "44ch",
                   }}
                 >
-                  A six-step AI chain runs continuously — so warm leads and ready-to-send drafts are waiting for you each time you log in.
+                  Each time you log in, fresh leads and ready-to-copy drafts are waiting — scanned, filtered, and scored by AI.
                 </p>
               </div>
 
@@ -1145,7 +1145,7 @@ export default function Home() {
               {
                 num: "03",
                 title: "Outreach",
-                body: "A personalised DM draft is ready before you open the app. Review, copy, and send in seconds.",
+                body: "Generate a personalised DM draft in seconds. Review, copy, and send it yourself — no automation required.",
               },
             ].map(({ num, title, body }) => (
               <div
@@ -1399,7 +1399,7 @@ export default function Home() {
           <div style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", gap: "1.2rem" }}>
             <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "oklch(0.78 0.14 65)", background: "oklch(0.78 0.14 65 / 0.08)", border: "0.5px solid oklch(0.78 0.14 65 / 0.25)", padding: "0.35rem 0.9rem", borderRadius: "2px" }}>Early Access</span>
             <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 400, color: "oklch(0.93 0.025 60)", margin: 0, lineHeight: 1.15 }}>Free during beta</h2>
-            <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.7rem", letterSpacing: "0.08em", color: "oklch(0.6 0.02 60)", margin: 0, maxWidth: "32ch", lineHeight: 1.7 }}>Full access. No credit card. No commitment.<br />Pricing unlocks after Reddit API approval.</p>
+            <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.7rem", letterSpacing: "0.08em", color: "oklch(0.6 0.02 60)", margin: 0, maxWidth: "32ch", lineHeight: 1.7 }}>Full access. No credit card. No commitment.</p>
             <a
               href={getLoginUrl("/onboarding")}
               className="btn-luxury-primary"
@@ -1774,7 +1774,7 @@ function LeadIntelligenceDemo() {
             <h2 className="display-lg mb-6">From subreddit to warm lead</h2>
             <div className="rule-gold mb-6" style={{ width: "3rem" }} />
             <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.9375rem", fontWeight: 300, color: "oklch(0.62 0.006 80)", lineHeight: 1.75, maxWidth: "44ch" }}>
-              SubRoast runs a six-step AI chain continuously — scanning, filtering spam, scoring intent, drafting personalised DMs, and writing public comment replies before you even open the app.
+              SubRoast scans Reddit for buying signals, filters spam, scores intent, and drafts personalised DMs and comment replies — so when you log in, the hard work is already done.
             </p>
           </div>
           {/* Right: animated demo panel */}
