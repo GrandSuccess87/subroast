@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
@@ -160,29 +160,28 @@ export default function AdminResponses() {
   const [, navigate] = useLocation();
   const [search, setSearch] = useState("");
 
+  // Move all navigate() calls into useEffect to avoid setState-in-render
+  useEffect(() => {
+    if (authLoading) return;
+    if (!user) {
+      navigate("/");
+    } else if (user.role !== "admin") {
+      navigate("/dashboard");
+    }
+  }, [authLoading, user, navigate]);
+
   const { data: responses, isLoading } = trpc.onboarding.getResponses.useQuery(undefined, {
     enabled: !!user && user.role === "admin",
     retry: false,
   });
 
-  // Auth guard
-  if (authLoading) {
+  // Show loading while auth resolves or while redirecting
+  if (authLoading || !user || user.role !== "admin") {
     return (
       <div className="min-h-screen bg-[oklch(0.09_0.005_240)] flex items-center justify-center">
         <div className="text-slate-400 text-sm">Loading…</div>
       </div>
     );
-  }
-
-  if (!user) {
-    navigate("/");
-    return null;
-  }
-
-  if (user.role !== "admin") {
-    // Silently redirect — don't reveal that this route exists
-    navigate("/dashboard");
-    return null;
   }
 
   const rows = responses ?? [];
