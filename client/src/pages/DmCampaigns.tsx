@@ -42,7 +42,7 @@ const SURFACE_RAISED = "oklch(0.14 0.007 60)";
 const BORDER = "oklch(0.22 0.007 60)";
 const IVORY = "oklch(0.88 0.025 85)";
 const FOREGROUND = "oklch(0.93 0.010 80)";
-const MUTED = "oklch(0.62 0.006 80)";
+const MUTED = "oklch(0.82 0.006 80)";
 const DANGER = "oklch(0.65 0.18 25)";
 const AMBER = "oklch(0.78 0.14 65)";
 
