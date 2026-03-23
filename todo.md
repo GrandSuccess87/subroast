@@ -908,3 +908,8 @@
 - [x] Fix: Manual sync in outreach.ts also updated to pass subreddit to isSpamPost
 - [x] Fix: Sync toast now shows "Inbox up to date — no new leads found. X leads already in your inbox." when 0 new leads
 - [x] Fix: Reset campaign 90001 (For Hire) lastSyncAt/dailySyncsUsed so next manual sync treats posts as fresh
+
+### Backlog v6.81
+- [ ] Feature: Daily 8am digest email — scheduled Resend email summarising new leads across all campaigns each morning
+- [ ] Feature: Lead Signal intelligence report — "3 warm leads in r/SaaS" card showing posts mentioning target keywords in last 48h, with outreach drafts ready
+- [ ] UX: Clean up spammy leads in existing campaigns — review inbox and add bulk "Skip" action for obvious spam posts

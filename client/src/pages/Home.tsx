@@ -182,11 +182,11 @@ function ReportMockup() {
               fontFamily: "var(--font-display)",
               fontSize: "1.05rem",
               fontWeight: 400,
-              color: "oklch(0.93 0.010 80)",
-              lineHeight: 1.3,
+              color: "oklch(0.92 0.006 80)",
+              lineHeight: 1.75,
             }}
           >
-            "Just launched my SaaS tool for tracking Reddit mentions…"
+            SubRoast scans Reddit for buying signalsReddit mentions…"
           </p>
         </div>
 
@@ -529,7 +529,7 @@ function FeatureRow({
           fontFamily: "var(--font-sans)",
           fontSize: "0.875rem",
           fontWeight: 300,
-          color: "oklch(0.72 0.006 80)",
+          color: "oklch(0.92 0.006 80)",
           lineHeight: 1.75,
         }}
       >
@@ -567,7 +567,7 @@ function VideoSection() {
               fontFamily: "var(--font-sans)",
               fontSize: "1rem",
               fontWeight: 300,
-              color: "oklch(0.62 0.006 80)",
+              color: "oklch(0.92 0.006 80)",
               lineHeight: 1.75,
               maxWidth: "44ch",
             }}
@@ -636,7 +636,7 @@ function VideoSection() {
               {/* Assessment */}
               <div className="px-8 py-6">
                 <p className="eyebrow mb-3" style={{ fontSize: "0.58rem", color: "oklch(0.88 0.025 85 / 0.7)" }}>Assessment</p>
-                <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.8rem", fontWeight: 300, color: "oklch(0.55 0.006 80)", lineHeight: 1.7 }}>
+                <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.8rem", fontWeight: 300, color: "oklch(0.92 0.006 80)", lineHeight: 1.7 }}>
                   This draft reads as promotional rather than conversational. Reddit’s highest-performing posts lead with a problem, not a product. Recommend restructuring the opening to surface the pain point first.
                 </p>
               </div>
@@ -658,7 +658,7 @@ function VideoSection() {
                   <div style={{ width: "1px", alignSelf: "stretch", background: "oklch(0.88 0.025 85 / 0.4)", flexShrink: 0 }} />
                   <div>
                     <p className="eyebrow mb-2" style={{ fontSize: "0.58rem", color: "oklch(0.88 0.025 85 / 0.7)" }}>Virality Recommendation</p>
-                    <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", fontWeight: 300, color: "oklch(0.62 0.006 80)", lineHeight: 1.65 }}>
+                    <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", fontWeight: 300, color: "oklch(0.92 0.006 80)", lineHeight: 1.65 }}>
                       Posts opening with “Has anyone…” receive 2.4× more comments on r/SaaS. Optimal posting window: Tuesday–Thursday, 9–11am EST.
                     </p>
                   </div>
@@ -673,7 +673,7 @@ function VideoSection() {
                   style={{ background: "oklch(0.15 0.010 65)", border: "0.5px solid oklch(0.28 0.020 65)" }}
                 >
                   <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", color: "oklch(0.78 0.14 65)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "0.4rem" }}>3 warm leads in r/SaaS</p>
-                  <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.72rem", fontWeight: 300, color: "oklch(0.55 0.006 80)", lineHeight: 1.6 }}>
+                  <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.72rem", fontWeight: 300, color: "oklch(0.92 0.006 80)", lineHeight: 1.6 }}>
                     Posts mentioning “Reddit tracking” or “mentions tool” in the last 48 hours. Outreach drafts ready.
                   </p>
                 </div>
@@ -759,8 +759,8 @@ function StatBar() {
                 style={{
                   fontFamily: "var(--font-mono)",
                   fontSize: "0.58rem",
-                  color: "oklch(0.38 0 0)",
-                  letterSpacing: "0.16em",
+color: "oklch(0.72 0 0)",
+                letterSpacing: "0.16em",
                   textTransform: "uppercase",
                   marginTop: "0.5rem",
                 }}
@@ -930,6 +930,8 @@ export default function Home() {
           minHeight: "calc(100svh - 3.5rem)",
           display: "flex",
           alignItems: "center",
+          paddingTop: "clamp(2rem, 5vw, 4rem)",
+          paddingBottom: "clamp(2rem, 5vw, 4rem)",
         }}
       >
         {/* Very subtle grid */}
@@ -960,7 +962,7 @@ export default function Home() {
         </svg>
 
         <div className="container relative w-full">
-          <div className="grid lg:grid-cols-2 gap-16 xl:gap-24 items-center py-12 lg:py-16" style={{ minWidth: 0, overflow: "hidden" }}>
+          <div className="grid lg:grid-cols-2 gap-10 xl:gap-24 items-center py-4 lg:py-8" style={{ minWidth: 0, overflow: "hidden" }}>
 
             {/* LEFT: editorial copy */}
             <div ref={heroRef}>
@@ -996,7 +998,7 @@ export default function Home() {
                   fontFamily: "var(--font-sans)",
                   fontSize: "1rem",
                   fontWeight: 300,
-                  color: "oklch(0.62 0.006 80)",
+                  color: "oklch(0.92 0.006 80)",
                   lineHeight: 1.8,
                   maxWidth: "48ch",
                   marginBottom: "3rem",
@@ -1077,7 +1079,7 @@ export default function Home() {
                     fontFamily: "var(--font-sans)",
                     fontSize: "0.875rem",
                     fontWeight: 300,
-                    color: "oklch(0.55 0.006 80)",
+                    color: "oklch(0.92 0.006 80)",
                     lineHeight: 1.7,
                     maxWidth: "44ch",
                   }}
@@ -1120,7 +1122,7 @@ export default function Home() {
               fontSize: "0.75rem",
               letterSpacing: "0.22em",
               textTransform: "uppercase",
-              color: "oklch(0.55 0.006 80)",
+              color: "oklch(0.92 0.006 80)",
               textAlign: "center",
               marginBottom: "2.5rem",
             }}
@@ -1184,12 +1186,12 @@ export default function Home() {
                     fontFamily: "var(--font-sans)",
                     fontSize: "0.875rem",
                     fontWeight: 300,
-                    color: "oklch(0.55 0.006 80)",
-                    lineHeight: 1.75,
-                  }}
-                >
-                  {body}
-                </div>
+color: "oklch(0.92 0.006 80)",
+                  lineHeight: 1.75,
+                }}
+              >
+                {body}
+              </div>
               </div>
             ))}
           </div>
@@ -1257,7 +1259,7 @@ export default function Home() {
               fontSize: "0.75rem",
               letterSpacing: "0.22em",
               textTransform: "uppercase",
-              color: "oklch(0.55 0.006 80)",
+              color: "oklch(0.92 0.006 80)",
               textAlign: "center",
               marginBottom: "2.5rem",
             }}
@@ -1299,7 +1301,7 @@ export default function Home() {
               </blockquote>
               <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "auto" }}>
                 <XLogo />
-                <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.62rem", letterSpacing: "0.08em", color: "oklch(0.65 0.006 80)" }}>
+                <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.62rem", letterSpacing: "0.08em", color: "oklch(0.85 0.006 80)" }}>
                   @zara_ferna94287 &nbsp;&middot;&nbsp; responding to SubRoast&apos;s launch
                 </p>
               </div>
@@ -1332,7 +1334,7 @@ export default function Home() {
               </blockquote>
               <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "auto" }}>
                 <XLogo />
-                <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.62rem", letterSpacing: "0.08em", color: "oklch(0.65 0.006 80)" }}>
+                <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.62rem", letterSpacing: "0.08em", color: "oklch(0.85 0.006 80)" }}>
                   @viberankdev &nbsp;&middot;&nbsp; responding to SubRoast&apos;s launch
                 </p>
               </div>
@@ -1364,7 +1366,7 @@ export default function Home() {
               </blockquote>
               <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "auto" }}>
                 <XLogo />
-                <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.62rem", letterSpacing: "0.08em", color: "oklch(0.65 0.006 80)" }}>
+                <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.62rem", letterSpacing: "0.08em", color: "oklch(0.85 0.006 80)" }}>
                   @marianbuildapps &nbsp;&middot;&nbsp; responding to SubRoast&apos;s launch
                 </p>
               </div>
@@ -1912,8 +1914,8 @@ function SafetyBlock() {
                 fontFamily: "var(--font-sans)",
                 fontSize: "0.8125rem",
                 fontWeight: 300,
-                color: "oklch(0.72 0.006 80)",
-                lineHeight: 1.6,
+color: "oklch(0.92 0.006 80)",
+              lineHeight: 1.6,
                 opacity: visibleItems[i] ? 1 : 0,
                 transform: visibleItems[i] ? "translateX(0)" : "translateX(-16px)",
                 transition: "opacity 0.5s ease, transform 0.5s ease",
@@ -1977,12 +1979,12 @@ function CtaSection({ onOpenModal }: { onOpenModal: () => void }) {
             fontFamily: "var(--font-sans)",
             fontSize: "0.9375rem",
             fontWeight: 300,
-            color: "oklch(0.62 0.006 80)",
-            lineHeight: 1.8,
-            maxWidth: "46ch",
-            margin: "0 auto 3rem",
-          }}
-        >
+            color: "oklch(0.92 0.006 80)",
+          lineHeight: 1.8,
+          maxWidth: "46ch",
+          margin: "0 auto 3rem",
+        }}
+      >
           They're describing their exact problem in a thread right now. SubRoast finds them, scores their intent, and hands you a personalised DM — before your competitors even open the app.
         </p>
 
@@ -2109,8 +2111,8 @@ function HomeWhatsComingSection({ onOpenModal }: { onOpenModal: () => void }) {
               style={{
                 fontFamily: "var(--font-body)",
                 fontSize: "clamp(0.9rem, 1.5vw, 1.05rem)",
-                color: "oklch(0.62 0.006 80)",
-                maxWidth: "36rem",
+color: "oklch(0.92 0.006 80)",
+                  maxWidth: "36rem",
                 margin: "0 auto",
                 lineHeight: 1.7,
               }}
@@ -2189,7 +2191,7 @@ function HomeWhatsComingSection({ onOpenModal }: { onOpenModal: () => void }) {
                   style={{
                     fontFamily: "var(--font-body)",
                     fontSize: "0.82rem",
-                    color: "oklch(0.52 0.006 80)",
+                    color: "oklch(0.92 0.006 80)",
                     lineHeight: 1.65,
                     margin: 0,
                   }}
@@ -2293,14 +2295,14 @@ function HomePricingSection() {
                 }}
               >
                 {/* Tier */}
-                <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", letterSpacing: "0.25em", textTransform: "uppercase", color: "oklch(0.62 0.006 80)", marginBottom: "0.75rem" }}>
+                <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", letterSpacing: "0.25em", textTransform: "uppercase", color: "oklch(0.85 0.006 80)", marginBottom: "0.75rem" }}>
                   Tier {plan.tier}
                 </p>
                 {/* Name */}
                 <h3 style={{ fontFamily: "var(--font-display)", fontSize: "2rem", fontWeight: 400, fontStyle: "italic", color: "oklch(0.93 0.010 80)", marginBottom: "0.4rem", lineHeight: 1.1 }}>
                   {plan.name}
                 </h3>
-                <p style={{ fontSize: "0.82rem", color: "oklch(0.62 0.006 80)", marginBottom: "1.75rem", lineHeight: 1.6 }}>
+                <p style={{ fontSize: "0.82rem", color: "oklch(0.92 0.006 80)", marginBottom: "1.75rem", lineHeight: 1.6 }}>
                   {plan.description}
                 </p>
                 {/* Price */}
@@ -2309,9 +2311,9 @@ function HomePricingSection() {
                     <span style={{ fontFamily: "var(--font-mono)", fontSize: "2.5rem", fontWeight: 400, color: "oklch(0.93 0.010 80)", lineHeight: 1 }}>
                       ${plan.price}
                     </span>
-                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.7rem", color: "oklch(0.62 0.006 80)", letterSpacing: "0.08em" }}>/ month</span>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.7rem", color: "oklch(0.85 0.006 80)", letterSpacing: "0.08em" }}>/ month</span>
                   </div>
-                  <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", color: "oklch(0.62 0.006 80)", letterSpacing: "0.1em", marginTop: "0.35rem" }}>
+                  <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", color: "oklch(0.85 0.006 80)", letterSpacing: "0.1em", marginTop: "0.35rem" }}>
                     Free during beta
                   </p>
                 </div>
@@ -2380,7 +2382,7 @@ function HomePricingSection() {
         </div>
 
         {/* Trust line */}
-        <p style={{ textAlign: "center", fontFamily: "var(--font-mono)", fontSize: "0.58rem", color: "oklch(0.42 0 0)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "4rem" }}>
+        <p style={{ textAlign: "center", fontFamily: "var(--font-mono)", fontSize: "0.58rem", color: "oklch(0.75 0 0)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "4rem" }}>
            Free during beta · No credit card required
         </p>
         {/* FAQ accordion */}
@@ -2416,7 +2418,7 @@ function PricingFAQ() {
       {/* Divider */}
       <div style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginBottom: "2.5rem" }}>
         <div style={{ flex: 1, height: "0.5px", background: "oklch(0.22 0.007 60)" }} />
-        <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", letterSpacing: "0.28em", textTransform: "uppercase", color: "oklch(0.62 0.006 80)", whiteSpace: "nowrap" }}>
+        <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", letterSpacing: "0.28em", textTransform: "uppercase", color: "oklch(0.85 0.006 80)", whiteSpace: "nowrap" }}>
           Common Questions
         </p>
         <div style={{ flex: 1, height: "0.5px", background: "oklch(0.22 0.007 60)" }} />
@@ -2468,7 +2470,7 @@ function PricingFAQ() {
               transition: "max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
             }}
           >
-            <p style={{ fontSize: "0.85rem", color: "oklch(0.62 0.006 80)", lineHeight: 1.75, paddingBottom: "1.4rem" }}>
+            <p style={{ fontSize: "0.85rem", color: "oklch(0.92 0.006 80)", lineHeight: 1.75, paddingBottom: "1.4rem" }}>
               {a}
             </p>
           </div>
