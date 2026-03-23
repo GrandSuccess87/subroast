@@ -1,0 +1,28 @@
+{
+  "query": "SELECT id, name, status, lastSyncAt FROM outreach_campaigns;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute SELECT id, name, status, lastSyncAt FROM outreach_campaigns;",
+  "rows": [
+    {
+      "id": "1",
+      "name": "SaaS Founders Outreach",
+      "status": "active",
+      "lastSyncAt": "1774278435371"
+    },
+    {
+      "id": "30001",
+      "name": "App Validation Complaint Mining",
+      "status": "active",
+      "lastSyncAt": "1774267251673"
+    },
+    {
+      "id": "60001",
+      "name": "SubRoast ICP Pain-Point Outreach",
+      "status": "active",
+      "lastSyncAt": "1774278979171"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tstatus\tlastSyncAt\n1\tSaaS Founders Outreach\tactive\t1774278435371\n30001\tApp Validation Complaint Mining\tactive\t1774267251673\n60001\tSubRoast ICP Pain-Point Outreach\tactive\t1774278979171\n",
+  "stderr": "",
+  "execution_time_ms": 53
+}

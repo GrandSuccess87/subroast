@@ -1,0 +1,16 @@
+{
+  "query": "SELECT id, name, subreddits, keywords FROM outreach_campaigns WHERE name LIKE '%SaaS%';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute SELECT id, name, subreddits, keywords FROM outreach_campaigns WHERE name LIKE '%SaaS%';",
+  "rows": [
+    {
+      "id": "1",
+      "name": "SaaS Founders Outreach",
+      "subreddits": "[\"Entrepreneur\",\"SaaS\",\"indiehackers\",\"smallbusiness\",\"marketing\",\"RedditMarketing\",\"SideProject\",\"startups\",\"growthhacking\",\"forhire\"]",
+      "keywords": "[\"reddit marketing strategy\",\"scheduling reddit posts\",\"managing reddit presence\",\"reddit engagement problems\",\"time management reddit\",\"automating reddit posts\",\"struggling with reddit reach\",\"consistent reddit posting\",\"reddit content calendar\",\"efficient reddit promotion\",\"reddit for lead generation\",\"saas marketing reddit\",\"indie founder reddit growth\"]"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tsubreddits\tkeywords\n1\tSaaS Founders Outreach\t[\"Entrepreneur\",\"SaaS\",\"indiehackers\",\"smallbusiness\",\"marketing\",\"RedditMarketing\",\"SideProject\",\"startups\",\"growthhacking\",\"forhire\"]\t[\"reddit marketing strategy\",\"scheduling reddit posts\",\"managing reddit presence\",\"reddit engagement problems\",\"time management reddit\",\"automating reddit posts\",\"struggling with reddit reach\",\"consistent reddit posting\",\"reddit content calendar\",\"efficient reddit promotion\",\"reddit for lead generation\",\"saas marketing reddit\",\"indie founder reddit growth\"]\n",
+  "stderr": "",
+  "execution_time_ms": 55
+}

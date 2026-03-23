@@ -134,12 +134,14 @@ async function syncCampaign(campaign: {
   subreddits: string;
   keywords: string;
   leadsFound: number;
-}): Promise<number> {
+}, userPlan: string): Promise<number> {
   const subreddits = JSON.parse(campaign.subreddits) as string[];
   const keywords = JSON.parse(campaign.keywords) as string[];
   let newLeads = 0;
 
-  for (const sub of subreddits.slice(0, 5)) {
+  // Growth users process all subreddits; Starter/trial capped at 5
+  const subLimit = userPlan === "growth" ? subreddits.length : 5;
+  for (const sub of subreddits.slice(0, subLimit)) {
     for (const kw of keywords.slice(0, 3)) {
       const posts = await searchRedditPosts(sub, kw, 5);
       for (const post of posts) {
@@ -248,8 +250,10 @@ export async function runAutoSync(): Promise<void> {
   let totalNewLeads = 0;
 
   for (const campaign of due) {
+    const user = userPlanMap.get(campaign.userId);
+    const plan = user?.plan ?? "starter";
     try {
-      const newLeads = await syncCampaign(campaign);
+      const newLeads = await syncCampaign(campaign, plan);
       totalNewLeads += newLeads;
       synced++;
       console.log(`[AutoSync] Campaign ${campaign.id} (${campaign.name}): +${newLeads} leads`);

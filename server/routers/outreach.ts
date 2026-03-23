@@ -485,9 +485,12 @@ Rules:
       const existingLeads = await getOutreachLeadsByCampaignId(input.campaignId);
       const existingPostIds = new Set(existingLeads.map((l) => l.redditPostId));
 
-      console.log(`[syncLeads] Campaign ${input.campaignId}: subreddits=${JSON.stringify(subreddits)}, keywords=${JSON.stringify(keywords)}, existingLeads=${existingLeads.length}`);
+      // Growth users get all subreddits; Starter/trial capped at 5
+      const subLimit = userPlan === "growth" ? subreddits.length : 5;
 
-      for (const sub of subreddits.slice(0, 5)) { // limit to 5 subreddits per sync
+      console.log(`[syncLeads] Campaign ${input.campaignId}: subreddits=${JSON.stringify(subreddits)}, keywords=${JSON.stringify(keywords)}, existingLeads=${existingLeads.length}, subLimit=${subLimit}`);
+
+      for (const sub of subreddits.slice(0, subLimit)) { // Growth: all subreddits; Starter: first 5
         // Check subreddit size filter if set
         if (minSubSize !== null || maxSubSize !== null) {
           const subscriberCount = await getSubredditSubscriberCount(sub, accessToken ?? "");

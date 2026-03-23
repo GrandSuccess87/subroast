@@ -1,0 +1,46 @@
+{
+  "query": "\nSELECT \n  oc.id, oc.name, oc.userId, oc.lastSyncAt, oc.dailySyncsUsed, oc.dailySyncsResetAt, oc.leadsFound,\n  u.plan, u.subscriptionStatus, u.trialEndsAt\nFROM outreach_campaigns oc\nJOIN users u ON oc.userId = u.id;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute \nSELECT \n  oc.id, oc.name, oc.userId, oc.lastSyncAt, oc.dailySyncsUsed, oc.dailySyncsResetAt, oc.leadsFound,\n  u.plan, u.subscriptionStatus, u.trialEndsAt\nFROM outreach_campaigns oc\nJOIN users u ON oc.userId = u.id;\n",
+  "rows": [
+    {
+      "id": "60001",
+      "name": "SubRoast ICP Pain-Point Outreach",
+      "userId": "1",
+      "lastSyncAt": "1774278979171",
+      "dailySyncsUsed": "1",
+      "dailySyncsResetAt": "1774224000000",
+      "leadsFound": "172",
+      "plan": "growth",
+      "subscriptionStatus": "active",
+      "trialEndsAt": "1773909604000"
+    },
+    {
+      "id": "30001",
+      "name": "App Validation Complaint Mining",
+      "userId": "1",
+      "lastSyncAt": "1774267251673",
+      "dailySyncsUsed": "1",
+      "dailySyncsResetAt": "1773878400000",
+      "leadsFound": "117",
+      "plan": "growth",
+      "subscriptionStatus": "active",
+      "trialEndsAt": "1773909604000"
+    },
+    {
+      "id": "1",
+      "name": "SaaS Founders Outreach",
+      "userId": "1",
+      "lastSyncAt": "1774278435371",
+      "dailySyncsUsed": "1",
+      "dailySyncsResetAt": "1774224000000",
+      "leadsFound": "595",
+      "plan": "growth",
+      "subscriptionStatus": "active",
+      "trialEndsAt": "1773909604000"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tuserId\tlastSyncAt\tdailySyncsUsed\tdailySyncsResetAt\tleadsFound\tplan\tsubscriptionStatus\ttrialEndsAt\n60001\tSubRoast ICP Pain-Point Outreach\t1\t1774278979171\t1\t1774224000000\t172\tgrowth\tactive\t1773909604000\n30001\tApp Validation Complaint Mining\t1\t1774267251673\t1\t1773878400000\t117\tgrowth\tactive\t1773909604000\n1\tSaaS Founders Outreach\t1\t1774278435371\t1\t1774224000000\t595\tgrowth\tactive\t1773909604000\n",
+  "stderr": "",
+  "execution_time_ms": 53
+}

@@ -1,0 +1,8 @@
+{
+  "query": "\nSELECT \n  oc.id, oc.name, oc.userId, oc.lastSyncAt, oc.dailySyncsUsed, oc.dailySyncsResetAt, oc.leadsFound, oc.isActive,\n  u.plan, u.subscriptionStatus, u.trialEndsAt\nFROM outreach_campaigns oc\nJOIN users u ON oc.userId = u.id\nWHERE oc.isActive = 1;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute \nSELECT \n  oc.id, oc.name, oc.userId, oc.lastSyncAt, oc.dailySyncsUsed, oc.dailySyncsResetAt, oc.leadsFound, oc.isActive,\n  u.plan, u.subscriptionStatus, u.trialEndsAt\nFROM outreach_campaigns oc\nJOIN users u ON oc.userId = u.id\nWHERE oc.isActive = 1;\n",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1054 (42S22) at line 2: Unknown column 'oc.isactive' in 'where clause'"
+  ]
+}

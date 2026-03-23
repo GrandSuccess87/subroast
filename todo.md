@@ -891,3 +891,8 @@
 - [ ] Surface posts mentioning target keywords in last 48 hours with match count
 - [ ] "Outreach drafts ready" indicator per campaign when unactioned leads exist
 - [ ] Lead Signal section on homepage accurately reflects this future feature (keep as aspirational)
+
+### Subreddit Sync Limit Fix v6.78
+- [x] Fix syncLeads (manual): Growth users now process all subreddits (was hard-capped at first 5); Starter/trial still capped at 5
+- [x] Fix autoSync (background): Pass userPlan to syncCampaign and apply same plan-based limit
+- [x] Root cause: r/forhire was position 10 in campaign subreddit list, silently skipped every run
