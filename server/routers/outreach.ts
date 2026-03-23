@@ -149,17 +149,22 @@ const BOT_USERNAME_RE = /^[a-z]+[_-]?[0-9]{4,}$|^[a-z0-9]{8,}[0-9]{4,}$|^[A-Za-z
 const URL_RE = /https?:\/\/[^\s)\]]+/i;
 // Excessive punctuation in title
 const EXCESSIVE_PUNCT_RE = /[!?]{3,}/;
+// Subreddits where external URLs in the body are normal (job boards, freelance)
+const JOB_BOARD_SUBREDDITS = new Set(["forhire", "freelance_forhire", "jobbit", "remotework", "hireadev"]);
 
 function isSpamPost(post: {
   title: string;
   body: string;
   author: string;
+  subreddit?: string;
 }): { spam: boolean; reason: string } {
-  const { title, body, author } = post;
+  const { title, body, author, subreddit } = post;
   const bodyTrimmed = body.trim();
+  const isJobBoard = subreddit ? JOB_BOARD_SUBREDDITS.has(subreddit.toLowerCase()) : false;
 
-  // 1. Body contains an external URL — almost always an ad or spam link
-  if (URL_RE.test(bodyTrimmed)) {
+  // 1. Body contains an external URL — skip for job board subreddits where
+  //    portfolio/contact links are normal and expected
+  if (!isJobBoard && URL_RE.test(bodyTrimmed)) {
     return { spam: true, reason: "external_url_in_body" };
   }
 
@@ -512,7 +517,7 @@ Rules:
             if (post.author === "[deleted]" || post.author === "AutoModerator") continue;
 
             // ── Lightweight spam filter ────────────────────────────────────────────────────
-            const spamCheck = isSpamPost({ title: post.title, body: post.body, author: post.author });
+            const spamCheck = isSpamPost({ title: post.title, body: post.body, author: post.author, subreddit: sub });
             if (spamCheck.spam) {
               console.log(`[syncLeads] Spam filtered: ${post.id} by u/${post.author} (${spamCheck.reason})`);
               spamFiltered++;

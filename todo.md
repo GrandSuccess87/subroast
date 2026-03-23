@@ -900,3 +900,11 @@
 ### Campaign Editor Bugs v6.79
 - [x] Bug: Keywords added via edit campaign modal are not saving/persisting
 - [x] Bug: No drag-to-reorder for keywords (and subreddits) in campaign editor
+
+### Auto-Sync Spam Filter & Lead Scoping Fix v6.80
+- [x] Bug: autoSync.ts background job had no spam filter — was saving spammy posts
+- [x] Fix: Added full spam filter to autoSync.ts mirroring the one in outreach.ts
+- [x] Fix: Spam filter is now subreddit-aware — job board subreddits (forhire, freelance_forhire, etc.) skip the external URL rule since portfolio/contact links are normal there
+- [x] Fix: Manual sync in outreach.ts also updated to pass subreddit to isSpamPost
+- [x] Fix: Sync toast now shows "Inbox up to date — no new leads found. X leads already in your inbox." when 0 new leads
+- [x] Fix: Reset campaign 90001 (For Hire) lastSyncAt/dailySyncsUsed so next manual sync treats posts as fresh

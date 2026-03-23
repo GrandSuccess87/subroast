@@ -978,7 +978,14 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
   const syncLeads = trpc.outreach.syncLeads.useMutation({
     onSuccess: (data) => {
       const spamNote = data.spamFiltered > 0 ? ` · ${data.spamFiltered} spam filtered` : "";
-      toast.success(`Found ${data.newLeads} new leads!${spamNote}`);
+      if (data.newLeads === 0) {
+        const alreadyHave = data.totalLeads > 0
+          ? ` ${data.totalLeads} lead${data.totalLeads === 1 ? '' : 's'} already in your inbox.`
+          : '';
+        toast.success(`Inbox up to date — no new leads found.${alreadyHave}${spamNote}`);
+      } else {
+        toast.success(`Found ${data.newLeads} new lead${data.newLeads === 1 ? '' : 's'}!${spamNote}`);
+      }
       utils.outreach.getLeads.invalidate({ campaignId: campaign.id });
       utils.outreach.listCampaigns.invalidate();
     },

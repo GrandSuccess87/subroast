@@ -1,0 +1,18 @@
+{
+  "query": "SELECT id, name, dailySyncsUsed, dailySyncsResetAt, lastSyncAt, status FROM outreach_campaigns WHERE id = 90001;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute SELECT id, name, dailySyncsUsed, dailySyncsResetAt, lastSyncAt, status FROM outreach_campaigns WHERE id = 90001;",
+  "rows": [
+    {
+      "id": "90001",
+      "name": "For Hire",
+      "dailySyncsUsed": "1",
+      "dailySyncsResetAt": "1774224000000",
+      "lastSyncAt": "1774281086505",
+      "status": "active"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tdailySyncsUsed\tdailySyncsResetAt\tlastSyncAt\tstatus\n90001\tFor Hire\t1\t1774224000000\t1774281086505\tactive\n",
+  "stderr": "",
+  "execution_time_ms": 51
+}

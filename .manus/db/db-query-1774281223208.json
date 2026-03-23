@@ -1,0 +1,20 @@
+{
+  "query": "SELECT id, name, keywords, subreddits, status, userId, lastSyncAt, createdAt FROM outreach_campaigns WHERE name LIKE '%Hire%' OR name LIKE '%hire%' ORDER BY createdAt DESC LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute SELECT id, name, keywords, subreddits, status, userId, lastSyncAt, createdAt FROM outreach_campaigns WHERE name LIKE '%Hire%' OR name LIKE '%hire%' ORDER BY createdAt DESC LIMIT 5;",
+  "rows": [
+    {
+      "id": "90001",
+      "name": "For Hire",
+      "keywords": "[\"ai engineer\",\"full stack\",\"founder\"]",
+      "subreddits": "[\"forhire\",\"freelance_forhire\"]",
+      "status": "active",
+      "userId": "1",
+      "lastSyncAt": "1774281086505",
+      "createdAt": "2026-03-23 15:51:19"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tkeywords\tsubreddits\tstatus\tuserId\tlastSyncAt\tcreatedAt\n90001\tFor Hire\t[\"ai engineer\",\"full stack\",\"founder\"]\t[\"forhire\",\"freelance_forhire\"]\tactive\t1\t1774281086505\t2026-03-23 15:51:19\n",
+  "stderr": "",
+  "execution_time_ms": 51
+}

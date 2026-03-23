@@ -59,6 +59,60 @@ function isStarterSyncDue(lastSyncAt: number | null): boolean {
   return Date.now() - lastSyncAt >= elevenHalfHoursMs;
 }
 
+// ─── Spam filter (mirrors outreach.ts) ──────────────────────────────────────
+
+// Subreddits where external URLs in the body are normal (job boards, freelance)
+const JOB_BOARD_SUBREDDITS = new Set(["forhire", "freelance_forhire", "jobbit", "remotework", "hireadev"]);
+
+const BOT_USERNAME_RE = /^[a-z]+[_-]?[0-9]{4,}$|^[a-z0-9]{8,}[0-9]{4,}$|^[A-Za-z]+[0-9]{4,}$/;
+const URL_RE = /https?:\/\/[^\s)\]]+/i;
+const EXCESSIVE_PUNCT_RE = /[!?]{3,}/;
+
+function isSpamPost(post: {
+  title: string;
+  body: string;
+  author: string;
+  subreddit: string;
+}): { spam: boolean; reason: string } {
+  const { title, body, author, subreddit } = post;
+  const bodyTrimmed = body.trim();
+  const isJobBoard = JOB_BOARD_SUBREDDITS.has(subreddit.toLowerCase());
+
+  // 1. Body contains an external URL — skip this check for job board subreddits
+  //    where URLs (portfolios, contact links) are normal and expected
+  if (!isJobBoard && URL_RE.test(bodyTrimmed)) {
+    return { spam: true, reason: "external_url_in_body" };
+  }
+
+  // 2. Body is too short to be a genuine discussion post (< 50 chars, non-empty)
+  if (bodyTrimmed.length > 0 && bodyTrimmed.length < 50) {
+    return { spam: true, reason: "body_too_short" };
+  }
+
+  // 3. Body is identical or near-identical to title (copy-paste spam)
+  if (bodyTrimmed.length > 0 && bodyTrimmed.toLowerCase() === title.toLowerCase().trim()) {
+    return { spam: true, reason: "body_equals_title" };
+  }
+
+  // 4. Title is all-caps (shouting spam)
+  const titleWords = title.replace(/[^a-zA-Z\s]/g, "").trim();
+  if (titleWords.length > 10 && titleWords === titleWords.toUpperCase()) {
+    return { spam: true, reason: "title_all_caps" };
+  }
+
+  // 5. Excessive punctuation in title (!!!, ???, etc.)
+  if (EXCESSIVE_PUNCT_RE.test(title)) {
+    return { spam: true, reason: "excessive_punctuation" };
+  }
+
+  // 6. Username matches bot/throwaway patterns
+  if (BOT_USERNAME_RE.test(author)) {
+    return { spam: true, reason: "bot_username_pattern" };
+  }
+
+  return { spam: false, reason: "" };
+}
+
 // ─── Reddit public search ─────────────────────────────────────────────────────
 
 async function searchRedditPosts(
@@ -146,6 +200,14 @@ async function syncCampaign(campaign: {
       const posts = await searchRedditPosts(sub, kw, 5);
       for (const post of posts) {
         if (post.author === "[deleted]" || post.author === "AutoModerator") continue;
+
+        // Apply spam filter (same rules as manual sync)
+        const spamCheck = isSpamPost({ title: post.title, body: post.body, author: post.author, subreddit: post.subreddit });
+        if (spamCheck.spam) {
+          console.log(`[AutoSync] Spam filtered: ${post.id} by u/${post.author} (${spamCheck.reason})`);
+          continue;
+        }
+
         const { score, matchedKeywords } = scoreMatch(post.title, post.body, keywords);
         await upsertOutreachLead({
           campaignId: campaign.id,
