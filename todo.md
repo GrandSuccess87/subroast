@@ -913,3 +913,9 @@
 - [ ] Feature: Daily 8am digest email — scheduled Resend email summarising new leads across all campaigns each morning
 - [ ] Feature: Lead Signal intelligence report — "3 warm leads in r/SaaS" card showing posts mentioning target keywords in last 48h, with outreach drafts ready
 - [ ] UX: Clean up spammy leads in existing campaigns — review inbox and add bulk "Skip" action for obvious spam posts
+
+### Auto-Sync Race Condition Fix v6.83
+- [x] Bug: Auto-sync runs immediately on new campaigns, consuming the fresh lead pool before user's first manual sync
+- [x] Fix: autoSync.ts should skip campaigns created in the last 10 minutes
+- [x] Fix: Manual syncLeads should ignore lastSyncAt when campaign has 0 leads (always treat as fresh)
+- [x] Reset Healthcare Outreach campaign so user can get leads on next manual sync

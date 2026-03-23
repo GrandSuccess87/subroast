@@ -279,6 +279,19 @@ export async function runAutoSync(): Promise<void> {
     if (!user) continue;
 
     const now = Date.now();
+
+    // Skip campaigns created in the last 10 minutes — let the user trigger
+    // the first manual sync themselves so they see results immediately.
+    // Without this guard the background job races ahead and "uses up" the
+    // fresh lead pool before the user ever clicks Sync Now.
+    const createdAt = campaign.createdAt instanceof Date
+      ? campaign.createdAt.getTime()
+      : Number(campaign.createdAt);
+    if (now - createdAt < 10 * 60 * 1000) {
+      console.log(`[AutoSync] Skipping campaign ${campaign.id} (${campaign.name}): created < 10 min ago, waiting for first manual sync`);
+      continue;
+    }
+
     const isTrialing = user.plan === "trial" && user.trialEndsAt != null && user.trialEndsAt > now;
     const hasActiveAccess =
       isTrialing ||

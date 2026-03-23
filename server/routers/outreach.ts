@@ -486,8 +486,13 @@ Rules:
       let newLeads = 0;
       let spamFiltered = 0;
 
-      // Fetch existing post IDs for this campaign to detect truly new leads
+      // Fetch existing post IDs for this campaign to detect truly new leads.
+      // If the campaign has 0 leads (e.g. auto-sync ran but saved nothing, or
+      // this is the very first manual sync), treat every post as new regardless
+      // of lastSyncAt — this prevents the race condition where the background
+      // job sets lastSyncAt before the user ever sees any results.
       const existingLeads = await getOutreachLeadsByCampaignId(input.campaignId);
+      const isFreshCampaign = existingLeads.length === 0;
       const existingPostIds = new Set(existingLeads.map((l) => l.redditPostId));
 
       // Growth users get all subreddits; Starter/trial capped at 5
@@ -525,7 +530,9 @@ Rules:
             }
 
             const { score, matchedKeywords } = scoreMatch(post.title, post.body, keywords);
-            const isNew = !existingPostIds.has(post.id);
+            // For fresh campaigns (0 leads), every post counts as new regardless
+            // of whether auto-sync previously set lastSyncAt
+            const isNew = isFreshCampaign || !existingPostIds.has(post.id);
             await upsertOutreachLead({
               campaignId: input.campaignId,
               userId: ctx.user.id,
