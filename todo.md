@@ -919,3 +919,11 @@
 - [x] Fix: autoSync.ts should skip campaigns created in the last 10 minutes
 - [x] Fix: Manual syncLeads should ignore lastSyncAt when campaign has 0 leads (always treat as fresh)
 - [x] Reset Healthcare Outreach campaign so user can get leads on next manual sync
+
+### PWA Setup v6.84
+- [x] Create web app manifest (manifest.json) with app name, icons, theme color, display: standalone
+- [x] Generate PWA app icons (192x192, 512x512)
+- [x] Create service worker for offline shell and caching
+- [x] Register service worker in the app
+- [x] Add install prompt UI for "Add to Home Screen"
+- [x] Link manifest in index.html with meta tags for mobile

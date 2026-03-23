@@ -1,0 +1,20 @@
+{
+  "query": "SELECT id, name, subreddits, keywords, status, lastSyncAt, leadsFound, dailySyncsUsed FROM outreach_campaigns WHERE id = 120001;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute SELECT id, name, subreddits, keywords, status, lastSyncAt, leadsFound, dailySyncsUsed FROM outreach_campaigns WHERE id = 120001;",
+  "rows": [
+    {
+      "id": "120001",
+      "name": "Healthcare Outreach",
+      "subreddits": "[\"SaaS\",\"Entrepreneur\",\"startups\",\"smallbusiness\",\"marketing\",\"growthhacking\",\"operations\",\"cofounder\",\"Business_Ideas\",\"indiehackers\",\"Privatepractice\",\"HealthIT\",\"Medicine\",\"Healthcare\",\"medicalpractice\"]",
+      "keywords": "[\"struggling with growth\",\"scaling operations challenges\",\"inefficient marketing strategy\",\"need help with customer acquisition\",\"optimizing business processes\",\"lack of operational efficiency\",\"bottlenecks in workflow\",\"improving conversion rates\",\"streamlining business operations\",\"finding product market fit\",\"automating growth tasks\",\"operational overhead too high\",\"struggling to scale\",\"marketing strategy not working\",\"growth strategy\",\"How to Reduce patient no shows\",\"Patients not booking appointments\",\"Missed calls\",\"Low patient volume clinic what to do\",\"Looking for better EMR\",\"Looking for better crm\"]",
+      "status": "active",
+      "lastSyncAt": "1774296671534",
+      "leadsFound": "0",
+      "dailySyncsUsed": "2"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tsubreddits\tkeywords\tstatus\tlastSyncAt\tleadsFound\tdailySyncsUsed\n120001\tHealthcare Outreach\t[\"SaaS\",\"Entrepreneur\",\"startups\",\"smallbusiness\",\"marketing\",\"growthhacking\",\"operations\",\"cofounder\",\"Business_Ideas\",\"indiehackers\",\"Privatepractice\",\"HealthIT\",\"Medicine\",\"Healthcare\",\"medicalpractice\"]\t[\"struggling with growth\",\"scaling operations challenges\",\"inefficient marketing strategy\",\"need help with customer acquisition\",\"optimizing business processes\",\"lack of operational efficiency\",\"bottlenecks in workflow\",\"improving conversion rates\",\"streamlining business operations\",\"finding product market fit\",\"automating growth tasks\",\"operational overhead too high\",\"struggling to scale\",\"marketing strategy not working\",\"growth strategy\",\"How to Reduce patient no shows\",\"Patients not booking appointments\",\"Missed calls\",\"Low patient volume clinic what to do\",\"Looking for better EMR\",\"Looking for better crm\"]\tactive\t1774296671534\t0\t2\n",
+  "stderr": "",
+  "execution_time_ms": 52
+}

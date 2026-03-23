@@ -19,6 +19,7 @@ import FeedbackPage from "./pages/Feedback";
 import Waitlist from "./pages/Waitlist";
 import Onboarding from "./pages/Onboarding";
 import AdminResponses from "./pages/AdminResponses";
+import { PwaInstallBanner } from "./components/PwaInstallBanner";
 
 function Router() {
   return (
@@ -54,6 +55,7 @@ function App() {
         <TooltipProvider>
           <Toaster />
           <Router />
+          <PwaInstallBanner />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
