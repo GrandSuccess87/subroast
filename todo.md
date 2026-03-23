@@ -896,3 +896,7 @@
 - [x] Fix syncLeads (manual): Growth users now process all subreddits (was hard-capped at first 5); Starter/trial still capped at 5
 - [x] Fix autoSync (background): Pass userPlan to syncCampaign and apply same plan-based limit
 - [x] Root cause: r/forhire was position 10 in campaign subreddit list, silently skipped every run
+
+### Campaign Editor Bugs v6.79
+- [x] Bug: Keywords added via edit campaign modal are not saving/persisting
+- [x] Bug: No drag-to-reorder for keywords (and subreddits) in campaign editor

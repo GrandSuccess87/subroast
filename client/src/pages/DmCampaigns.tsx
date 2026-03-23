@@ -9,6 +9,7 @@ import {
   Clipboard,
   ExternalLink,
   Flame,
+  GripVertical,
   Inbox,
   Loader2,
   MessageSquare,
@@ -28,7 +29,7 @@ import {
   XCircle,
   Zap,
 } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useLocation } from "wouter";
 import { toast } from "sonner";
 
@@ -194,6 +195,44 @@ function EditCampaignModal({ campaign, onClose }: { campaign: Campaign; onClose:
   const [kwInput, setKwInput] = useState("");
   const [aiInstructions, setAiInstructions] = useState(campaign.aiPromptInstructions ?? "");
 
+  // Sync state when campaign prop changes (e.g. after a save + invalidate)
+  useEffect(() => {
+    setName(campaign.name);
+    setOffering(campaign.offering);
+    setWebsiteUrl(campaign.websiteUrl ?? "");
+    setSubreddits(campaign.subreddits);
+    setKeywords(campaign.keywords);
+    setAiInstructions(campaign.aiPromptInstructions ?? "");
+  }, [campaign.id, campaign.keywords.join(","), campaign.subreddits.join(",")]);
+
+  // Drag-to-reorder state
+  const [dragKwIdx, setDragKwIdx] = useState<number | null>(null);
+  const [dragSubIdx, setDragSubIdx] = useState<number | null>(null);
+
+  const handleKwDragStart = (idx: number) => setDragKwIdx(idx);
+  const handleKwDragOver = (e: React.DragEvent, idx: number) => {
+    e.preventDefault();
+    if (dragKwIdx === null || dragKwIdx === idx) return;
+    const reordered = [...keywords];
+    const [moved] = reordered.splice(dragKwIdx, 1);
+    reordered.splice(idx, 0, moved);
+    setKeywords(reordered);
+    setDragKwIdx(idx);
+  };
+  const handleKwDragEnd = () => setDragKwIdx(null);
+
+  const handleSubDragStart = (idx: number) => setDragSubIdx(idx);
+  const handleSubDragOver = (e: React.DragEvent, idx: number) => {
+    e.preventDefault();
+    if (dragSubIdx === null || dragSubIdx === idx) return;
+    const reordered = [...subreddits];
+    const [moved] = reordered.splice(dragSubIdx, 1);
+    reordered.splice(idx, 0, moved);
+    setSubreddits(reordered);
+    setDragSubIdx(idx);
+  };
+  const handleSubDragEnd = () => setDragSubIdx(null);
+
   const updateCampaign = trpc.outreach.updateCampaign.useMutation({
     onSuccess: () => { toast.success("Campaign updated!"); utils.outreach.listCampaigns.invalidate(); onClose(); },
     onError: (err) => toast.error(err.message),
@@ -253,8 +292,17 @@ function EditCampaignModal({ campaign, onClose }: { campaign: Campaign; onClose:
             </div>
             {subreddits.length > 0 && (
               <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem" }}>
-                {subreddits.map((s) => (
-                  <span key={s} style={tagStyle}>r/{s}
+                {subreddits.map((s, idx) => (
+                  <span
+                    key={s}
+                    draggable
+                    onDragStart={() => handleSubDragStart(idx)}
+                    onDragOver={(e) => handleSubDragOver(e, idx)}
+                    onDragEnd={handleSubDragEnd}
+                    style={{ ...tagStyle, cursor: "grab", opacity: dragSubIdx === idx ? 0.5 : 1 }}
+                  >
+                    <GripVertical size={8} style={{ color: MUTED, flexShrink: 0 }} />
+                    r/{s}
                     <button onClick={() => setSubreddits(subreddits.filter((x) => x !== s))} style={{ background: "none", border: "none", color: MUTED, cursor: "pointer", padding: 0, display: "flex" }}><X size={9} /></button>
                   </span>
                 ))}
@@ -270,8 +318,17 @@ function EditCampaignModal({ campaign, onClose }: { campaign: Campaign; onClose:
             </div>
             {keywords.length > 0 && (
               <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem" }}>
-                {keywords.map((k) => (
-                  <span key={k} style={tagStyle}>{k}
+                {keywords.map((k, idx) => (
+                  <span
+                    key={k}
+                    draggable
+                    onDragStart={() => handleKwDragStart(idx)}
+                    onDragOver={(e) => handleKwDragOver(e, idx)}
+                    onDragEnd={handleKwDragEnd}
+                    style={{ ...tagStyle, cursor: "grab", opacity: dragKwIdx === idx ? 0.5 : 1 }}
+                  >
+                    <GripVertical size={8} style={{ color: MUTED, flexShrink: 0 }} />
+                    {k}
                     <button onClick={() => setKeywords(keywords.filter((x) => x !== k))} style={{ background: "none", border: "none", color: MUTED, cursor: "pointer", padding: 0, display: "flex" }}><X size={9} /></button>
                   </span>
                 ))}
@@ -1029,7 +1086,7 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
             {campaign.status === "active" ? <><Pause size={10} /> Pause</> : <><Play size={10} /> Resume</>}
           </button>
         </div>
-        {showEdit && <EditCampaignModal campaign={campaign} onClose={() => setShowEdit(false)} />}
+        {showEdit && <EditCampaignModal key={campaign.id + '-' + campaign.keywords.length + '-' + campaign.subreddits.length} campaign={campaign} onClose={() => setShowEdit(false)} />}
       </div>
 
       {/* Stats grid — commented out, kept in backlog for future consideration
