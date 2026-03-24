@@ -930,3 +930,8 @@
 
 ## Discord CTA (v6.85)
 - [x] Add "Join Discord" CTA button to sidebar linking to https://discord.gg/RD8ZCtt7Y
+
+## Discord Post-Onboarding Invite (v6.86)
+- [x] Add Discord community invite card as final step after onboarding completion (step 5 → Discord → dashboard)
+- [x] Card shows "You're in — join the community" messaging with Discord CTA and "Go to dashboard" skip option
+- [x] Remove Discord CTA from homepage (keep only in sidebar + post-onboarding)

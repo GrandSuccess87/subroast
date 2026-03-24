@@ -21,6 +21,10 @@ const FONT_MONO = "JetBrains Mono, monospace";
 const FONT_SANS = "Inter, sans-serif";
 
 const TOTAL_STEPS = 5;
+const DISCORD_URL = "https://discord.gg/RD8ZCtt7Y";
+const DISCORD_PURPLE = "oklch(0.72 0.14 270)";
+const DISCORD_PURPLE_BG = "oklch(0.22 0.06 270 / 0.35)";
+const DISCORD_PURPLE_BORDER = "oklch(0.40 0.12 270 / 0.5)";
 
 // ─── Step data ────────────────────────────────────────────────────────────────
 const CURRENT_TOOL_OPTIONS = [
@@ -433,6 +437,106 @@ function Step5({
   );
 }
 
+// ─── Step 6: Discord community invite ────────────────────────────────────────
+function StepDiscord({ onContinue }: { onContinue: () => void }) {
+  return (
+    <div>
+      {/* Completion badge */}
+      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "2rem" }}>
+        <div style={{
+          width: "32px", height: "32px", borderRadius: "50%",
+          background: "oklch(0.20 0.008 60)",
+          border: `0.5px solid ${IVORY}`,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          flexShrink: 0,
+        }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={IVORY} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        </div>
+        <span style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.18em", textTransform: "uppercase", color: IVORY }}>
+          You're all set
+        </span>
+      </div>
+
+      <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: "clamp(1.5rem, 3.5vw, 2.2rem)", fontWeight: 300, fontStyle: "italic", color: FOREGROUND, lineHeight: 1.2, marginBottom: "0.75rem" }}>
+        One more thing.
+      </h2>
+      <p style={{ fontFamily: FONT_SANS, fontSize: "0.875rem", color: MUTED, lineHeight: 1.7, marginBottom: "2rem" }}>
+        Join the SubRoast Discord — a private space for indie founders sharing what's working on Reddit, swapping lead strategies, and getting early access to new features.
+      </p>
+
+      {/* Discord card */}
+      <div style={{
+        background: DISCORD_PURPLE_BG,
+        border: `0.5px solid ${DISCORD_PURPLE_BORDER}`,
+        padding: "1.25rem 1.5rem",
+        marginBottom: "1rem",
+        display: "flex",
+        alignItems: "center",
+        gap: "1rem",
+      }}>
+        <svg style={{ width: "28px", height: "28px", flexShrink: 0, color: DISCORD_PURPLE }} viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.03.056a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+        </svg>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <p style={{ fontFamily: FONT_MONO, fontSize: "0.65rem", letterSpacing: "0.14em", textTransform: "uppercase", color: IVORY, marginBottom: "0.2rem" }}>
+            SubRoast Community
+          </p>
+          <p style={{ fontFamily: FONT_SANS, fontSize: "0.78rem", color: MUTED, lineHeight: 1.5 }}>
+            Founders sharing Reddit outreach wins, tips & feedback
+          </p>
+        </div>
+      </div>
+
+      {/* Join Discord CTA */}
+      <a
+        href={DISCORD_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          display: "block",
+          padding: "0.85rem 1.5rem",
+          background: DISCORD_PURPLE_BG,
+          border: `0.5px solid ${DISCORD_PURPLE_BORDER}`,
+          color: DISCORD_PURPLE,
+          fontFamily: FONT_MONO,
+          fontSize: "0.68rem",
+          letterSpacing: "0.2em",
+          textTransform: "uppercase",
+          textAlign: "center",
+          textDecoration: "none",
+          cursor: "pointer",
+          transition: "opacity 0.2s",
+          marginBottom: "0.75rem",
+        }}
+      >
+        Join Discord →
+      </a>
+
+      {/* Skip link */}
+      <button
+        onClick={onContinue}
+        style={{
+          background: "transparent",
+          border: "none",
+          color: MUTED,
+          fontFamily: FONT_MONO,
+          fontSize: "0.6rem",
+          letterSpacing: "0.14em",
+          textTransform: "uppercase",
+          cursor: "pointer",
+          width: "100%",
+          padding: "0.5rem",
+          textAlign: "center",
+        }}
+      >
+        Skip — go to dashboard
+      </button>
+    </div>
+  );
+}
+
 // ─── Button styles ────────────────────────────────────────────────────────────
 const ctaStyle: React.CSSProperties = {
   padding: "0.85rem 1.5rem",
@@ -504,7 +608,7 @@ export default function Onboarding() {
 
   const saveStep = trpc.onboarding.saveStep.useMutation();
   const complete = trpc.onboarding.complete.useMutation({
-    onSuccess: () => navigate("/dashboard"),
+    onSuccess: () => setStep(6),
   });
 
   const handleNext = async (nextStep: number, payload?: Parameters<typeof saveStep.mutate>[0]) => {
@@ -641,6 +745,9 @@ export default function Onboarding() {
             onBack={() => setStep(4)}
             isLoading={complete.isPending}
           />
+        )}
+        {step === 6 && (
+          <StepDiscord onContinue={() => navigate("/dashboard")} />
         )}
       </div>
     </div>
