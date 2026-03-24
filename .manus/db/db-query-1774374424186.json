@@ -1,0 +1,40 @@
+{
+  "query": "\nSELECT campaignId, COUNT(*) as lead_count, MIN(discoveredAt) as first_seen, MAX(discoveredAt) as last_seen\nFROM outreach_leads\nGROUP BY campaignId\nORDER BY lead_count DESC\nLIMIT 20;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute \nSELECT campaignId, COUNT(*) as lead_count, MIN(discoveredAt) as first_seen, MAX(discoveredAt) as last_seen\nFROM outreach_leads\nGROUP BY campaignId\nORDER BY lead_count DESC\nLIMIT 20;\n",
+  "rows": [
+    {
+      "campaignId": "1",
+      "lead_count": "437",
+      "first_seen": "1772258327213",
+      "last_seen": "1774295600627"
+    },
+    {
+      "campaignId": "60001",
+      "lead_count": "234",
+      "first_seen": "1773729933220",
+      "last_seen": "1774322660139"
+    },
+    {
+      "campaignId": "30001",
+      "lead_count": "104",
+      "first_seen": "1773728558452",
+      "last_seen": "1773728566320"
+    },
+    {
+      "campaignId": "90001",
+      "lead_count": "50",
+      "first_seen": "1774283933866",
+      "last_seen": "1774283936879"
+    },
+    {
+      "campaignId": "120001",
+      "lead_count": "34",
+      "first_seen": "1774322664627",
+      "last_seen": "1774322672124"
+    }
+  ],
+  "messages": [],
+  "stdout": "campaignId\tlead_count\tfirst_seen\tlast_seen\n1\t437\t1772258327213\t1774295600627\n60001\t234\t1773729933220\t1774322660139\n30001\t104\t1773728558452\t1773728566320\n90001\t50\t1774283933866\t1774283936879\n120001\t34\t1774322664627\t1774322672124\n",
+  "stderr": "",
+  "execution_time_ms": 59
+}

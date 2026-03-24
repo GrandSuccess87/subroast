@@ -1,0 +1,266 @@
+{
+  "query": "\nDESCRIBE outreach_leads;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute \nDESCRIBE outreach_leads;\n",
+  "rows": [
+    {
+      "Field": "id",
+      "Type": "int",
+      "Null": "NO",
+      "Key": "PRI",
+      "Default": "NULL",
+      "Extra": "auto_increment"
+    },
+    {
+      "Field": "campaignId",
+      "Type": "int",
+      "Null": "NO",
+      "Key": "MUL",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "userId",
+      "Type": "int",
+      "Null": "NO",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "redditPostId",
+      "Type": "varchar(64)",
+      "Null": "NO",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "redditPostUrl",
+      "Type": "text",
+      "Null": "NO",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "subreddit",
+      "Type": "varchar(128)",
+      "Null": "NO",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "postTitle",
+      "Type": "text",
+      "Null": "NO",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "postBody",
+      "Type": "text",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "authorUsername",
+      "Type": "varchar(64)",
+      "Null": "NO",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "matchScore",
+      "Type": "enum('strong','partial','lowest')",
+      "Null": "NO",
+      "Key": "",
+      "Default": "partial",
+      "Extra": ""
+    },
+    {
+      "Field": "matchedKeywords",
+      "Type": "text",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "dmDraft",
+      "Type": "text",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "status",
+      "Type": "enum('new','dm_generated','queued','sent','skipped','failed')",
+      "Null": "NO",
+      "Key": "",
+      "Default": "new",
+      "Extra": ""
+    },
+    {
+      "Field": "sentAt",
+      "Type": "bigint",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "errorMessage",
+      "Type": "text",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "discoveredAt",
+      "Type": "bigint",
+      "Null": "NO",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "createdAt",
+      "Type": "timestamp",
+      "Null": "NO",
+      "Key": "",
+      "Default": "CURRENT_TIMESTAMP",
+      "Extra": ""
+    },
+    {
+      "Field": "updatedAt",
+      "Type": "timestamp",
+      "Null": "NO",
+      "Key": "",
+      "Default": "CURRENT_TIMESTAMP",
+      "Extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP"
+    },
+    {
+      "Field": "upvotes",
+      "Type": "int",
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": ""
+    },
+    {
+      "Field": "commentCount",
+      "Type": "int",
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": ""
+    },
+    {
+      "Field": "fitScore",
+      "Type": "int",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "urgencyScore",
+      "Type": "int",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "sentimentScore",
+      "Type": "int",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "leadHeat",
+      "Type": "enum('cold','warm','hot','on_fire')",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "roastInsight",
+      "Type": "text",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "intentType",
+      "Type": "enum('hiring','buying','seeking_advice','venting','unknown')",
+      "Null": "YES",
+      "Key": "",
+      "Default": "unknown",
+      "Extra": ""
+    },
+    {
+      "Field": "roastReplyDraft",
+      "Type": "text",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "pipelineStage",
+      "Type": "enum('new','replied','interested','converted','skipped')",
+      "Null": "NO",
+      "Key": "",
+      "Default": "new",
+      "Extra": ""
+    },
+    {
+      "Field": "commentDraft",
+      "Type": "text",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "spamScore",
+      "Type": "int",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "spamFlags",
+      "Type": "text",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "isFavorited",
+      "Type": "tinyint(1)",
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": ""
+    }
+  ],
+  "messages": [],
+  "stdout": "Field\tType\tNull\tKey\tDefault\tExtra\nid\tint\tNO\tPRI\tNULL\tauto_increment\ncampaignId\tint\tNO\tMUL\tNULL\t\nuserId\tint\tNO\t\tNULL\t\nredditPostId\tvarchar(64)\tNO\t\tNULL\t\nredditPostUrl\ttext\tNO\t\tNULL\t\nsubreddit\tvarchar(128)\tNO\t\tNULL\t\npostTitle\ttext\tNO\t\tNULL\t\npostBody\ttext\tYES\t\tNULL\t\nauthorUsername\tvarchar(64)\tNO\t\tNULL\t\nmatchScore\tenum('strong','partial','lowest')\tNO\t\tpartial\t\nmatchedKeywords\ttext\tYES\t\tNULL\t\ndmDraft\ttext\tYES\t\tNULL\t\nstatus\tenum('new','dm_generated','queued','sent','skipped','failed')\tNO\t\tnew\t\nsentAt\tbigint\tYES\t\tNULL\t\nerrorMessage\ttext\tYES\t\tNULL\t\ndiscoveredAt\tbigint\tNO\t\tNULL\t\ncreatedAt\ttimestamp\tNO\t\tCURRENT_TIMESTAMP\t\nupdatedAt\ttimestamp\tNO\t\tCURRENT_TIMESTAMP\tDEFAULT_GENERATED on update CURRENT_TIMESTAMP\nupvotes\tint\tNO\t\t0\t\ncommentCount\tint\tNO\t\t0\t\nfitScore\tint\tYES\t\tNULL\t\nurgencyScore\tint\tYES\t\tNULL\t\nsentimentScore\tint\tYES\t\tNULL\t\nleadHeat\tenum('cold','warm','hot','on_fire')\tYES\t\tNULL\t\nroastInsight\ttext\tYES\t\tNULL\t\nintentType\tenum('hiring','buying','seeking_advice','venting','unknown')\tYES\t\tunknown\t\nroastReplyDraft\ttext\tYES\t\tNULL\t\npipelineStage\tenum('new','replied','interested','converted','skipped')\tNO\t\tnew\t\ncommentDraft\ttext\tYES\t\tNULL\t\nspamScore\tint\tYES\t\tNULL\t\nspamFlags\ttext\tYES\t\tNULL\t\nisFavorited\ttinyint(1)\tNO\t\t0\t\n",
+  "stderr": "",
+  "execution_time_ms": 53
+}

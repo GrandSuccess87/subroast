@@ -1,0 +1,88 @@
+{
+  "query": "\nSELECT \n  ol.campaignId,\n  oc.name,\n  ol.status,\n  COUNT(*) as count\nFROM outreach_leads ol\nLEFT JOIN outreach_campaigns oc ON oc.id = ol.campaignId\nGROUP BY ol.campaignId, oc.name, ol.status\nORDER BY ol.campaignId, ol.status;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute \nSELECT \n  ol.campaignId,\n  oc.name,\n  ol.status,\n  COUNT(*) as count\nFROM outreach_leads ol\nLEFT JOIN outreach_campaigns oc ON oc.id = ol.campaignId\nGROUP BY ol.campaignId, oc.name, ol.status\nORDER BY ol.campaignId, ol.status;\n",
+  "rows": [
+    {
+      "campaignId": "1",
+      "name": "SaaS Founders Outreach",
+      "status": "new",
+      "count": "372"
+    },
+    {
+      "campaignId": "1",
+      "name": "SaaS Founders Outreach",
+      "status": "dm_generated",
+      "count": "55"
+    },
+    {
+      "campaignId": "1",
+      "name": "SaaS Founders Outreach",
+      "status": "queued",
+      "count": "4"
+    },
+    {
+      "campaignId": "1",
+      "name": "SaaS Founders Outreach",
+      "status": "skipped",
+      "count": "6"
+    },
+    {
+      "campaignId": "30001",
+      "name": "App Validation Complaint Mining",
+      "status": "new",
+      "count": "97"
+    },
+    {
+      "campaignId": "30001",
+      "name": "App Validation Complaint Mining",
+      "status": "dm_generated",
+      "count": "7"
+    },
+    {
+      "campaignId": "60001",
+      "name": "SubRoast ICP Pain-Point Outreach",
+      "status": "new",
+      "count": "195"
+    },
+    {
+      "campaignId": "60001",
+      "name": "SubRoast ICP Pain-Point Outreach",
+      "status": "dm_generated",
+      "count": "37"
+    },
+    {
+      "campaignId": "60001",
+      "name": "SubRoast ICP Pain-Point Outreach",
+      "status": "skipped",
+      "count": "2"
+    },
+    {
+      "campaignId": "90001",
+      "name": "For Hire",
+      "status": "new",
+      "count": "37"
+    },
+    {
+      "campaignId": "90001",
+      "name": "For Hire",
+      "status": "skipped",
+      "count": "13"
+    },
+    {
+      "campaignId": "120001",
+      "name": "Healthcare Outreach",
+      "status": "new",
+      "count": "33"
+    },
+    {
+      "campaignId": "120001",
+      "name": "Healthcare Outreach",
+      "status": "skipped",
+      "count": "1"
+    }
+  ],
+  "messages": [],
+  "stdout": "campaignId\tname\tstatus\tcount\n1\tSaaS Founders Outreach\tnew\t372\n1\tSaaS Founders Outreach\tdm_generated\t55\n1\tSaaS Founders Outreach\tqueued\t4\n1\tSaaS Founders Outreach\tskipped\t6\n30001\tApp Validation Complaint Mining\tnew\t97\n30001\tApp Validation Complaint Mining\tdm_generated\t7\n60001\tSubRoast ICP Pain-Point Outreach\tnew\t195\n60001\tSubRoast ICP Pain-Point Outreach\tdm_generated\t37\n60001\tSubRoast ICP Pain-Point Outreach\tskipped\t2\n90001\tFor Hire\tnew\t37\n90001\tFor Hire\tskipped\t13\n120001\tHealthcare Outreach\tnew\t33\n120001\tHealthcare Outreach\tskipped\t1\n",
+  "stderr": "",
+  "execution_time_ms": 64
+}

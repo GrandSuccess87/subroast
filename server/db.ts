@@ -553,8 +553,7 @@ export async function getOutreachLeadsByCampaignId(campaignId: number): Promise<
     .select()
     .from(outreachLeads)
     .where(eq(outreachLeads.campaignId, campaignId))
-    .orderBy(desc(outreachLeads.discoveredAt))
-    .limit(100);
+    .orderBy(desc(outreachLeads.discoveredAt));
 }
 
 export async function getOutreachLeadsByUserId(userId: number): Promise<OutreachLead[]> {
@@ -564,8 +563,7 @@ export async function getOutreachLeadsByUserId(userId: number): Promise<Outreach
     .select()
     .from(outreachLeads)
     .where(eq(outreachLeads.userId, userId))
-    .orderBy(desc(outreachLeads.discoveredAt))
-    .limit(200);
+    .orderBy(desc(outreachLeads.discoveredAt));
 }
 
 export async function updateOutreachLeadStatus(

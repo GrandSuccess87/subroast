@@ -1,0 +1,50 @@
+{
+  "query": "\nSELECT id, userId, name, subreddits, status, createdAt FROM outreach_campaigns ORDER BY id;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute \nSELECT id, userId, name, subreddits, status, createdAt FROM outreach_campaigns ORDER BY id;\n",
+  "rows": [
+    {
+      "id": "1",
+      "userId": "1",
+      "name": "SaaS Founders Outreach",
+      "subreddits": "[\"Entrepreneur\",\"SaaS\",\"indiehackers\",\"smallbusiness\",\"marketing\",\"RedditMarketing\",\"SideProject\",\"startups\",\"growthhacking\"]",
+      "status": "active",
+      "createdAt": "2026-02-27 04:12:43"
+    },
+    {
+      "id": "30001",
+      "userId": "1",
+      "name": "App Validation Complaint Mining",
+      "subreddits": "[\"SaaS\",\"Entrepreneur\",\"startups\",\"smallbusiness\",\"marketing\",\"GrowthHacking\",\"SideProject\",\"indiehackers\",\"leadgeneration\",\"RedditMarketing\"]",
+      "status": "active",
+      "createdAt": "2026-03-17 04:47:43"
+    },
+    {
+      "id": "60001",
+      "userId": "1",
+      "name": "SubRoast ICP Pain-Point Outreach",
+      "subreddits": "[\"SaaS\",\"Entrepreneur\",\"startups\",\"growthhacking\",\"marketing\",\"smallbusiness\",\"leadgeneration\",\"digital_marketing\",\"SideProject\",\"indiehackers\",\"indiehacking\",\"aiforsmallbusiness\",\"ai\"]",
+      "status": "active",
+      "createdAt": "2026-03-17 06:44:52"
+    },
+    {
+      "id": "90001",
+      "userId": "1",
+      "name": "For Hire",
+      "subreddits": "[\"forhire\",\"freelance_forhire\"]",
+      "status": "active",
+      "createdAt": "2026-03-23 15:51:19"
+    },
+    {
+      "id": "120001",
+      "userId": "1",
+      "name": "Healthcare Outreach",
+      "subreddits": "[\"Entrepreneur\",\"startups\",\"smallbusiness\",\"marketing\",\"growthhacking\",\"operations\",\"Business_Ideas\",\"HealthIT\",\"Medicine\",\"P\",\"privatepractice\"]",
+      "status": "active",
+      "createdAt": "2026-03-23 19:27:57"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tuserId\tname\tsubreddits\tstatus\tcreatedAt\n1\t1\tSaaS Founders Outreach\t[\"Entrepreneur\",\"SaaS\",\"indiehackers\",\"smallbusiness\",\"marketing\",\"RedditMarketing\",\"SideProject\",\"startups\",\"growthhacking\"]\tactive\t2026-02-27 04:12:43\n30001\t1\tApp Validation Complaint Mining\t[\"SaaS\",\"Entrepreneur\",\"startups\",\"smallbusiness\",\"marketing\",\"GrowthHacking\",\"SideProject\",\"indiehackers\",\"leadgeneration\",\"RedditMarketing\"]\tactive\t2026-03-17 04:47:43\n60001\t1\tSubRoast ICP Pain-Point Outreach\t[\"SaaS\",\"Entrepreneur\",\"startups\",\"growthhacking\",\"marketing\",\"smallbusiness\",\"leadgeneration\",\"digital_marketing\",\"SideProject\",\"indiehackers\",\"indiehacking\",\"aiforsmallbusiness\",\"ai\"]\tactive\t2026-03-17 06:44:52\n90001\t1\tFor Hire\t[\"forhire\",\"freelance_forhire\"]\tactive\t2026-03-23 15:51:19\n120001\t1\tHealthcare Outreach\t[\"Entrepreneur\",\"startups\",\"smallbusiness\",\"marketing\",\"growthhacking\",\"operations\",\"Business_Ideas\",\"HealthIT\",\"Medicine\",\"P\",\"privatepractice\"]\tactive\t2026-03-23 19:27:57\n",
+  "stderr": "",
+  "execution_time_ms": 57
+}

@@ -935,3 +935,9 @@
 - [x] Add Discord community invite card as final step after onboarding completion (step 5 → Discord → dashboard)
 - [x] Card shows "You're in — join the community" messaging with Discord CTA and "Go to dashboard" skip option
 - [x] Remove Discord CTA from homepage (keep only in sidebar + post-onboarding)
+
+## Bug: Leads capped at 100 (v6.87)
+- [x] Remove hard .limit(100) from getOutreachLeadsByCampaignId — all leads should be visible
+- [x] Remove hard .limit(200) from getOutreachLeadsByUserId (dashboard total also capped)
+- [x] Add cursor-based pagination to getLeads procedure so large campaigns load efficiently
+- [x] Fix leadsFound counter on listCampaigns to use real DB count not stale column

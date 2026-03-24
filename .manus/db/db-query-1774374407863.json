@@ -1,0 +1,49 @@
+{
+  "query": "\nSELECT table_name FROM information_schema.tables WHERE table_schema = DATABASE() ORDER BY table_name;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute \nSELECT table_name FROM information_schema.tables WHERE table_schema = DATABASE() ORDER BY table_name;\n",
+  "rows": [
+    {
+      "table_name": "__drizzle_migrations"
+    },
+    {
+      "table_name": "dm_campaigns"
+    },
+    {
+      "table_name": "dm_recipients"
+    },
+    {
+      "table_name": "feedback"
+    },
+    {
+      "table_name": "outreach_campaigns"
+    },
+    {
+      "table_name": "outreach_leads"
+    },
+    {
+      "table_name": "post_history"
+    },
+    {
+      "table_name": "rate_limit_tracking"
+    },
+    {
+      "table_name": "reddit_accounts"
+    },
+    {
+      "table_name": "scheduled_posts"
+    },
+    {
+      "table_name": "user_settings"
+    },
+    {
+      "table_name": "users"
+    },
+    {
+      "table_name": "waitlist_signups"
+    }
+  ],
+  "messages": [],
+  "stdout": "table_name\n__drizzle_migrations\ndm_campaigns\ndm_recipients\nfeedback\noutreach_campaigns\noutreach_leads\npost_history\nrate_limit_tracking\nreddit_accounts\nscheduled_posts\nuser_settings\nusers\nwaitlist_signups\n",
+  "stderr": "",
+  "execution_time_ms": 46
+}
