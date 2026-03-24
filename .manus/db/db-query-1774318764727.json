@@ -1,0 +1,17 @@
+{
+  "query": "SELECT id, email, name, source, createdAt FROM waitlist_signups ORDER BY createdAt ASC;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute SELECT id, email, name, source, createdAt FROM waitlist_signups ORDER BY createdAt ASC;",
+  "rows": [
+    {
+      "id": "32",
+      "email": "anderson.quintessa@gmail.com",
+      "name": "Tessa",
+      "source": "home_modal",
+      "createdAt": "2026-03-19 19:35:42"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\temail\tname\tsource\tcreatedAt\n32\tanderson.quintessa@gmail.com\tTessa\thome_modal\t2026-03-19 19:35:42\n",
+  "stderr": "",
+  "execution_time_ms": 62
+}

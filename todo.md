@@ -927,3 +927,6 @@
 - [x] Register service worker in the app
 - [x] Add install prompt UI for "Add to Home Screen"
 - [x] Link manifest in index.html with meta tags for mobile
+
+## Discord CTA (v6.85)
+- [x] Add "Join Discord" CTA button to sidebar linking to https://discord.gg/RD8ZCtt7Y

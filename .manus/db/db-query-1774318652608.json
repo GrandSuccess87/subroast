@@ -1,0 +1,94 @@
+{
+  "query": "SELECT email, name, COUNT(*) as count, MIN(createdAt) as first_seen, MAX(createdAt) as last_seen FROM waitlist_signups GROUP BY email, name ORDER BY first_seen ASC;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute SELECT email, name, COUNT(*) as count, MIN(createdAt) as first_seen, MAX(createdAt) as last_seen FROM waitlist_signups GROUP BY email, name ORDER BY first_seen ASC;",
+  "rows": [
+    {
+      "email": "founder@startup.io",
+      "name": "Alex",
+      "count": "15",
+      "first_seen": "2026-03-19 16:01:14",
+      "last_seen": "2026-03-23 21:18:58"
+    },
+    {
+      "email": "test@example.com",
+      "name": "NULL",
+      "count": "15",
+      "first_seen": "2026-03-19 16:01:14",
+      "last_seen": "2026-03-23 21:18:58"
+    },
+    {
+      "email": "test+home_header@example.com",
+      "name": "NULL",
+      "count": "15",
+      "first_seen": "2026-03-19 16:01:15",
+      "last_seen": "2026-03-23 21:18:58"
+    },
+    {
+      "email": "test+header@example.com",
+      "name": "NULL",
+      "count": "15",
+      "first_seen": "2026-03-19 16:01:15",
+      "last_seen": "2026-03-23 21:18:58"
+    },
+    {
+      "email": "test+home_footer@example.com",
+      "name": "NULL",
+      "count": "15",
+      "first_seen": "2026-03-19 16:01:15",
+      "last_seen": "2026-03-23 21:18:58"
+    },
+    {
+      "email": "test+footer@example.com",
+      "name": "NULL",
+      "count": "15",
+      "first_seen": "2026-03-19 16:01:15",
+      "last_seen": "2026-03-23 21:18:58"
+    },
+    {
+      "email": "test+home_modal@example.com",
+      "name": "NULL",
+      "count": "11",
+      "first_seen": "2026-03-19 19:27:31",
+      "last_seen": "2026-03-23 21:18:58"
+    },
+    {
+      "email": "anderson.quintessa@gmail.com",
+      "name": "Tessa",
+      "count": "6",
+      "first_seen": "2026-03-19 19:35:42",
+      "last_seen": "2026-03-20 05:36:47"
+    },
+    {
+      "email": "anderson.quintessa@gmail.com",
+      "name": "Tessa Test",
+      "count": "1",
+      "first_seen": "2026-03-20 00:09:58",
+      "last_seen": "2026-03-20 00:09:58"
+    },
+    {
+      "email": "anderson.quintessa@gmail.com",
+      "name": "Tessa Testing",
+      "count": "1",
+      "first_seen": "2026-03-20 00:12:37",
+      "last_seen": "2026-03-20 00:12:37"
+    },
+    {
+      "email": "anderson.quintessa@gmail.com",
+      "name": "Tessa 123",
+      "count": "1",
+      "first_seen": "2026-03-20 00:13:13",
+      "last_seen": "2026-03-20 00:13:13"
+    },
+    {
+      "email": "anderson.quintessa@gmail.com",
+      "name": "Tessa testing123",
+      "count": "1",
+      "first_seen": "2026-03-20 00:13:48",
+      "last_seen": "2026-03-20 00:13:48"
+    }
+  ],
+  "messages": [],
+  "stdout": "email\tname\tcount\tfirst_seen\tlast_seen\nfounder@startup.io\tAlex\t15\t2026-03-19 16:01:14\t2026-03-23 21:18:58\ntest@example.com\tNULL\t15\t2026-03-19 16:01:14\t2026-03-23 21:18:58\ntest+home_header@example.com\tNULL\t15\t2026-03-19 16:01:15\t2026-03-23 21:18:58\ntest+header@example.com\tNULL\t15\t2026-03-19 16:01:15\t2026-03-23 21:18:58\ntest+home_footer@example.com\tNULL\t15\t2026-03-19 16:01:15\t2026-03-23 21:18:58\ntest+footer@example.com\tNULL\t15\t2026-03-19 16:01:15\t2026-03-23 21:18:58\ntest+home_modal@example.com\tNULL\t11\t2026-03-19 19:27:31\t2026-03-23 21:18:58\nanderson.quintessa@gmail.com\tTessa\t6\t2026-03-19 19:35:42\t2026-03-20 05:36:47\nanderson.quintessa@gmail.com\tTessa Test\t1\t2026-03-20 00:09:58\t2026-03-20 00:09:58\nanderson.quintessa@gmail.com\tTessa Testing\t1\t2026-03-20 00:12:37\t2026-03-20 00:12:37\nanderson.quintessa@gmail.com\tTessa 123\t1\t2026-03-20 00:13:13\t2026-03-20 00:13:13\nanderson.quintessa@gmail.com\tTessa testing123\t1\t2026-03-20 00:13:48\t2026-03-20 00:13:48\n",
+  "stderr": "",
+  "execution_time_ms": 52
+}

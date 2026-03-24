@@ -1,0 +1,787 @@
+{
+  "query": "SELECT id, email, name, source, createdAt FROM waitlist_signups ORDER BY createdAt ASC;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute SELECT id, email, name, source, createdAt FROM waitlist_signups ORDER BY createdAt ASC;",
+  "rows": [
+    {
+      "id": "1",
+      "email": "test@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-19 16:01:14"
+    },
+    {
+      "id": "2",
+      "email": "founder@startup.io",
+      "name": "Alex",
+      "source": "footer",
+      "createdAt": "2026-03-19 16:01:14"
+    },
+    {
+      "id": "3",
+      "email": "test+header@example.com",
+      "name": "NULL",
+      "source": "header",
+      "createdAt": "2026-03-19 16:01:15"
+    },
+    {
+      "id": "4",
+      "email": "test+footer@example.com",
+      "name": "NULL",
+      "source": "footer",
+      "createdAt": "2026-03-19 16:01:15"
+    },
+    {
+      "id": "5",
+      "email": "test+home_header@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-19 16:01:15"
+    },
+    {
+      "id": "6",
+      "email": "test+home_footer@example.com",
+      "name": "NULL",
+      "source": "home_footer",
+      "createdAt": "2026-03-19 16:01:15"
+    },
+    {
+      "id": "7",
+      "email": "test@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-19 16:30:56"
+    },
+    {
+      "id": "8",
+      "email": "founder@startup.io",
+      "name": "Alex",
+      "source": "footer",
+      "createdAt": "2026-03-19 16:30:56"
+    },
+    {
+      "id": "9",
+      "email": "test+header@example.com",
+      "name": "NULL",
+      "source": "header",
+      "createdAt": "2026-03-19 16:30:56"
+    },
+    {
+      "id": "10",
+      "email": "test+footer@example.com",
+      "name": "NULL",
+      "source": "footer",
+      "createdAt": "2026-03-19 16:30:56"
+    },
+    {
+      "id": "11",
+      "email": "test+home_header@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-19 16:30:56"
+    },
+    {
+      "id": "12",
+      "email": "test+home_footer@example.com",
+      "name": "NULL",
+      "source": "home_footer",
+      "createdAt": "2026-03-19 16:30:56"
+    },
+    {
+      "id": "13",
+      "email": "test@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-19 16:54:20"
+    },
+    {
+      "id": "14",
+      "email": "founder@startup.io",
+      "name": "Alex",
+      "source": "footer",
+      "createdAt": "2026-03-19 16:54:20"
+    },
+    {
+      "id": "15",
+      "email": "test+header@example.com",
+      "name": "NULL",
+      "source": "header",
+      "createdAt": "2026-03-19 16:54:20"
+    },
+    {
+      "id": "16",
+      "email": "test+footer@example.com",
+      "name": "NULL",
+      "source": "footer",
+      "createdAt": "2026-03-19 16:54:20"
+    },
+    {
+      "id": "17",
+      "email": "test+home_header@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-19 16:54:20"
+    },
+    {
+      "id": "18",
+      "email": "test+home_footer@example.com",
+      "name": "NULL",
+      "source": "home_footer",
+      "createdAt": "2026-03-19 16:54:20"
+    },
+    {
+      "id": "19",
+      "email": "test@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-19 19:27:10"
+    },
+    {
+      "id": "20",
+      "email": "founder@startup.io",
+      "name": "Alex",
+      "source": "footer",
+      "createdAt": "2026-03-19 19:27:10"
+    },
+    {
+      "id": "21",
+      "email": "test+header@example.com",
+      "name": "NULL",
+      "source": "header",
+      "createdAt": "2026-03-19 19:27:10"
+    },
+    {
+      "id": "22",
+      "email": "test+footer@example.com",
+      "name": "NULL",
+      "source": "footer",
+      "createdAt": "2026-03-19 19:27:10"
+    },
+    {
+      "id": "23",
+      "email": "test+home_header@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-19 19:27:10"
+    },
+    {
+      "id": "24",
+      "email": "test+home_footer@example.com",
+      "name": "NULL",
+      "source": "home_footer",
+      "createdAt": "2026-03-19 19:27:10"
+    },
+    {
+      "id": "25",
+      "email": "test@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-19 19:27:31"
+    },
+    {
+      "id": "26",
+      "email": "founder@startup.io",
+      "name": "Alex",
+      "source": "footer",
+      "createdAt": "2026-03-19 19:27:31"
+    },
+    {
+      "id": "27",
+      "email": "test+header@example.com",
+      "name": "NULL",
+      "source": "header",
+      "createdAt": "2026-03-19 19:27:31"
+    },
+    {
+      "id": "28",
+      "email": "test+footer@example.com",
+      "name": "NULL",
+      "source": "footer",
+      "createdAt": "2026-03-19 19:27:31"
+    },
+    {
+      "id": "29",
+      "email": "test+home_header@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-19 19:27:31"
+    },
+    {
+      "id": "30",
+      "email": "test+home_footer@example.com",
+      "name": "NULL",
+      "source": "home_footer",
+      "createdAt": "2026-03-19 19:27:31"
+    },
+    {
+      "id": "31",
+      "email": "test+home_modal@example.com",
+      "name": "NULL",
+      "source": "home_modal",
+      "createdAt": "2026-03-19 19:27:31"
+    },
+    {
+      "id": "32",
+      "email": "anderson.quintessa@gmail.com",
+      "name": "Tessa",
+      "source": "home_modal",
+      "createdAt": "2026-03-19 19:35:42"
+    },
+    {
+      "id": "33",
+      "email": "anderson.quintessa@gmail.com",
+      "name": "Tessa",
+      "source": "header",
+      "createdAt": "2026-03-19 19:36:47"
+    },
+    {
+      "id": "34",
+      "email": "anderson.quintessa@gmail.com",
+      "name": "Tessa",
+      "source": "footer",
+      "createdAt": "2026-03-19 19:37:34"
+    },
+    {
+      "id": "35",
+      "email": "anderson.quintessa@gmail.com",
+      "name": "Tessa",
+      "source": "home_modal",
+      "createdAt": "2026-03-19 20:23:16"
+    },
+    {
+      "id": "36",
+      "email": "test@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-19 21:03:02"
+    },
+    {
+      "id": "37",
+      "email": "founder@startup.io",
+      "name": "Alex",
+      "source": "footer",
+      "createdAt": "2026-03-19 21:03:02"
+    },
+    {
+      "id": "38",
+      "email": "test+header@example.com",
+      "name": "NULL",
+      "source": "header",
+      "createdAt": "2026-03-19 21:03:02"
+    },
+    {
+      "id": "39",
+      "email": "test+footer@example.com",
+      "name": "NULL",
+      "source": "footer",
+      "createdAt": "2026-03-19 21:03:02"
+    },
+    {
+      "id": "40",
+      "email": "test+home_header@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-19 21:03:02"
+    },
+    {
+      "id": "41",
+      "email": "test+home_footer@example.com",
+      "name": "NULL",
+      "source": "home_footer",
+      "createdAt": "2026-03-19 21:03:02"
+    },
+    {
+      "id": "42",
+      "email": "test+home_modal@example.com",
+      "name": "NULL",
+      "source": "home_modal",
+      "createdAt": "2026-03-19 21:03:02"
+    },
+    {
+      "id": "43",
+      "email": "anderson.quintessa@gmail.com",
+      "name": "Tessa",
+      "source": "home_modal",
+      "createdAt": "2026-03-20 00:04:48"
+    },
+    {
+      "id": "44",
+      "email": "anderson.quintessa@gmail.com",
+      "name": "Tessa Test",
+      "source": "home_modal",
+      "createdAt": "2026-03-20 00:09:58"
+    },
+    {
+      "id": "45",
+      "email": "anderson.quintessa@gmail.com",
+      "name": "Tessa Testing",
+      "source": "home_modal",
+      "createdAt": "2026-03-20 00:12:37"
+    },
+    {
+      "id": "46",
+      "email": "anderson.quintessa@gmail.com",
+      "name": "Tessa 123",
+      "source": "home_modal",
+      "createdAt": "2026-03-20 00:13:13"
+    },
+    {
+      "id": "47",
+      "email": "anderson.quintessa@gmail.com",
+      "name": "Tessa testing123",
+      "source": "home_modal",
+      "createdAt": "2026-03-20 00:13:48"
+    },
+    {
+      "id": "48",
+      "email": "anderson.quintessa@gmail.com",
+      "name": "Tessa",
+      "source": "home_modal",
+      "createdAt": "2026-03-20 05:36:47"
+    },
+    {
+      "id": "30001",
+      "email": "test@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-21 18:52:21"
+    },
+    {
+      "id": "30002",
+      "email": "founder@startup.io",
+      "name": "Alex",
+      "source": "footer",
+      "createdAt": "2026-03-21 18:52:21"
+    },
+    {
+      "id": "30003",
+      "email": "test+header@example.com",
+      "name": "NULL",
+      "source": "header",
+      "createdAt": "2026-03-21 18:52:21"
+    },
+    {
+      "id": "30004",
+      "email": "test+footer@example.com",
+      "name": "NULL",
+      "source": "footer",
+      "createdAt": "2026-03-21 18:52:21"
+    },
+    {
+      "id": "30005",
+      "email": "test+home_header@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-21 18:52:21"
+    },
+    {
+      "id": "30006",
+      "email": "test+home_footer@example.com",
+      "name": "NULL",
+      "source": "home_footer",
+      "createdAt": "2026-03-21 18:52:21"
+    },
+    {
+      "id": "30007",
+      "email": "test+home_modal@example.com",
+      "name": "NULL",
+      "source": "home_modal",
+      "createdAt": "2026-03-21 18:52:21"
+    },
+    {
+      "id": "60001",
+      "email": "test@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-22 18:36:15"
+    },
+    {
+      "id": "60002",
+      "email": "founder@startup.io",
+      "name": "Alex",
+      "source": "footer",
+      "createdAt": "2026-03-22 18:36:15"
+    },
+    {
+      "id": "60003",
+      "email": "test+header@example.com",
+      "name": "NULL",
+      "source": "header",
+      "createdAt": "2026-03-22 18:36:15"
+    },
+    {
+      "id": "60004",
+      "email": "test+footer@example.com",
+      "name": "NULL",
+      "source": "footer",
+      "createdAt": "2026-03-22 18:36:15"
+    },
+    {
+      "id": "60005",
+      "email": "test+home_header@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-22 18:36:15"
+    },
+    {
+      "id": "60006",
+      "email": "test+home_footer@example.com",
+      "name": "NULL",
+      "source": "home_footer",
+      "createdAt": "2026-03-22 18:36:15"
+    },
+    {
+      "id": "60007",
+      "email": "test+home_modal@example.com",
+      "name": "NULL",
+      "source": "home_modal",
+      "createdAt": "2026-03-22 18:36:15"
+    },
+    {
+      "id": "90001",
+      "email": "test@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-23 15:33:59"
+    },
+    {
+      "id": "90002",
+      "email": "founder@startup.io",
+      "name": "Alex",
+      "source": "footer",
+      "createdAt": "2026-03-23 15:33:59"
+    },
+    {
+      "id": "90003",
+      "email": "test+header@example.com",
+      "name": "NULL",
+      "source": "header",
+      "createdAt": "2026-03-23 15:33:59"
+    },
+    {
+      "id": "90004",
+      "email": "test+footer@example.com",
+      "name": "NULL",
+      "source": "footer",
+      "createdAt": "2026-03-23 15:33:59"
+    },
+    {
+      "id": "90005",
+      "email": "test+home_header@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-23 15:33:59"
+    },
+    {
+      "id": "90006",
+      "email": "test+home_footer@example.com",
+      "name": "NULL",
+      "source": "home_footer",
+      "createdAt": "2026-03-23 15:33:59"
+    },
+    {
+      "id": "90007",
+      "email": "test+home_modal@example.com",
+      "name": "NULL",
+      "source": "home_modal",
+      "createdAt": "2026-03-23 15:33:59"
+    },
+    {
+      "id": "90008",
+      "email": "test@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-23 15:50:37"
+    },
+    {
+      "id": "90009",
+      "email": "founder@startup.io",
+      "name": "Alex",
+      "source": "footer",
+      "createdAt": "2026-03-23 15:50:37"
+    },
+    {
+      "id": "90010",
+      "email": "test+header@example.com",
+      "name": "NULL",
+      "source": "header",
+      "createdAt": "2026-03-23 15:50:37"
+    },
+    {
+      "id": "90011",
+      "email": "test+footer@example.com",
+      "name": "NULL",
+      "source": "footer",
+      "createdAt": "2026-03-23 15:50:37"
+    },
+    {
+      "id": "90012",
+      "email": "test+home_header@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-23 15:50:37"
+    },
+    {
+      "id": "90013",
+      "email": "test+home_footer@example.com",
+      "name": "NULL",
+      "source": "home_footer",
+      "createdAt": "2026-03-23 15:50:37"
+    },
+    {
+      "id": "90014",
+      "email": "test+home_modal@example.com",
+      "name": "NULL",
+      "source": "home_modal",
+      "createdAt": "2026-03-23 15:50:37"
+    },
+    {
+      "id": "90015",
+      "email": "test@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-23 16:35:55"
+    },
+    {
+      "id": "90016",
+      "email": "founder@startup.io",
+      "name": "Alex",
+      "source": "footer",
+      "createdAt": "2026-03-23 16:35:55"
+    },
+    {
+      "id": "90017",
+      "email": "test+header@example.com",
+      "name": "NULL",
+      "source": "header",
+      "createdAt": "2026-03-23 16:35:55"
+    },
+    {
+      "id": "90018",
+      "email": "test+footer@example.com",
+      "name": "NULL",
+      "source": "footer",
+      "createdAt": "2026-03-23 16:35:56"
+    },
+    {
+      "id": "90019",
+      "email": "test+home_header@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-23 16:35:56"
+    },
+    {
+      "id": "90020",
+      "email": "test+home_footer@example.com",
+      "name": "NULL",
+      "source": "home_footer",
+      "createdAt": "2026-03-23 16:35:56"
+    },
+    {
+      "id": "90021",
+      "email": "test+home_modal@example.com",
+      "name": "NULL",
+      "source": "home_modal",
+      "createdAt": "2026-03-23 16:35:56"
+    },
+    {
+      "id": "120001",
+      "email": "test@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-23 19:11:30"
+    },
+    {
+      "id": "120002",
+      "email": "founder@startup.io",
+      "name": "Alex",
+      "source": "footer",
+      "createdAt": "2026-03-23 19:11:30"
+    },
+    {
+      "id": "120003",
+      "email": "test+header@example.com",
+      "name": "NULL",
+      "source": "header",
+      "createdAt": "2026-03-23 19:11:30"
+    },
+    {
+      "id": "120004",
+      "email": "test+footer@example.com",
+      "name": "NULL",
+      "source": "footer",
+      "createdAt": "2026-03-23 19:11:30"
+    },
+    {
+      "id": "120005",
+      "email": "test+home_header@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-23 19:11:30"
+    },
+    {
+      "id": "120006",
+      "email": "test+home_footer@example.com",
+      "name": "NULL",
+      "source": "home_footer",
+      "createdAt": "2026-03-23 19:11:30"
+    },
+    {
+      "id": "120007",
+      "email": "test+home_modal@example.com",
+      "name": "NULL",
+      "source": "home_modal",
+      "createdAt": "2026-03-23 19:11:30"
+    },
+    {
+      "id": "120008",
+      "email": "test@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-23 19:42:48"
+    },
+    {
+      "id": "120009",
+      "email": "founder@startup.io",
+      "name": "Alex",
+      "source": "footer",
+      "createdAt": "2026-03-23 19:42:48"
+    },
+    {
+      "id": "120010",
+      "email": "test+header@example.com",
+      "name": "NULL",
+      "source": "header",
+      "createdAt": "2026-03-23 19:42:48"
+    },
+    {
+      "id": "120011",
+      "email": "test+footer@example.com",
+      "name": "NULL",
+      "source": "footer",
+      "createdAt": "2026-03-23 19:42:48"
+    },
+    {
+      "id": "120012",
+      "email": "test+home_header@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-23 19:42:48"
+    },
+    {
+      "id": "120013",
+      "email": "test+home_footer@example.com",
+      "name": "NULL",
+      "source": "home_footer",
+      "createdAt": "2026-03-23 19:42:48"
+    },
+    {
+      "id": "120014",
+      "email": "test+home_modal@example.com",
+      "name": "NULL",
+      "source": "home_modal",
+      "createdAt": "2026-03-23 19:42:48"
+    },
+    {
+      "id": "120015",
+      "email": "test@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-23 20:03:35"
+    },
+    {
+      "id": "120016",
+      "email": "founder@startup.io",
+      "name": "Alex",
+      "source": "footer",
+      "createdAt": "2026-03-23 20:03:35"
+    },
+    {
+      "id": "120017",
+      "email": "test+header@example.com",
+      "name": "NULL",
+      "source": "header",
+      "createdAt": "2026-03-23 20:03:35"
+    },
+    {
+      "id": "120018",
+      "email": "test+footer@example.com",
+      "name": "NULL",
+      "source": "footer",
+      "createdAt": "2026-03-23 20:03:35"
+    },
+    {
+      "id": "120019",
+      "email": "test+home_header@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-23 20:03:35"
+    },
+    {
+      "id": "120020",
+      "email": "test+home_footer@example.com",
+      "name": "NULL",
+      "source": "home_footer",
+      "createdAt": "2026-03-23 20:03:36"
+    },
+    {
+      "id": "120021",
+      "email": "test+home_modal@example.com",
+      "name": "NULL",
+      "source": "home_modal",
+      "createdAt": "2026-03-23 20:03:36"
+    },
+    {
+      "id": "120022",
+      "email": "test@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-23 21:18:58"
+    },
+    {
+      "id": "120023",
+      "email": "founder@startup.io",
+      "name": "Alex",
+      "source": "footer",
+      "createdAt": "2026-03-23 21:18:58"
+    },
+    {
+      "id": "120024",
+      "email": "test+header@example.com",
+      "name": "NULL",
+      "source": "header",
+      "createdAt": "2026-03-23 21:18:58"
+    },
+    {
+      "id": "120025",
+      "email": "test+footer@example.com",
+      "name": "NULL",
+      "source": "footer",
+      "createdAt": "2026-03-23 21:18:58"
+    },
+    {
+      "id": "120026",
+      "email": "test+home_header@example.com",
+      "name": "NULL",
+      "source": "home_header",
+      "createdAt": "2026-03-23 21:18:58"
+    },
+    {
+      "id": "120027",
+      "email": "test+home_footer@example.com",
+      "name": "NULL",
+      "source": "home_footer",
+      "createdAt": "2026-03-23 21:18:58"
+    },
+    {
+      "id": "120028",
+      "email": "test+home_modal@example.com",
+      "name": "NULL",
+      "source": "home_modal",
+      "createdAt": "2026-03-23 21:18:58"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\temail\tname\tsource\tcreatedAt\n1\ttest@example.com\tNULL\thome_header\t2026-03-19 16:01:14\n2\tfounder@startup.io\tAlex\tfooter\t2026-03-19 16:01:14\n3\ttest+header@example.com\tNULL\theader\t2026-03-19 16:01:15\n4\ttest+footer@example.com\tNULL\tfooter\t2026-03-19 16:01:15\n5\ttest+home_header@example.com\tNULL\thome_header\t2026-03-19 16:01:15\n6\ttest+home_footer@example.com\tNULL\thome_footer\t2026-03-19 16:01:15\n7\ttest@example.com\tNULL\thome_header\t2026-03-19 16:30:56\n8\tfounder@startup.io\tAlex\tfooter\t2026-03-19 16:30:56\n9\ttest+header@example.com\tNULL\theader\t2026-03-19 16:30:56\n10\ttest+footer@example.com\tNULL\tfooter\t2026-03-19 16:30:56\n11\ttest+home_header@example.com\tNULL\thome_header\t2026-03-19 16:30:56\n12\ttest+home_footer@example.com\tNULL\thome_footer\t2026-03-19 16:30:56\n13\ttest@example.com\tNULL\thome_header\t2026-03-19 16:54:20\n14\tfounder@startup.io\tAlex\tfooter\t2026-03-19 16:54:20\n15\ttest+header@example.com\tNULL\theader\t2026-03-19 16:54:20\n16\ttest+footer@example.com\tNULL\tfooter\t2026-03-19 16:54:20\n17\ttest+home_header@example.com\tNULL\thome_header\t2026-03-19 16:54:20\n18\ttest+home_footer@example.com\tNULL\thome_footer\t2026-03-19 16:54:20\n19\ttest@example.com\tNULL\thome_header\t2026-03-19 19:27:10\n20\tfounder@startup.io\tAlex\tfooter\t2026-03-19 19:27:10\n21\ttest+header@example.com\tNULL\theader\t2026-03-19 19:27:10\n22\ttest+footer@example.com\tNULL\tfooter\t2026-03-19 19:27:10\n23\ttest+home_header@example.com\tNULL\thome_header\t2026-03-19 19:27:10\n24\ttest+home_footer@example.com\tNULL\thome_footer\t2026-03-19 19:27:10\n25\ttest@example.com\tNULL\thome_header\t2026-03-19 19:27:31\n26\tfounder@startup.io\tAlex\tfooter\t2026-03-19 19:27:31\n27\ttest+header@example.com\tNULL\theader\t2026-03-19 19:27:31\n28\ttest+footer@example.com\tNULL\tfooter\t2026-03-19 19:27:31\n29\ttest+home_header@example.com\tNULL\thome_header\t2026-03-19 19:27:31\n30\ttest+home_footer@example.com\tNULL\thome_footer\t2026-03-19 19:27:31\n31\ttest+home_modal@example.com\tNULL\thome_modal\t2026-03-19 19:27:31\n32\tanderson.quintessa@gmail.com\tTessa\thome_modal\t2026-03-19 19:35:42\n33\tanderson.quintessa@gmail.com\tTessa\theader\t2026-03-19 19:36:47\n34\tanderson.quintessa@gmail.com\tTessa\tfooter\t2026-03-19 19:37:34\n35\tanderson.quintessa@gmail.com\tTessa\thome_modal\t2026-03-19 20:23:16\n36\ttest@example.com\tNULL\thome_header\t2026-03-19 21:03:02\n37\tfounder@startup.io\tAlex\tfooter\t2026-03-19 21:03:02\n38\ttest+header@example.com\tNULL\theader\t2026-03-19 21:03:02\n39\ttest+footer@example.com\tNULL\tfooter\t2026-03-19 21:03:02\n40\ttest+home_header@example.com\tNULL\thome_header\t2026-03-19 21:03:02\n41\ttest+home_footer@example.com\tNULL\thome_footer\t2026-03-19 21:03:02\n42\ttest+home_modal@example.com\tNULL\thome_modal\t2026-03-19 21:03:02\n43\tanderson.quintessa@gmail.com\tTessa\thome_modal\t2026-03-20 00:04:48\n44\tanderson.quintessa@gmail.com\tTessa Test\thome_modal\t2026-03-20 00:09:58\n45\tanderson.quintessa@gmail.com\tTessa Testing\thome_modal\t2026-03-20 00:12:37\n46\tanderson.quintessa@gmail.com\tTessa 123\thome_modal\t2026-03-20 00:13:13\n47\tanderson.quintessa@gmail.com\tTessa testing123\thome_modal\t2026-03-20 00:13:48\n48\tanderson.quintessa@gmail.com\tTessa\thome_modal\t2026-03-20 05:36:47\n30001\ttest@example.com\tNULL\thome_header\t2026-03-21 18:52:21\n30002\tfounder@startup.io\tAlex\tfooter\t2026-03-21 18:52:21\n30003\ttest+header@example.com\tNULL\theader\t2026-03-21 18:52:21\n30004\ttest+footer@example.com\tNULL\tfooter\t2026-03-21 18:52:21\n30005\ttest+home_header@example.com\tNULL\thome_header\t2026-03-21 18:52:21\n30006\ttest+home_footer@example.com\tNULL\thome_footer\t2026-03-21 18:52:21\n30007\ttest+home_modal@example.com\tNULL\thome_modal\t2026-03-21 18:52:21\n60001\ttest@example.com\tNULL\thome_header\t2026-03-22 18:36:15\n60002\tfounder@startup.io\tAlex\tfooter\t2026-03-22 18:36:15\n60003\ttest+header@example.com\tNULL\theader\t2026-03-22 18:36:15\n60004\ttest+footer@example.com\tNULL\tfooter\t2026-03-22 18:36:15\n60005\ttest+home_header@example.com\tNULL\thome_header\t2026-03-22 18:36:15\n60006\ttest+home_footer@example.com\tNULL\thome_footer\t2026-03-22 18:36:15\n60007\ttest+home_modal@example.com\tNULL\thome_modal\t2026-03-22 18:36:15\n90001\ttest@example.com\tNULL\thome_header\t2026-03-23 15:33:59\n90002\tfounder@startup.io\tAlex\tfooter\t2026-03-23 15:33:59\n90003\ttest+header@example.com\tNULL\theader\t2026-03-23 15:33:59\n90004\ttest+footer@example.com\tNULL\tfooter\t2026-03-23 15:33:59\n90005\ttest+home_header@example.com\tNULL\thome_header\t2026-03-23 15:33:59\n90006\ttest+home_footer@example.com\tNULL\thome_footer\t2026-03-23 15:33:59\n90007\ttest+home_modal@example.com\tNULL\thome_modal\t2026-03-23 15:33:59\n90008\ttest@example.com\tNULL\thome_header\t2026-03-23 15:50:37\n90009\tfounder@startup.io\tAlex\tfooter\t2026-03-23 15:50:37\n90010\ttest+header@example.com\tNULL\theader\t2026-03-23 15:50:37\n90011\ttest+footer@example.com\tNULL\tfooter\t2026-03-23 15:50:37\n90012\ttest+home_header@example.com\tNULL\thome_header\t2026-03-23 15:50:37\n90013\ttest+home_footer@example.com\tNULL\thome_footer\t2026-03-23 15:50:37\n90014\ttest+home_modal@example.com\tNULL\thome_modal\t2026-03-23 15:50:37\n90015\ttest@example.com\tNULL\thome_header\t2026-03-23 16:35:55\n90016\tfounder@startup.io\tAlex\tfooter\t2026-03-23 16:35:55\n90017\ttest+header@example.com\tNULL\theader\t2026-03-23 16:35:55\n90018\ttest+footer@example.com\tNULL\tfooter\t2026-03-23 16:35:56\n90019\ttest+home_header@example.com\tNULL\thome_header\t2026-03-23 16:35:56\n90020\ttest+home_footer@example.com\tNULL\thome_footer\t2026-03-23 16:35:56\n90021\ttest+home_modal@example.com\tNULL\thome_modal\t2026-03-23 16:35:56\n120001\ttest@example.com\tNULL\thome_header\t2026-03-23 19:11:30\n120002\tfounder@startup.io\tAlex\tfooter\t2026-03-23 19:11:30\n120003\ttest+header@example.com\tNULL\theader\t2026-03-23 19:11:30\n120004\ttest+footer@example.com\tNULL\tfooter\t2026-03-23 19:11:30\n120005\ttest+home_header@example.com\tNULL\thome_header\t2026-03-23 19:11:30\n120006\ttest+home_footer@example.com\tNULL\thome_footer\t2026-03-23 19:11:30\n120007\ttest+home_modal@example.com\tNULL\thome_modal\t2026-03-23 19:11:30\n120008\ttest@example.com\tNULL\thome_header\t2026-03-23 19:42:48\n120009\tfounder@startup.io\tAlex\tfooter\t2026-03-23 19:42:48\n120010\ttest+header@example.com\tNULL\theader\t2026-03-23 19:42:48\n120011\ttest+footer@example.com\tNULL\tfooter\t2026-03-23 19:42:48\n120012\ttest+home_header@example.com\tNULL\thome_header\t2026-03-23 19:42:48\n120013\ttest+home_footer@example.com\tNULL\thome_footer\t2026-03-23 19:42:48\n120014\ttest+home_modal@example.com\tNULL\thome_modal\t2026-03-23 19:42:48\n120015\ttest@example.com\tNULL\thome_header\t2026-03-23 20:03:35\n120016\tfounder@startup.io\tAlex\tfooter\t2026-03-23 20:03:35\n120017\ttest+header@example.com\tNULL\theader\t2026-03-23 20:03:35\n120018\ttest+footer@example.com\tNULL\tfooter\t2026-03-23 20:03:35\n120019\ttest+home_header@example.com\tNULL\thome_header\t2026-03-23 20:03:35\n120020\ttest+home_footer@example.com\tNULL\thome_footer\t2026-03-23 20:03:36\n120021\ttest+home_modal@example.com\tNULL\thome_modal\t2026-03-23 20:03:36\n120022\ttest@example.com\tNULL\thome_header\t2026-03-23 21:18:58\n120023\tfounder@startup.io\tAlex\tfooter\t2026-03-23 21:18:58\n120024\ttest+header@example.com\tNULL\theader\t2026-03-23 21:18:58\n120025\ttest+footer@example.com\tNULL\tfooter\t2026-03-23 21:18:58\n120026\ttest+home_header@example.com\tNULL\thome_header\t2026-03-23 21:18:58\n120027\ttest+home_footer@example.com\tNULL\thome_footer\t2026-03-23 21:18:58\n120028\ttest+home_modal@example.com\tNULL\thome_modal\t2026-03-23 21:18:58\n",
+  "stderr": "",
+  "execution_time_ms": 53
+}
