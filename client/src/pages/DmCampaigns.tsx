@@ -90,6 +90,7 @@ type Lead = {
   commentDraft?: string | null; commentSentAt?: number | null;
   spamScore?: number | null; spamFlags?: string | null;
   isFavorited?: boolean;
+  painPoint?: string | null;
 };
 
 // ─── Shared input style ───────────────────────────────────────────────────────
@@ -762,6 +763,12 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
             <ExternalLink size={11} color={MUTED} style={{ flexShrink: 0, marginTop: "2px" }} />
           </a>
 
+          {lead.painPoint && (
+            <div style={{ display: "flex", alignItems: "flex-start", gap: "0.35rem", marginBottom: "0.2rem", marginTop: "0.1rem" }}>
+              <span style={{ fontFamily: FONT_MONO, fontSize: "0.55rem", letterSpacing: "0.08em", textTransform: "uppercase", color: AMBER, flexShrink: 0, marginTop: "1px" }}>Pain Point</span>
+              <p style={{ fontFamily: FONT_MONO, fontSize: "0.62rem", color: "oklch(0.78 0.06 85)", margin: 0, lineHeight: 1.4, fontStyle: "italic" }}>"{lead.painPoint}"</p>
+            </div>
+          )}
           <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", color: MUTED }}>
             u/{lead.authorUsername} · {new Date(lead.discoveredAt).toLocaleDateString()}
           </p>

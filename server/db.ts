@@ -538,12 +538,14 @@ export async function getActiveCampaignsForSync(): Promise<OutreachCampaign[]> {
 export async function upsertOutreachLead(data: InsertOutreachLead): Promise<void> {
   const db = await getDb();
   if (!db) return;
-  await db.insert(outreachLeads).values(data).onDuplicateKeyUpdate({
-    set: {
-      matchScore: data.matchScore,
-      matchedKeywords: data.matchedKeywords,
-    },
-  });
+  const updateSet: Partial<InsertOutreachLead> = {
+    matchScore: data.matchScore,
+    matchedKeywords: data.matchedKeywords,
+  };
+  // Persist AI-extracted fields if provided (don't overwrite existing roast data)
+  if (data.intentType !== undefined) updateSet.intentType = data.intentType;
+  if (data.painPoint !== undefined) updateSet.painPoint = data.painPoint;
+  await db.insert(outreachLeads).values(data).onDuplicateKeyUpdate({ set: updateSet });
 }
 
 export async function getOutreachLeadsByCampaignId(campaignId: number): Promise<OutreachLead[]> {

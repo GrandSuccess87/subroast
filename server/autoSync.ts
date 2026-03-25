@@ -18,6 +18,7 @@ import {
 import { notifyNewLeads } from "./emailNotifications";
 import { users, outreachCampaigns } from "../drizzle/schema";
 import { eq, inArray } from "drizzle-orm";
+import { invokeLLM } from "./_core/llm";
 
 // ─── Sync window helpers ──────────────────────────────────────────────────────
 
@@ -179,12 +180,67 @@ function scoreMatch(
   return { score, matchedKeywords: matched };
 }
 
+// ─── Lightweight AI: pain point + intent extraction ─────────────────────────
+
+async function extractPainPointAndIntent(postTitle: string, postBody: string, offering: string): Promise<{
+  painPoint: string | null;
+  intentType: "hiring" | "buying" | "seeking_advice" | "venting" | "unknown";
+}> {
+  try {
+    const content = `Title: ${postTitle}\nBody: ${(postBody || "").slice(0, 600)}`;
+    const response = await invokeLLM({
+      messages: [
+        {
+          role: "system" as const,
+          content: `You are a lead intelligence engine. Given a Reddit post and a product offering, extract:
+1. painPoint: A single sentence (max 15 words) describing the specific problem or frustration the author is experiencing. If no clear pain point exists, return null.
+2. intentType: Classify the post author's intent as exactly one of: "buying" (actively seeking to purchase a tool/service), "seeking_advice" (asking for recommendations or help), "venting" (complaining about a problem without seeking a solution), "hiring" (posting a job or gig), "unknown" (none of the above apply clearly).
+
+Heuristics:
+- Questions asking for tool recommendations → seeking_advice
+- "looking for", "need a tool", "recommend" → buying or seeking_advice
+- Complaints without a question → venting
+- Job/gig posts → hiring
+- Vague or off-topic → unknown
+
+Offering context: ${offering.slice(0, 200)}`,
+        },
+        { role: "user" as const, content },
+      ],
+      response_format: {
+        type: "json_schema",
+        json_schema: {
+          name: "pain_point_intent",
+          strict: true,
+          schema: {
+            type: "object",
+            properties: {
+              painPoint: { type: ["string", "null"] as unknown as "string", description: "1-sentence pain point or null" },
+              intentType: { type: "string", enum: ["hiring", "buying", "seeking_advice", "venting", "unknown"] },
+            },
+            required: ["painPoint", "intentType"],
+            additionalProperties: false,
+          },
+        },
+      },
+    });
+    const rawContent = response.choices[0]?.message?.content;
+    const raw = typeof rawContent === "string" ? rawContent : null;
+    if (!raw) return { painPoint: null, intentType: "unknown" };
+    const parsed = JSON.parse(raw) as { painPoint: string | null; intentType: "hiring" | "buying" | "seeking_advice" | "venting" | "unknown" };
+    return { painPoint: parsed.painPoint || null, intentType: parsed.intentType || "unknown" };
+  } catch {
+    return { painPoint: null, intentType: "unknown" };
+  }
+}
+
 // ─── Per-campaign sync ────────────────────────────────────────────────────────
 
 async function syncCampaign(campaign: {
   id: number;
   userId: number;
   name: string;
+  offering: string;
   subreddits: string;
   keywords: string;
   leadsFound: number;
@@ -209,6 +265,8 @@ async function syncCampaign(campaign: {
         }
 
         const { score, matchedKeywords } = scoreMatch(post.title, post.body, keywords);
+        // Extract pain point + intent via lightweight AI call
+        const { painPoint, intentType } = await extractPainPointAndIntent(post.title, post.body, campaign.offering);
         await upsertOutreachLead({
           campaignId: campaign.id,
           userId: campaign.userId,
@@ -220,6 +278,8 @@ async function syncCampaign(campaign: {
           authorUsername: post.author,
           matchScore: score,
           matchedKeywords: JSON.stringify(matchedKeywords),
+          intentType,
+          painPoint,
           status: "new",
           discoveredAt: Date.now(),
         });

@@ -239,6 +239,7 @@ export const outreachLeads = mysqlTable("outreach_leads", {
   sentAt: bigint("sentAt", { mode: "number" }),
   errorMessage: text("errorMessage"),
   isFavorited: boolean("isFavorited").default(false).notNull(),
+  painPoint: text("painPoint"),                     // AI-extracted 1-sentence pain point summary
   discoveredAt: bigint("discoveredAt", { mode: "number" }).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),

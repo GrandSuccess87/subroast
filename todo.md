@@ -968,11 +968,11 @@
 - [x] Purchase-Ready floats to top when sorted by intent tier
 - [x] Sort is client-side, no refetch needed
 
-## Pain Point Extraction — Core Differentiator (roadmap)
-- [ ] Add painPoint field to outreach_leads schema (1-sentence extracted pain point)
-- [ ] During auto-sync AI scoring, extract 1-sentence pain point per lead: e.g. "Struggling to find warm leads without getting banned"
-- [ ] Show pain point on lead cards (below post title)
-- [ ] Show pain point in expandable lead detail / hover
+## Pain Point Extraction — Core Differentiator (v6.92)
+- [x] Add painPoint field to outreach_leads schema (1-sentence extracted pain point)
+- [x] During auto-sync AI scoring, extract 1-sentence pain point per lead: e.g. "Struggling to find warm leads without getting banned"
+- [x] Show pain point on lead cards (below post title)
+- [x] Show pain point in expandable lead detail / hover
 
 ## Pain Point Frequency Aggregation (roadmap)
 - [ ] After extraction works: aggregate pain points per campaign into clusters

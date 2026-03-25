@@ -140,6 +140,47 @@ function scoreMatch(
   return { score, matchedKeywords: matched };
 }
 
+async function extractPainPointAndIntent(postTitle: string, postBody: string, offering: string): Promise<{
+  painPoint: string | null;
+  intentType: "hiring" | "buying" | "seeking_advice" | "venting" | "unknown";
+}> {
+  try {
+    const content = `Title: ${postTitle}\nBody: ${(postBody || "").slice(0, 600)}`;
+    const response = await invokeLLM({
+      messages: [
+        {
+          role: "system" as const,
+          content: `You are a lead intelligence engine. Given a Reddit post and a product offering, extract:\n1. painPoint: A single sentence (max 15 words) describing the specific problem or frustration the author is experiencing. If no clear pain point exists, return null.\n2. intentType: Classify the post author's intent as exactly one of: "buying" (actively seeking to purchase a tool/service), "seeking_advice" (asking for recommendations or help), "venting" (complaining about a problem without seeking a solution), "hiring" (posting a job or gig), "unknown" (none of the above apply clearly).\n\nHeuristics:\n- Questions asking for tool recommendations → seeking_advice\n- "looking for", "need a tool", "recommend" → buying or seeking_advice\n- Complaints without a question → venting\n- Job/gig posts → hiring\n- Vague or off-topic → unknown\n\nOffering context: ${offering.slice(0, 200)}`,
+        },
+        { role: "user" as const, content },
+      ],
+      response_format: {
+        type: "json_schema",
+        json_schema: {
+          name: "pain_point_intent",
+          strict: true,
+          schema: {
+            type: "object",
+            properties: {
+              painPoint: { type: "string" as const, description: "1-sentence pain point or empty string if none" },
+              intentType: { type: "string", enum: ["hiring", "buying", "seeking_advice", "venting", "unknown"] },
+            },
+            required: ["painPoint", "intentType"],
+            additionalProperties: false,
+          },
+        },
+      },
+    });
+    const rawContent = response.choices[0]?.message?.content;
+    const raw = typeof rawContent === "string" ? rawContent : null;
+    if (!raw) return { painPoint: null, intentType: "unknown" };
+    const parsed = JSON.parse(raw) as { painPoint: string; intentType: "hiring" | "buying" | "seeking_advice" | "venting" | "unknown" };
+    return { painPoint: parsed.painPoint?.trim() || null, intentType: parsed.intentType || "unknown" };
+  } catch {
+    return { painPoint: null, intentType: "unknown" };
+  }
+}
+
 /// ─── Lightweight Spam Filter ─────────────────────────────────────────────────────
 // Uses only data already present in the post response — no extra API calls.
 
@@ -533,6 +574,8 @@ Rules:
             // For fresh campaigns (0 leads), every post counts as new regardless
             // of whether auto-sync previously set lastSyncAt
             const isNew = isFreshCampaign || !existingPostIds.has(post.id);
+            // Extract pain point + intent via lightweight AI call
+            const { painPoint, intentType } = await extractPainPointAndIntent(post.title, post.body || "", c.offering);
             await upsertOutreachLead({
               campaignId: input.campaignId,
               userId: ctx.user.id,
@@ -544,6 +587,8 @@ Rules:
               authorUsername: post.author,
               matchScore: score,
               matchedKeywords: JSON.stringify(matchedKeywords),
+              intentType,
+              painPoint,
               status: "new",
               discoveredAt: Date.now(),
             });
