@@ -1,0 +1,22 @@
+{
+  "query": "SELECT matchScore, COUNT(*) as count FROM outreach_leads GROUP BY matchScore ORDER BY count DESC;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute SELECT matchScore, COUNT(*) as count FROM outreach_leads GROUP BY matchScore ORDER BY count DESC;",
+  "rows": [
+    {
+      "matchScore": "lowest",
+      "count": "908"
+    },
+    {
+      "matchScore": "partial",
+      "count": "33"
+    },
+    {
+      "matchScore": "strong",
+      "count": "3"
+    }
+  ],
+  "messages": [],
+  "stdout": "matchScore\tcount\nlowest\t908\npartial\t33\nstrong\t3\n",
+  "stderr": "",
+  "execution_time_ms": 63
+}

@@ -1,0 +1,145 @@
+{
+  "query": "\nSELECT \n  id, campaignId, authorUsername, subreddit, status, matchScore,\n  FROM_UNIXTIME(discoveredAt/1000) as discovered_at\nFROM outreach_leads\nORDER BY discoveredAt DESC\nLIMIT 15;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute \nSELECT \n  id, campaignId, authorUsername, subreddit, status, matchScore,\n  FROM_UNIXTIME(discoveredAt/1000) as discovered_at\nFROM outreach_leads\nORDER BY discoveredAt DESC\nLIMIT 15;\n",
+  "rows": [
+    {
+      "id": "420111",
+      "campaignId": "120001",
+      "authorUsername": "Competitive-Pen7849",
+      "subreddit": "indiehackers",
+      "status": "new",
+      "matchScore": "lowest",
+      "discovered_at": "2026-03-24 03:24:32.1240"
+    },
+    {
+      "id": "420110",
+      "campaignId": "120001",
+      "authorUsername": "Leather_Carpenter462",
+      "subreddit": "Business_Ideas",
+      "status": "new",
+      "matchScore": "lowest",
+      "discovered_at": "2026-03-24 03:24:31.0160"
+    },
+    {
+      "id": "420109",
+      "campaignId": "120001",
+      "authorUsername": "pythoncoder_back",
+      "subreddit": "GrowthHacking",
+      "status": "new",
+      "matchScore": "lowest",
+      "discovered_at": "2026-03-24 03:24:29.6060"
+    },
+    {
+      "id": "420108",
+      "campaignId": "120001",
+      "authorUsername": "Zestyclose-Ad-9003",
+      "subreddit": "GrowthHacking",
+      "status": "new",
+      "matchScore": "lowest",
+      "discovered_at": "2026-03-24 03:24:29.5960"
+    },
+    {
+      "id": "420107",
+      "campaignId": "120001",
+      "authorUsername": "Key-Box-2548",
+      "subreddit": "GrowthHacking",
+      "status": "new",
+      "matchScore": "lowest",
+      "discovered_at": "2026-03-24 03:24:29.2710"
+    },
+    {
+      "id": "420106",
+      "campaignId": "120001",
+      "authorUsername": "macurda",
+      "subreddit": "marketing",
+      "status": "new",
+      "matchScore": "lowest",
+      "discovered_at": "2026-03-24 03:24:28.5340"
+    },
+    {
+      "id": "420105",
+      "campaignId": "120001",
+      "authorUsername": "Vnsmart001",
+      "subreddit": "smallbusiness",
+      "status": "new",
+      "matchScore": "lowest",
+      "discovered_at": "2026-03-24 03:24:28.0430"
+    },
+    {
+      "id": "420104",
+      "campaignId": "120001",
+      "authorUsername": "Ok_North5881",
+      "subreddit": "smallbusiness",
+      "status": "new",
+      "matchScore": "lowest",
+      "discovered_at": "2026-03-24 03:24:28.0350"
+    },
+    {
+      "id": "420103",
+      "campaignId": "120001",
+      "authorUsername": "Advanced_Bag4610",
+      "subreddit": "smallbusiness",
+      "status": "new",
+      "matchScore": "lowest",
+      "discovered_at": "2026-03-24 03:24:28.0250"
+    },
+    {
+      "id": "420102",
+      "campaignId": "120001",
+      "authorUsername": "mariadanieldeepak",
+      "subreddit": "smallbusiness",
+      "status": "skipped",
+      "matchScore": "lowest",
+      "discovered_at": "2026-03-24 03:24:28.0160"
+    },
+    {
+      "id": "420101",
+      "campaignId": "120001",
+      "authorUsername": "Necessary_Task_7068",
+      "subreddit": "smallbusiness",
+      "status": "new",
+      "matchScore": "lowest",
+      "discovered_at": "2026-03-24 03:24:28.0060"
+    },
+    {
+      "id": "420100",
+      "campaignId": "120001",
+      "authorUsername": "Tricky-Airport7554",
+      "subreddit": "smallbusiness",
+      "status": "new",
+      "matchScore": "lowest",
+      "discovered_at": "2026-03-24 03:24:27.6920"
+    },
+    {
+      "id": "420099",
+      "campaignId": "120001",
+      "authorUsername": "tbhcamels",
+      "subreddit": "smallbusiness",
+      "status": "new",
+      "matchScore": "lowest",
+      "discovered_at": "2026-03-24 03:24:27.6820"
+    },
+    {
+      "id": "420098",
+      "campaignId": "120001",
+      "authorUsername": "WeHaveTerms",
+      "subreddit": "smallbusiness",
+      "status": "new",
+      "matchScore": "lowest",
+      "discovered_at": "2026-03-24 03:24:27.6730"
+    },
+    {
+      "id": "420097",
+      "campaignId": "120001",
+      "authorUsername": "sagar_223",
+      "subreddit": "smallbusiness",
+      "status": "new",
+      "matchScore": "lowest",
+      "discovered_at": "2026-03-24 03:24:27.3400"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tcampaignId\tauthorUsername\tsubreddit\tstatus\tmatchScore\tdiscovered_at\n420111\t120001\tCompetitive-Pen7849\tindiehackers\tnew\tlowest\t2026-03-24 03:24:32.1240\n420110\t120001\tLeather_Carpenter462\tBusiness_Ideas\tnew\tlowest\t2026-03-24 03:24:31.0160\n420109\t120001\tpythoncoder_back\tGrowthHacking\tnew\tlowest\t2026-03-24 03:24:29.6060\n420108\t120001\tZestyclose-Ad-9003\tGrowthHacking\tnew\tlowest\t2026-03-24 03:24:29.5960\n420107\t120001\tKey-Box-2548\tGrowthHacking\tnew\tlowest\t2026-03-24 03:24:29.2710\n420106\t120001\tmacurda\tmarketing\tnew\tlowest\t2026-03-24 03:24:28.5340\n420105\t120001\tVnsmart001\tsmallbusiness\tnew\tlowest\t2026-03-24 03:24:28.0430\n420104\t120001\tOk_North5881\tsmallbusiness\tnew\tlowest\t2026-03-24 03:24:28.0350\n420103\t120001\tAdvanced_Bag4610\tsmallbusiness\tnew\tlowest\t2026-03-24 03:24:28.0250\n420102\t120001\tmariadanieldeepak\tsmallbusiness\tskipped\tlowest\t2026-03-24 03:24:28.0160\n420101\t120001\tNecessary_Task_7068\tsmallbusiness\tnew\tlowest\t2026-03-24 03:24:28.0060\n420100\t120001\tTricky-Airport7554\tsmallbusiness\tnew\tlowest\t2026-03-24 03:24:27.6920\n420099\t120001\ttbhcamels\tsmallbusiness\tnew\tlowest\t2026-03-24 03:24:27.6820\n420098\t120001\tWeHaveTerms\tsmallbusiness\tnew\tlowest\t2026-03-24 03:24:27.6730\n420097\t120001\tsagar_223\tsmallbusiness\tnew\tlowest\t2026-03-24 03:24:27.3400\n",
+  "stderr": "",
+  "execution_time_ms": 56
+}

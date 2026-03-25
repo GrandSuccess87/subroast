@@ -941,3 +941,13 @@
 - [x] Remove hard .limit(200) from getOutreachLeadsByUserId (dashboard total also capped)
 - [x] Add cursor-based pagination to getLeads procedure so large campaigns load efficiently
 - [x] Fix leadsFound counter on listCampaigns to use real DB count not stale column
+
+## UX Improvements (backlog)
+- [ ] Add virtual scrolling or "load 50 more" pagination to campaign detail lead list (performance for 400+ leads)
+- [ ] Bulk "Skip all lowest-match" action in campaign detail to quickly surface strong/partial leads
+- [ ] Lead age indicator — show days since discovered so user can prioritise fresher posts
+
+## Intent Label Rename — Buyer-Intent Language (v6.88)
+- [x] Rename intentType display labels in DmCampaigns.tsx: buying→🔥 Purchase-Ready, seeking_advice→🎯 Actively Looking, venting→⚠️ Problem-Aware, unknown→👀 Needs Review, hiring→🚫 Not a Lead
+- [x] Update badge colors to match new intent tiers
+- [x] Update any filter dropdowns or tooltips referencing old labels
