@@ -2,8 +2,10 @@ import DashboardLayout from "@/components/DashboardLayout";
 import { trpc } from "@/lib/trpc";
 import {
   ArrowLeft,
+  BarChart2,
   Bot,
   CheckCircle2,
+  ChevronDown,
   ChevronRight,
   Clock,
   Clipboard,
@@ -991,6 +993,12 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
   const [sortOrder, setSortOrder] = useState<"intent" | "newest" | "match">("newest");
   const chainLeadIdRef = useRef<number | null>(null);
   const [showEdit, setShowEdit] = useState(false);
+  const [painPointsOpen, setPainPointsOpen] = useState(true);
+
+  const { data: painPointData, isLoading: painPointsLoading, refetch: refetchPainPoints } = trpc.outreach.getPainPointClusters.useQuery(
+    { campaignId: campaign.id, days: 7 },
+    { enabled: false, staleTime: 5 * 60 * 1000 }
+  );
 
   const { data: leads = [], isLoading: leadsLoading } = trpc.outreach.getLeads.useQuery(
     { campaignId: campaign.id },
@@ -1252,6 +1260,72 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
             <span style={{ width: 4, height: 4, borderRadius: "50%", background: AMBER, display: "inline-block", animation: "pulse 2s ease-in-out infinite" }} />
             Extension coming soon
           </span>
+        )}
+      </div>
+
+      {/* Pain Point Frequency Panel */}
+      <div style={{ marginBottom: "1.5rem", border: `0.5px solid ${BORDER}`, background: SURFACE }}>
+        <button
+          onClick={() => {
+            setPainPointsOpen((o) => !o);
+            if (!painPointData && !painPointsLoading) refetchPainPoints();
+          }}
+          style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0.75rem 1rem", background: "transparent", border: "none", cursor: "pointer", borderBottom: painPointsOpen ? `0.5px solid ${BORDER}` : "none" }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <BarChart2 size={12} color={AMBER} />
+            <span style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.18em", textTransform: "uppercase", color: AMBER }}>Top Problems This Week</span>
+            {painPointData && (
+              <span style={{ fontFamily: FONT_MONO, fontSize: "0.52rem", color: MUTED, marginLeft: "0.25rem" }}>
+                {painPointData.totalLeads} pain points · {painPointData.daysBack}d
+              </span>
+            )}
+          </div>
+          <ChevronDown size={12} color={MUTED} style={{ transform: painPointsOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s" }} />
+        </button>
+
+        {painPointsOpen && (
+          <div style={{ padding: "0.75rem 1rem" }}>
+            {painPointsLoading ? (
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.5rem 0" }}>
+                <Loader2 size={12} color={MUTED} style={{ animation: "spin 1s linear infinite" }} />
+                <span style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", color: MUTED }}>Clustering pain points with AI…</span>
+              </div>
+            ) : !painPointData ? (
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <span style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", color: MUTED }}>Click to analyse pain point patterns from the last 7 days</span>
+                <button
+                  onClick={() => refetchPainPoints()}
+                  style={{ fontFamily: FONT_MONO, fontSize: "0.55rem", letterSpacing: "0.1em", textTransform: "uppercase", color: AMBER, background: "transparent", border: `0.5px solid ${AMBER}50`, padding: "0.3rem 0.7rem", cursor: "pointer" }}
+                >
+                  Analyse Now
+                </button>
+              </div>
+            ) : painPointData.clusters.length === 0 ? (
+              <span style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", color: MUTED }}>No pain points extracted yet — run a sync to start collecting insights</span>
+            ) : (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "1.5px" }}>
+                {painPointData.clusters.map((cluster, i) => {
+                  const barColors = [AMBER, "oklch(0.72 0.14 145)", "oklch(0.72 0.12 220)", "oklch(0.72 0.14 300)", "oklch(0.72 0.14 25)", "oklch(0.72 0.10 180)", IVORY];
+                  const color = barColors[i % barColors.length];
+                  const maxCount = painPointData.clusters[0].count;
+                  const barWidth = Math.round((cluster.count / maxCount) * 100);
+                  return (
+                    <div key={i} style={{ padding: "0.75rem", border: `0.5px solid ${BORDER}`, background: SURFACE_RAISED }}>
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.4rem" }}>
+                        <span style={{ fontFamily: FONT_MONO, fontSize: "0.62rem", color: FOREGROUND, fontWeight: 600 }}>{cluster.theme}</span>
+                        <span style={{ fontFamily: FONT_MONO, fontSize: "0.7rem", color, fontWeight: 700, marginLeft: "0.5rem", flexShrink: 0 }}>{cluster.count}</span>
+                      </div>
+                      <div style={{ height: "2px", background: BORDER, marginBottom: "0.5rem", borderRadius: "1px" }}>
+                        <div style={{ height: "100%", width: `${barWidth}%`, background: color, borderRadius: "1px", transition: "width 0.4s ease" }} />
+                      </div>
+                      <p style={{ fontFamily: FONT_MONO, fontSize: "0.52rem", color: MUTED, fontStyle: "italic", lineHeight: 1.4, margin: 0 }}>"{cluster.example}"</p>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         )}
       </div>
 

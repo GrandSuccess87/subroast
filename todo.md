@@ -1010,6 +1010,13 @@
 - [x] Move intent badge above r/subreddit name (top of card, before the subreddit row)
 
 ## UI Tweak (v6.99)
-- [ ] Remove redundant Active status badge from campaign detail header (Pause button implies active)
-- [ ] Move Paused/Completed status badge to appear after the Pause button
-- [ ] Put last sync timestamp on the same line as "Last Synced" label
+- [x] Remove redundant Active status badge from campaign detail header (Pause button implies active)
+- [x] Move Paused/Completed status badge to appear after the Pause button
+- [x] Put last sync timestamp on the same line as "Last Synced" label
+
+## Pain Point Frequency Panel (v7.00)
+- [x] Add getPainPointClusters tRPC procedure — groups pain points from last 7 days into clusters with counts
+- [x] AI clusters similar pain points into named themes (e.g. "Ban risk concerns", "Low reply rates")
+- [x] Show "Top Problems This Week" panel in campaign detail screen above the Leads Inbox
+- [x] Each cluster shows theme name, count badge, and example pain point snippet
+- [x] Panel collapses/expands and shows a loading skeleton while AI clusters

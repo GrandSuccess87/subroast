@@ -1203,8 +1203,7 @@ spamFlags should be a list of specific signals found (empty array if none). Each
       return { success: true, spamScore: parsed.spamScore, spamFlags: parsed.spamFlags };
     }),
 
-  // ── Toggle Favorite Lead ─────────────────────────────────────────────────────────────────────────
-
+   // ── Toggle Favorite Lead ─────────────────────────────────────────────────────────────────────────
   toggleFavorite: protectedProcedure
     .input(z.object({ leadId: z.number(), isFavorited: z.boolean() }))
     .mutation(async ({ ctx, input }) => {
@@ -1220,5 +1219,96 @@ spamFlags should be a list of specific signals found (empty array if none). Each
           .where(eq(leadsTable.id, input.leadId));
       }
       return { success: true, isFavorited: input.isFavorited };
+    }),
+
+  // ── Pain Point Clusters ───────────────────────────────────────────────────────────────────────────
+  getPainPointClusters: protectedProcedure
+    .input(z.object({ campaignId: z.number(), days: z.number().default(7) }))
+    .query(async ({ ctx, input }) => {
+      // Verify campaign belongs to user
+      const campaign = await getOutreachCampaignById(input.campaignId);
+      if (!campaign || campaign.userId !== ctx.user.id) throw new TRPCError({ code: "NOT_FOUND" });
+
+      // Get leads from the last N days that have a pain point
+      const leads = await getOutreachLeadsByCampaignId(input.campaignId);
+      const cutoff = Date.now() - input.days * 24 * 60 * 60 * 1000;
+      const recentLeads = leads.filter(
+        (l) => l.painPoint && l.painPoint.trim().length > 0 && (l.discoveredAt ?? 0) >= cutoff
+      );
+
+      if (recentLeads.length === 0) {
+        return { clusters: [], totalLeads: 0, daysBack: input.days };
+      }
+
+      // Build list of pain points for AI clustering
+      const painPoints = recentLeads.map((l, i) => `${i + 1}. ${l.painPoint}`).join("\n");
+
+      const response = await invokeLLM({
+        messages: [
+          {
+            role: "system",
+            content: `You are an expert at identifying patterns in customer pain points. 
+Group the following pain points into 3-7 meaningful themes/clusters. 
+Each cluster should represent a distinct problem category.
+Return ONLY valid JSON with this exact structure:
+{
+  "clusters": [
+    {
+      "theme": "Short theme name (3-5 words)",
+      "count": number,
+      "example": "Best representative pain point quote",
+      "indices": [array of 1-based indices from the input list]
+    }
+  ]
+}
+Order clusters by count descending. Be specific and actionable with theme names.`,
+          },
+          {
+            role: "user",
+            content: `Here are ${recentLeads.length} pain points from the past ${input.days} days:\n\n${painPoints}\n\nGroup these into meaningful clusters.`,
+          },
+        ],
+        response_format: {
+          type: "json_schema",
+          json_schema: {
+            name: "pain_point_clusters",
+            strict: true,
+            schema: {
+              type: "object",
+              properties: {
+                clusters: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    properties: {
+                      theme: { type: "string" },
+                      count: { type: "integer" },
+                      example: { type: "string" },
+                      indices: { type: "array", items: { type: "integer" } },
+                    },
+                    required: ["theme", "count", "example", "indices"],
+                    additionalProperties: false,
+                  },
+                },
+              },
+              required: ["clusters"],
+              additionalProperties: false,
+            },
+          },
+        },
+      });
+
+      const content = response.choices?.[0]?.message?.content;
+      if (!content) return { clusters: [], totalLeads: recentLeads.length, daysBack: input.days };
+
+      const parsed = JSON.parse(typeof content === "string" ? content : JSON.stringify(content)) as {
+        clusters: { theme: string; count: number; example: string; indices: number[] }[];
+      };
+
+      return {
+        clusters: parsed.clusters,
+        totalLeads: recentLeads.length,
+        daysBack: input.days,
+      };
     }),
 });
