@@ -1007,4 +1007,9 @@
 - [x] Move intent badge to sit directly above the subreddit/author line on lead cards
 
 ## UI Tweak (v6.98)
-- [ ] Move intent badge above r/subreddit name (top of card, before the subreddit row)
+- [x] Move intent badge above r/subreddit name (top of card, before the subreddit row)
+
+## UI Tweak (v6.99)
+- [ ] Remove redundant Active status badge from campaign detail header (Pause button implies active)
+- [ ] Move Paused/Completed status badge to appear after the Pause button
+- [ ] Put last sync timestamp on the same line as "Last Synced" label

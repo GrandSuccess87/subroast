@@ -1135,10 +1135,7 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
         </button>
         <div style={{ flex: 1, minWidth: "200px" }}>
           <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: "clamp(1.2rem, 3vw, 2rem)", fontWeight: 300, fontStyle: "italic", color: FOREGROUND, lineHeight: 1.1, marginBottom: "0.3rem" }}>{campaign.name}</h2>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.25rem", flexWrap: "wrap" }}>
-            <StatusBadge status={campaign.status} />
-            <p style={{ fontFamily: FONT_MONO, fontSize: "0.62rem", color: MUTED, margin: 0 }}>{campaign.offering.slice(0, 80)}</p>
-          </div>
+          <p style={{ fontFamily: FONT_MONO, fontSize: "0.62rem", color: MUTED, margin: 0 }}>{campaign.offering.slice(0, 80)}</p>
         </div>
         <div style={{ display: "flex", gap: "0.5rem", flexShrink: 0, flexWrap: "wrap" }}>
           <button onClick={() => syncLeads.mutate({ campaignId: campaign.id })} disabled={syncLeads.isPending || campaign.status !== "active"} style={{ ...monoBtn, opacity: (syncLeads.isPending || campaign.status !== "active") ? 0.5 : 1 }}>
@@ -1150,6 +1147,7 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
           <button onClick={() => updateCampaign.mutate({ id: campaign.id, status: campaign.status === "active" ? "paused" : "active" })} style={monoBtn}>
             {campaign.status === "active" ? <><Pause size={10} /> Pause</> : <><Play size={10} /> Resume</>}
           </button>
+          {campaign.status !== "active" && <StatusBadge status={campaign.status} />}
         </div>
         {showEdit && <EditCampaignModal key={campaign.id + '-' + campaign.keywords.length + '-' + campaign.subreddits.length + '-' + (campaign.aiPromptInstructions ?? '').length} campaign={campaign} onClose={() => setShowEdit(false)} />}
       </div>
@@ -1266,7 +1264,7 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
             {campaign.lastSyncAt && (
-              <p style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", color: MUTED }}>Last sync: {new Date(campaign.lastSyncAt).toLocaleString()}</p>
+              <p style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", color: MUTED }}>Last Synced: {new Date(campaign.lastSyncAt).toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}</p>
             )}
             <div style={{ display: "flex", gap: "1.5px", marginLeft: "0.5rem" }}>
               {(["intent", "newest", "match"] as const).map((s) => {
