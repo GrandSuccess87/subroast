@@ -120,7 +120,7 @@ function IntentBadge({ intent }: { intent: string }) {
     buying:         { label: "🔥 Purchase-Ready",  color: IVORY,                       border: "oklch(0.88 0.025 85 / 0.35)" },
     seeking_advice: { label: "🎯 Actively Looking", color: AMBER,                       border: "oklch(0.78 0.14 65 / 0.35)" },
     venting:        { label: "⚠️ Problem-Aware",    color: "oklch(0.75 0.10 55)",       border: "oklch(0.75 0.10 55 / 0.35)" },
-    unknown:        { label: "👀 Needs Review",     color: "oklch(0.60 0.005 250)",     border: "oklch(0.60 0.005 250 / 0.35)" },
+    unknown:        { label: "👀 Unclassified Opportunities", color: "oklch(0.60 0.005 250)", border: "oklch(0.60 0.005 250 / 0.35)" },
     hiring:         { label: "🚫 Not a Lead",       color: "oklch(0.55 0.08 20)",       border: "oklch(0.55 0.08 20 / 0.35)" },
   };
   const cfg = intentMap[intent];

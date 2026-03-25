@@ -951,3 +951,8 @@
 - [x] Rename intentType display labels in DmCampaigns.tsx: buying→🔥 Purchase-Ready, seeking_advice→🎯 Actively Looking, venting→⚠️ Problem-Aware, unknown→👀 Needs Review, hiring→🚫 Not a Lead
 - [x] Update badge colors to match new intent tiers
 - [x] Update any filter dropdowns or tooltips referencing old labels
+
+## Intent Tier UX (v6.89)
+- [ ] Filter bar above lead list — one-click filter by intent tier (🔥 Purchase-Ready, 🎯 Actively Looking, ⚠️ Problem-Aware, 👀 Unclassified Opportunities, 🚫 Not a Lead)
+- [ ] Bulk "Skip all 🚫 Not a Lead" button — instantly dismiss all hiring posts from the inbox
+- [x] Rename unknown intent badge to "👀 Unclassified Opportunities — hidden potential"
