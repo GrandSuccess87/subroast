@@ -985,3 +985,9 @@
 - [ ] Add heuristic rules: question posts → seeking_advice, "looking for / need" → buying, "recommend / best tool" → buying, venting language → venting
 - [ ] Target: 50%+ reduction in unknown/unclassified leads from existing pool
 - [ ] Re-classify existing unknown leads in bulk via a background job
+
+## Campaign Edit Fix (v6.93)
+- [x] Update Founders Outreach campaign keywords to intent-signal phrases
+- [x] Add aiPromptInstructions to Founders Outreach campaign
+- [x] Verify campaign edit form loads aiPromptInstructions on open
+- [x] Verify campaign edit form saves aiPromptInstructions on submit

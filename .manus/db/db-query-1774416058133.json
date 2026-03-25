@@ -1,0 +1,19 @@
+{
+  "query": "SELECT id, name, offering, subreddits, keywords, aiPromptInstructions, status FROM outreach_campaigns WHERE id = 1;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute SELECT id, name, offering, subreddits, keywords, aiPromptInstructions, status FROM outreach_campaigns WHERE id = 1;",
+  "rows": [
+    {
+      "id": "1",
+      "name": "Founders Outreach",
+      "offering": "Software Development and Marketing Services",
+      "subreddits": "[\"Entrepreneur\",\"SaaS\",\"indiehackers\",\"smallbusiness\",\"marketing\",\"RedditMarketing\",\"SideProject\",\"startups\",\"growthhacking\"]",
+      "keywords": "[\"full stack\",\"ai engineer\",\"Marketing\",\"Scaling\"]",
+      "aiPromptInstructions": "NULL",
+      "status": "active"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\toffering\tsubreddits\tkeywords\taiPromptInstructions\tstatus\n1\tFounders Outreach\tSoftware Development and Marketing Services\t[\"Entrepreneur\",\"SaaS\",\"indiehackers\",\"smallbusiness\",\"marketing\",\"RedditMarketing\",\"SideProject\",\"startups\",\"growthhacking\"]\t[\"full stack\",\"ai engineer\",\"Marketing\",\"Scaling\"]\tNULL\tactive\n",
+  "stderr": "",
+  "execution_time_ms": 56
+}

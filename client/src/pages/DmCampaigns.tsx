@@ -206,7 +206,7 @@ function EditCampaignModal({ campaign, onClose }: { campaign: Campaign; onClose:
     setSubreddits(campaign.subreddits);
     setKeywords(campaign.keywords);
     setAiInstructions(campaign.aiPromptInstructions ?? "");
-  }, [campaign.id, campaign.keywords.join(","), campaign.subreddits.join(",")]);
+  }, [campaign.id, campaign.keywords.join(","), campaign.subreddits.join(","), campaign.aiPromptInstructions]);
 
   // Drag-to-reorder state
   const [dragKwIdx, setDragKwIdx] = useState<number | null>(null);
@@ -1139,7 +1139,7 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
             {campaign.status === "active" ? <><Pause size={10} /> Pause</> : <><Play size={10} /> Resume</>}
           </button>
         </div>
-        {showEdit && <EditCampaignModal key={campaign.id + '-' + campaign.keywords.length + '-' + campaign.subreddits.length} campaign={campaign} onClose={() => setShowEdit(false)} />}
+        {showEdit && <EditCampaignModal key={campaign.id + '-' + campaign.keywords.length + '-' + campaign.subreddits.length + '-' + (campaign.aiPromptInstructions ?? '').length} campaign={campaign} onClose={() => setShowEdit(false)} />}
       </div>
 
       {/* Stats grid — commented out, kept in backlog for future consideration

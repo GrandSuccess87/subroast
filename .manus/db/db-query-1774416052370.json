@@ -1,0 +1,55 @@
+{
+  "query": "SELECT id, name, offering, subreddits, keywords, aiPromptInstructions, status FROM outreach_campaigns ORDER BY id DESC LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute SELECT id, name, offering, subreddits, keywords, aiPromptInstructions, status FROM outreach_campaigns ORDER BY id DESC LIMIT 10;",
+  "rows": [
+    {
+      "id": "120001",
+      "name": "Healthcare Outreach",
+      "offering": "full-stack growth + operations offer",
+      "subreddits": "[\"Entrepreneur\",\"startups\",\"smallbusiness\",\"marketing\",\"growthhacking\",\"operations\",\"Business_Ideas\",\"HealthIT\",\"Medicine\",\"P\",\"privatepractice\"]",
+      "keywords": "[\"struggling with growth\",\"scaling operations challenges\",\"inefficient marketing strategy\",\"need help with customer acquisition\",\"optimizing business processes\",\"lack of operational efficiency\",\"bottlenecks in workflow\",\"improving conversion rates\",\"streamlining business operations\",\"finding product market fit\",\"automating growth tasks\",\"operational overhead too high\",\"struggling to scale\",\"marketing strategy not working\",\"growth strategy\",\"How to Reduce patient no shows\",\"Patients not booking appointments\",\"Missed calls\",\"Low patient volume clinic what to do\",\"Looking for better EMR\",\"Looking for better crm\"]",
+      "aiPromptInstructions": "Keep sentences clear and direct Avoid hype words (“fantastic”, “amazing opportunity”) Avoid sales language (“I’d love to work with you”) Include 1 insight + 1 question Use neutral confidence, not excitement Write as if commenting in a technical discussion, not applying for a job",
+      "status": "active"
+    },
+    {
+      "id": "90001",
+      "name": "For Hire",
+      "offering": "Custom Full Stack + AI Engineering solutions",
+      "subreddits": "[\"forhire\",\"freelance_forhire\"]",
+      "keywords": "[\"ai engineer\",\"full stack\",\"founder\"]",
+      "aiPromptInstructions": "Keep sentences clear and direct Avoid hype words (“fantastic”, “amazing opportunity”) Avoid sales language (“I’d love to work with you”) Include 1 insight + 1 question Use neutral confidence, not excitement Write as if commenting in a technical discussion, not applying for a job",
+      "status": "active"
+    },
+    {
+      "id": "60001",
+      "name": "SubRoast ICP Pain-Point Outreach",
+      "offering": "SubRoast — AI-powered Reddit lead finder and DM drafter for founders and growth marketers",
+      "subreddits": "[\"SaaS\",\"Entrepreneur\",\"startups\",\"growthhacking\",\"marketing\",\"smallbusiness\",\"leadgeneration\",\"digital_marketing\",\"SideProject\",\"indiehackers\",\"indiehacking\",\"aiforsmallbusiness\",\"ai\"]",
+      "keywords": "[\"finding leads reddit\",\"reddit marketing strategy\",\"cold outreach reddit\",\"struggling with lead generation\",\"automating reddit outreach\",\"how to find customers reddit\",\"reddit for business growth\",\"time-consuming lead research\",\"scaling outreach efforts\",\"personalizing cold DMs\",\"reddit engagement strategy\",\"customer acquisition reddit\",\"efficient lead discovery\",\"manual lead searching\"]",
+      "aiPromptInstructions": "Be a genuinely helpful peer, not a salesperson. Write like a thoughtful founder who has been in the trenches. Never mention the product unprompted. Lead with empathy for the specific pain they expressed. Keep DMs under 4 sentences. No links in the first message. Mention SubRoast as a solution, but do not hard sell. End with a single open question.",
+      "status": "active"
+    },
+    {
+      "id": "30001",
+      "name": "App Validation Complaint Mining",
+      "offering": "Your next app (to be validated — listen-only campaign, no DM pitch)",
+      "subreddits": "[\"SaaS\",\"Entrepreneur\",\"startups\",\"smallbusiness\",\"marketing\",\"GrowthHacking\",\"SideProject\",\"indiehackers\",\"leadgeneration\",\"RedditMarketing\"]",
+      "keywords": "[\"i wish someone would build, why doesn't this exist, why is there no app for, struggling to find a tool, can't find anything that does, frustrated with, this sucks, why is X so hard, nobody has solved, looking for a solution to, is there a better way to, tired of manually, hate that I have to, why do I still have to, there has to be a better way, this workflow is broken, every tool I try, nothing works for, spent hours trying to, why isn't there a simple, I've been looking everywhere for, built my own because, had to hack together, cobbled together, duct tape solution, [tool]: # \\\"is terrible for, [tool] doesn't support, [tool] keeps breaking,\\\" wish [tool] could, [tool] sucks at, why can't [tool] just, anyone else frustrated by, does anyone else struggle with, am I the only one who, please tell me there's a better way, I would pay for something that, would literally pay money if, take my money if you build, someone needs to build, this is a million dollar idea but, gap in the market for, underserved market, nobody is solving, pain point that nobody addresses\"]",
+      "aiPromptInstructions": "This is a research and validation campaign, not a sales campaign. Do NOT draft a DM pitching a product. Instead, summarize the core complaint or frustration expressed in the post in 1–2 sentences. Tag the pain point category (e.g. \"workflow friction\", \"missing tool\", \"bad existing solution\"). Note the exact phrase the user used to describe their frustration. This data feeds product validation, not outreach.",
+      "status": "active"
+    },
+    {
+      "id": "1",
+      "name": "Founders Outreach",
+      "offering": "Software Development and Marketing Services",
+      "subreddits": "[\"Entrepreneur\",\"SaaS\",\"indiehackers\",\"smallbusiness\",\"marketing\",\"RedditMarketing\",\"SideProject\",\"startups\",\"growthhacking\"]",
+      "keywords": "[\"full stack\",\"ai engineer\",\"Marketing\",\"Scaling\"]",
+      "aiPromptInstructions": "NULL",
+      "status": "active"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\toffering\tsubreddits\tkeywords\taiPromptInstructions\tstatus\n120001\tHealthcare Outreach\tfull-stack growth + operations offer\t[\"Entrepreneur\",\"startups\",\"smallbusiness\",\"marketing\",\"growthhacking\",\"operations\",\"Business_Ideas\",\"HealthIT\",\"Medicine\",\"P\",\"privatepractice\"]\t[\"struggling with growth\",\"scaling operations challenges\",\"inefficient marketing strategy\",\"need help with customer acquisition\",\"optimizing business processes\",\"lack of operational efficiency\",\"bottlenecks in workflow\",\"improving conversion rates\",\"streamlining business operations\",\"finding product market fit\",\"automating growth tasks\",\"operational overhead too high\",\"struggling to scale\",\"marketing strategy not working\",\"growth strategy\",\"How to Reduce patient no shows\",\"Patients not booking appointments\",\"Missed calls\",\"Low patient volume clinic what to do\",\"Looking for better EMR\",\"Looking for better crm\"]\tKeep sentences clear and direct Avoid hype words (“fantastic”, “amazing opportunity”) Avoid sales language (“I’d love to work with you”) Include 1 insight + 1 question Use neutral confidence, not excitement Write as if commenting in a technical discussion, not applying for a job\tactive\n90001\tFor Hire\tCustom Full Stack + AI Engineering solutions\t[\"forhire\",\"freelance_forhire\"]\t[\"ai engineer\",\"full stack\",\"founder\"]\tKeep sentences clear and direct Avoid hype words (“fantastic”, “amazing opportunity”) Avoid sales language (“I’d love to work with you”) Include 1 insight + 1 question Use neutral confidence, not excitement Write as if commenting in a technical discussion, not applying for a job\tactive\n60001\tSubRoast ICP Pain-Point Outreach\tSubRoast — AI-powered Reddit lead finder and DM drafter for founders and growth marketers\t[\"SaaS\",\"Entrepreneur\",\"startups\",\"growthhacking\",\"marketing\",\"smallbusiness\",\"leadgeneration\",\"digital_marketing\",\"SideProject\",\"indiehackers\",\"indiehacking\",\"aiforsmallbusiness\",\"ai\"]\t[\"finding leads reddit\",\"reddit marketing strategy\",\"cold outreach reddit\",\"struggling with lead generation\",\"automating reddit outreach\",\"how to find customers reddit\",\"reddit for business growth\",\"time-consuming lead research\",\"scaling outreach efforts\",\"personalizing cold DMs\",\"reddit engagement strategy\",\"customer acquisition reddit\",\"efficient lead discovery\",\"manual lead searching\"]\tBe a genuinely helpful peer, not a salesperson. Write like a thoughtful founder who has been in the trenches. Never mention the product unprompted. Lead with empathy for the specific pain they expressed. Keep DMs under 4 sentences. No links in the first message. Mention SubRoast as a solution, but do not hard sell. End with a single open question.\tactive\n30001\tApp Validation Complaint Mining\tYour next app (to be validated — listen-only campaign, no DM pitch)\t[\"SaaS\",\"Entrepreneur\",\"startups\",\"smallbusiness\",\"marketing\",\"GrowthHacking\",\"SideProject\",\"indiehackers\",\"leadgeneration\",\"RedditMarketing\"]\t[\"i wish someone would build, why doesn't this exist, why is there no app for, struggling to find a tool, can't find anything that does, frustrated with, this sucks, why is X so hard, nobody has solved, looking for a solution to, is there a better way to, tired of manually, hate that I have to, why do I still have to, there has to be a better way, this workflow is broken, every tool I try, nothing works for, spent hours trying to, why isn't there a simple, I've been looking everywhere for, built my own because, had to hack together, cobbled together, duct tape solution, [tool]: # \\\"is terrible for, [tool] doesn't support, [tool] keeps breaking,\\\" wish [tool] could, [tool] sucks at, why can't [tool] just, anyone else frustrated by, does anyone else struggle with, am I the only one who, please tell me there's a better way, I would pay for something that, would literally pay money if, take my money if you build, someone needs to build, this is a million dollar idea but, gap in the market for, underserved market, nobody is solving, pain point that nobody addresses\"]\tThis is a research and validation campaign, not a sales campaign. Do NOT draft a DM pitching a product. Instead, summarize the core complaint or frustration expressed in the post in 1–2 sentences. Tag the pain point category (e.g. \"workflow friction\", \"missing tool\", \"bad existing solution\"). Note the exact phrase the user used to describe their frustration. This data feeds product validation, not outreach.\tactive\n1\tFounders Outreach\tSoftware Development and Marketing Services\t[\"Entrepreneur\",\"SaaS\",\"indiehackers\",\"smallbusiness\",\"marketing\",\"RedditMarketing\",\"SideProject\",\"startups\",\"growthhacking\"]\t[\"full stack\",\"ai engineer\",\"Marketing\",\"Scaling\"]\tNULL\tactive\n",
+  "stderr": "",
+  "execution_time_ms": 54
+}
