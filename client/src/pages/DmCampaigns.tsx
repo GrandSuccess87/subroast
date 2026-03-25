@@ -968,6 +968,7 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
 function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () => void }) {
   const utils = trpc.useUtils();
   const [activeFilter, setActiveFilter] = useState<"all" | "new" | "dm_generated" | "queued" | "sent" | "skipped">("all");
+  const [intentFilter, setIntentFilter] = useState<"all" | "buying" | "seeking_advice" | "venting" | "unknown" | "hiring">("all");
   const chainLeadIdRef = useRef<number | null>(null);
   const [showEdit, setShowEdit] = useState(false);
 
@@ -1064,8 +1065,25 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
     onSettled: () => utils.outreach.getLeads.invalidate({ campaignId: campaign.id }),
   });
 
-  const filteredLeads = leads.filter((l) => activeFilter === "all" || l.status === activeFilter);
+  const statusFiltered = leads.filter((l) => activeFilter === "all" || l.status === activeFilter);
+  const filteredLeads = statusFiltered.filter((l) => intentFilter === "all" || (intentFilter === "unknown" ? (l.intentType === "unknown" || l.intentType == null) : l.intentType === intentFilter));
   const filterCounts = { all: leads.length, new: leads.filter((l) => l.status === "new").length, dm_generated: leads.filter((l) => l.status === "dm_generated").length, queued: leads.filter((l) => l.status === "queued").length, sent: leads.filter((l) => l.status === "sent").length, skipped: leads.filter((l) => l.status === "skipped").length };
+  const intentCounts = {
+    all: statusFiltered.length,
+    buying: statusFiltered.filter((l) => l.intentType === "buying").length,
+    seeking_advice: statusFiltered.filter((l) => l.intentType === "seeking_advice").length,
+    venting: statusFiltered.filter((l) => l.intentType === "venting").length,
+    unknown: statusFiltered.filter((l) => l.intentType === "unknown" || l.intentType == null).length,
+    hiring: statusFiltered.filter((l) => l.intentType === "hiring").length,
+  };
+  const intentTiers: { key: "all" | "buying" | "seeking_advice" | "venting" | "unknown" | "hiring"; label: string; color: string }[] = [
+    { key: "all",            label: "All Intent",                   color: MUTED },
+    { key: "buying",         label: "\uD83D\uDD25 Purchase-Ready",   color: IVORY },
+    { key: "seeking_advice", label: "\uD83C\uDFAF Actively Looking", color: AMBER },
+    { key: "venting",        label: "\u26A0\uFE0F Problem-Aware",    color: "oklch(0.75 0.10 55)" },
+    { key: "unknown",        label: "\uD83D\uDC40 Unclassified",     color: "oklch(0.60 0.005 250)" },
+    { key: "hiring",         label: "\uD83D\uDEAB Not a Lead",       color: "oklch(0.55 0.08 20)" },
+  ];
 
   const monoBtn: React.CSSProperties = { fontFamily: FONT_MONO, fontSize: "0.58rem", letterSpacing: "0.12em", textTransform: "uppercase", background: "transparent", border: `0.5px solid ${BORDER}`, color: MUTED, padding: "0.4rem 0.85rem", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "0.3rem" };
 
@@ -1213,14 +1231,58 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
           )}
         </div>
 
-        {/* Filter tabs */}
-        <div style={{ display: "flex", gap: "1.5px", marginBottom: "1rem", overflowX: "auto" }}>
+        {/* Status filter tabs */}
+        <div style={{ display: "flex", gap: "1.5px", marginBottom: "0.5rem", overflowX: "auto" }}>
           {(["all", "new", "dm_generated", "queued", "sent", "skipped"] as const).map((f) => (
             <button key={f} onClick={() => setActiveFilter(f)} style={{ padding: "0.5rem 0.85rem", background: activeFilter === f ? SURFACE_RAISED : "transparent", border: `0.5px solid ${activeFilter === f ? BORDER : "transparent"}`, color: activeFilter === f ? FOREGROUND : MUTED, fontFamily: FONT_MONO, fontSize: "0.58rem", letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer", flexShrink: 0, transition: "all 0.15s" }}>
               {f === "dm_generated" ? "Drafted" : f.charAt(0).toUpperCase() + f.slice(1)}
               {filterCounts[f] > 0 && <span style={{ marginLeft: "0.3rem", opacity: 0.6 }}>({filterCounts[f]})</span>}
             </button>
           ))}
+        </div>
+
+        {/* Intent tier filter bar */}
+        <div style={{ display: "flex", gap: "1.5px", marginBottom: "1rem", overflowX: "auto", paddingBottom: "2px" }}>
+          {intentTiers.map(({ key, label, color }) => {
+            const count = intentCounts[key];
+            const isActive = intentFilter === key;
+            return (
+              <button
+                key={key}
+                onClick={() => setIntentFilter(key)}
+                style={{
+                  padding: "0.35rem 0.7rem",
+                  background: isActive ? "oklch(0.14 0.007 60)" : "transparent",
+                  border: `0.5px solid ${isActive ? (key === "all" ? BORDER : color + "55") : "transparent"}`,
+                  color: isActive ? color : "oklch(0.48 0.005 60)",
+                  fontFamily: FONT_MONO,
+                  fontSize: "0.55rem",
+                  letterSpacing: "0.07em",
+                  cursor: "pointer",
+                  flexShrink: 0,
+                  transition: "all 0.15s",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.3rem",
+                }}
+                onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.color = color; }}
+                onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.color = "oklch(0.48 0.005 60)"; }}
+              >
+                {label}
+                {count > 0 && (
+                  <span style={{
+                    opacity: isActive ? 0.85 : 0.5,
+                    background: isActive ? color + "18" : "transparent",
+                    padding: "0 0.22rem",
+                    borderRadius: "2px",
+                    fontSize: "0.52rem",
+                  }}>
+                    {count}
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
 
         {leadsLoading && (

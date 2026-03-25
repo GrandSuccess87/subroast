@@ -956,3 +956,9 @@
 - [ ] Filter bar above lead list — one-click filter by intent tier (🔥 Purchase-Ready, 🎯 Actively Looking, ⚠️ Problem-Aware, 👀 Unclassified Opportunities, 🚫 Not a Lead)
 - [ ] Bulk "Skip all 🚫 Not a Lead" button — instantly dismiss all hiring posts from the inbox
 - [x] Rename unknown intent badge to "👀 Unclassified Opportunities — hidden potential"
+
+## Intent Filter Bar (v6.90)
+- [x] Add intent tier filter bar above lead list in campaign detail — one-click filter with counts per tier
+- [x] "All" pill selected by default, clicking a tier filters the list instantly (client-side, no refetch)
+- [x] Show count badge on each filter pill (e.g. "🔥 Purchase-Ready (3)")
+- [x] Active filter pill highlighted in amber
