@@ -721,6 +721,12 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
       <div style={{ padding: "1rem 1.25rem" }}>
         {/* Header */}
         <div style={{ marginBottom: "0.75rem" }}>
+          {/* Intent badge row — sits above subreddit */}
+          {lead.intentType && (
+            <div style={{ marginBottom: "0.3rem" }}>
+              <IntentBadge intent={lead.intentType} />
+            </div>
+          )}
           <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", flexWrap: "wrap", marginBottom: "0.5rem" }}>
             {/* Favorite toggle */}
             <button
@@ -762,11 +768,6 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
             <ExternalLink size={11} color={MUTED} style={{ flexShrink: 0, marginTop: "2px" }} />
           </a>
 
-          {lead.intentType && (
-            <div style={{ marginBottom: "0.2rem" }}>
-              <IntentBadge intent={lead.intentType} />
-            </div>
-          )}
           <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", color: MUTED }}>
             u/{lead.authorUsername} · {new Date(lead.discoveredAt).toLocaleDateString()}
           </p>

@@ -1005,3 +1005,6 @@
 
 ## UI Tweak (v6.97)
 - [x] Move intent badge to sit directly above the subreddit/author line on lead cards
+
+## UI Tweak (v6.98)
+- [ ] Move intent badge above r/subreddit name (top of card, before the subreddit row)
