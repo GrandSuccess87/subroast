@@ -995,3 +995,6 @@
 ## UI/UX Tweaks (v6.94)
 - [x] Move pain point display to below lead name and above Analyze Lead button on lead cards
 - [x] Fix campaign status badge overlapping with Sync Leads button in campaign detail header
+
+## UI Tweak (v6.95)
+- [x] Make Analyze & Draft / Analyze Lead button full width on lead cards

@@ -904,28 +904,31 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
         )}
 
         {/* Action row */}
-        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap", paddingTop: "0.75rem", borderTop: `0.5px solid ${BORDER}` }}>
-          {/* Analyze & Draft — combined */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", paddingTop: "0.75rem", borderTop: `0.5px solid ${BORDER}` }}>
+          {/* Analyze & Draft — combined, full width */}
           {!isRoasted && isActionable && !lead.dmDraft && !isChaining && (
             (roastStep !== null || dmStep !== null || commentStep !== null) ? (
               <ProgressSteps steps={["Reading", "Scoring", "Crafting DM", "DM ready", "Comment", "Done"]} currentStep={roastStep !== null ? roastStep : dmStep !== null ? dmStep + 2 : (commentStep ?? 0) + 4} />
             ) : (
-              <button onClick={() => { startRoastProgress(); onRoast(lead.id); }} style={primaryBtn}>
+              <button onClick={() => { startRoastProgress(); onRoast(lead.id); }} style={{ ...primaryBtn, width: "100%", justifyContent: "center" }}>
                 <Sparkles size={10} /> Analyze & Draft
               </button>
             )
           )}
 
-          {/* Analyze only */}
+          {/* Analyze only — full width */}
           {!isRoasted && isActionable && lead.dmDraft && (
             roastStep !== null ? (
               <ProgressSteps steps={["Reading", "Scoring", "Done"]} currentStep={roastStep} />
             ) : (
-              <button onClick={() => { startRoastProgress(); onRoast(lead.id); }} style={monoBtn}>
+              <button onClick={() => { startRoastProgress(); onRoast(lead.id); }} style={{ ...monoBtn, width: "100%", justifyContent: "center" }}>
                 <TrendingUp size={10} /> Analyze Lead
               </button>
             )
           )}
+
+          {/* Secondary actions row */}
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
 
           {/* Draft DM only */}
           {isRoasted && isActionable && !lead.dmDraft && !isChaining && (
@@ -967,6 +970,7 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
               <SkipForward size={10} /> Skip
             </button>
           )}
+          </div>{/* end secondary actions row */}
         </div>
       </div>
     </div>
