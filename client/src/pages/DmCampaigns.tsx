@@ -969,6 +969,7 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
   const utils = trpc.useUtils();
   const [activeFilter, setActiveFilter] = useState<"all" | "new" | "dm_generated" | "queued" | "sent" | "skipped">("all");
   const [intentFilter, setIntentFilter] = useState<"all" | "buying" | "seeking_advice" | "venting" | "unknown" | "hiring">("all");
+  const [sortOrder, setSortOrder] = useState<"intent" | "newest" | "match">("newest");
   const chainLeadIdRef = useRef<number | null>(null);
   const [showEdit, setShowEdit] = useState(false);
 
@@ -1065,8 +1066,26 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
     onSettled: () => utils.outreach.getLeads.invalidate({ campaignId: campaign.id }),
   });
 
+  const INTENT_PRIORITY: Record<string, number> = { buying: 0, seeking_advice: 1, venting: 2, unknown: 3, hiring: 4 };
+  const MATCH_PRIORITY: Record<string, number> = { strong: 0, partial: 1, lowest: 2 };
   const statusFiltered = leads.filter((l) => activeFilter === "all" || l.status === activeFilter);
-  const filteredLeads = statusFiltered.filter((l) => intentFilter === "all" || (intentFilter === "unknown" ? (l.intentType === "unknown" || l.intentType == null) : l.intentType === intentFilter));
+  const intentFiltered = statusFiltered.filter((l) => intentFilter === "all" || (intentFilter === "unknown" ? (l.intentType === "unknown" || l.intentType == null) : l.intentType === intentFilter));
+  const filteredLeads = [...intentFiltered].sort((a, b) => {
+    if (sortOrder === "intent") {
+      const pa = INTENT_PRIORITY[a.intentType ?? "unknown"] ?? 3;
+      const pb = INTENT_PRIORITY[b.intentType ?? "unknown"] ?? 3;
+      if (pa !== pb) return pa - pb;
+      return b.discoveredAt - a.discoveredAt;
+    }
+    if (sortOrder === "match") {
+      const pa = MATCH_PRIORITY[a.matchScore] ?? 2;
+      const pb = MATCH_PRIORITY[b.matchScore] ?? 2;
+      if (pa !== pb) return pa - pb;
+      return b.discoveredAt - a.discoveredAt;
+    }
+    // newest
+    return b.discoveredAt - a.discoveredAt;
+  });
   const filterCounts = { all: leads.length, new: leads.filter((l) => l.status === "new").length, dm_generated: leads.filter((l) => l.status === "dm_generated").length, queued: leads.filter((l) => l.status === "queued").length, sent: leads.filter((l) => l.status === "sent").length, skipped: leads.filter((l) => l.status === "skipped").length };
   const intentCounts = {
     all: statusFiltered.length,
@@ -1221,14 +1240,31 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
 
       {/* Leads inbox */}
       <div>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem", flexWrap: "wrap", gap: "0.5rem" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
             <Inbox size={13} color={MUTED} />
             <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.18em", textTransform: "uppercase", color: MUTED }}>Leads Inbox</p>
           </div>
-          {campaign.lastSyncAt && (
-            <p style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", color: MUTED }}>Last sync: {new Date(campaign.lastSyncAt).toLocaleString()}</p>
-          )}
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            {campaign.lastSyncAt && (
+              <p style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", color: MUTED }}>Last sync: {new Date(campaign.lastSyncAt).toLocaleString()}</p>
+            )}
+            <div style={{ display: "flex", gap: "1.5px", marginLeft: "0.5rem" }}>
+              {(["intent", "newest", "match"] as const).map((s) => {
+                const labels = { intent: "Intent ↑", newest: "Newest", match: "Match ↑" };
+                const isActive = sortOrder === s;
+                return (
+                  <button
+                    key={s}
+                    onClick={() => setSortOrder(s)}
+                    style={{ padding: "0.25rem 0.6rem", background: isActive ? SURFACE_RAISED : "transparent", border: `0.5px solid ${isActive ? BORDER : "transparent"}`, color: isActive ? AMBER : MUTED, fontFamily: FONT_MONO, fontSize: "0.52rem", letterSpacing: "0.08em", cursor: "pointer", transition: "all 0.15s" }}
+                  >
+                    {labels[s]}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         </div>
 
         {/* Status filter tabs */}

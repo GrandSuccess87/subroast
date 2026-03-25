@@ -962,3 +962,26 @@
 - [x] "All" pill selected by default, clicking a tier filters the list instantly (client-side, no refetch)
 - [x] Show count badge on each filter pill (e.g. "🔥 Purchase-Ready (3)")
 - [x] Active filter pill highlighted in amber
+
+## Sort by Intent Tier (v6.91)
+- [x] Add sort toggle to campaign detail lead list: Intent Tier ↑ / Newest / Match Score
+- [x] Purchase-Ready floats to top when sorted by intent tier
+- [x] Sort is client-side, no refetch needed
+
+## Pain Point Extraction — Core Differentiator (roadmap)
+- [ ] Add painPoint field to outreach_leads schema (1-sentence extracted pain point)
+- [ ] During auto-sync AI scoring, extract 1-sentence pain point per lead: e.g. "Struggling to find warm leads without getting banned"
+- [ ] Show pain point on lead cards (below post title)
+- [ ] Show pain point in expandable lead detail / hover
+
+## Pain Point Frequency Aggregation (roadmap)
+- [ ] After extraction works: aggregate pain points per campaign into clusters
+- [ ] Show "Top Problems This Week" panel on campaign detail page
+- [ ] Display top pain point clusters with counts (e.g. "Ban risk concerns (23)", "Low reply rates (18)")
+- [ ] This turns SubRoast into an insight + strategy tool, not just a lead finder
+
+## Fix 839 Unclassified Leads — Intent Classification Improvement (roadmap)
+- [ ] Tighten AI scoring prompt to force a classification on every post (reduce unknown to near 0)
+- [ ] Add heuristic rules: question posts → seeking_advice, "looking for / need" → buying, "recommend / best tool" → buying, venting language → venting
+- [ ] Target: 50%+ reduction in unknown/unclassified leads from existing pool
+- [ ] Re-classify existing unknown leads in bulk via a background job
