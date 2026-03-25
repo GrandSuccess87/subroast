@@ -928,48 +928,49 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
           )}
 
           {/* Secondary actions row */}
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
-
           {/* Draft DM only */}
           {isRoasted && isActionable && !lead.dmDraft && !isChaining && (
             dmStep !== null ? (
               <ProgressSteps steps={["Reading", "Crafting DM", "Done"]} currentStep={dmStep} />
             ) : (
-              <button onClick={() => { startDmProgress(); onGenerateDm(lead.id); }} style={monoBtn}>
+              <button onClick={() => { startDmProgress(); onGenerateDm(lead.id); }} style={{ ...monoBtn, width: "100%", justifyContent: "center" }}>
                 <Sparkles size={10} /> Draft DM
               </button>
             )
           )}
 
-          {/* Mark Contacted */}
-          {isActionable && lead.pipelineStage !== "replied" && (
-            <button onClick={() => onMarkContacted(lead.id)} style={{ ...monoBtn, color: "oklch(0.72 0.15 145)", borderColor: "oklch(0.72 0.15 145 / 0.35)" }}>
-              <CheckCircle2 size={10} /> Mark Contacted
-            </button>
-          )}
-          {lead.pipelineStage === "replied" && (
-            <span style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", color: "oklch(0.72 0.15 145)", display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
-              <CheckCircle2 size={10} /> Contacted
-            </span>
-          )}
+          {/* Secondary row: Spam Check | Mark Contacted | Skip */}
+          <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", flexWrap: "wrap" }}>
 
-          {/* Spam Check */}
-          {isActionable && (
-            <button
-              onClick={() => onCheckSpam(lead.id)}
-              style={{ ...monoBtn, color: lead.spamScore != null ? (lead.spamScore >= 51 ? "oklch(0.65 0.22 25)" : "oklch(0.72 0.15 145)") : MUTED, borderColor: lead.spamScore != null ? (lead.spamScore >= 51 ? "oklch(0.65 0.22 25 / 0.35)" : "oklch(0.72 0.15 145 / 0.35)") : "transparent" }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = FOREGROUND)} onMouseLeave={(e) => (e.currentTarget.style.color = lead.spamScore != null ? (lead.spamScore >= 51 ? "oklch(0.65 0.22 25)" : "oklch(0.72 0.15 145)") : MUTED)}>
-              <ShieldAlert size={10} /> {lead.spamScore != null ? `Spam ${lead.spamScore}` : "Spam Check"}
-            </button>
-          )}
+            {/* Spam Check */}
+            {isActionable && (
+              <button
+                onClick={() => onCheckSpam(lead.id)}
+                style={{ ...monoBtn, flex: 1, justifyContent: "center", color: lead.spamScore != null ? (lead.spamScore >= 51 ? "oklch(0.65 0.22 25)" : "oklch(0.72 0.15 145)") : MUTED, borderColor: lead.spamScore != null ? (lead.spamScore >= 51 ? "oklch(0.65 0.22 25 / 0.35)" : "oklch(0.72 0.15 145 / 0.35)") : `0.5px solid ${BORDER}` }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = FOREGROUND)} onMouseLeave={(e) => (e.currentTarget.style.color = lead.spamScore != null ? (lead.spamScore >= 51 ? "oklch(0.65 0.22 25)" : "oklch(0.72 0.15 145)") : MUTED)}>
+                <ShieldAlert size={10} /> {lead.spamScore != null ? `Spam ${lead.spamScore}` : "Spam Check"}
+              </button>
+            )}
 
-          {/* Skip */}
-          {isActionable && lead.pipelineStage !== "replied" && (
-            <button onClick={() => onSkip(lead.id)} style={{ ...monoBtn, borderColor: "transparent" }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = FOREGROUND)} onMouseLeave={(e) => (e.currentTarget.style.color = MUTED)}>
-              <SkipForward size={10} /> Skip
-            </button>
-          )}
+            {/* Mark Contacted */}
+            {isActionable && lead.pipelineStage !== "replied" && (
+              <button onClick={() => onMarkContacted(lead.id)} style={{ ...monoBtn, flex: 1, justifyContent: "center", color: "oklch(0.72 0.15 145)", borderColor: "oklch(0.72 0.15 145 / 0.35)" }}>
+                <CheckCircle2 size={10} /> Mark Contacted
+              </button>
+            )}
+            {lead.pipelineStage === "replied" && (
+              <span style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", color: "oklch(0.72 0.15 145)", display: "inline-flex", alignItems: "center", gap: "0.3rem", flex: 1, justifyContent: "center" }}>
+                <CheckCircle2 size={10} /> Contacted
+              </span>
+            )}
+
+            {/* Skip */}
+            {isActionable && lead.pipelineStage !== "replied" && (
+              <button onClick={() => onSkip(lead.id)} style={{ ...monoBtn, flex: 1, justifyContent: "center", borderColor: BORDER }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = FOREGROUND)} onMouseLeave={(e) => (e.currentTarget.style.color = MUTED)}>
+                <SkipForward size={10} /> Skip
+              </button>
+            )}
           </div>{/* end secondary actions row */}
         </div>
       </div>

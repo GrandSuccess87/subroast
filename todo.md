@@ -998,3 +998,7 @@
 
 ## UI Tweak (v6.95)
 - [x] Make Analyze & Draft / Analyze Lead button full width on lead cards
+
+## UI Tweak (v6.96)
+- [x] Reorder secondary action buttons: Spam Check | Mark Contacted | Skip in one row
+- [x] Add hairline border to Spam Check and Skip buttons
