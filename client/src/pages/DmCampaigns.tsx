@@ -763,12 +763,6 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
             <ExternalLink size={11} color={MUTED} style={{ flexShrink: 0, marginTop: "2px" }} />
           </a>
 
-          {lead.painPoint && (
-            <div style={{ display: "flex", alignItems: "flex-start", gap: "0.35rem", marginBottom: "0.2rem", marginTop: "0.1rem" }}>
-              <span style={{ fontFamily: FONT_MONO, fontSize: "0.55rem", letterSpacing: "0.08em", textTransform: "uppercase", color: AMBER, flexShrink: 0, marginTop: "1px" }}>Pain Point</span>
-              <p style={{ fontFamily: FONT_MONO, fontSize: "0.62rem", color: "oklch(0.78 0.06 85)", margin: 0, lineHeight: 1.4, fontStyle: "italic" }}>"{lead.painPoint}"</p>
-            </div>
-          )}
           <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", color: MUTED }}>
             u/{lead.authorUsername} · {new Date(lead.discoveredAt).toLocaleDateString()}
           </p>
@@ -898,6 +892,14 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
                 <p style={{ fontSize: "0.78rem", color: FOREGROUND, lineHeight: 1.7, whiteSpace: "pre-wrap", opacity: 0.85 }}>{(lead as any).commentDraft}</p>
               </div>
             )}
+          </div>
+        )}
+
+        {/* Pain Point — above action row */}
+        {lead.painPoint && (
+          <div style={{ display: "flex", alignItems: "flex-start", gap: "0.35rem", marginBottom: "0.6rem", padding: "0.5rem 0.65rem", background: "oklch(0.78 0.14 65 / 0.05)", border: `0.5px solid oklch(0.78 0.14 65 / 0.2)` }}>
+            <span style={{ fontFamily: FONT_MONO, fontSize: "0.55rem", letterSpacing: "0.08em", textTransform: "uppercase", color: AMBER, flexShrink: 0, marginTop: "1px" }}>Pain Point</span>
+            <p style={{ fontFamily: FONT_MONO, fontSize: "0.62rem", color: "oklch(0.78 0.06 85)", margin: 0, lineHeight: 1.4, fontStyle: "italic" }}>&#34;{lead.painPoint}&#34;</p>
           </div>
         )}
 
@@ -1116,19 +1118,19 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
   return (
     <div>
       {/* Back + header */}
-      <div style={{ display: "flex", alignItems: "flex-start", gap: "1rem", marginBottom: "2rem" }}>
+      <div style={{ display: "flex", alignItems: "flex-start", gap: "1rem", marginBottom: "2rem", flexWrap: "wrap" }}>
         <button onClick={onBack} style={{ background: "none", border: "none", color: MUTED, cursor: "pointer", padding: "0.2rem", marginTop: "0.3rem" }}
           onMouseEnter={(e) => (e.currentTarget.style.color = FOREGROUND)} onMouseLeave={(e) => (e.currentTarget.style.color = MUTED)}>
           <ArrowLeft size={16} />
         </button>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.25rem" }}>
-            <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: 300, fontStyle: "italic", color: FOREGROUND, lineHeight: 1.1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{campaign.name}</h2>
+        <div style={{ flex: 1, minWidth: "200px" }}>
+          <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: "clamp(1.2rem, 3vw, 2rem)", fontWeight: 300, fontStyle: "italic", color: FOREGROUND, lineHeight: 1.1, marginBottom: "0.3rem" }}>{campaign.name}</h2>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.25rem", flexWrap: "wrap" }}>
             <StatusBadge status={campaign.status} />
+            <p style={{ fontFamily: FONT_MONO, fontSize: "0.62rem", color: MUTED, margin: 0 }}>{campaign.offering.slice(0, 80)}</p>
           </div>
-          <p style={{ fontFamily: FONT_MONO, fontSize: "0.62rem", color: MUTED, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{campaign.offering.slice(0, 80)}</p>
         </div>
-        <div style={{ display: "flex", gap: "0.5rem", flexShrink: 0 }}>
+        <div style={{ display: "flex", gap: "0.5rem", flexShrink: 0, flexWrap: "wrap" }}>
           <button onClick={() => syncLeads.mutate({ campaignId: campaign.id })} disabled={syncLeads.isPending || campaign.status !== "active"} style={{ ...monoBtn, opacity: (syncLeads.isPending || campaign.status !== "active") ? 0.5 : 1 }}>
             {syncLeads.isPending ? <Loader2 size={10} style={{ animation: "spin 1s linear infinite" }} /> : <RefreshCw size={10} />} Sync Leads
           </button>

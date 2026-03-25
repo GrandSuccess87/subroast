@@ -991,3 +991,7 @@
 - [x] Add aiPromptInstructions to Founders Outreach campaign
 - [x] Verify campaign edit form loads aiPromptInstructions on open
 - [x] Verify campaign edit form saves aiPromptInstructions on submit
+
+## UI/UX Tweaks (v6.94)
+- [x] Move pain point display to below lead name and above Analyze Lead button on lead cards
+- [x] Fix campaign status badge overlapping with Sync Leads button in campaign detail header
