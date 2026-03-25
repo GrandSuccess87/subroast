@@ -1002,3 +1002,6 @@
 ## UI Tweak (v6.96)
 - [x] Reorder secondary action buttons: Spam Check | Mark Contacted | Skip in one row
 - [x] Add hairline border to Spam Check and Skip buttons
+
+## UI Tweak (v6.97)
+- [x] Move intent badge to sit directly above the subreddit/author line on lead cards

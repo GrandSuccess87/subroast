@@ -744,7 +744,6 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
             </button>
             <span style={{ fontFamily: FONT_MONO, fontSize: "0.62rem", color: MUTED }}>r/{lead.subreddit}</span>
             <MatchBadge score={lead.matchScore} />
-            {lead.intentType && <IntentBadge intent={lead.intentType} />}
             {lead.status === "queued" && <span style={{ fontFamily: FONT_MONO, fontSize: "0.52rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "oklch(0.72 0.12 220)", border: `0.5px solid oklch(0.72 0.12 220 / 0.35)`, padding: "0.1rem 0.35rem" }}>Queued</span>}
             {lead.status === "sent" && <span style={{ fontFamily: FONT_MONO, fontSize: "0.52rem", letterSpacing: "0.1em", textTransform: "uppercase", color: IVORY, border: `0.5px solid oklch(0.88 0.025 85 / 0.35)`, padding: "0.1rem 0.35rem" }}>Sent</span>}
             {lead.matchedKeywords.length > 0 && (
@@ -763,6 +762,11 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
             <ExternalLink size={11} color={MUTED} style={{ flexShrink: 0, marginTop: "2px" }} />
           </a>
 
+          {lead.intentType && (
+            <div style={{ marginBottom: "0.2rem" }}>
+              <IntentBadge intent={lead.intentType} />
+            </div>
+          )}
           <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", color: MUTED }}>
             u/{lead.authorUsername} · {new Date(lead.discoveredAt).toLocaleDateString()}
           </p>
