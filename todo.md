@@ -1033,3 +1033,15 @@
 - [x] Update Intelligence Report mockup: Lead Signal Detected → Lead Intelligence with intent-classified cards
 - [x] Update pricing plan features: added AI pain point extraction, 5-tier buyer intent, Pain Point Frequency panel
 - [x] Update CTA section body copy to reference pain point extraction and intent classification
+
+## Mobile UX & Lead Sync Fix (v7.02)
+- [x] shadcn Button: add active:scale-[0.97] active:opacity-85 press states + [touch-action:manipulation]
+- [x] shadcn Button: add min-h-[44px] on mobile for all size variants
+- [x] shadcn Input: add min-h-[44px] on mobile + [touch-action:manipulation]
+- [x] shadcn Textarea: update min-h to 44px + [touch-action:manipulation]
+- [x] DmCampaigns inputStyle: border 0.5px → 1px, fontSize 16px, minHeight 44px
+- [x] Onboarding inputStyle: border 0.5px → 1px, fontSize 16px, minHeight 44px
+- [x] Schedule inputStyle: border 0.5px → 1px, fontSize 16px, minHeight 44px
+- [x] Confirmed btn-luxury and btn-luxury-primary already have active states + 1px borders
+- [x] Confirmed global @media (max-width: 639px) enforces 44px + font-size: 16px !important
+- [ ] Lead sync: Reddit IP block on production — fix by connecting Reddit account in Settings → Reddit Account

@@ -54,12 +54,14 @@ const inputStyle: React.CSSProperties = {
   width: "100%",
   padding: "0.75rem 1rem",
   background: SURFACE,
-  border: `0.5px solid ${BORDER}`,
+  border: `1px solid ${BORDER}`,
   color: FOREGROUND,
   fontFamily: FONT_SANS,
-  fontSize: "0.875rem",
+  fontSize: "16px",
   outline: "none",
   boxSizing: "border-box",
+  minHeight: "44px",
+  touchAction: "manipulation",
 };
 
 const textareaStyle: React.CSSProperties = {

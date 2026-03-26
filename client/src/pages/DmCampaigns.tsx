@@ -95,14 +95,15 @@ type Lead = {
   painPoint?: string | null;
 };
 
-// ─── Shared input style ───────────────────────────────────────────────────────
+// ─── Shared input style ────────────────────────────────────────────────────────────────────────────────
 const inputStyle: React.CSSProperties = {
-  width: "100%", background: SURFACE_RAISED, border: `0.5px solid ${BORDER}`,
-  color: FOREGROUND, fontFamily: "Inter, sans-serif", fontSize: "0.82rem",
+  width: "100%", background: SURFACE_RAISED, border: `1px solid ${BORDER}`,
+  color: FOREGROUND, fontFamily: "Inter, sans-serif", fontSize: "16px",
   padding: "0.6rem 0.75rem", outline: "none", boxSizing: "border-box",
+  minHeight: "44px", touchAction: "manipulation",
 };
 
-// ─── Score bar ────────────────────────────────────────────────────────────────
+// ─── Score bar ────────────────────────────────────────────────────────────────────────────────
 function ScoreBar({ label, value, color }: { label: string; value: number; color: string }) {
   return (
     <div>

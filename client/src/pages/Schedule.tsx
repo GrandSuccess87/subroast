@@ -72,13 +72,15 @@ function isDST(date: Date): boolean {
 const inputStyle: React.CSSProperties = {
   width: "100%",
   background: SURFACE_RAISED,
-  border: `0.5px solid ${BORDER}`,
+  border: `1px solid ${BORDER}`,
   color: FOREGROUND,
   fontFamily: "Inter, sans-serif",
-  fontSize: "0.82rem",
+  fontSize: "16px",
   padding: "0.6rem 0.75rem",
   outline: "none",
   boxSizing: "border-box",
+  minHeight: "44px",
+  touchAction: "manipulation",
 };
 
 export default function Schedule() {

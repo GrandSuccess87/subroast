@@ -286,7 +286,7 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.75rem 2rem;
-    border: 0.5px solid oklch(0.88 0.025 85 / 0.5);
+    border: 1px solid oklch(0.88 0.025 85 / 0.55);
     color: oklch(0.88 0.025 85);
     font-family: var(--font-mono);
     font-size: 0.6rem;
@@ -294,14 +294,21 @@
     letter-spacing: 0.32em;
     text-transform: uppercase;
     background: transparent;
-    transition: background 0.4s ease, border-color 0.4s ease, color 0.4s ease;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.1s ease, opacity 0.1s ease;
     text-decoration: none;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
   .btn-luxury:hover {
     background: oklch(0.88 0.025 85 / 0.18);
     border-color: oklch(0.88 0.025 85);
     color: oklch(1 0 0);
     transform: translateY(-1px);
+  }
+  .btn-luxury:active {
+    transform: scale(0.97);
+    opacity: 0.85;
+    background: oklch(0.88 0.025 85 / 0.12);
   }
 
   /* Luxury primary button — amber-gold fill, high contrast, used sparingly */
@@ -317,14 +324,22 @@
     font-weight: 600;
     letter-spacing: 0.32em;
     text-transform: uppercase;
-    border: none;
-    transition: background 0.4s ease, transform 0.4s ease;
+    border: 1px solid oklch(0.78 0.14 65);
+    transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease, opacity 0.1s ease;
     text-decoration: none;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
   .btn-luxury-primary:hover {
     background: oklch(0.86 0.17 65);
+    border-color: oklch(0.86 0.17 65);
     transform: translateY(-3px);
     box-shadow: 0 12px 32px oklch(0.78 0.14 65 / 0.50), 0 4px 12px oklch(0.78 0.14 65 / 0.25);
+  }
+  .btn-luxury-primary:active {
+    transform: scale(0.96);
+    opacity: 0.88;
+    box-shadow: none;
   }
 
   /* Card 3D lift on hover */
@@ -372,7 +387,17 @@
   @media (max-width: 639px) {
     .text-xs { font-size: 0.8rem !important; line-height: 1.4rem !important; }
     .text-sm { font-size: 0.875rem !important; }
-    button, [role="button"] { min-height: 36px; }
+    /* Touch target: Apple HIG minimum 44px */
+    button, [role="button"], [type="button"], [type="submit"],
+    a[href], select, label[for] {
+      min-height: 44px;
+    }
+    /* Touch target for inputs and textareas */
+    input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+    textarea {
+      min-height: 44px;
+      font-size: 16px !important; /* prevents iOS zoom on focus */
+    }
   }
 
   /* Draft & Roast — stack panels vertically on mobile */

@@ -1,0 +1,50 @@
+{
+  "query": "SELECT id, name, lastSyncAt, FROM_UNIXTIME(lastSyncAt/1000) as last_sync_time, dailySyncsUsed, dailySyncsResetAt FROM outreach_campaigns WHERE status = 'active' ORDER BY id;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute SELECT id, name, lastSyncAt, FROM_UNIXTIME(lastSyncAt/1000) as last_sync_time, dailySyncsUsed, dailySyncsResetAt FROM outreach_campaigns WHERE status = 'active' ORDER BY id;",
+  "rows": [
+    {
+      "id": "1",
+      "name": "Founders Outreach",
+      "lastSyncAt": "1774495438608",
+      "last_sync_time": "2026-03-26 03:23:58.6080",
+      "dailySyncsUsed": "1",
+      "dailySyncsResetAt": "1774483200000"
+    },
+    {
+      "id": "30001",
+      "name": "App Validation Complaint Mining",
+      "lastSyncAt": "1774485311031",
+      "last_sync_time": "2026-03-26 00:35:11.0310",
+      "dailySyncsUsed": "1",
+      "dailySyncsResetAt": "1774396800000"
+    },
+    {
+      "id": "60001",
+      "name": "SubRoast ICP Pain-Point Outreach",
+      "lastSyncAt": "1774495426317",
+      "last_sync_time": "2026-03-26 03:23:46.3170",
+      "dailySyncsUsed": "1",
+      "dailySyncsResetAt": "1774483200000"
+    },
+    {
+      "id": "90001",
+      "name": "For Hire",
+      "lastSyncAt": "1774495407155",
+      "last_sync_time": "2026-03-26 03:23:27.1550",
+      "dailySyncsUsed": "1",
+      "dailySyncsResetAt": "1774483200000"
+    },
+    {
+      "id": "120001",
+      "name": "Healthcare Outreach",
+      "lastSyncAt": "1774495245468",
+      "last_sync_time": "2026-03-26 03:20:45.4680",
+      "dailySyncsUsed": "2",
+      "dailySyncsResetAt": "1774483200000"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tlastSyncAt\tlast_sync_time\tdailySyncsUsed\tdailySyncsResetAt\n1\tFounders Outreach\t1774495438608\t2026-03-26 03:23:58.6080\t1\t1774483200000\n30001\tApp Validation Complaint Mining\t1774485311031\t2026-03-26 00:35:11.0310\t1\t1774396800000\n60001\tSubRoast ICP Pain-Point Outreach\t1774495426317\t2026-03-26 03:23:46.3170\t1\t1774483200000\n90001\tFor Hire\t1774495407155\t2026-03-26 03:23:27.1550\t1\t1774483200000\n120001\tHealthcare Outreach\t1774495245468\t2026-03-26 03:20:45.4680\t2\t1774483200000\n",
+  "stderr": "",
+  "execution_time_ms": 68
+}

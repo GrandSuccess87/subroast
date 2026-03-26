@@ -1,0 +1,50 @@
+{
+  "query": "SELECT \n  c.id, \n  c.name, \n  c.leadsFound,\n  COUNT(l.id) as actual_lead_count,\n  MAX(l.discoveredAt) as last_lead_discovered_ms,\n  FROM_UNIXTIME(MAX(l.discoveredAt)/1000) as last_lead_discovered_at\nFROM outreach_campaigns c\nLEFT JOIN outreach_leads l ON l.campaignId = c.id\nWHERE c.status = 'active'\nGROUP BY c.id, c.name, c.leadsFound\nORDER BY c.id;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute SELECT \n  c.id, \n  c.name, \n  c.leadsFound,\n  COUNT(l.id) as actual_lead_count,\n  MAX(l.discoveredAt) as last_lead_discovered_ms,\n  FROM_UNIXTIME(MAX(l.discoveredAt)/1000) as last_lead_discovered_at\nFROM outreach_campaigns c\nLEFT JOIN outreach_leads l ON l.campaignId = c.id\nWHERE c.status = 'active'\nGROUP BY c.id, c.name, c.leadsFound\nORDER BY c.id;",
+  "rows": [
+    {
+      "id": "1",
+      "name": "Founders Outreach",
+      "leadsFound": "840",
+      "actual_lead_count": "471",
+      "last_lead_discovered_ms": "1774413172375",
+      "last_lead_discovered_at": "2026-03-25 04:32:52.3750"
+    },
+    {
+      "id": "30001",
+      "name": "App Validation Complaint Mining",
+      "leadsFound": "117",
+      "actual_lead_count": "104",
+      "last_lead_discovered_ms": "1773728566320",
+      "last_lead_discovered_at": "2026-03-17 06:22:46.3200"
+    },
+    {
+      "id": "60001",
+      "name": "SubRoast ICP Pain-Point Outreach",
+      "leadsFound": "328",
+      "actual_lead_count": "271",
+      "last_lead_discovered_ms": "1774414318262",
+      "last_lead_discovered_at": "2026-03-25 04:51:58.2620"
+    },
+    {
+      "id": "90001",
+      "name": "For Hire",
+      "leadsFound": "84",
+      "actual_lead_count": "72",
+      "last_lead_discovered_ms": "1774414326331",
+      "last_lead_discovered_at": "2026-03-25 04:52:06.3310"
+    },
+    {
+      "id": "120001",
+      "name": "Healthcare Outreach",
+      "leadsFound": "51",
+      "actual_lead_count": "47",
+      "last_lead_discovered_ms": "1774418330812",
+      "last_lead_discovered_at": "2026-03-25 05:58:50.8120"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tleadsFound\tactual_lead_count\tlast_lead_discovered_ms\tlast_lead_discovered_at\n1\tFounders Outreach\t840\t471\t1774413172375\t2026-03-25 04:32:52.3750\n30001\tApp Validation Complaint Mining\t117\t104\t1773728566320\t2026-03-17 06:22:46.3200\n60001\tSubRoast ICP Pain-Point Outreach\t328\t271\t1774414318262\t2026-03-25 04:51:58.2620\n90001\tFor Hire\t84\t72\t1774414326331\t2026-03-25 04:52:06.3310\n120001\tHealthcare Outreach\t51\t47\t1774418330812\t2026-03-25 05:58:50.8120\n",
+  "stderr": "",
+  "execution_time_ms": 64
+}
