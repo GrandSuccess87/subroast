@@ -1,0 +1,22 @@
+{
+  "query": "\nSELECT id, name, email, plan, subscriptionStatus, stripeCustomerId, stripeSubscriptionId, trialStartAt, trialEndsAt, createdAt\nFROM users\nWHERE email = 'tessa.anderson@blackvectorhorizon.solutions';\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute \nSELECT id, name, email, plan, subscriptionStatus, stripeCustomerId, stripeSubscriptionId, trialStartAt, trialEndsAt, createdAt\nFROM users\nWHERE email = 'tessa.anderson@blackvectorhorizon.solutions';\n",
+  "rows": [
+    {
+      "id": "1",
+      "name": "Quintessa Anderson",
+      "email": "tessa.anderson@blackvectorhorizon.solutions",
+      "plan": "growth",
+      "subscriptionStatus": "active",
+      "stripeCustomerId": "cus_U8LKhJruIANQRr",
+      "stripeSubscriptionId": "sub_1TA4n5J3IdCBAyoJKDgOp0sL",
+      "trialStartAt": "1773304825848",
+      "trialEndsAt": "1773909604000",
+      "createdAt": "2026-02-25 09:51:34"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\temail\tplan\tsubscriptionStatus\tstripeCustomerId\tstripeSubscriptionId\ttrialStartAt\ttrialEndsAt\tcreatedAt\n1\tQuintessa Anderson\ttessa.anderson@blackvectorhorizon.solutions\tgrowth\tactive\tcus_U8LKhJruIANQRr\tsub_1TA4n5J3IdCBAyoJKDgOp0sL\t1773304825848\t1773909604000\t2026-02-25 09:51:34\n",
+  "stderr": "",
+  "execution_time_ms": 61
+}

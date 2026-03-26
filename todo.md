@@ -1058,3 +1058,12 @@
 - [x] Progress bar: height 2px → 3px
 - [x] Discord card/buttons: border 0.5px → 1.5px, skip button now has visible border
 - [x] All interactive elements: touchAction manipulation + WebkitTapHighlightColor transparent
+
+## Test User Guard (v7.04)
+- [x] Add TEST_USER_EMAILS constant in webhook.ts and subscription.ts
+- [x] Guard webhook checkout.session.completed: skip if customer_email is test user
+- [x] Guard webhook customer.subscription.created/updated: skip if user email is test user
+- [x] Guard webhook customer.subscription.deleted: skip if user email is test user
+- [x] Guard webhook invoice.payment_failed: skip if user email is test user
+- [x] Guard createCheckoutSession: throw FORBIDDEN for test users
+- [x] Guard getStatus: always return Growth/hasActiveAccess=true for test users regardless of DB state

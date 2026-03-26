@@ -53,6 +53,15 @@ async function getOrCreateStripeCustomer(
   return customer.id;
 }
 
+// ─── Test user guard ────────────────────────────────────────────────────────
+const TEST_USER_EMAILS = new Set([
+  "tessa.anderson@blackvectorhorizon.solutions",
+]);
+
+function isTestUser(email: string | null | undefined): boolean {
+  return !!email && TEST_USER_EMAILS.has(email.toLowerCase());
+}
+
 // ─── Router ───────────────────────────────────────────────────────────────────
 
 export const subscriptionRouter = router({
@@ -70,6 +79,19 @@ export const subscriptionRouter = router({
     const trialDaysLeft = isTrialing
       ? Math.max(0, Math.ceil((user.trialEndsAt! - now) / (1000 * 60 * 60 * 24)))
       : 0;
+
+    // ⚠️ Test user: always return full Growth access regardless of DB state
+    if (isTestUser(user.email)) {
+      return {
+        plan: "growth" as const,
+        subscriptionStatus: "canceled" as const,
+        isTrialing: false,
+        trialDaysLeft: 0,
+        trialEndsAt: null,
+        hasActiveAccess: true,
+        campaignLimit: null,
+      };
+    }
 
     return {
       plan: user.plan,
@@ -92,6 +114,14 @@ export const subscriptionRouter = router({
   createCheckoutSession: protectedProcedure
     .input(z.object({ plan: z.enum(["starter", "growth"]), origin: z.string() }))
     .mutation(async ({ ctx, input }) => {
+      // ⚠️ Test user guard: never create real Stripe sessions for test accounts
+      if (isTestUser(ctx.user.email)) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "This is a test account. Billing is disabled.",
+        });
+      }
+
       const stripe = getStripe();
       const plan = PLANS[input.plan as PlanKey];
       if (!plan) throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid plan" });

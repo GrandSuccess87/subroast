@@ -5,6 +5,16 @@ import { getDb } from "../db";
 import { users } from "../../drizzle/schema";
 import { eq } from "drizzle-orm";
 
+// ─── Test users: never charge, never update subscription state ───────────────
+const TEST_USER_EMAILS = new Set([
+  "tessa.anderson@blackvectorhorizon.solutions",
+]);
+
+/** Returns true if the given email is a protected test account */
+function isTestUserEmail(email: string | null | undefined): boolean {
+  return !!email && TEST_USER_EMAILS.has(email.toLowerCase());
+}
+
 export function registerStripeWebhook(app: Express) {
   // MUST use raw body before json middleware
   app.post(
@@ -49,6 +59,13 @@ export function registerStripeWebhook(app: Express) {
               : null;
             const customerId = session.customer as string | null;
             const subscriptionId = session.subscription as string | null;
+            const customerEmail = session.metadata?.customer_email ?? session.customer_email;
+
+            // ⚠️ Test user guard: never update subscription state for test accounts
+            if (isTestUserEmail(customerEmail)) {
+              console.log(`[Webhook] Skipping checkout.session.completed for test user: ${customerEmail}`);
+              break;
+            }
 
             if (userId && customerId) {
               // Determine plan from metadata or line items
@@ -86,6 +103,12 @@ export function registerStripeWebhook(app: Express) {
               .where(eq(users.stripeCustomerId, customerId))
               .limit(1);
 
+            // ⚠️ Test user guard
+            if (userRows[0] && isTestUserEmail(userRows[0].email)) {
+              console.log(`[Webhook] Skipping ${event.type} for test user: ${userRows[0].email}`);
+              break;
+            }
+
             if (userRows[0]) {
               const planKey = (sub.metadata?.plan as "starter" | "growth") ?? "starter";
               const status = sub.status as "active" | "trialing" | "past_due" | "canceled";
@@ -119,6 +142,13 @@ export function registerStripeWebhook(app: Express) {
             const sub = event.data.object as import("stripe").Stripe.Subscription;
             const customerId = sub.customer as string;
 
+            // ⚠️ Test user guard: look up by customer ID first
+            const deletedUserRows = await db.select().from(users).where(eq(users.stripeCustomerId, customerId)).limit(1);
+            if (deletedUserRows[0] && isTestUserEmail(deletedUserRows[0].email)) {
+              console.log(`[Webhook] Skipping subscription.deleted for test user: ${deletedUserRows[0].email}`);
+              break;
+            }
+
             await db
               .update(users)
               .set({
@@ -135,6 +165,13 @@ export function registerStripeWebhook(app: Express) {
           case "invoice.payment_failed": {
             const invoice = event.data.object as import("stripe").Stripe.Invoice;
             const customerId = invoice.customer as string;
+
+            // ⚠️ Test user guard
+            const failedUserRows = await db.select().from(users).where(eq(users.stripeCustomerId, customerId)).limit(1);
+            if (failedUserRows[0] && isTestUserEmail(failedUserRows[0].email)) {
+              console.log(`[Webhook] Skipping invoice.payment_failed for test user: ${failedUserRows[0].email}`);
+              break;
+            }
 
             await db
               .update(users)
