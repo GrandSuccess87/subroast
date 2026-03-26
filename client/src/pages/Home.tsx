@@ -1072,11 +1072,10 @@ export default function Home() {
         className="relative overflow-hidden"
         style={{
           minHeight: "calc(100svh - 3.5rem)",
-          maxHeight: "calc(100svh - 3.5rem)",
           display: "flex",
           alignItems: "center",
-          paddingTop: "clamp(0.5rem, 1.5vw, 1.25rem)",
-          paddingBottom: "clamp(0.5rem, 1.5vw, 1.25rem)",
+          paddingTop: "clamp(1rem, 2.5vw, 2rem)",
+          paddingBottom: "clamp(1rem, 2.5vw, 2rem)",
         }}
       >
         {/* Very subtle grid */}
