@@ -8,13 +8,13 @@ import { trackOnboardingStarted, trackOnboardingStep, trackOnboardingCompleted }
 // ─── Design tokens (match global brand) ──────────────────────────────────────
 const BG = "oklch(0.09 0.008 60)";
 const SURFACE = "oklch(0.12 0.007 60)";
-const SURFACE_RAISED = "oklch(0.14 0.007 60)";
-const BORDER = "oklch(0.22 0.007 60)";
-const BORDER_ACCENT = "oklch(0.88 0.025 85 / 0.35)";
+const SURFACE_RAISED = "oklch(0.16 0.010 60)";
+const BORDER = "oklch(0.28 0.008 60)";
+const BORDER_ACCENT = "oklch(0.88 0.025 85 / 0.55)";
 const IVORY = "oklch(0.88 0.025 85)";
-const IVORY_DIM = "oklch(0.88 0.025 85 / 0.55)";
+const IVORY_DIM = "oklch(0.88 0.025 85 / 0.65)";
 const FOREGROUND = "oklch(0.93 0.010 80)";
-const MUTED = "oklch(0.62 0.006 80)";
+const MUTED = "oklch(0.65 0.006 80)";
 const AMBER = "oklch(0.78 0.14 65)";
 const FONT_DISPLAY = "Cormorant Garamond, Georgia, serif";
 const FONT_MONO = "JetBrains Mono, monospace";
@@ -24,7 +24,7 @@ const TOTAL_STEPS = 5;
 const DISCORD_URL = "https://discord.gg/RD8ZCtt7Y";
 const DISCORD_PURPLE = "oklch(0.72 0.14 270)";
 const DISCORD_PURPLE_BG = "oklch(0.22 0.06 270 / 0.35)";
-const DISCORD_PURPLE_BORDER = "oklch(0.40 0.12 270 / 0.5)";
+const DISCORD_PURPLE_BORDER = "oklch(0.45 0.12 270 / 0.6)";
 
 // ─── Step data ────────────────────────────────────────────────────────────────
 const CURRENT_TOOL_OPTIONS = [
@@ -52,23 +52,37 @@ const PAIN_POINT_OPTIONS = [
 // ─── Shared input styles ──────────────────────────────────────────────────────
 const inputStyle: React.CSSProperties = {
   width: "100%",
-  padding: "0.75rem 1rem",
-  background: SURFACE,
-  border: `1px solid ${BORDER}`,
+  padding: "0.875rem 1.125rem",
+  background: SURFACE_RAISED,
+  border: `1.5px solid ${BORDER}`,
   color: FOREGROUND,
   fontFamily: FONT_SANS,
   fontSize: "16px",
+  lineHeight: 1.5,
   outline: "none",
   boxSizing: "border-box",
-  minHeight: "44px",
+  minHeight: "52px",
   touchAction: "manipulation",
+  borderRadius: "2px",
 };
 
 const textareaStyle: React.CSSProperties = {
   ...inputStyle,
   resize: "vertical",
-  minHeight: "80px",
-  lineHeight: 1.6,
+  minHeight: "96px",
+  lineHeight: 1.7,
+};
+
+// ─── Label style ──────────────────────────────────────────────────────────────
+const labelStyle: React.CSSProperties = {
+  fontFamily: FONT_MONO,
+  fontSize: "0.7rem",
+  fontWeight: 600,
+  letterSpacing: "0.16em",
+  textTransform: "uppercase" as const,
+  color: IVORY_DIM,
+  display: "block",
+  marginBottom: "0.6rem",
 };
 
 // ─── Progress bar ─────────────────────────────────────────────────────────────
@@ -76,15 +90,15 @@ function ProgressBar({ step }: { step: number }) {
   const pct = Math.round(((step - 1) / TOTAL_STEPS) * 100);
   return (
     <div style={{ marginBottom: "2.5rem" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
-        <span style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.18em", textTransform: "uppercase", color: MUTED }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.6rem" }}>
+        <span style={{ fontFamily: FONT_MONO, fontSize: "0.65rem", letterSpacing: "0.16em", textTransform: "uppercase", color: MUTED, fontWeight: 500 }}>
           Step {step} of {TOTAL_STEPS}
         </span>
-        <span style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.12em", color: MUTED }}>
+        <span style={{ fontFamily: FONT_MONO, fontSize: "0.65rem", letterSpacing: "0.12em", color: MUTED }}>
           {pct}%
         </span>
       </div>
-      <div style={{ height: "2px", background: BORDER, position: "relative" }}>
+      <div style={{ height: "3px", background: BORDER, position: "relative", borderRadius: "2px" }}>
         <div
           style={{
             position: "absolute",
@@ -94,10 +108,70 @@ function ProgressBar({ step }: { step: number }) {
             width: `${Math.round((step / TOTAL_STEPS) * 100)}%`,
             background: IVORY,
             transition: "width 0.4s ease",
+            borderRadius: "2px",
           }}
         />
       </div>
     </div>
+  );
+}
+
+// ─── Selection button ─────────────────────────────────────────────────────────
+function SelectionButton({
+  label,
+  selected,
+  onClick,
+  multi = false,
+}: {
+  label: string;
+  selected: boolean;
+  onClick: () => void;
+  multi?: boolean;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        padding: "0.875rem 1.125rem",
+        background: selected ? "oklch(0.18 0.012 65)" : SURFACE_RAISED,
+        border: `1.5px solid ${selected ? BORDER_ACCENT : BORDER}`,
+        color: selected ? IVORY : FOREGROUND,
+        fontFamily: FONT_SANS,
+        fontSize: "0.9rem",
+        fontWeight: selected ? 500 : 400,
+        textAlign: "left",
+        cursor: "pointer",
+        transition: "border-color 0.15s, color 0.15s, background 0.15s",
+        display: "flex",
+        alignItems: "center",
+        gap: "0.875rem",
+        width: "100%",
+        minHeight: "52px",
+        touchAction: "manipulation",
+        WebkitTapHighlightColor: "transparent",
+        borderRadius: "2px",
+      }}
+    >
+      <span style={{
+        width: multi ? "16px" : "16px",
+        height: multi ? "16px" : "16px",
+        borderRadius: multi ? "3px" : "50%",
+        border: `2px solid ${selected ? IVORY : BORDER}`,
+        background: selected ? IVORY : "transparent",
+        flexShrink: 0,
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        transition: "border-color 0.15s, background 0.15s",
+      }}>
+        {selected && multi && (
+          <svg width="9" height="9" viewBox="0 0 12 12" fill="none">
+            <polyline points="2 6 5 9 10 3" stroke={BG} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        )}
+      </span>
+      {label}
+    </button>
   );
 }
 
@@ -113,33 +187,31 @@ function Step1({
 }) {
   return (
     <div>
-      <p className="eyebrow mb-3" style={{ color: IVORY_DIM }}>Let's personalise your experience</p>
-      <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: "clamp(1.8rem, 4vw, 2.5rem)", fontWeight: 300, fontStyle: "italic", color: FOREGROUND, lineHeight: 1.15, marginBottom: "0.5rem" }}>
+      <p style={{ fontFamily: FONT_MONO, fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: IVORY_DIM, marginBottom: "0.75rem" }}>
+        Let's personalise your experience
+      </p>
+      <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: "clamp(2rem, 5vw, 2.75rem)", fontWeight: 300, fontStyle: "italic", color: FOREGROUND, lineHeight: 1.15, marginBottom: "0.75rem" }}>
         Welcome to SubRoast.
       </h1>
-      <p style={{ fontFamily: FONT_SANS, fontSize: "0.875rem", color: MUTED, lineHeight: 1.7, marginBottom: "2rem" }}>
+      <p style={{ fontFamily: FONT_SANS, fontSize: "1rem", color: MUTED, lineHeight: 1.75, marginBottom: "2.5rem" }}>
         Quick setup — takes about 30 seconds. We'll use this to personalise your experience.
       </p>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "2rem" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem", marginBottom: "2.5rem" }}>
         <div>
-          <label style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.18em", textTransform: "uppercase", color: MUTED, display: "block", marginBottom: "0.4rem" }}>
-            Name
-          </label>
+          <label style={labelStyle}>Name</label>
           <input
             value={name}
             readOnly
-            style={{ ...inputStyle, opacity: 0.7 }}
+            style={{ ...inputStyle, opacity: 0.6 }}
           />
         </div>
         <div>
-          <label style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.18em", textTransform: "uppercase", color: MUTED, display: "block", marginBottom: "0.4rem" }}>
-            Email
-          </label>
+          <label style={labelStyle}>Email</label>
           <input
             value={email || "—"}
             readOnly
-            style={{ ...inputStyle, opacity: 0.7 }}
+            style={{ ...inputStyle, opacity: 0.6 }}
           />
         </div>
       </div>
@@ -169,45 +241,24 @@ function Step2({
 }) {
   return (
     <div>
-      <p className="eyebrow mb-3" style={{ color: IVORY_DIM }}>Current workflow</p>
-      <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: "clamp(1.5rem, 3.5vw, 2rem)", fontWeight: 300, fontStyle: "italic", color: FOREGROUND, lineHeight: 1.2, marginBottom: "0.5rem" }}>
+      <p style={{ fontFamily: FONT_MONO, fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: IVORY_DIM, marginBottom: "0.75rem" }}>
+        Current workflow
+      </p>
+      <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: "clamp(1.6rem, 4vw, 2.2rem)", fontWeight: 300, fontStyle: "italic", color: FOREGROUND, lineHeight: 1.2, marginBottom: "0.75rem" }}>
         What are you using today for outreach?
       </h2>
-      <p style={{ fontFamily: FONT_SANS, fontSize: "0.875rem", color: MUTED, lineHeight: 1.7, marginBottom: "1.75rem" }}>
+      <p style={{ fontFamily: FONT_SANS, fontSize: "1rem", color: MUTED, lineHeight: 1.75, marginBottom: "2rem" }}>
         Pick the option that best describes your current setup.
       </p>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginBottom: "1.25rem" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "0.625rem", marginBottom: "1.5rem" }}>
         {CURRENT_TOOL_OPTIONS.map((opt) => (
-          <button
+          <SelectionButton
             key={opt.value}
+            label={opt.label}
+            selected={value === opt.value}
             onClick={() => onChange(opt.value)}
-            style={{
-              padding: "0.75rem 1rem",
-              background: value === opt.value ? SURFACE_RAISED : SURFACE,
-              border: `0.5px solid ${value === opt.value ? IVORY : BORDER}`,
-              color: value === opt.value ? IVORY : FOREGROUND,
-              fontFamily: FONT_SANS,
-              fontSize: "0.875rem",
-              textAlign: "left",
-              cursor: "pointer",
-              transition: "border-color 0.2s, color 0.2s",
-              display: "flex",
-              alignItems: "center",
-              gap: "0.75rem",
-            }}
-          >
-            <span style={{
-              width: "14px",
-              height: "14px",
-              borderRadius: "50%",
-              border: `1.5px solid ${value === opt.value ? IVORY : BORDER}`,
-              background: value === opt.value ? IVORY : "transparent",
-              flexShrink: 0,
-              display: "inline-block",
-            }} />
-            {opt.label}
-          </button>
+          />
         ))}
       </div>
 
@@ -216,7 +267,7 @@ function Step2({
           value={otherValue}
           onChange={(e) => onOtherChange(e.target.value)}
           placeholder="Tell us what you use…"
-          style={{ ...inputStyle, marginBottom: "1.25rem" }}
+          style={{ ...inputStyle, marginBottom: "1.5rem" }}
         />
       )}
 
@@ -248,48 +299,26 @@ function Step3({
 }) {
   return (
     <div>
-      <p className="eyebrow mb-3" style={{ color: IVORY_DIM }}>Pain points</p>
-      <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: "clamp(1.5rem, 3.5vw, 2rem)", fontWeight: 300, fontStyle: "italic", color: FOREGROUND, lineHeight: 1.2, marginBottom: "0.5rem" }}>
+      <p style={{ fontFamily: FONT_MONO, fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: IVORY_DIM, marginBottom: "0.75rem" }}>
+        Pain points
+      </p>
+      <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: "clamp(1.6rem, 4vw, 2.2rem)", fontWeight: 300, fontStyle: "italic", color: FOREGROUND, lineHeight: 1.2, marginBottom: "0.75rem" }}>
         What's most frustrating about your current setup?
       </h2>
-      <p style={{ fontFamily: FONT_SANS, fontSize: "0.875rem", color: MUTED, lineHeight: 1.7, marginBottom: "1.75rem" }}>
+      <p style={{ fontFamily: FONT_SANS, fontSize: "1rem", color: MUTED, lineHeight: 1.75, marginBottom: "2rem" }}>
         Select all that apply.
       </p>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginBottom: "1.25rem" }}>
-        {PAIN_POINT_OPTIONS.map((opt) => {
-          const active = selected.includes(opt.value);
-          return (
-            <button
-              key={opt.value}
-              onClick={() => onToggle(opt.value)}
-              style={{
-                padding: "0.75rem 1rem",
-                background: active ? SURFACE_RAISED : SURFACE,
-                border: `0.5px solid ${active ? IVORY : BORDER}`,
-                color: active ? IVORY : FOREGROUND,
-                fontFamily: FONT_SANS,
-                fontSize: "0.875rem",
-                textAlign: "left",
-                cursor: "pointer",
-                transition: "border-color 0.2s, color 0.2s",
-                display: "flex",
-                alignItems: "center",
-                gap: "0.75rem",
-              }}
-            >
-              <span style={{
-                width: "14px",
-                height: "14px",
-                border: `1.5px solid ${active ? IVORY : BORDER}`,
-                background: active ? IVORY : "transparent",
-                flexShrink: 0,
-                display: "inline-block",
-              }} />
-              {opt.label}
-            </button>
-          );
-        })}
+      <div style={{ display: "flex", flexDirection: "column", gap: "0.625rem", marginBottom: "1.5rem" }}>
+        {PAIN_POINT_OPTIONS.map((opt) => (
+          <SelectionButton
+            key={opt.value}
+            label={opt.label}
+            selected={selected.includes(opt.value)}
+            onClick={() => onToggle(opt.value)}
+            multi
+          />
+        ))}
       </div>
 
       {selected.includes("other") && (
@@ -297,7 +326,7 @@ function Step3({
           value={otherValue}
           onChange={(e) => onOtherChange(e.target.value)}
           placeholder="Describe your frustration…"
-          style={{ ...inputStyle, marginBottom: "1.25rem" }}
+          style={{ ...inputStyle, marginBottom: "1.5rem" }}
         />
       )}
 
@@ -325,11 +354,13 @@ function Step4({
 }) {
   return (
     <div>
-      <p className="eyebrow mb-3" style={{ color: IVORY_DIM }}>Your goal</p>
-      <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: "clamp(1.5rem, 3.5vw, 2rem)", fontWeight: 300, fontStyle: "italic", color: FOREGROUND, lineHeight: 1.2, marginBottom: "0.5rem" }}>
+      <p style={{ fontFamily: FONT_MONO, fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: IVORY_DIM, marginBottom: "0.75rem" }}>
+        Your goal
+      </p>
+      <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: "clamp(1.6rem, 4vw, 2.2rem)", fontWeight: 300, fontStyle: "italic", color: FOREGROUND, lineHeight: 1.2, marginBottom: "0.75rem" }}>
         What does success look like for you?
       </h2>
-      <p style={{ fontFamily: FONT_SANS, fontSize: "0.875rem", color: MUTED, lineHeight: 1.7, marginBottom: "1.75rem" }}>
+      <p style={{ fontFamily: FONT_SANS, fontSize: "1rem", color: MUTED, lineHeight: 1.75, marginBottom: "2rem" }}>
         In one sentence — what would make SubRoast a win for you?
       </p>
 
@@ -337,7 +368,7 @@ function Step4({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="e.g. Getting 5 warm leads per week without spending hours on Reddit…"
-        style={{ ...textareaStyle, marginBottom: "1.5rem" }}
+        style={{ ...textareaStyle, marginBottom: "1.75rem" }}
       />
 
       <div style={{ display: "flex", gap: "0.75rem" }}>
@@ -380,41 +411,29 @@ function Step5({
 
   return (
     <div>
-      <p className="eyebrow mb-3" style={{ color: IVORY_DIM }}>Almost done</p>
-      <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: "clamp(1.5rem, 3.5vw, 2rem)", fontWeight: 300, fontStyle: "italic", color: FOREGROUND, lineHeight: 1.2, marginBottom: "0.5rem" }}>
+      <p style={{ fontFamily: FONT_MONO, fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: IVORY_DIM, marginBottom: "0.75rem" }}>
+        Almost done
+      </p>
+      <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: "clamp(1.6rem, 4vw, 2.2rem)", fontWeight: 300, fontStyle: "italic", color: FOREGROUND, lineHeight: 1.2, marginBottom: "0.75rem" }}>
         One last question.
       </h2>
-      <p style={{ fontFamily: FONT_SANS, fontSize: "0.875rem", color: MUTED, lineHeight: 1.7, marginBottom: "1.75rem" }}>
+      <p style={{ fontFamily: FONT_SANS, fontSize: "1rem", color: MUTED, lineHeight: 1.75, marginBottom: "2rem" }}>
         If SubRoast consistently helped you find high-intent leads that could turn into customers, what would you pay for it?
       </p>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginBottom: "1.5rem" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "0.625rem", marginBottom: "1.75rem" }}>
         {WTP_OPTIONS.map((opt) => (
-          <button
+          <SelectionButton
             key={opt.value}
+            label={opt.label}
+            selected={wtp === opt.value}
             onClick={() => onWtpChange(opt.value)}
-            style={{
-              width: "100%",
-              padding: "0.85rem 1.25rem",
-              background: wtp === opt.value ? SURFACE_RAISED : SURFACE,
-              border: `0.5px solid ${wtp === opt.value ? IVORY : BORDER}`,
-              color: wtp === opt.value ? IVORY : FOREGROUND,
-              fontFamily: FONT_MONO,
-              fontSize: "0.7rem",
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              cursor: "pointer",
-              transition: "border-color 0.2s, color 0.2s",
-              textAlign: "left",
-            }}
-          >
-            {opt.label}
-          </button>
+          />
         ))}
       </div>
 
-      <div style={{ marginBottom: "1.75rem" }}>
-        <label style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.18em", textTransform: "uppercase", color: MUTED, display: "block", marginBottom: "0.4rem" }}>
+      <div style={{ marginBottom: "2rem" }}>
+        <label style={labelStyle}>
           Anything else? (optional)
         </label>
         <textarea
@@ -444,48 +463,49 @@ function StepDiscord({ onContinue }: { onContinue: () => void }) {
   return (
     <div>
       {/* Completion badge */}
-      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "2rem" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "0.625rem", marginBottom: "2rem" }}>
         <div style={{
-          width: "32px", height: "32px", borderRadius: "50%",
+          width: "36px", height: "36px", borderRadius: "50%",
           background: "oklch(0.20 0.008 60)",
-          border: `0.5px solid ${IVORY}`,
+          border: `1.5px solid ${IVORY}`,
           display: "flex", alignItems: "center", justifyContent: "center",
           flexShrink: 0,
         }}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={IVORY} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={IVORY} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="20 6 9 17 4 12" />
           </svg>
         </div>
-        <span style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.18em", textTransform: "uppercase", color: IVORY }}>
+        <span style={{ fontFamily: FONT_MONO, fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: IVORY }}>
           You're all set
         </span>
       </div>
 
-      <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: "clamp(1.5rem, 3.5vw, 2.2rem)", fontWeight: 300, fontStyle: "italic", color: FOREGROUND, lineHeight: 1.2, marginBottom: "0.75rem" }}>
+      <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: "clamp(1.6rem, 4vw, 2.4rem)", fontWeight: 300, fontStyle: "italic", color: FOREGROUND, lineHeight: 1.2, marginBottom: "0.875rem" }}>
         One more thing.
       </h2>
-      <p style={{ fontFamily: FONT_SANS, fontSize: "0.875rem", color: MUTED, lineHeight: 1.7, marginBottom: "2rem" }}>
+      <p style={{ fontFamily: FONT_SANS, fontSize: "1rem", color: MUTED, lineHeight: 1.75, marginBottom: "2rem" }}>
         Join the SubRoast Discord — a private space for indie founders sharing what's working on Reddit, swapping lead strategies, and getting early access to new features.
       </p>
 
       {/* Discord card */}
       <div style={{
         background: DISCORD_PURPLE_BG,
-        border: `0.5px solid ${DISCORD_PURPLE_BORDER}`,
+        border: `1.5px solid ${DISCORD_PURPLE_BORDER}`,
         padding: "1.25rem 1.5rem",
         marginBottom: "1rem",
         display: "flex",
         alignItems: "center",
         gap: "1rem",
+        borderRadius: "2px",
       }}>
         <svg style={{ width: "28px", height: "28px", flexShrink: 0, color: DISCORD_PURPLE }} viewBox="0 0 24 24" fill="currentColor">
           <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.03.056a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
         </svg>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <p style={{ fontFamily: FONT_MONO, fontSize: "0.65rem", letterSpacing: "0.14em", textTransform: "uppercase", color: IVORY, marginBottom: "0.2rem" }}>
+          <p style={{ fontFamily: FONT_MONO, fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: IVORY, marginBottom: "0.25rem" }}>
             SubRoast Community
           </p>
-          <p style={{ fontFamily: FONT_SANS, fontSize: "0.78rem", color: MUTED, lineHeight: 1.5 }}>
+          <p style={{ fontFamily: FONT_SANS, fontSize: "0.875rem", color: MUTED, lineHeight: 1.6 }}>
             Founders sharing Reddit outreach wins, tips & feedback
           </p>
         </div>
@@ -498,19 +518,23 @@ function StepDiscord({ onContinue }: { onContinue: () => void }) {
         rel="noopener noreferrer"
         style={{
           display: "block",
-          padding: "0.85rem 1.5rem",
+          padding: "1rem 1.5rem",
           background: DISCORD_PURPLE_BG,
-          border: `0.5px solid ${DISCORD_PURPLE_BORDER}`,
+          border: `1.5px solid ${DISCORD_PURPLE_BORDER}`,
           color: DISCORD_PURPLE,
           fontFamily: FONT_MONO,
-          fontSize: "0.68rem",
+          fontSize: "0.72rem",
+          fontWeight: 600,
           letterSpacing: "0.2em",
           textTransform: "uppercase",
           textAlign: "center",
           textDecoration: "none",
           cursor: "pointer",
           transition: "opacity 0.2s",
-          marginBottom: "0.75rem",
+          marginBottom: "0.875rem",
+          borderRadius: "2px",
+          touchAction: "manipulation",
+          WebkitTapHighlightColor: "transparent",
         }}
       >
         Join Discord →
@@ -521,16 +545,21 @@ function StepDiscord({ onContinue }: { onContinue: () => void }) {
         onClick={onContinue}
         style={{
           background: "transparent",
-          border: "none",
+          border: `1px solid ${BORDER}`,
           color: MUTED,
           fontFamily: FONT_MONO,
-          fontSize: "0.6rem",
+          fontSize: "0.65rem",
+          fontWeight: 500,
           letterSpacing: "0.14em",
           textTransform: "uppercase",
           cursor: "pointer",
           width: "100%",
-          padding: "0.5rem",
+          padding: "0.75rem",
           textAlign: "center",
+          borderRadius: "2px",
+          touchAction: "manipulation",
+          WebkitTapHighlightColor: "transparent",
+          minHeight: "44px",
         }}
       >
         Skip — go to dashboard
@@ -541,30 +570,41 @@ function StepDiscord({ onContinue }: { onContinue: () => void }) {
 
 // ─── Button styles ────────────────────────────────────────────────────────────
 const ctaStyle: React.CSSProperties = {
-  padding: "0.85rem 1.5rem",
+  padding: "1rem 1.75rem",
   background: IVORY,
-  border: `0.5px solid ${IVORY}`,
+  border: `1.5px solid ${IVORY}`,
   color: BG,
   fontFamily: FONT_MONO,
-  fontSize: "0.68rem",
+  fontSize: "0.72rem",
+  fontWeight: 700,
   letterSpacing: "0.2em",
   textTransform: "uppercase",
   cursor: "pointer",
-  transition: "opacity 0.2s",
+  transition: "opacity 0.15s, transform 0.1s",
   width: "100%",
+  minHeight: "52px",
+  touchAction: "manipulation",
+  WebkitTapHighlightColor: "transparent",
+  borderRadius: "2px",
 };
 
 const backStyle: React.CSSProperties = {
-  padding: "0.85rem 1rem",
+  padding: "1rem 1.125rem",
   background: "transparent",
-  border: `0.5px solid ${BORDER}`,
+  border: `1.5px solid ${BORDER}`,
   color: MUTED,
   fontFamily: FONT_MONO,
-  fontSize: "0.65rem",
+  fontSize: "0.68rem",
+  fontWeight: 500,
   letterSpacing: "0.15em",
   textTransform: "uppercase",
   cursor: "pointer",
   flexShrink: 0,
+  minHeight: "52px",
+  touchAction: "manipulation",
+  WebkitTapHighlightColor: "transparent",
+  borderRadius: "2px",
+  transition: "border-color 0.15s, color 0.15s",
 };
 
 // ─── Main Onboarding page ─────────────────────────────────────────────────────
@@ -671,16 +711,17 @@ export default function Onboarding() {
       <div
         style={{
           width: "100%",
-          maxWidth: "480px",
+          maxWidth: "520px",
           background: SURFACE,
-          border: `0.5px solid ${BORDER}`,
-          padding: "clamp(1.75rem, 5vw, 3rem)",
+          border: `1.5px solid ${BORDER}`,
+          padding: "clamp(2rem, 6vw, 3.5rem)",
+          borderRadius: "3px",
         }}
       >
         {/* Logo */}
-        <div style={{ marginBottom: "2rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+        <div style={{ marginBottom: "2.25rem", display: "flex", alignItems: "center", gap: "0.625rem" }}>
           <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663208942813/D6eMQgvSZZr9tsyS9zVhzn/subroast-logo-debossed_490a86ef.png" alt="SubRoast" style={{ width: "28px", height: "28px", objectFit: "contain" }} />
-          <span style={{ fontFamily: FONT_MONO, fontSize: "0.65rem", letterSpacing: "0.22em", textTransform: "uppercase", color: IVORY }}>SubRoast</span>
+          <span style={{ fontFamily: FONT_MONO, fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.22em", textTransform: "uppercase", color: IVORY }}>SubRoast</span>
         </div>
 
         <ProgressBar step={step} />

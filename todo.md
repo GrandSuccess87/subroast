@@ -1045,3 +1045,16 @@
 - [x] Confirmed btn-luxury and btn-luxury-primary already have active states + 1px borders
 - [x] Confirmed global @media (max-width: 639px) enforces 44px + font-size: 16px !important
 - [ ] Lead sync: Reddit IP block on production — fix by connecting Reddit account in Settings → Reddit Account
+
+## Onboarding Form Visual Weight (v7.03 — mattyjacks "fragile dollhouse" feedback)
+- [x] Labels: font-size 0.6rem → 0.7rem, font-weight 400 → 600, color MUTED → IVORY_DIM
+- [x] Body text: 0.875rem → 1rem, line-height 1.7 → 1.75
+- [x] Section gaps: option gap 0.5rem → 0.625rem, form group gap 1rem → 1.25rem
+- [x] Selection buttons: extracted to SelectionButton component, padding 0.75rem → 0.875rem, border 0.5px → 1.5px, font-size 0.875rem → 0.9rem, minHeight 52px, checkbox/radio indicator 14px → 16px with 2px border
+- [x] Multi-select (Step 3): checkbox indicator now shows checkmark SVG when selected
+- [x] CTA buttons: padding 0.85rem → 1rem, font-size 0.68rem → 0.72rem, font-weight → 700, border 0.5px → 1.5px, minHeight 52px
+- [x] Back button: added 1.5px solid border, font-weight 500, minHeight 52px — reads as real button not plain text
+- [x] Card: border 0.5px → 1.5px, padding increased, maxWidth 480px → 520px, borderRadius 0 → 3px
+- [x] Progress bar: height 2px → 3px
+- [x] Discord card/buttons: border 0.5px → 1.5px, skip button now has visible border
+- [x] All interactive elements: touchAction manipulation + WebkitTapHighlightColor transparent
