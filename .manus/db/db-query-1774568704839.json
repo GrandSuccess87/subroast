@@ -1,0 +1,9 @@
+{
+  "query": "\nUPDATE outreach_campaigns SET keywords = '[\"wish someone would build\",\"why doesn\\'t this exist\",\"no app for this\",\"struggling to find a tool\",\"frustrated with\",\"this sucks\",\"nobody has solved\",\"is there a better way\",\"tired of manually\",\"hate that I have to\",\"workflow is broken\",\"nothing works for\",\"built my own because\",\"had to hack together\",\"would pay for something\",\"take my money\",\"someone needs to build\",\"gap in the market\",\"pain point nobody addresses\",\"does anyone else struggle\"]' WHERE id = 30001;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute \nUPDATE outreach_campaigns SET keywords = '[\"wish someone would build\",\"why doesn\\'t this exist\",\"no app for this\",\"struggling to find a tool\",\"frustrated with\",\"this sucks\",\"nobody has solved\",\"is there a better way\",\"tired of manually\",\"hate that I have to\",\"workflow is broken\",\"nothing works for\",\"built my own because\",\"had to hack together\",\"would pay for something\",\"take my money\",\"someone needs to build\",\"gap in the market\",\"pain point nobody addresses\",\"does anyone else struggle\"]' WHERE id = 30001;\n",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 62
+}

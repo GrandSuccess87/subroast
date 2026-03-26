@@ -1,0 +1,45 @@
+{
+  "query": "\nSELECT id, name, keywords, subreddits, offering FROM outreach_campaigns ORDER BY id;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute \nSELECT id, name, keywords, subreddits, offering FROM outreach_campaigns ORDER BY id;\n",
+  "rows": [
+    {
+      "id": "1",
+      "name": "Founders Outreach",
+      "keywords": "[\"need a full stack developer\",\"looking for a developer\",\"need help building\",\"looking for an ai engineer\",\"need ai development\",\"struggling with marketing\",\"marketing not working\",\"can't scale my startup\",\"need help scaling\",\"how do I grow my startup\",\"looking for a technical co-founder\",\"need a dev to build\",\"outsource development\",\"hire a developer\",\"growth strategy not working\",\"need marketing help\",\"customer acquisition problem\",\"struggling to get users\",\"how to find customers\",\"need someone to build my app\"]",
+      "subreddits": "[\"Entrepreneur\",\"SaaS\",\"indiehackers\",\"smallbusiness\",\"marketing\",\"RedditMarketing\",\"SideProject\",\"startups\",\"growthhacking\"]",
+      "offering": "Software Development and Marketing Services"
+    },
+    {
+      "id": "30001",
+      "name": "App Validation Complaint Mining",
+      "keywords": "[\"i wish someone would build, why doesn't this exist, why is there no app for, struggling to find a tool, can't find anything that does, frustrated with, this sucks, why is X so hard, nobody has solved, looking for a solution to, is there a better way to, tired of manually, hate that I have to, why do I still have to, there has to be a better way, this workflow is broken, every tool I try, nothing works for, spent hours trying to, why isn't there a simple, I've been looking everywhere for, built my own because, had to hack together, cobbled together, duct tape solution, [tool]: # \\\"is terrible for, [tool] doesn't support, [tool] keeps breaking,\\\" wish [tool] could, [tool] sucks at, why can't [tool] just, anyone else frustrated by, does anyone else struggle with, am I the only one who, please tell me there's a better way, I would pay for something that, would literally pay money if, take my money if you build, someone needs to build, this is a million dollar idea but, gap in the market for, underserved market, nobody is solving, pain point that nobody addresses\"]",
+      "subreddits": "[\"SaaS\",\"Entrepreneur\",\"startups\",\"smallbusiness\",\"marketing\",\"GrowthHacking\",\"SideProject\",\"indiehackers\",\"leadgeneration\",\"RedditMarketing\"]",
+      "offering": "Your next app (to be validated — listen-only campaign, no DM pitch)"
+    },
+    {
+      "id": "60001",
+      "name": "SubRoast ICP Pain-Point Outreach",
+      "keywords": "[\"finding leads reddit\",\"reddit marketing strategy\",\"cold outreach reddit\",\"struggling with lead generation\",\"automating reddit outreach\",\"how to find customers reddit\",\"reddit for business growth\",\"time-consuming lead research\",\"scaling outreach efforts\",\"personalizing cold DMs\",\"reddit engagement strategy\",\"customer acquisition reddit\",\"efficient lead discovery\",\"manual lead searching\"]",
+      "subreddits": "[\"SaaS\",\"Entrepreneur\",\"startups\",\"growthhacking\",\"marketing\",\"smallbusiness\",\"leadgeneration\",\"digital_marketing\",\"SideProject\",\"indiehackers\",\"indiehacking\",\"aiforsmallbusiness\",\"ai\"]",
+      "offering": "SubRoast — AI-powered Reddit lead finder and DM drafter for founders and growth marketers"
+    },
+    {
+      "id": "90001",
+      "name": "For Hire",
+      "keywords": "[\"ai engineer\",\"full stack\",\"founder\"]",
+      "subreddits": "[\"forhire\",\"freelance_forhire\"]",
+      "offering": "Custom Full Stack + AI Engineering solutions"
+    },
+    {
+      "id": "120001",
+      "name": "Healthcare Outreach",
+      "keywords": "[\"struggling with growth\",\"scaling operations challenges\",\"inefficient marketing strategy\",\"need help with customer acquisition\",\"optimizing business processes\",\"lack of operational efficiency\",\"bottlenecks in workflow\",\"improving conversion rates\",\"streamlining business operations\",\"finding product market fit\",\"automating growth tasks\",\"operational overhead too high\",\"struggling to scale\",\"marketing strategy not working\",\"growth strategy\",\"How to Reduce patient no shows\",\"Patients not booking appointments\",\"Missed calls\",\"Low patient volume clinic what to do\",\"Looking for better EMR\",\"Looking for better crm\"]",
+      "subreddits": "[\"Entrepreneur\",\"startups\",\"smallbusiness\",\"marketing\",\"growthhacking\",\"operations\",\"Business_Ideas\",\"HealthIT\",\"Medicine\",\"P\",\"privatepractice\"]",
+      "offering": "full-stack growth + operations offer"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tkeywords\tsubreddits\toffering\n1\tFounders Outreach\t[\"need a full stack developer\",\"looking for a developer\",\"need help building\",\"looking for an ai engineer\",\"need ai development\",\"struggling with marketing\",\"marketing not working\",\"can't scale my startup\",\"need help scaling\",\"how do I grow my startup\",\"looking for a technical co-founder\",\"need a dev to build\",\"outsource development\",\"hire a developer\",\"growth strategy not working\",\"need marketing help\",\"customer acquisition problem\",\"struggling to get users\",\"how to find customers\",\"need someone to build my app\"]\t[\"Entrepreneur\",\"SaaS\",\"indiehackers\",\"smallbusiness\",\"marketing\",\"RedditMarketing\",\"SideProject\",\"startups\",\"growthhacking\"]\tSoftware Development and Marketing Services\n30001\tApp Validation Complaint Mining\t[\"i wish someone would build, why doesn't this exist, why is there no app for, struggling to find a tool, can't find anything that does, frustrated with, this sucks, why is X so hard, nobody has solved, looking for a solution to, is there a better way to, tired of manually, hate that I have to, why do I still have to, there has to be a better way, this workflow is broken, every tool I try, nothing works for, spent hours trying to, why isn't there a simple, I've been looking everywhere for, built my own because, had to hack together, cobbled together, duct tape solution, [tool]: # \\\"is terrible for, [tool] doesn't support, [tool] keeps breaking,\\\" wish [tool] could, [tool] sucks at, why can't [tool] just, anyone else frustrated by, does anyone else struggle with, am I the only one who, please tell me there's a better way, I would pay for something that, would literally pay money if, take my money if you build, someone needs to build, this is a million dollar idea but, gap in the market for, underserved market, nobody is solving, pain point that nobody addresses\"]\t[\"SaaS\",\"Entrepreneur\",\"startups\",\"smallbusiness\",\"marketing\",\"GrowthHacking\",\"SideProject\",\"indiehackers\",\"leadgeneration\",\"RedditMarketing\"]\tYour next app (to be validated — listen-only campaign, no DM pitch)\n60001\tSubRoast ICP Pain-Point Outreach\t[\"finding leads reddit\",\"reddit marketing strategy\",\"cold outreach reddit\",\"struggling with lead generation\",\"automating reddit outreach\",\"how to find customers reddit\",\"reddit for business growth\",\"time-consuming lead research\",\"scaling outreach efforts\",\"personalizing cold DMs\",\"reddit engagement strategy\",\"customer acquisition reddit\",\"efficient lead discovery\",\"manual lead searching\"]\t[\"SaaS\",\"Entrepreneur\",\"startups\",\"growthhacking\",\"marketing\",\"smallbusiness\",\"leadgeneration\",\"digital_marketing\",\"SideProject\",\"indiehackers\",\"indiehacking\",\"aiforsmallbusiness\",\"ai\"]\tSubRoast — AI-powered Reddit lead finder and DM drafter for founders and growth marketers\n90001\tFor Hire\t[\"ai engineer\",\"full stack\",\"founder\"]\t[\"forhire\",\"freelance_forhire\"]\tCustom Full Stack + AI Engineering solutions\n120001\tHealthcare Outreach\t[\"struggling with growth\",\"scaling operations challenges\",\"inefficient marketing strategy\",\"need help with customer acquisition\",\"optimizing business processes\",\"lack of operational efficiency\",\"bottlenecks in workflow\",\"improving conversion rates\",\"streamlining business operations\",\"finding product market fit\",\"automating growth tasks\",\"operational overhead too high\",\"struggling to scale\",\"marketing strategy not working\",\"growth strategy\",\"How to Reduce patient no shows\",\"Patients not booking appointments\",\"Missed calls\",\"Low patient volume clinic what to do\",\"Looking for better EMR\",\"Looking for better crm\"]\t[\"Entrepreneur\",\"startups\",\"smallbusiness\",\"marketing\",\"growthhacking\",\"operations\",\"Business_Ideas\",\"HealthIT\",\"Medicine\",\"P\",\"privatepractice\"]\tfull-stack growth + operations offer\n",
+  "stderr": "",
+  "execution_time_ms": 57
+}

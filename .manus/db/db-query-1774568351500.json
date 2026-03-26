@@ -1,0 +1,45 @@
+{
+  "query": "\nSELECT \n  c.id as campaign_id,\n  c.name as campaign_name,\n  COUNT(l.id) as total_leads,\n  SUM(CASE WHEN l.createdAt > DATE_SUB(NOW(), INTERVAL 1 HOUR) THEN 1 ELSE 0 END) as leads_last_hour,\n  MAX(l.createdAt) as latest_lead_at\nFROM outreach_campaigns c\nLEFT JOIN outreach_leads l ON l.campaignId = c.id\nGROUP BY c.id, c.name\nORDER BY c.id;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute \nSELECT \n  c.id as campaign_id,\n  c.name as campaign_name,\n  COUNT(l.id) as total_leads,\n  SUM(CASE WHEN l.createdAt > DATE_SUB(NOW(), INTERVAL 1 HOUR) THEN 1 ELSE 0 END) as leads_last_hour,\n  MAX(l.createdAt) as latest_lead_at\nFROM outreach_campaigns c\nLEFT JOIN outreach_leads l ON l.campaignId = c.id\nGROUP BY c.id, c.name\nORDER BY c.id;\n",
+  "rows": [
+    {
+      "campaign_id": "1",
+      "campaign_name": "Founders Outreach",
+      "total_leads": "471",
+      "leads_last_hour": "0",
+      "latest_lead_at": "2026-03-25 04:32:52"
+    },
+    {
+      "campaign_id": "30001",
+      "campaign_name": "App Validation Complaint Mining",
+      "total_leads": "119",
+      "leads_last_hour": "15",
+      "latest_lead_at": "2026-03-26 23:26:57"
+    },
+    {
+      "campaign_id": "60001",
+      "campaign_name": "SubRoast ICP Pain-Point Outreach",
+      "total_leads": "271",
+      "leads_last_hour": "0",
+      "latest_lead_at": "2026-03-25 04:51:58"
+    },
+    {
+      "campaign_id": "90001",
+      "campaign_name": "For Hire",
+      "total_leads": "72",
+      "leads_last_hour": "0",
+      "latest_lead_at": "2026-03-25 04:52:06"
+    },
+    {
+      "campaign_id": "120001",
+      "campaign_name": "Healthcare Outreach",
+      "total_leads": "47",
+      "leads_last_hour": "0",
+      "latest_lead_at": "2026-03-25 05:58:50"
+    }
+  ],
+  "messages": [],
+  "stdout": "campaign_id\tcampaign_name\ttotal_leads\tleads_last_hour\tlatest_lead_at\n1\tFounders Outreach\t471\t0\t2026-03-25 04:32:52\n30001\tApp Validation Complaint Mining\t119\t15\t2026-03-26 23:26:57\n60001\tSubRoast ICP Pain-Point Outreach\t271\t0\t2026-03-25 04:51:58\n90001\tFor Hire\t72\t0\t2026-03-25 04:52:06\n120001\tHealthcare Outreach\t47\t0\t2026-03-25 05:58:50\n",
+  "stderr": "",
+  "execution_time_ms": 69
+}

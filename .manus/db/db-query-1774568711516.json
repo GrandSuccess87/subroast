@@ -1,0 +1,9 @@
+{
+  "query": "\nUPDATE outreach_campaigns SET keywords = '[\"finding leads on reddit\",\"reddit for lead gen\",\"cold outreach not working\",\"struggling with lead gen\",\"automate outreach\",\"how to find customers\",\"reddit for sales\",\"lead research takes forever\",\"scaling outreach\",\"personalizing cold DMs\",\"reddit engagement\",\"customer acquisition\",\"manual lead searching\",\"reddit prospecting\",\"outreach automation\",\"DM strategy reddit\",\"finding prospects\",\"lead generation tool\",\"reddit marketing\",\"outreach tool\"]' WHERE id = 60001;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute \nUPDATE outreach_campaigns SET keywords = '[\"finding leads on reddit\",\"reddit for lead gen\",\"cold outreach not working\",\"struggling with lead gen\",\"automate outreach\",\"how to find customers\",\"reddit for sales\",\"lead research takes forever\",\"scaling outreach\",\"personalizing cold DMs\",\"reddit engagement\",\"customer acquisition\",\"manual lead searching\",\"reddit prospecting\",\"outreach automation\",\"DM strategy reddit\",\"finding prospects\",\"lead generation tool\",\"reddit marketing\",\"outreach tool\"]' WHERE id = 60001;\n",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 55
+}

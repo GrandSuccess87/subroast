@@ -1115,3 +1115,11 @@
 - [x] Move PainPointFrequencySection to immediately after the hero section (before VideoSection/How It Works)
 - [x] Ensure "See how it works" CTA is fully above the fold (hero maxHeight capped at 100svh - 3.5rem, padding reduced)
 - [x] Fix pain point description text color to oklch(0.92 0.006 80) — matches hero body text
+
+## Campaign Keyword Optimisation
+- [x] Update Founders Outreach keywords to short conversational phrases
+- [x] Split App Validation Complaint Mining into individual short keywords
+- [x] Update SubRoast ICP Pain-Point Outreach keywords to natural Reddit language
+- [x] Update For Hire campaign subreddits to include broader communities
+- [x] Update Healthcare Outreach keywords to conversational Reddit language
+- [x] Verify syncs return leads after keyword update (8/10 keywords tested, 2 failing replaced with confirmed alternatives)

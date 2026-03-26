@@ -1,0 +1,8 @@
+{
+  "query": "\nSELECT \n  c.id as campaign_id,\n  c.name as campaign_name,\n  COUNT(l.id) as total_leads,\n  SUM(CASE WHEN l.created_at > DATE_SUB(NOW(), INTERVAL 1 HOUR) THEN 1 ELSE 0 END) as leads_last_hour,\n  MAX(l.created_at) as latest_lead_at\nFROM outreach_campaigns c\nLEFT JOIN outreach_leads l ON l.campaign_id = c.id\nGROUP BY c.id, c.name\nORDER BY c.id;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute \nSELECT \n  c.id as campaign_id,\n  c.name as campaign_name,\n  COUNT(l.id) as total_leads,\n  SUM(CASE WHEN l.created_at > DATE_SUB(NOW(), INTERVAL 1 HOUR) THEN 1 ELSE 0 END) as leads_last_hour,\n  MAX(l.created_at) as latest_lead_at\nFROM outreach_campaigns c\nLEFT JOIN outreach_leads l ON l.campaign_id = c.id\nGROUP BY c.id, c.name\nORDER BY c.id;\n",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1054 (42S22) at line 2: Unknown column 'l.campaign_id' in 'on clause'"
+  ]
+}

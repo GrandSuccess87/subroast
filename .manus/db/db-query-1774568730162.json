@@ -1,0 +1,9 @@
+{
+  "query": "\nUPDATE outreach_campaigns \nSET \n  keywords = '[\"patient no shows\",\"patients not booking\",\"missed calls clinic\",\"low patient volume\",\"need better EMR\",\"need better CRM\",\"struggling to grow practice\",\"marketing not working\",\"can\\'t get new patients\",\"struggling to scale\",\"need more referrals\",\"clinic losing patients\",\"healthcare marketing\",\"private practice growth\",\"medical practice struggling\",\"billing issues\",\"front desk overwhelmed\",\"staff turnover clinic\",\"practice management help\",\"need more appointments\"]',\n  subreddits = '[\"privatepractice\",\"HealthIT\",\"medicine\",\"smallbusiness\",\"Entrepreneur\",\"startups\",\"marketing\",\"growthhacking\",\"DentalOffice\",\"physicaltherapy\"]'\nWHERE id = 120001;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute \nUPDATE outreach_campaigns \nSET \n  keywords = '[\"patient no shows\",\"patients not booking\",\"missed calls clinic\",\"low patient volume\",\"need better EMR\",\"need better CRM\",\"struggling to grow practice\",\"marketing not working\",\"can\\'t get new patients\",\"struggling to scale\",\"need more referrals\",\"clinic losing patients\",\"healthcare marketing\",\"private practice growth\",\"medical practice struggling\",\"billing issues\",\"front desk overwhelmed\",\"staff turnover clinic\",\"practice management help\",\"need more appointments\"]',\n  subreddits = '[\"privatepractice\",\"HealthIT\",\"medicine\",\"smallbusiness\",\"Entrepreneur\",\"startups\",\"marketing\",\"growthhacking\",\"DentalOffice\",\"physicaltherapy\"]'\nWHERE id = 120001;\n",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 59
+}

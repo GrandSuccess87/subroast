@@ -1,0 +1,9 @@
+{
+  "query": "\nUPDATE outreach_campaigns \nSET \n  keywords = '[\"looking for AI engineer\",\"hire AI developer\",\"need full stack dev\",\"looking for freelancer\",\"need a developer\",\"build my app\",\"technical help needed\",\"ai development\",\"full stack developer\",\"hire a programmer\"]',\n  subreddits = '[\"forhire\",\"freelance_forhire\",\"Entrepreneur\",\"startups\",\"SideProject\",\"indiehackers\",\"SaaS\",\"smallbusiness\"]'\nWHERE id = 90001;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute \nUPDATE outreach_campaigns \nSET \n  keywords = '[\"looking for AI engineer\",\"hire AI developer\",\"need full stack dev\",\"looking for freelancer\",\"need a developer\",\"build my app\",\"technical help needed\",\"ai development\",\"full stack developer\",\"hire a programmer\"]',\n  subreddits = '[\"forhire\",\"freelance_forhire\",\"Entrepreneur\",\"startups\",\"SideProject\",\"indiehackers\",\"SaaS\",\"smallbusiness\"]'\nWHERE id = 90001;\n",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 56
+}
