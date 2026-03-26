@@ -297,13 +297,15 @@ async function syncCampaign(campaign: {
   if (newLeads > 0) {
     const origin = typeof globalThis !== "undefined" && (globalThis as Record<string, unknown>).__appOrigin
       ? String((globalThis as Record<string, unknown>).__appOrigin)
-      : "https://subroast.manus.space";
+      : "https://subroast.com";
     notifyNewLeads({
       campaignName: campaign.name,
       newLeadsCount: newLeads,
       totalLeadsCount: updatedLeadsFound,
       appUrl: origin,
-    }).catch(() => {});
+    }).catch((err) => {
+      console.warn(`[AutoSync] Failed to send new leads notification for campaign ${campaign.id} (${campaign.name}):`, err?.message ?? err);
+    });
   }
 
   return newLeads;

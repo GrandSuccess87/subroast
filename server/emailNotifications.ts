@@ -49,7 +49,7 @@ Total leads in this campaign: ${params.totalLeadsCount}
 ---
 *SubRoast monitors Reddit so you don't have to. Leads are scored Strong / Partial / Lowest based on keyword match.*`,
   }).catch((err) => {
-    console.warn("[Notifications] Failed to send new leads notification:", err);
+    console.warn("[Notifications] Failed to send new leads notification:", err?.message ?? err);
   });
 }
 

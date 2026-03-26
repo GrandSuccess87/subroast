@@ -1,0 +1,50 @@
+{
+  "query": "SELECT id, name, plan, subscriptionStatus, trialEndsAt, FROM_UNIXTIME(trialEndsAt/1000) as trial_ends FROM users LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute SELECT id, name, plan, subscriptionStatus, trialEndsAt, FROM_UNIXTIME(trialEndsAt/1000) as trial_ends FROM users LIMIT 5;",
+  "rows": [
+    {
+      "id": "1",
+      "name": "Quintessa Anderson",
+      "plan": "growth",
+      "subscriptionStatus": "active",
+      "trialEndsAt": "1773909604000",
+      "trial_ends": "2026-03-19 08:40:04.0000"
+    },
+    {
+      "id": "210019",
+      "name": "Dev User",
+      "plan": "none",
+      "subscriptionStatus": "none",
+      "trialEndsAt": "NULL",
+      "trial_ends": "NULL"
+    },
+    {
+      "id": "360023",
+      "name": "Suhail Hilal",
+      "plan": "none",
+      "subscriptionStatus": "none",
+      "trialEndsAt": "NULL",
+      "trial_ends": "NULL"
+    },
+    {
+      "id": "962040",
+      "name": "Quintessa Anderson",
+      "plan": "none",
+      "subscriptionStatus": "none",
+      "trialEndsAt": "NULL",
+      "trial_ends": "NULL"
+    },
+    {
+      "id": "1200065",
+      "name": "Miss_Q",
+      "plan": "none",
+      "subscriptionStatus": "none",
+      "trialEndsAt": "NULL",
+      "trial_ends": "NULL"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tplan\tsubscriptionStatus\ttrialEndsAt\ttrial_ends\n1\tQuintessa Anderson\tgrowth\tactive\t1773909604000\t2026-03-19 08:40:04.0000\n210019\tDev User\tnone\tnone\tNULL\tNULL\n360023\tSuhail Hilal\tnone\tnone\tNULL\tNULL\n962040\tQuintessa Anderson\tnone\tnone\tNULL\tNULL\n1200065\tMiss_Q\tnone\tnone\tNULL\tNULL\n",
+  "stderr": "",
+  "execution_time_ms": 56
+}

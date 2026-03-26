@@ -1,0 +1,50 @@
+{
+  "query": "SELECT id, name, status, FROM_UNIXTIME(lastSyncAt/1000) as last_sync, dailySyncsUsed, leadsFound FROM outreach_campaigns WHERE status = 'active' ORDER BY id;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute SELECT id, name, status, FROM_UNIXTIME(lastSyncAt/1000) as last_sync, dailySyncsUsed, leadsFound FROM outreach_campaigns WHERE status = 'active' ORDER BY id;",
+  "rows": [
+    {
+      "id": "1",
+      "name": "Founders Outreach",
+      "status": "active",
+      "last_sync": "2026-03-26 02:58:16.5540",
+      "dailySyncsUsed": "1",
+      "leadsFound": "840"
+    },
+    {
+      "id": "30001",
+      "name": "App Validation Complaint Mining",
+      "status": "active",
+      "last_sync": "2026-03-26 00:35:11.0310",
+      "dailySyncsUsed": "1",
+      "leadsFound": "117"
+    },
+    {
+      "id": "60001",
+      "name": "SubRoast ICP Pain-Point Outreach",
+      "status": "active",
+      "last_sync": "2026-03-26 02:10:37.7860",
+      "dailySyncsUsed": "1",
+      "leadsFound": "328"
+    },
+    {
+      "id": "90001",
+      "name": "For Hire",
+      "status": "active",
+      "last_sync": "2026-03-26 01:10:51.7310",
+      "dailySyncsUsed": "1",
+      "leadsFound": "84"
+    },
+    {
+      "id": "120001",
+      "name": "Healthcare Outreach",
+      "status": "active",
+      "last_sync": "2026-03-25 23:50:08.4920",
+      "dailySyncsUsed": "1",
+      "leadsFound": "51"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tstatus\tlast_sync\tdailySyncsUsed\tleadsFound\n1\tFounders Outreach\tactive\t2026-03-26 02:58:16.5540\t1\t840\n30001\tApp Validation Complaint Mining\tactive\t2026-03-26 00:35:11.0310\t1\t117\n60001\tSubRoast ICP Pain-Point Outreach\tactive\t2026-03-26 02:10:37.7860\t1\t328\n90001\tFor Hire\tactive\t2026-03-26 01:10:51.7310\t1\t84\n120001\tHealthcare Outreach\tactive\t2026-03-25 23:50:08.4920\t1\t51\n",
+  "stderr": "",
+  "execution_time_ms": 58
+}
