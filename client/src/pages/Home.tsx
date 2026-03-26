@@ -1074,8 +1074,8 @@ export default function Home() {
           minHeight: "calc(100svh - 3.5rem)",
           display: "flex",
           alignItems: "center",
-          paddingTop: "clamp(2rem, 5vw, 4rem)",
-          paddingBottom: "clamp(2rem, 5vw, 4rem)",
+          paddingTop: "clamp(1rem, 2.5vw, 2rem)",
+          paddingBottom: "clamp(1rem, 2.5vw, 2rem)",
         }}
       >
         {/* Very subtle grid */}
@@ -1106,17 +1106,17 @@ export default function Home() {
         </svg>
 
         <div className="container relative w-full">
-          <div className="grid lg:grid-cols-2 gap-10 xl:gap-24 items-center py-4 lg:py-8" style={{ minWidth: 0, overflow: "hidden" }}>
+          <div className="grid lg:grid-cols-2 gap-8 xl:gap-16 items-center py-0 lg:py-2" style={{ minWidth: 0, overflow: "hidden" }}>
 
             {/* LEFT: editorial copy */}
             <div ref={heroRef}>
               {/* Eyebrow */}
-              <p className="eyebrow mb-8 hero-eyebrow-animate" style={{ textAlign: "center" }}>
+              <p className="eyebrow mb-4 hero-eyebrow-animate" style={{ textAlign: "center" }}>
                 For Indie Founders
               </p>
 
               {/* Display headline */}
-              <h1 className="display-xl mb-6 hero-headline-animate">
+              <h1 className="display-xl mb-4 hero-headline-animate">
                 Know exactly what your
                 <br />
                 <span style={{ color: "oklch(0.88 0.025 85)" }}>
@@ -1131,7 +1131,7 @@ export default function Home() {
                   width: "4rem",
                   height: "0.5px",
                   background: "oklch(0.88 0.025 85 / 0.6)",
-                  marginBottom: "2rem",
+                  marginBottom: "1rem",
                 }}
               />
 
@@ -1143,16 +1143,16 @@ export default function Home() {
                   fontSize: "1rem",
                   fontWeight: 300,
                   color: "oklch(0.92 0.006 80)",
-                  lineHeight: 1.8,
+                  lineHeight: 1.7,
                   maxWidth: "48ch",
-                  marginBottom: "3rem",
+                  marginBottom: "1.5rem",
                 }}
               >
                 SubRoast extracts the exact pain points behind every Reddit post, classifies each lead by purchase intent, and surfaces the patterns that tell you what to build and who to reach out to first.
               </p>
 
               {/* CTAs */}
-              <div className="relative flex flex-wrap gap-4 mb-10 hero-cta-animate">
+              <div className="relative flex flex-wrap gap-4 mb-4 hero-cta-animate">
                 {/* Radial amber glow behind the CTA area */}
                 <div
                   className="absolute pointer-events-none"

@@ -1067,3 +1067,14 @@
 - [x] Guard webhook invoice.payment_failed: skip if user email is test user
 - [x] Guard createCheckoutSession: throw FORBIDDEN for test users
 - [x] Guard getStatus: always return Growth/hasActiveAccess=true for test users regardless of DB state
+
+## Hero CTA Above-Fold Fix (v7.05)
+- [x] Reduce hero section paddingTop: clamp(2rem,5vw,4rem) → clamp(1rem,2.5vw,2rem)
+- [x] Reduce hero section paddingBottom: clamp(2rem,5vw,4rem) → clamp(1rem,2.5vw,2rem)
+- [x] Reduce grid py-4 lg:py-8 → py-0 lg:py-2
+- [x] Eyebrow mb-8 → mb-4 (saves ~1rem)
+- [x] Headline mb-6 → mb-4 (saves ~0.5rem)
+- [x] Gold rule marginBottom: 2rem → 1rem (saves 1rem)
+- [x] Body paragraph marginBottom: 3rem → 1.5rem (saves 1.5rem)
+- [x] CTA row mb-10 → mb-4 (saves ~1.5rem)
+- [x] Total vertical savings: ~7rem — CTAs now visible above fold on 900px+ screens
