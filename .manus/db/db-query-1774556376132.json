@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE `reddit_oauth_states` (\n  `state` varchar(64) NOT NULL,\n  `userId` int NOT NULL,\n  `redirectUri` varchar(500) NOT NULL,\n  `createdAt` bigint NOT NULL,\n  CONSTRAINT `reddit_oauth_states_state` PRIMARY KEY(`state`)\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute CREATE TABLE `reddit_oauth_states` (\n  `state` varchar(64) NOT NULL,\n  `userId` int NOT NULL,\n  `redirectUri` varchar(500) NOT NULL,\n  `createdAt` bigint NOT NULL,\n  CONSTRAINT `reddit_oauth_states_state` PRIMARY KEY(`state`)\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 181
+}

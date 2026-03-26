@@ -1092,3 +1092,10 @@
 - [x] Shows Connect Reddit Account CTA when no account linked (uses trpc.reddit.getConnectUrl)
 - [x] Success toast on redirect back from Reddit OAuth (reddit_connected=1 query param)
 - [x] Available to all users (per-user tokens used for DM drafting + lead sync fallback)
+
+## Reddit OAuth Callback Fix (v7.07)
+- [x] Root cause: oauthStates was an in-memory Map — dev sandbox and production server don't share memory, so state lookups always failed on production, causing redirect to /dashboard/settings?reddit_error=invalid_state which returned {} JSON
+- [x] Fix: migrated state storage to DB (new reddit_oauth_states table, varchar PK, 10-min TTL with opportunistic cleanup)
+- [x] Fix: callback now redirects to frontendOrigin extracted from stored redirectUri, not a relative path
+- [x] Fix: getDb() pattern used throughout (matches rest of server codebase)
+- [ ] Reddit app name showing blank on consent screen — requires updating app name in Reddit dashboard at reddit.com/prefs/apps to "SubRoast"

@@ -276,3 +276,12 @@ export const waitlistSignups = mysqlTable("waitlist_signups", {
 });
 export type WaitlistSignup = typeof waitlistSignups.$inferSelect;
 export type InsertWaitlistSignup = typeof waitlistSignups.$inferInsert;
+
+// ─── Reddit OAuth States (CSRF protection, DB-backed for multi-server) ────────
+export const redditOAuthStates = mysqlTable("reddit_oauth_states", {
+  state: varchar("state", { length: 64 }).primaryKey(),
+  userId: int("userId").notNull(),
+  redirectUri: varchar("redirectUri", { length: 500 }).notNull(),
+  createdAt: bigint("createdAt", { mode: "number" }).notNull(),
+});
+export type RedditOAuthState = typeof redditOAuthStates.$inferSelect;
