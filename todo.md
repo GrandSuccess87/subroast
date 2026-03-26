@@ -1110,3 +1110,8 @@
 - [x] Add Arctic Shift search function to a shared module (server/arcticShift.ts)
 - [x] Arctic Shift is primary; Reddit OAuth API is secondary fallback
 - [ ] Test sync returns leads on production (requires deployment)
+
+## Landing Page Layout Fixes (v7.09)
+- [x] Move PainPointFrequencySection to immediately after the hero section (before VideoSection/How It Works)
+- [x] Ensure "See how it works" CTA is fully above the fold (hero maxHeight capped at 100svh - 3.5rem, padding reduced)
+- [x] Fix pain point description text color to oklch(0.92 0.006 80) — matches hero body text

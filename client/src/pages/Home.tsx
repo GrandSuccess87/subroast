@@ -761,7 +761,7 @@ function PainPointFrequencySection() {
                 fontFamily: "var(--font-sans)",
                 fontSize: "0.9375rem",
                 fontWeight: 300,
-                color: "oklch(0.62 0.006 80)",
+                color: "oklch(0.92 0.006 80)",
                 lineHeight: 1.75,
                 maxWidth: "44ch",
                 marginBottom: "1.5rem",
@@ -774,7 +774,7 @@ function PainPointFrequencySection() {
                 fontFamily: "var(--font-sans)",
                 fontSize: "0.875rem",
                 fontWeight: 300,
-                color: "oklch(0.55 0.006 80)",
+                color: "oklch(0.92 0.006 80)",
                 lineHeight: 1.7,
                 maxWidth: "44ch",
               }}
@@ -1072,10 +1072,11 @@ export default function Home() {
         className="relative overflow-hidden"
         style={{
           minHeight: "calc(100svh - 3.5rem)",
+          maxHeight: "calc(100svh - 3.5rem)",
           display: "flex",
           alignItems: "center",
-          paddingTop: "clamp(1rem, 2.5vw, 2rem)",
-          paddingBottom: "clamp(1rem, 2.5vw, 2rem)",
+          paddingTop: "clamp(0.5rem, 1.5vw, 1.25rem)",
+          paddingBottom: "clamp(0.5rem, 1.5vw, 1.25rem)",
         }}
       >
         {/* Very subtle grid */}
@@ -1342,11 +1343,11 @@ color: "oklch(0.92 0.006 80)",
         </div>
       </section>
 
-      {/* ── DEMO VIDEO ── */}
-      <VideoSection />
-
       {/* ── PAIN POINT FREQUENCY INSIGHTS ── */}
       <PainPointFrequencySection />
+
+      {/* ── DEMO VIDEO ── */}
+      <VideoSection />
 
       {/* ── USE CASES ── */}
       <section
