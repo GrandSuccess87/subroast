@@ -1099,3 +1099,14 @@
 - [x] Fix: callback now redirects to frontendOrigin extracted from stored redirectUri, not a relative path
 - [x] Fix: getDb() pattern used throughout (matches rest of server codebase)
 - [ ] Reddit app name showing blank on consent screen — requires updating app name in Reddit dashboard at reddit.com/prefs/apps to "SubRoast"
+
+## Reddit OAuth Callback Fix Round 2 (v7.08)
+- [ ] Investigate why callback still returns {} after DB-backed state fix
+- [ ] Fix routing/redirect issue causing black screen
+
+## Reddit Search via Arctic Shift (v7.08)
+- [x] Replace blocked Reddit public API calls in autoSync.ts with Arctic Shift /api/posts/search
+- [x] Replace blocked Reddit public API calls in outreach.ts with Arctic Shift /api/posts/search
+- [x] Add Arctic Shift search function to a shared module (server/arcticShift.ts)
+- [x] Arctic Shift is primary; Reddit OAuth API is secondary fallback
+- [ ] Test sync returns leads on production (requires deployment)

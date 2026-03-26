@@ -2,6 +2,7 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { invokeLLM } from "../_core/llm";
 import { protectedProcedure, router } from "../_core/trpc";
+import { searchArcticShiftPosts } from "../arcticShift";
 import { notifyNewLeads } from "../emailNotifications";
 import {
   createOutreachCampaign,
@@ -80,9 +81,17 @@ async function searchRedditPosts(
   subreddit: string;
   createdUtc: number;
 }>> {
+  // Primary: Arctic Shift mirror — not subject to Reddit's IP-based blocks.
+  // This is the most reliable path for cloud server IPs.
+  const arcticResults = await searchArcticShiftPosts(subreddit, keyword, limit, 30);
+  if (arcticResults.length > 0) {
+    return arcticResults;
+  }
+
+  // Secondary: Reddit OAuth API (authenticated, bypasses IP blocks if token available)
+  // or Reddit public API as last resort.
   try {
     const query = encodeURIComponent(keyword);
-    // Use OAuth API if token available (avoids IP blocks), fall back to public API
     const baseUrl = accessToken
       ? `https://oauth.reddit.com/r/${subreddit}/search`
       : `https://www.reddit.com/r/${subreddit}/search.json`;
@@ -94,7 +103,7 @@ async function searchRedditPosts(
     if (accessToken) headers["Authorization"] = `Bearer ${accessToken}`;
     const res = await fetch(url, { headers });
     if (!res.ok) {
-      console.log(`[searchRedditPosts] HTTP ${res.status} for r/${subreddit} + "${keyword}"`);
+      console.log(`[searchRedditPosts] Reddit API HTTP ${res.status} for r/${subreddit} + "${keyword}"`);
       return [];
     }
     const json = await res.json() as {

@@ -15,6 +15,7 @@ import {
   updateOutreachCampaign,
   upsertOutreachLead,
 } from "./db";
+import { searchArcticShiftPosts } from "./arcticShift";
 import { notifyNewLeads } from "./emailNotifications";
 import { users, outreachCampaigns } from "../drizzle/schema";
 import { eq, inArray } from "drizzle-orm";
@@ -114,7 +115,11 @@ function isSpamPost(post: {
   return { spam: false, reason: "" };
 }
 
-// ─── Reddit public search ─────────────────────────────────────────────────────
+// ─── Reddit search via Arctic Shift mirror ───────────────────────────────────
+// Arctic Shift is a third-party Reddit data mirror that is NOT subject to
+// Reddit's IP-based rate limiting. We use it as the primary search backend
+// in autoSync so that background jobs reliably find leads even when the
+// production server IP is blocked by Reddit's public API.
 
 async function searchRedditPosts(
   subreddit: string,
@@ -129,16 +134,26 @@ async function searchRedditPosts(
   subreddit: string;
   createdUtc: number;
 }>> {
+  // Primary: Arctic Shift mirror (not IP-blocked)
+  const arcticResults = await searchArcticShiftPosts(subreddit, keyword, limit, 30);
+  if (arcticResults.length > 0) {
+    return arcticResults;
+  }
+
+  // Fallback: Reddit public API (may be IP-blocked on cloud servers)
   try {
     const query = encodeURIComponent(keyword);
-    const url = `https://www.reddit.com/r/${subreddit}/search.json?q=${query}&restrict_sr=1&sort=new&limit=${limit}&t=week`;
+    const url = `https://www.reddit.com/r/${subreddit}/search.json?q=${query}&restrict_sr=1&sort=new&limit=${limit}&t=month`;
     const res = await fetch(url, {
       headers: {
         "User-Agent": "SubRoast/1.0 (subreddit monitoring bot)",
         Accept: "application/json",
       },
     });
-    if (!res.ok) return [];
+    if (!res.ok) {
+      console.warn(`[AutoSync] Reddit public API HTTP ${res.status} for r/${subreddit} + "${keyword}"`);
+      return [];
+    }
     const json = await res.json() as {
       data?: {
         children?: Array<{
