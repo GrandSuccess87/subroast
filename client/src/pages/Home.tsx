@@ -1250,6 +1250,9 @@ export default function Home() {
         />
       </section>
 
+      {/* ── PAIN POINT FREQUENCY INSIGHTS ── */}
+      <PainPointFrequencySection />
+
       {/* ── HOW IT WORKS (3-step strip) ── */}
       <section
         style={{
@@ -1341,9 +1344,6 @@ color: "oklch(0.92 0.006 80)",
           </div>
         </div>
       </section>
-
-      {/* ── PAIN POINT FREQUENCY INSIGHTS ── */}
-      <PainPointFrequencySection />
 
       {/* ── DEMO VIDEO ── */}
       <VideoSection />
