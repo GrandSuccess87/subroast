@@ -159,10 +159,10 @@ describe("searchArcticShiftPosts", () => {
     const afterParam = new URL(calledUrl).searchParams.get("after");
     expect(afterParam).toBeTruthy();
 
-    // The after date should be approximately 7 days ago (allow ±1 day tolerance
-    // to account for test environment clock skew and rounding to YYYY-MM-DD)
-    const afterDate = new Date(afterParam!);
-    const diffDays = (beforeCall.getTime() - afterDate.getTime()) / (1000 * 60 * 60 * 24);
+    // Arctic Shift requires a Unix timestamp (seconds) — parse as integer and
+    // convert to ms to compute the diff. Allow ±1 day tolerance.
+    const afterTimestampMs = parseInt(afterParam!, 10) * 1000;
+    const diffDays = (beforeCall.getTime() - afterTimestampMs) / (1000 * 60 * 60 * 24);
     expect(diffDays).toBeGreaterThanOrEqual(6);
     expect(diffDays).toBeLessThanOrEqual(8);
   });

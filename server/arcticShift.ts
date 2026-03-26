@@ -56,12 +56,13 @@ export async function searchArcticShiftPosts(
 ): Promise<ArcticShiftPost[]> {
   try {
     const afterDate = new Date(Date.now() - afterDays * 24 * 60 * 60 * 1000);
-    const afterStr = afterDate.toISOString().split("T")[0]; // YYYY-MM-DD
+    // Arctic Shift requires a Unix timestamp (seconds), not a date string
+    const afterUnix = Math.floor(afterDate.getTime() / 1000);
 
     const params = new URLSearchParams({
       subreddit,
       query: keyword,
-      after: afterStr,
+      after: String(afterUnix),
       sort: "desc",
       limit: String(Math.min(limit, 100)),
       fields: "id,permalink,title,selftext,author,subreddit,created_utc",
