@@ -1020,3 +1020,16 @@
 - [x] Show "Top Problems This Week" panel in campaign detail screen above the Leads Inbox
 - [x] Each cluster shows theme name, count badge, and example pain point snippet
 - [x] Panel collapses/expands and shows a loading skeleton while AI clusters
+
+## Landing Page Messaging Update (v7.01)
+- [x] Update hero headline and subheadline to lead with competitive edges (pain point extraction + buyer intent)
+- [x] Update How It Works strip: Extract → Classify → Outreach (replaces Find → Score → Outreach)
+- [x] Update stat bar: 5 Buyer intent tiers, AI Pain point extraction, 25 DMs/day, 7-day trial
+- [x] Update Use Cases: Lead Generation → Market Intelligence (pain point frequency), App Validation → Market Intelligence
+- [x] Add new PainPointFrequencySection with cluster bar chart mockup between VideoSection and Use Cases
+- [x] Update LeadIntelligenceDemo section copy + add intent tier legend (🔥/🎯/⚠️)
+- [x] Update animated demo Phase 2 lead card: show intent badge, pain point block, and updated DM preview
+- [x] Update animated demo chain steps: added Extract pain points + Classify buyer intent steps
+- [x] Update Intelligence Report mockup: Lead Signal Detected → Lead Intelligence with intent-classified cards
+- [x] Update pricing plan features: added AI pain point extraction, 5-tier buyer intent, Pain Point Frequency panel
+- [x] Update CTA section body copy to reference pain point extraction and intent classification

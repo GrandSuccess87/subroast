@@ -572,7 +572,7 @@ function VideoSection() {
               maxWidth: "44ch",
             }}
           >
-            Paste your draft and get a clarity score, subreddit fit rating, virality score, and a fully rewritten version — in seconds.
+            Paste your draft and get a clarity score, subreddit fit rating, virality score, and a fully rewritten version. Every lead also gets an AI-extracted pain point and a buyer intent tier — automatically.
           </p>
         </div>
 
@@ -667,14 +667,23 @@ function VideoSection() {
 
               {/* Lead signal */}
               <div className="px-8 py-6">
-                <p className="eyebrow mb-3" style={{ fontSize: "0.58rem", color: "oklch(0.88 0.025 85 / 0.7)" }}>Lead Signal Detected</p>
+                <p className="eyebrow mb-3" style={{ fontSize: "0.58rem", color: "oklch(0.88 0.025 85 / 0.7)" }}>Lead Intelligence</p>
                 <div
-                  className="px-4 py-3"
+                  className="px-4 py-3 mb-3"
                   style={{ background: "oklch(0.15 0.010 65)", border: "0.5px solid oklch(0.28 0.020 65)" }}
                 >
-                  <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", color: "oklch(0.78 0.14 65)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "0.4rem" }}>3 warm leads in r/SaaS</p>
+                  <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", color: "oklch(0.78 0.14 65)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "0.4rem" }}>🔥 Purchase-Ready · r/SaaS</p>
                   <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.72rem", fontWeight: 300, color: "oklch(0.92 0.006 80)", lineHeight: 1.6 }}>
-                    Posts mentioning “Reddit tracking” or “mentions tool” in the last 48 hours. Outreach drafts ready.
+                    Pain point: “Spending hours manually searching Reddit for mentions of my tool.”
+                  </p>
+                </div>
+                <div
+                  className="px-4 py-3"
+                  style={{ background: "oklch(0.13 0.007 60)", border: "0.5px solid oklch(0.22 0.007 60)" }}
+                >
+                  <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", color: "oklch(0.62 0.006 80)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "0.4rem" }}>🎯 Actively Looking · r/startups</p>
+                  <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.72rem", fontWeight: 300, color: "oklch(0.72 0.006 80)", lineHeight: 1.6 }}>
+                    Pain point: “Looking for a tool to track Reddit traction without manual effort.”
                   </p>
                 </div>
               </div>
@@ -708,8 +717,143 @@ function VideoSection() {
               textTransform: "uppercase",
             }}
           >
-            Six-step intelligence chain — Detect · Analyze · Score · Draft · Queue · Complete
+            AI intelligence chain — Extract Pain Point · Classify Intent · Score · Draft · Review · Send
           </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Pain Point Frequency Insights Section ── */
+function PainPointFrequencySection() {
+  const ref = useFadeUp();
+  const CLUSTERS = [
+    { theme: "Manual tracking & monitoring", count: 142, pct: 100, example: "“Spending hours manually searching Reddit for mentions of my tool.”" },
+    { theme: "Getting traction without sounding spammy", count: 118, pct: 83, example: "“Every post I write feels like an ad. I don’t know how to be helpful without pitching.”" },
+    { theme: "Finding the right subreddits", count: 97, pct: 68, example: "“I don’t know which communities to target — r/SaaS feels too broad.”" },
+    { theme: "Validating willingness to pay", count: 74, pct: 52, example: "“People say they love it but nobody converts. Is anyone actually paying for this?”" },
+    { theme: "Outreach at scale without bans", count: 61, pct: 43, example: "“I got shadowbanned after 3 DMs. No idea what triggered it.”" },
+  ];
+
+  return (
+    <section
+      style={{
+        paddingTop: "clamp(5rem, 10vw, 9rem)",
+        paddingBottom: "clamp(5rem, 10vw, 9rem)",
+        borderBottom: "0.5px solid oklch(0.18 0.007 60)",
+        background: "oklch(0.07 0.006 60)",
+      }}
+    >
+      <div className="container">
+        <div className="grid lg:grid-cols-2 gap-16 items-start">
+          {/* Left: copy */}
+          <div ref={ref} className="fade-up">
+            <p className="eyebrow mb-5">Pain Point Frequency</p>
+            <h2 className="display-lg mb-6">
+              See the patterns your
+              <br />
+              <span style={{ color: "oklch(0.88 0.025 85)" }}>market is screaming about.</span>
+            </h2>
+            <div className="rule-gold mb-6" style={{ width: "3rem" }} />
+            <p
+              style={{
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.9375rem",
+                fontWeight: 300,
+                color: "oklch(0.62 0.006 80)",
+                lineHeight: 1.75,
+                maxWidth: "44ch",
+                marginBottom: "1.5rem",
+              }}
+            >
+              SubRoast clusters every extracted pain point across all your leads into named themes — showing you which problems come up most and what people actually say.
+            </p>
+            <p
+              style={{
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.875rem",
+                fontWeight: 300,
+                color: "oklch(0.55 0.006 80)",
+                lineHeight: 1.7,
+                maxWidth: "44ch",
+              }}
+            >
+              Use it to prioritise your roadmap, sharpen your positioning, or find the exact language your buyers use.
+            </p>
+          </div>
+
+          {/* Right: frequency panel mockup */}
+          <div
+            style={{
+              background: "oklch(0.12 0.007 60)",
+              border: "0.5px solid oklch(0.22 0.007 60)",
+            }}
+          >
+            {/* Panel header */}
+            <div
+              style={{
+                borderBottom: "0.5px solid oklch(0.18 0.007 60)",
+                padding: "0.875rem 1.5rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "oklch(0.78 0.14 65)", animation: "pulse 2s ease-in-out infinite" }} />
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.58rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "oklch(0.62 0.006 80)" }}>Pain Point Frequency</span>
+              </div>
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", color: "oklch(0.38 0 0)", letterSpacing: "0.1em" }}>Last 7 days · {CLUSTERS.reduce((a, c) => a + c.count, 0)} leads</span>
+            </div>
+
+            {/* Cluster rows */}
+            <div style={{ padding: "1.25rem 1.5rem", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+              {CLUSTERS.map((cluster, i) => (
+                <div key={cluster.theme}>
+                  {/* Theme + count */}
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.4rem" }}>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", letterSpacing: "0.08em", color: "oklch(0.88 0.025 85)", flex: 1, paddingRight: "1rem" }}>{cluster.theme}</span>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", color: "oklch(0.62 0.006 80)", flexShrink: 0 }}>{cluster.count}</span>
+                  </div>
+                  {/* Bar */}
+                  <div style={{ height: "3px", background: "oklch(0.18 0.007 60)", marginBottom: "0.5rem" }}>
+                    <div
+                      style={{
+                        height: "100%",
+                        width: `${cluster.pct}%`,
+                        background: i === 0
+                          ? "oklch(0.78 0.14 65)"
+                          : i === 1
+                          ? "oklch(0.78 0.14 65 / 0.75)"
+                          : i === 2
+                          ? "oklch(0.78 0.14 65 / 0.55)"
+                          : "oklch(0.78 0.14 65 / 0.35)",
+                        transition: "width 1s ease",
+                      }}
+                    />
+                  </div>
+                  {/* Example quote */}
+                  <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.68rem", fontWeight: 300, color: "oklch(0.45 0.006 80)", lineHeight: 1.5, fontStyle: "italic" }}>
+                    {cluster.example}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* Footer */}
+            <div
+              style={{
+                borderTop: "0.5px solid oklch(0.18 0.007 60)",
+                padding: "0.75rem 1.5rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+              }}
+            >
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.52rem", color: "oklch(0.38 0 0)", letterSpacing: "0.1em", textTransform: "uppercase" }}>AI-clustered from extracted pain points across all campaigns</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -720,9 +864,9 @@ function VideoSection() {
 function StatBar() {
   const ref = useFadeUp();
   const STATS = [
-    { value: "6", label: "Step AI chain" },
+    { value: "5", label: "Buyer intent tiers" },
+    { value: "AI", label: "Pain point extraction" },
     { value: "25", label: "DMs per day" },
-    { value: "1–100", label: "Virality score" },
     { value: "7", label: "Day free trial" },
   ];
   return (
@@ -973,10 +1117,10 @@ export default function Home() {
 
               {/* Display headline */}
               <h1 className="display-xl mb-6 hero-headline-animate">
-                Find high-intent Reddit posts
+                Know exactly what your
                 <br />
                 <span style={{ color: "oklch(0.88 0.025 85)" }}>
-                  and turn them into customers.
+                  buyers need — before you reach out.
                 </span>
               </h1>
 
@@ -1004,7 +1148,7 @@ export default function Home() {
                   marginBottom: "3rem",
                 }}
               >
-                We scan Reddit for buying signals, filter out noise, and draft replies and outreach so you can turn interest into customers faster.
+                SubRoast extracts the exact pain points behind every Reddit post, classifies each lead by purchase intent, and surfaces the patterns that tell you what to build and who to reach out to first.
               </p>
 
               {/* CTAs */}
@@ -1072,7 +1216,7 @@ export default function Home() {
                     marginBottom: "0.75rem",
                   }}
                 >
-                  From subreddit to warm lead
+                  From raw post to purchase-ready lead
                 </h2>
                 <p
                   style={{
@@ -1084,7 +1228,7 @@ export default function Home() {
                     maxWidth: "44ch",
                   }}
                 >
-                  Each time you log in, fresh leads and ready-to-copy drafts are waiting — scanned, filtered, and scored by AI.
+                  Each sync extracts pain points, classifies buyer intent, and surfaces the leads most likely to convert — before you’ve typed a word.
                 </p>
               </div>
 
@@ -1136,18 +1280,18 @@ export default function Home() {
             {[
               {
                 num: "01",
-                title: "Find",
-                body: "SubRoast scans your target subreddits and surfaces posts from people describing the exact problem you solve.",
+                title: "Extract",
+                body: "SubRoast scans your target subreddits and uses AI to extract the exact pain point from every post — not just keyword matches.",
               },
               {
                 num: "02",
-                title: "Score",
-                body: "Each lead is scored for intent, urgency, and subreddit fit — so you only see the ones worth your time.",
+                title: "Classify",
+                body: "Each lead is classified into one of 5 buyer intent tiers — from 🔥 Purchase-Ready to 👀 Unclassified — so you prioritise the warmest leads first.",
               },
               {
                 num: "03",
                 title: "Outreach",
-                body: "Generate a personalised DM draft in seconds. Review, copy, and send it yourself — no automation required.",
+                body: "Generate a personalised DM draft grounded in the lead's actual pain point. Review, copy, and send — no automation required.",
               },
             ].map(({ num, title, body }) => (
               <div
@@ -1201,6 +1345,9 @@ color: "oklch(0.92 0.006 80)",
       {/* ── DEMO VIDEO ── */}
       <VideoSection />
 
+      {/* ── PAIN POINT FREQUENCY INSIGHTS ── */}
+      <PainPointFrequencySection />
+
       {/* ── USE CASES ── */}
       <section
         style={{
@@ -1219,21 +1366,21 @@ color: "oklch(0.92 0.006 80)",
             {[
               {
                 tag: "Lead Generation",
-                headline: "Find buyers already talking about your product or service",
-                body: "Monitor subreddits, score leads by relevance and urgency, draft personalized outreach. You review and send.",
-                stat: "High-signal leads only — scored by relevance, urgency, and subreddit fit",
+                headline: "Find purchase-ready buyers before your competitors do",
+                body: "AI extracts the pain point from every post and classifies intent into 5 tiers. You see who’s 🔥 Purchase-Ready the moment they post.",
+                stat: "Intent-classified leads — not just keyword matches",
               },
               {
                 tag: "Draft & Roast",
                 headline: "Write better Reddit content before you hit post",
-                body: "Paste your draft. Get a clarity score, subreddit fit, virality rating, and a fully rewritten version.",
+                body: "Paste your draft. Get a clarity score, subreddit fit, virality rating, and a fully rewritten version — in seconds.",
                 stat: "Know how your post will land — before it does",
               },
               {
-                tag: "App Validation",
-                headline: "Know if people will pay before you build",
-                body: "Surface real complaints in your niche, score them by signal strength, and validate willingness to pay before writing a line of code.",
-                stat: "Real market signal — before writing a single line of code",
+                tag: "Market Intelligence",
+                headline: "Discover the top pain points across your entire market",
+                body: "Pain Point Frequency clusters every extracted pain point into themes. See which problems come up most — and build what people actually need.",
+                stat: "Strategic insight — from real Reddit conversations, not surveys",
               },
             ].map(({ tag, headline, body, stat }) => (
               <UseCaseCard key={tag} tag={tag} headline={headline} body={body} stat={stat} />
@@ -1504,10 +1651,10 @@ color: "oklch(0.92 0.006 80)",
 const CHAIN_STEPS = [
   { id: "scan",    label: "Scanning subreddits",       sub: "r/SaaS · r/startups · r/entrepreneur" },
   { id: "filter",  label: "Spam check running",         sub: "Filtering bots, ad accounts, thin posts" },
-  { id: "score",   label: "Scoring relevance",          sub: "Intent · Urgency · Subreddit fit" },
-  { id: "draft",   label: "Drafting outreach",          sub: "Personalised to each post" },
-  { id: "queue",   label: "Queueing for review",        sub: "Awaiting your approval" },
-  { id: "done",    label: "Lead ready",                 sub: "High-signal · Outreach drafted" },
+  { id: "extract", label: "Extracting pain points",     sub: "AI reads each post — not just keywords" },
+  { id: "intent",  label: "Classifying buyer intent",   sub: "🔥 Purchase-Ready · 🎯 Actively Looking · ⚠️ Problem-Aware" },
+  { id: "draft",   label: "Drafting outreach",          sub: "Personalised to pain point · awaiting review" },
+  { id: "done",    label: "Lead ready",                 sub: "Intent-classified · Pain point extracted" },
 ];
 
 const SPAM_POSTS = [
@@ -1518,7 +1665,8 @@ const SPAM_POSTS = [
   { text: "FREE followers — click link in bio", spam: true },
 ];
 
-const COMMENT_TEXT = "Hey — saw your post about Reddit traction. I built SubRoast specifically for this problem. It scores your draft before you post and finds warm leads in your target subreddits. Happy to share more if useful.";
+const COMMENT_TEXT = "Hey — saw your post about finding SaaS customers on Reddit. I built SubRoast for exactly this — it extracts pain points from posts, classifies buyer intent, and drafts outreach grounded in what people actually said. Happy to share more if useful.";
+const LEAD_PAIN_POINT = "Struggling to find first SaaS customers without sounding like an ad.";
 
 /* ── Shared animated demo panel (used in hero + Lead Intelligence section) ── */
 function HeroDemoPanel() {
@@ -1716,11 +1864,15 @@ function HeroDemoPanel() {
                     padding: "1rem 1.25rem",
                   }}
                 >
+                  {/* Intent badge */}
+                  <div style={{ marginBottom: "0.6rem" }}>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "oklch(0.78 0.22 30)", background: "oklch(0.18 0.025 30)", padding: "0.2rem 0.5rem", border: "0.5px solid oklch(0.35 0.08 30)" }}>🔥 Purchase-Ready</span>
+                  </div>
                   {/* Card header */}
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.6rem" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                       <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "oklch(0.78 0.14 65)", background: "oklch(0.20 0.020 65)", padding: "0.2rem 0.5rem" }}>r/SaaS</span>
-                      <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "oklch(0.65 0.15 140)", background: "oklch(0.16 0.012 140)", padding: "0.2rem 0.5rem" }}>High intent</span>
+                      <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "oklch(0.65 0.15 140)", background: "oklch(0.16 0.012 140)", padding: "0.2rem 0.5rem" }}>Strong Match</span>
                     </div>
                     <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", color: "oklch(0.38 0 0)", letterSpacing: "0.08em" }}>2h ago</span>
                   </div>
@@ -1728,20 +1880,18 @@ function HeroDemoPanel() {
                   <p style={{ fontFamily: "var(--font-display)", fontSize: "0.95rem", fontWeight: 400, color: "oklch(0.93 0.010 80)", lineHeight: 1.35, marginBottom: "0.6rem" }}>
                     "Struggling to get traction on Reddit without sounding like an ad"
                   </p>
-                  {/* Scores */}
-                  <div style={{ display: "flex", gap: "1rem", marginBottom: "0.75rem" }}>
-                    {[{ l: "Relevance", v: "94" }, { l: "Urgency", v: "87" }, { l: "Fit", v: "91" }].map(s => (
-                      <div key={s.l}>
-                        <div style={{ fontFamily: "var(--font-mono)", fontSize: "1rem", fontWeight: 300, color: "oklch(0.88 0.025 85)", lineHeight: 1 }}>{s.v}</div>
-                        <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", color: "oklch(0.38 0 0)", letterSpacing: "0.12em", textTransform: "uppercase", marginTop: "0.2rem" }}>{s.l}</div>
-                      </div>
-                    ))}
+                  {/* Pain point */}
+                  <div style={{ background: "oklch(0.17 0.012 75)", border: "0.5px solid oklch(0.30 0.025 75)", padding: "0.5rem 0.75rem", marginBottom: "0.65rem" }}>
+                    <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "oklch(0.78 0.14 75 / 0.8)", marginBottom: "0.25rem" }}>Pain Point</p>
+                    <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.7rem", fontWeight: 300, color: "oklch(0.88 0.008 80)", lineHeight: 1.5, fontStyle: "italic" }}>
+                      "{LEAD_PAIN_POINT}"
+                    </p>
                   </div>
                   {/* DM preview */}
                   <div style={{ borderTop: "0.5px solid oklch(0.22 0.007 60)", paddingTop: "0.65rem" }}>
                     <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "oklch(0.88 0.025 85 / 0.6)", marginBottom: "0.35rem" }}>Outreach draft ready</p>
                     <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.72rem", fontWeight: 300, color: "oklch(0.62 0.006 80)", lineHeight: 1.6, fontStyle: "italic" }}>
-                      "Hey — saw your post about Reddit traction. I built SubRoast specifically for this problem…"
+                      "Hey — saw your post about Reddit traction. I built SubRoast for this exact problem…"
                     </p>
                   </div>
                 </div>
@@ -1773,11 +1923,26 @@ function LeadIntelligenceDemo() {
           {/* Left: copy */}
           <div ref={sectionRef} className="fade-up">
             <p className="eyebrow mb-5">Lead Intelligence</p>
-            <h2 className="display-lg mb-6">From subreddit to warm lead</h2>
+            <h2 className="display-lg mb-6">From raw post to purchase-ready lead</h2>
             <div className="rule-gold mb-6" style={{ width: "3rem" }} />
-            <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.9375rem", fontWeight: 300, color: "oklch(0.62 0.006 80)", lineHeight: 1.75, maxWidth: "44ch" }}>
-              SubRoast scans Reddit for buying signals, filters spam, scores intent, and drafts personalised DMs and comment replies — so when you log in, the hard work is already done.
+            <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.9375rem", fontWeight: 300, color: "oklch(0.62 0.006 80)", lineHeight: 1.75, maxWidth: "44ch", marginBottom: "1.5rem" }}>
+              Every post gets an AI-extracted pain point and a buyer intent tier. You see who’s 🔥 Purchase-Ready, who’s 🎯 Actively Looking, and who to skip — before you’ve typed a word.
             </p>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+              {[
+                { icon: "🔥", label: "Purchase-Ready", desc: "Explicitly looking to buy or switch tools" },
+                { icon: "🎯", label: "Actively Looking", desc: "Seeking a solution but not yet decided" },
+                { icon: "⚠️", label: "Problem-Aware", desc: "Describing a pain point without seeking help" },
+              ].map(({ icon, label, desc }) => (
+                <div key={label} style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.72rem", flexShrink: 0, marginTop: "0.1rem" }}>{icon}</span>
+                  <div>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "oklch(0.88 0.025 85)", display: "block", marginBottom: "0.15rem" }}>{label}</span>
+                    <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.78rem", fontWeight: 300, color: "oklch(0.62 0.006 80)", lineHeight: 1.5 }}>{desc}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
           {/* Right: animated demo panel */}
           <HeroDemoPanel />
@@ -1985,7 +2150,7 @@ function CtaSection({ onOpenModal }: { onOpenModal: () => void }) {
           margin: "0 auto 3rem",
         }}
       >
-          They're describing their exact problem in a thread right now. SubRoast finds them, scores their intent, and hands you a personalised DM — before your competitors even open the app.
+          They're describing their exact problem in a thread right now. SubRoast extracts their pain point, classifies their intent, and hands you a personalised DM — before your competitors even open the app.
         </p>
 
         <a
@@ -2023,12 +2188,12 @@ const HOME_PLANS = [
     description: "For founders testing Reddit as a distribution channel.",
     features: [
       "1 outreach campaign",
+      "AI pain point extraction per lead",
+      "5-tier buyer intent classification",
       "AI Draft & Roast with virality score",
-      "Lead discovery via Reddit search",
       "Lead sync: 2× daily",
       "AI-generated personalized DMs",
       "Match scoring (Strong / Partial / Lowest)",
-      "Email alerts for new leads",
     ],
     popular: false,
   },
@@ -2041,10 +2206,10 @@ const HOME_PLANS = [
     features: [
       "Everything in Starter",
       "Unlimited outreach campaigns",
+      "Pain Point Frequency insights panel",
       "Lead sync: every 4 hours (6× daily)",
-      "App Validation campaigns",
+      "Market Intelligence campaigns",
       "One-click send via Chrome extension — coming soon",
-      "DM template library — coming soon",
       "Advanced analytics — coming soon",
     ],
     popular: true,
