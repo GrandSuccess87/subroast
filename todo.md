@@ -1078,3 +1078,17 @@
 - [x] Body paragraph marginBottom: 3rem → 1.5rem (saves 1.5rem)
 - [x] CTA row mb-10 → mb-4 (saves ~1.5rem)
 - [x] Total vertical savings: ~7rem — CTAs now visible above fold on 900px+ screens
+
+## Pain Point Clusters Feature Copy (v7.06)
+- [x] Added to todo — copy to be applied to Pain Point Frequency section in next landing page pass
+
+## Use Cases Text Color Fix (v7.06)
+- [x] UseCaseCard body text color: oklch(0.60 0.006 80) → oklch(0.92 0.006 80) (matches rate limiting section)
+
+## Reddit Account Connection in Settings (v7.06)
+- [x] Investigated: Settings page had a "Coming Soon" placeholder instead of the real connect flow
+- [x] Rewrote Reddit Connection section in SettingsPage.tsx with full connect/disconnect UI
+- [x] Shows connected account (u/username), Active/Paused status, Disconnect button
+- [x] Shows Connect Reddit Account CTA when no account linked (uses trpc.reddit.getConnectUrl)
+- [x] Success toast on redirect back from Reddit OAuth (reddit_connected=1 query param)
+- [x] Available to all users (per-user tokens used for DM drafting + lead sync fallback)

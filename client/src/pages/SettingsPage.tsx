@@ -2,9 +2,11 @@ import DashboardLayout from "@/components/DashboardLayout";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import {
-  Clock,
+  CheckCircle,
   CreditCard,
+  ExternalLink,
   Loader2,
+  LogOut,
   Settings,
   Shield,
   User,
@@ -12,6 +14,7 @@ import {
 } from "lucide-react";
 import { useLocation } from "wouter";
 import { toast } from "sonner";
+import { useEffect } from "react";
 
 const FONT_DISPLAY = "Cormorant Garamond, Georgia, serif";
 const FONT_MONO = "JetBrains Mono, monospace";
@@ -22,18 +25,40 @@ const IVORY = "oklch(0.88 0.025 85)";
 const FOREGROUND = "oklch(0.93 0.010 80)";
 const MUTED = "oklch(0.62 0.006 80)";
 const BG = "oklch(0.09 0.008 60)";
+const GREEN = "oklch(0.72 0.14 145)";
 
 export default function SettingsPage() {
   const { user } = useAuth();
   const utils = trpc.useUtils();
-  const [, navigate] = useLocation();
+  const [location, navigate] = useLocation();
 
   const { data: subStatus, isLoading: subLoading } = trpc.subscription.getStatus.useQuery();
+  const { data: redditAccount, isLoading: redditLoading } = trpc.reddit.getAccount.useQuery();
+  const { data: connectUrlData } = trpc.reddit.getConnectUrl.useQuery(
+    { origin: typeof window !== "undefined" ? window.location.origin : "" },
+    { enabled: !redditAccount && !redditLoading }
+  );
+
+  const disconnectReddit = trpc.reddit.disconnect.useMutation({
+    onSuccess: () => {
+      toast.success("Reddit account disconnected.");
+      utils.reddit.getAccount.invalidate();
+    },
+    onError: (err: { message: string }) => toast.error(err.message),
+  });
 
   const createPortalSession = trpc.subscription.createPortalSession.useMutation({
     onSuccess: ({ url }) => { if (url) window.open(url, "_blank"); },
     onError: (err: { message: string }) => toast.error(err.message),
   });
+
+  // Show success toast when redirected back after connecting Reddit
+  useEffect(() => {
+    if (location.includes("reddit_connected=1")) {
+      toast.success("Reddit account connected successfully!");
+      utils.reddit.getAccount.invalidate();
+    }
+  }, []);
 
   const sectionStyle: React.CSSProperties = {
     border: `0.5px solid ${BORDER}`,
@@ -70,26 +95,67 @@ export default function SettingsPage() {
         {/* Reddit Connection */}
         <div style={sectionStyle}>
           <div style={sectionHeaderStyle}>
-            <Zap size={12} color={IVORY} />
+            <svg width="12" height="12" viewBox="0 0 20 20" fill={IVORY} xmlns="http://www.w3.org/2000/svg">
+              <circle cx="10" cy="10" r="10" fill="currentColor" />
+              <path d="M16.67 10a1.46 1.46 0 0 0-2.47-1 7.12 7.12 0 0 0-3.85-1.23l.65-3.08 2.13.45a1 1 0 1 0 .14-.55l-2.38-.5a.26.26 0 0 0-.31.2l-.73 3.44a7.14 7.14 0 0 0-3.89 1.23 1.46 1.46 0 1 0-1.61 2.39 2.87 2.87 0 0 0 0 .44c0 2.24 2.61 4.06 5.83 4.06s5.83-1.82 5.83-4.06a2.87 2.87 0 0 0 0-.44 1.46 1.46 0 0 0 .57-1.35zm-9.4 1.09a1 1 0 1 1 1 1 1 1 0 0 1-1-1zm5.57 2.64a3.54 3.54 0 0 1-2.84.5 3.54 3.54 0 0 1-2.84-.5.26.26 0 0 1 .37-.37 3 3 0 0 0 2.47.38 3 3 0 0 0 2.47-.38.26.26 0 0 1 .37.37zm-.21-1.64a1 1 0 1 1 1-1 1 1 0 0 1-1 1z" fill={BG} />
+            </svg>
             <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: MUTED, flex: 1 }}>
-              Reddit Connection
+              Reddit Account
             </p>
-            <span style={{ fontFamily: FONT_MONO, fontSize: "0.55rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "oklch(0.75 0.14 65)", border: "0.5px solid oklch(0.75 0.14 65 / 0.35)", padding: "0.15rem 0.5rem" }}>
-              Coming Soon
-            </span>
+            {redditAccount && (
+              <span style={{ fontFamily: FONT_MONO, fontSize: "0.55rem", letterSpacing: "0.12em", textTransform: "uppercase", color: GREEN, border: `0.5px solid ${GREEN}40`, padding: "0.15rem 0.5rem", display: "flex", alignItems: "center", gap: "0.3rem" }}>
+                <CheckCircle size={9} /> Connected
+              </span>
+            )}
           </div>
           <div style={sectionBodyStyle}>
-            <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem", padding: "1rem", border: `0.5px solid ${BORDER}`, background: SURFACE_RAISED }}>
-              <Clock size={13} color={MUTED} style={{ flexShrink: 0, marginTop: "2px" }} />
-              <div>
-                <p style={{ fontSize: "0.82rem", color: FOREGROUND, fontWeight: 500, marginBottom: "0.4rem" }}>
-                  One-click send via Chrome extension — coming soon
-                </p>
+            {redditLoading ? (
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: MUTED, fontSize: "0.8rem" }}>
+                <Loader2 size={14} style={{ animation: "spin 1s linear infinite" }} />
+                Loading...
+              </div>
+            ) : redditAccount ? (
+              <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                {/* Connected account row */}
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem", border: `0.5px solid ${BORDER}`, background: SURFACE_RAISED }}>
+                  <div>
+                    <p style={{ fontSize: "0.85rem", color: FOREGROUND, fontWeight: 500, marginBottom: "0.2rem" }}>
+                      u/{redditAccount.redditUsername}
+                    </p>
+                    <p style={{ fontFamily: FONT_MONO, fontSize: "0.62rem", color: redditAccount.isPaused ? "oklch(0.72 0.18 25)" : GREEN, letterSpacing: "0.08em" }}>
+                      {redditAccount.isPaused ? `Paused — ${redditAccount.pauseReason ?? "rate limit reached"}` : "Active · Lead sync enabled"}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => disconnectReddit.mutate()}
+                    disabled={disconnectReddit.isPending}
+                    style={{ padding: "0.5rem 0.875rem", background: "transparent", border: `0.5px solid oklch(0.72 0.18 25 / 0.4)`, color: "oklch(0.72 0.18 25)", fontFamily: FONT_MONO, fontSize: "0.58rem", letterSpacing: "0.15em", textTransform: "uppercase", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.35rem", touchAction: "manipulation" }}
+                  >
+                    {disconnectReddit.isPending ? <Loader2 size={10} style={{ animation: "spin 1s linear infinite" }} /> : <LogOut size={10} />}
+                    Disconnect
+                  </button>
+                </div>
                 <p style={{ fontSize: "0.75rem", color: MUTED, lineHeight: 1.6 }}>
-                  SubRoast is building a Chrome extension that lets you send DMs, comments, and posts directly from your own browser session — no Reddit API, no bot flags, no ban risk. Until then, use the Copy &amp; Open workflow to paste drafts directly on Reddit.
+                  Your Reddit account is used for lead sync and DM drafting. SubRoast never stores your password — access is via a secure OAuth token you can revoke at any time.
                 </p>
               </div>
-            </div>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                <p style={{ fontSize: "0.82rem", color: FOREGROUND, lineHeight: 1.65 }}>
+                  Connect your Reddit account to enable lead sync and DM drafting. SubRoast uses OAuth — no password stored, revoke access at any time from Reddit settings.
+                </p>
+                <a
+                  href={connectUrlData?.url ?? "#"}
+                  style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", padding: "0.75rem 1.25rem", background: IVORY, border: `0.5px solid ${IVORY}`, color: BG, fontFamily: FONT_MONO, fontSize: "0.62rem", letterSpacing: "0.18em", textTransform: "uppercase", cursor: "pointer", textDecoration: "none", alignSelf: "flex-start", touchAction: "manipulation" }}
+                  onClick={(e) => {
+                    if (!connectUrlData?.url) { e.preventDefault(); toast.error("Loading connect URL…"); }
+                  }}
+                >
+                  <ExternalLink size={11} />
+                  Connect Reddit Account
+                </a>
+              </div>
+            )}
           </div>
         </div>
 
@@ -153,7 +219,7 @@ export default function SettingsPage() {
                   {subStatus.plan === "none" ? (
                     <button
                       onClick={() => navigate("/pricing")}
-                      style={{ padding: "0.65rem 1.25rem", background: IVORY, border: `0.5px solid ${IVORY}`, color: BG, fontFamily: FONT_MONO, fontSize: "0.62rem", letterSpacing: "0.18em", textTransform: "uppercase", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.4rem" }}
+                      style={{ padding: "0.65rem 1.25rem", background: IVORY, border: `0.5px solid ${IVORY}`, color: BG, fontFamily: FONT_MONO, fontSize: "0.62rem", letterSpacing: "0.18em", textTransform: "uppercase", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.4rem", touchAction: "manipulation" }}
                     >
                       <Zap size={11} /> Start Free Trial
                     </button>
@@ -161,7 +227,7 @@ export default function SettingsPage() {
                     <button
                       onClick={() => createPortalSession.mutate({ origin: window.location.origin })}
                       disabled={createPortalSession.isPending}
-                      style={{ padding: "0.65rem 1.25rem", background: "transparent", border: `0.5px solid ${BORDER}`, color: MUTED, fontFamily: FONT_MONO, fontSize: "0.62rem", letterSpacing: "0.18em", textTransform: "uppercase", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.4rem" }}
+                      style={{ padding: "0.65rem 1.25rem", background: "transparent", border: `0.5px solid ${BORDER}`, color: MUTED, fontFamily: FONT_MONO, fontSize: "0.62rem", letterSpacing: "0.18em", textTransform: "uppercase", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.4rem", touchAction: "manipulation" }}
                     >
                       {createPortalSession.isPending ? <Loader2 size={11} style={{ animation: "spin 1s linear infinite" }} /> : <CreditCard size={11} />}
                       Manage Billing
@@ -170,7 +236,7 @@ export default function SettingsPage() {
                   {subStatus.plan !== "growth" && subStatus.plan !== "none" && (
                     <button
                       onClick={() => navigate("/pricing")}
-                      style={{ padding: "0.65rem 1.25rem", background: "transparent", border: `0.5px solid oklch(0.88 0.025 85 / 0.35)`, color: IVORY, fontFamily: FONT_MONO, fontSize: "0.62rem", letterSpacing: "0.18em", textTransform: "uppercase", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.4rem" }}
+                      style={{ padding: "0.65rem 1.25rem", background: "transparent", border: `0.5px solid oklch(0.88 0.025 85 / 0.35)`, color: IVORY, fontFamily: FONT_MONO, fontSize: "0.62rem", letterSpacing: "0.18em", textTransform: "uppercase", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.4rem", touchAction: "manipulation" }}
                     >
                       <Zap size={11} /> Get priority access
                     </button>

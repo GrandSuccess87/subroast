@@ -448,7 +448,7 @@ function UseCaseCard({
       <p
         style={{
           fontSize: "0.88rem",
-          color: "oklch(0.60 0.006 80)",
+          color: "oklch(0.92 0.006 80)",
           lineHeight: 1.75,
         }}
       >
