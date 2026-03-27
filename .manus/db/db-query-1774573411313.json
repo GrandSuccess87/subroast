@@ -1,0 +1,40 @@
+{
+  "query": "SELECT id, name, subreddits, keywords FROM outreach_campaigns ORDER BY id;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute SELECT id, name, subreddits, keywords FROM outreach_campaigns ORDER BY id;",
+  "rows": [
+    {
+      "id": "1",
+      "name": "Founders Outreach",
+      "subreddits": "[\"Entrepreneur\",\"SaaS\",\"indiehackers\",\"smallbusiness\",\"marketing\",\"RedditMarketing\",\"SideProject\",\"startups\",\"growthhacking\"]",
+      "keywords": "[\"need a developer\",\"hire a dev\",\"looking for technical help\",\"need help building\",\"outsource development\",\"technical co-founder\",\"struggling with marketing\",\"can't get users\",\"how to find customers\",\"struggling to scale\",\"growth not working\",\"customer acquisition\",\"need marketing help\",\"can't scale startup\",\"need someone to build\"]"
+    },
+    {
+      "id": "30001",
+      "name": "App Validation Complaint Mining",
+      "subreddits": "[\"SaaS\",\"Entrepreneur\",\"startups\",\"smallbusiness\",\"marketing\",\"GrowthHacking\",\"SideProject\",\"indiehackers\",\"leadgeneration\",\"RedditMarketing\"]",
+      "keywords": "[\"wish someone would build\",\"why doesn't this exist\",\"no app for this\",\"struggling to find a tool\",\"frustrated with\",\"this sucks\",\"nobody has solved\",\"is there a better way\",\"tired of manually\",\"hate that I have to\",\"workflow is broken\",\"nothing works for\",\"built my own because\",\"had to hack together\",\"would pay for something\",\"take my money\",\"someone needs to build\",\"gap in the market\",\"pain point nobody addresses\",\"does anyone else struggle\"]"
+    },
+    {
+      "id": "60001",
+      "name": "SubRoast ICP Pain-Point Outreach",
+      "subreddits": "[\"SaaS\",\"Entrepreneur\",\"startups\",\"growthhacking\",\"marketing\",\"smallbusiness\",\"leadgeneration\",\"digital_marketing\",\"SideProject\",\"indiehackers\",\"indiehacking\",\"aiforsmallbusiness\",\"ai\"]",
+      "keywords": "[\"finding leads on reddit\",\"reddit for lead gen\",\"cold outreach\",\"cold email\",\"struggling with lead gen\",\"automate outreach\",\"how to find customers\",\"reddit for sales\",\"lead research takes forever\",\"scaling outreach\",\"personalizing cold DMs\",\"reddit engagement\",\"customer acquisition\",\"manual lead searching\",\"reddit prospecting\",\"outreach automation\",\"DM strategy reddit\",\"finding prospects\",\"lead generation tool\",\"reddit marketing\",\"outreach tool\"]"
+    },
+    {
+      "id": "90001",
+      "name": "For Hire",
+      "subreddits": "[\"forhire\",\"freelance_forhire\",\"Entrepreneur\",\"startups\",\"SideProject\",\"indiehackers\",\"SaaS\",\"smallbusiness\"]",
+      "keywords": "[\"looking for AI engineer\",\"hire AI developer\",\"need full stack dev\",\"looking for freelancer\",\"need a developer\",\"build my app\",\"technical help needed\",\"ai development\",\"full stack developer\",\"hire a programmer\"]"
+    },
+    {
+      "id": "120001",
+      "name": "Healthcare Outreach",
+      "subreddits": "[\"privatepractice\",\"HealthIT\",\"medicine\",\"smallbusiness\",\"Entrepreneur\",\"startups\",\"marketing\",\"growthhacking\",\"DentalOffice\",\"physicaltherapy\"]",
+      "keywords": "[\"patient no shows\",\"patients not booking\",\"missed calls clinic\",\"low patient volume\",\"need better EMR\",\"need better CRM\",\"struggling to grow\",\"need more clients\",\"marketing not working\",\"marketing not working\",\"can't get new patients\",\"struggling to scale\",\"need more referrals\",\"clinic losing patients\",\"healthcare marketing\",\"private practice growth\",\"medical practice struggling\",\"billing issues\",\"front desk overwhelmed\",\"staff turnover clinic\",\"practice management help\",\"need more appointments\"]"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tsubreddits\tkeywords\n1\tFounders Outreach\t[\"Entrepreneur\",\"SaaS\",\"indiehackers\",\"smallbusiness\",\"marketing\",\"RedditMarketing\",\"SideProject\",\"startups\",\"growthhacking\"]\t[\"need a developer\",\"hire a dev\",\"looking for technical help\",\"need help building\",\"outsource development\",\"technical co-founder\",\"struggling with marketing\",\"can't get users\",\"how to find customers\",\"struggling to scale\",\"growth not working\",\"customer acquisition\",\"need marketing help\",\"can't scale startup\",\"need someone to build\"]\n30001\tApp Validation Complaint Mining\t[\"SaaS\",\"Entrepreneur\",\"startups\",\"smallbusiness\",\"marketing\",\"GrowthHacking\",\"SideProject\",\"indiehackers\",\"leadgeneration\",\"RedditMarketing\"]\t[\"wish someone would build\",\"why doesn't this exist\",\"no app for this\",\"struggling to find a tool\",\"frustrated with\",\"this sucks\",\"nobody has solved\",\"is there a better way\",\"tired of manually\",\"hate that I have to\",\"workflow is broken\",\"nothing works for\",\"built my own because\",\"had to hack together\",\"would pay for something\",\"take my money\",\"someone needs to build\",\"gap in the market\",\"pain point nobody addresses\",\"does anyone else struggle\"]\n60001\tSubRoast ICP Pain-Point Outreach\t[\"SaaS\",\"Entrepreneur\",\"startups\",\"growthhacking\",\"marketing\",\"smallbusiness\",\"leadgeneration\",\"digital_marketing\",\"SideProject\",\"indiehackers\",\"indiehacking\",\"aiforsmallbusiness\",\"ai\"]\t[\"finding leads on reddit\",\"reddit for lead gen\",\"cold outreach\",\"cold email\",\"struggling with lead gen\",\"automate outreach\",\"how to find customers\",\"reddit for sales\",\"lead research takes forever\",\"scaling outreach\",\"personalizing cold DMs\",\"reddit engagement\",\"customer acquisition\",\"manual lead searching\",\"reddit prospecting\",\"outreach automation\",\"DM strategy reddit\",\"finding prospects\",\"lead generation tool\",\"reddit marketing\",\"outreach tool\"]\n90001\tFor Hire\t[\"forhire\",\"freelance_forhire\",\"Entrepreneur\",\"startups\",\"SideProject\",\"indiehackers\",\"SaaS\",\"smallbusiness\"]\t[\"looking for AI engineer\",\"hire AI developer\",\"need full stack dev\",\"looking for freelancer\",\"need a developer\",\"build my app\",\"technical help needed\",\"ai development\",\"full stack developer\",\"hire a programmer\"]\n120001\tHealthcare Outreach\t[\"privatepractice\",\"HealthIT\",\"medicine\",\"smallbusiness\",\"Entrepreneur\",\"startups\",\"marketing\",\"growthhacking\",\"DentalOffice\",\"physicaltherapy\"]\t[\"patient no shows\",\"patients not booking\",\"missed calls clinic\",\"low patient volume\",\"need better EMR\",\"need better CRM\",\"struggling to grow\",\"need more clients\",\"marketing not working\",\"marketing not working\",\"can't get new patients\",\"struggling to scale\",\"need more referrals\",\"clinic losing patients\",\"healthcare marketing\",\"private practice growth\",\"medical practice struggling\",\"billing issues\",\"front desk overwhelmed\",\"staff turnover clinic\",\"practice management help\",\"need more appointments\"]\n",
+  "stderr": "",
+  "execution_time_ms": 151
+}

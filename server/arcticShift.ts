@@ -65,7 +65,9 @@ export async function searchArcticShiftPosts(
       after: String(afterUnix),
       sort: "desc",
       limit: String(Math.min(limit, 100)),
-      fields: "id,permalink,title,selftext,author,subreddit,created_utc",
+      // Note: do NOT add a `fields` filter — Arctic Shift rejects 'permalink'
+      // as an invalid field name and returns HTTP 400. Return the full object
+      // and map only the fields we need in the .map() below.
     });
 
     const url = `${ARCTIC_SHIFT_BASE}/api/posts/search?${params.toString()}`;
