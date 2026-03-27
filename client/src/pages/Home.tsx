@@ -2222,23 +2222,23 @@ function HomeWhatsComingSection({ onOpenModal }: { onOpenModal: () => void }) {
   const items = [
     {
       icon: "⚡",
-      title: "One-click send via Chrome extension",
+      title: "Faster outreach workflows",
       description:
-        "Send personalised DMs directly from Reddit without leaving the page. Spot a lead, click once, done.",
+        "Move from insight → action instantly, without breaking your flow.",
       eta: "Q2 2026",
     },
     {
       icon: "✉️",
-      title: "DM template library",
+      title: "Smarter messaging support",
       description:
-        "A curated library of high-converting outreach templates, organised by use case and subreddit type.",
+        "Generate and refine replies tailored to intent, use case, and context.",
       eta: "Q2 2026",
     },
     {
       icon: "📊",
-      title: "Advanced analytics",
+      title: "Performance insights",
       description:
-        "Track reply rates, conversion funnels, and subreddit performance across all your campaigns in one view.",
+        "Understand what's working — from replies to conversions — across your campaigns.",
       eta: "Q3 2026",
     },
   ];
@@ -2257,7 +2257,7 @@ function HomeWhatsComingSection({ onOpenModal }: { onOpenModal: () => void }) {
           {/* Header */}
           <div style={{ textAlign: "center", marginBottom: "clamp(2.5rem, 5vw, 4rem)" }}>
             <div style={{ display: "flex", justifyContent: "center", marginBottom: "1.25rem" }}>
-              <span className="eyebrow">On the roadmap</span>
+              <span className="eyebrow">🔥 Safer + stronger roadmap</span>
             </div>
             <h2
               style={{
@@ -2270,7 +2270,7 @@ function HomeWhatsComingSection({ onOpenModal }: { onOpenModal: () => void }) {
                 marginBottom: "1rem",
               }}
             >
-              What's coming next.
+              What's coming next
             </h2>
             <p
               style={{
@@ -2282,7 +2282,7 @@ color: "oklch(0.92 0.006 80)",
                 lineHeight: 1.7,
               }}
             >
-              We're building fast. Get early access and shape what we build next.
+              We're building fast. Early users help shape what comes next.
             </p>
           </div>
 
