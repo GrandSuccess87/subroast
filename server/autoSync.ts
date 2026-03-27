@@ -267,8 +267,8 @@ async function syncCampaign(campaign: {
   // Growth users process all subreddits; Starter/trial capped at 5
   const subLimit = userPlan === "growth" ? subreddits.length : 5;
   for (const sub of subreddits.slice(0, subLimit)) {
-    for (const kw of keywords.slice(0, 3)) {
-      const posts = await searchRedditPosts(sub, kw, 5);
+    for (const kw of keywords.slice(0, 10)) {
+      const posts = await searchRedditPosts(sub, kw, 10);
       for (const post of posts) {
         if (post.author === "[deleted]" || post.author === "AutoModerator") continue;
 

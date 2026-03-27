@@ -560,7 +560,7 @@ Rules:
           }
         }
 
-        for (const kw of keywords.slice(0, 3)) { // limit to 3 keywords per subreddit
+        for (const kw of keywords.slice(0, 10)) { // try up to 10 keywords per subreddit
           // Truncate long keyword phrases to the first 4 words for Reddit search
           // (Reddit treats long phrases as near-exact matches, returning 0 results)
           const searchQuery = kw.split(/\s+/).length > 4
