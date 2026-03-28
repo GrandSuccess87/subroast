@@ -241,7 +241,13 @@ function EditCampaignModal({ campaign, onClose }: { campaign: Campaign; onClose:
   const handleSubDragEnd = () => setDragSubIdx(null);
 
   const updateCampaign = trpc.outreach.updateCampaign.useMutation({
-    onSuccess: () => { toast.success("Campaign updated!"); utils.outreach.listCampaigns.invalidate(); onClose(); },
+    onSuccess: async () => {
+      toast.success("Campaign updated!");
+      // Await the invalidation so the cache is fresh before the modal closes.
+      // Without this, reopening the modal immediately shows stale keywords.
+      await utils.outreach.listCampaigns.invalidate();
+      onClose();
+    },
     onError: (err) => toast.error(err.message),
   });
 

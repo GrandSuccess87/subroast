@@ -1135,3 +1135,6 @@
 - [x] Add owner bypass in autoSync.ts so owner's campaigns always sync regardless of subscription status (uses ENV.ownerOpenId)
 - [x] Restore owner account subscriptionStatus to active in DB (plan: growth)
 - [x] Remove Reddit public API fallback from autoSync.ts — was causing 403 noise, Arctic Shift is sufficient
+
+## Campaign Keyword Editor Bug
+- [x] Keywords added in campaign edit modal don't appear after saving — fixed race condition: now awaits listCampaigns invalidation before closing modal

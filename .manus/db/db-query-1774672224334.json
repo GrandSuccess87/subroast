@@ -1,0 +1,16 @@
+{
+  "query": "SELECT id, name, keywords, subreddits FROM outreach_campaigns WHERE id = 1;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute SELECT id, name, keywords, subreddits FROM outreach_campaigns WHERE id = 1;",
+  "rows": [
+    {
+      "id": "1",
+      "name": "Founders Outreach",
+      "keywords": "[\"booking automation\",\"service business automation\",\"automation system\",\"need a developer\",\"Go High Level\",\"replicate for multiple businesses\",\"GoHighLevel\",\"GHL\",\"looking for someone to build\",\"GoHighLevel setup\",\"hire a dev\",\"looking for technical help\",\"need help building\",\"outsource development\",\"technical co-founder\",\"struggling with marketing\",\"can't get users\",\"how to find customers\",\"struggling to scale\",\"growth not working\",\"customer acquisition\",\"need marketing help\",\"can't scale startup\",\"need someone to build\"]",
+      "subreddits": "[\"Entrepreneur\",\"SaaS\",\"indiehackers\",\"smallbusiness\",\"marketing\",\"RedditMarketing\",\"SideProject\",\"startups\",\"growthhacking\"]"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tkeywords\tsubreddits\n1\tFounders Outreach\t[\"booking automation\",\"service business automation\",\"automation system\",\"need a developer\",\"Go High Level\",\"replicate for multiple businesses\",\"GoHighLevel\",\"GHL\",\"looking for someone to build\",\"GoHighLevel setup\",\"hire a dev\",\"looking for technical help\",\"need help building\",\"outsource development\",\"technical co-founder\",\"struggling with marketing\",\"can't get users\",\"how to find customers\",\"struggling to scale\",\"growth not working\",\"customer acquisition\",\"need marketing help\",\"can't scale startup\",\"need someone to build\"]\t[\"Entrepreneur\",\"SaaS\",\"indiehackers\",\"smallbusiness\",\"marketing\",\"RedditMarketing\",\"SideProject\",\"startups\",\"growthhacking\"]\n",
+  "stderr": "",
+  "execution_time_ms": 56
+}
