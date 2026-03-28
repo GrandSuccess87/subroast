@@ -202,7 +202,9 @@ function EditCampaignModal({ campaign, onClose }: { campaign: Campaign; onClose:
   const [kwInput, setKwInput] = useState("");
   const [aiInstructions, setAiInstructions] = useState(campaign.aiPromptInstructions ?? "");
 
-  // Sync state when campaign prop changes (e.g. after a save + invalidate)
+  // Only re-initialise state when the campaign ID changes (i.e. a different campaign
+  // was opened). Do NOT depend on campaign.keywords/subreddits so that background
+  // tRPC refetches don't wipe out unsaved edits the user has made in the modal.
   useEffect(() => {
     setName(campaign.name);
     setOffering(campaign.offering);
@@ -210,7 +212,8 @@ function EditCampaignModal({ campaign, onClose }: { campaign: Campaign; onClose:
     setSubreddits(campaign.subreddits);
     setKeywords(campaign.keywords);
     setAiInstructions(campaign.aiPromptInstructions ?? "");
-  }, [campaign.id, campaign.keywords.join(","), campaign.subreddits.join(","), campaign.aiPromptInstructions]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [campaign.id]);
 
   // Drag-to-reorder state
   const [dragKwIdx, setDragKwIdx] = useState<number | null>(null);

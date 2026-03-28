@@ -1138,3 +1138,6 @@
 
 ## Campaign Keyword Editor Bug
 - [x] Keywords added in campaign edit modal don't appear after saving — fixed race condition: now awaits listCampaigns invalidation before closing modal
+
+## Campaign Keyword Editor Bug (Round 2)
+- [x] Keywords added in edit modal still don't persist — fixed: useEffect was depending on campaign.keywords.join() so background tRPC refetches were wiping unsaved edits; now only resets on campaign.id change
