@@ -268,10 +268,12 @@ export const outreachRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      // ── Paywall: check campaign limit based on plan ──────────────────────────
-      const db = await getDb();
-      if (db) {
-        const userRows = await db.select().from(users).where(eq(users.id, ctx.user.id)).limit(1);
+      // ── Paywall: TEMPORARILY DISABLED during feedback-gathering phase ─────────
+      // TODO: Re-enable before full launch by removing the /* */ comment wrapper
+      /*
+      const db_paywall = await getDb();
+      if (db_paywall) {
+        const userRows = await db_paywall.select().from(users).where(eq(users.id, ctx.user.id)).limit(1);
         const user = userRows[0];
         if (user) {
           const now = Date.now();
@@ -310,6 +312,7 @@ export const outreachRouter = router({
           }
         }
       }
+      */
       // ────────────────────────────────────────────────────────────────────────
 
       const id = await createOutreachCampaign({

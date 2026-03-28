@@ -1149,3 +1149,6 @@
 
 ## Create Campaign Form State Persistence
 - [x] Persist create-campaign form fields to localStorage (key: subroast_new_campaign_draft) — auto-saves on every field change, restores on mount, clears on successful create or explicit cancel
+
+## Pricing Gate (Feedback Phase)
+- [x] Comment out pricing page redirect/gate in create campaign flow during feedback gathering phase (paywall block wrapped in /* */ with TODO to re-enable before launch)
