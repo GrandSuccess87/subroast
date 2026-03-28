@@ -1141,3 +1141,8 @@
 
 ## Campaign Keyword Editor Bug (Round 2)
 - [x] Keywords added in edit modal still don't persist — fixed: useEffect was depending on campaign.keywords.join() so background tRPC refetches were wiping unsaved edits; now only resets on campaign.id change
+
+## Subreddit Editor & Email Notification Fixes
+- [x] Fix subreddit editor same useEffect race condition — already covered by the campaign.id-only useEffect fix applied in the previous round
+- [x] Update new-leads email: instructions now read Filter by Strong match, Analyse & Draft, Send directly
+- [x] Add subroast.com link to new-leads notification email (hardcoded to https://subroast.com/dm-campaigns)

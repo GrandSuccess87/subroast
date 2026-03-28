@@ -40,11 +40,11 @@ Total leads in this campaign: ${params.totalLeadsCount}
 
 **What to do next:**
 1. Open your DM Campaigns inbox
-2. Review the new leads (look for Strong match badges first)
-3. Click "Generate DM" to create personalized outreach
-4. Queue or send directly
+2. Filter by **Strong match** to find your best leads
+3. Click **Analyse & Draft** to generate your outreach message
+4. Send directly
 
-[Open SubRoast → DM Campaigns](${params.appUrl}/dm-campaigns)
+[Open SubRoast → DM Campaigns](https://subroast.com/dm-campaigns)
 
 ---
 *SubRoast monitors Reddit so you don't have to. Leads are scored Strong / Partial / Lowest based on keyword match.*`,
