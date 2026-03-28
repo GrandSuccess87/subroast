@@ -31,7 +31,7 @@ import {
   XCircle,
   Zap,
 } from "lucide-react";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useLocation } from "wouter";
 import { toast } from "sonner";
 
@@ -373,25 +373,48 @@ function EditCampaignModal({ campaign, onClose }: { campaign: Campaign; onClose:
   );
 }
 
-// ─── New campaign form ────────────────────────────────────────────────────────────────────────────────────
+/// ─── New campaign form ────────────────────────────────────────────────────────────────────────────────────
+const NEW_CAMPAIGN_DRAFT_KEY = "subroast_new_campaign_draft";
+
+function loadDraft() {
+  try {
+    const raw = localStorage.getItem(NEW_CAMPAIGN_DRAFT_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw) as {
+      name: string; offering: string; websiteUrl: string;
+      subreddits: string[]; keywords: string[]; aiInstructions: string;
+      campaignType: "outreach" | "validation"; reviewMode: "auto_send" | "review_first";
+      minSubSize: string; maxSubSize: string;
+    };
+  } catch { return null; }
+}
+
 function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCancel: () => void }) {
-  const [name, setName] = useState("");
-  const [offering, setOffering] = useState("");
-  const [websiteUrl, setWebsiteUrl] = useState("");
-  const [subreddits, setSubreddits] = useState<string[]>([]);
-  const [keywords, setKeywords] = useState<string[]>([]);
+  const draft = useMemo(() => loadDraft(), []);
+  const [name, setName] = useState(draft?.name ?? "");
+  const [offering, setOffering] = useState(draft?.offering ?? "");
+  const [websiteUrl, setWebsiteUrl] = useState(draft?.websiteUrl ?? "");
+  const [subreddits, setSubreddits] = useState<string[]>(draft?.subreddits ?? []);
+  const [keywords, setKeywords] = useState<string[]>(draft?.keywords ?? []);
   const [subInput, setSubInput] = useState("");
   const [kwInput, setKwInput] = useState("");
-  const [aiInstructions, setAiInstructions] = useState("");
-  const [campaignType, setCampaignType] = useState<"outreach" | "validation">("outreach");
-  const [reviewMode, setReviewMode] = useState<"auto_send" | "review_first">("review_first");
+  const [aiInstructions, setAiInstructions] = useState(draft?.aiInstructions ?? "");
+  const [campaignType, setCampaignType] = useState<"outreach" | "validation">(draft?.campaignType ?? "outreach");
+  const [reviewMode, setReviewMode] = useState<"auto_send" | "review_first">(draft?.reviewMode ?? "review_first");
   const [aiRecs, setAiRecs] = useState<{ subreddits: string[]; keywords: string[]; reasoning: string } | null>(null);
-  const [minSubSize, setMinSubSize] = useState<string>("");
-  const [maxSubSize, setMaxSubSize] = useState<string>("");
+  const [minSubSize, setMinSubSize] = useState<string>(draft?.minSubSize ?? "");
+  const [maxSubSize, setMaxSubSize] = useState<string>(draft?.maxSubSize ?? "");
   const [showSizeFilter, setShowSizeFilter] = useState(false);
-
   const utils = trpc.useUtils();
   const [, navigate] = useLocation();
+
+  // Persist draft to localStorage whenever any field changes
+  useEffect(() => {
+    localStorage.setItem(NEW_CAMPAIGN_DRAFT_KEY, JSON.stringify({
+      name, offering, websiteUrl, subreddits, keywords, aiInstructions,
+      campaignType, reviewMode, minSubSize, maxSubSize,
+    }));
+  }, [name, offering, websiteUrl, subreddits, keywords, aiInstructions, campaignType, reviewMode, minSubSize, maxSubSize]);
 
   const getRecs = trpc.outreach.getRecommendations.useMutation({
     onSuccess: (data) => { setAiRecs(data); toast.success("AI recommendations ready!"); },
@@ -399,7 +422,7 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
   });
 
   const createCampaign = trpc.outreach.createCampaign.useMutation({
-    onSuccess: () => { toast.success("Campaign created!"); utils.outreach.listCampaigns.invalidate(); onSuccess(); },
+    onSuccess: () => { localStorage.removeItem(NEW_CAMPAIGN_DRAFT_KEY); toast.success("Campaign created!"); utils.outreach.listCampaigns.invalidate(); onSuccess(); },
     onError: (err) => {
       if (err.message === "CAMPAIGN_LIMIT_REACHED") {
         toast.error("Free during beta — full access unlocking soon.", { action: { label: "Get priority access", onClick: () => navigate("/pricing") }, duration: 8000 });
@@ -664,7 +687,7 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
           >
             {createCampaign.isPending ? <><Loader2 size={11} style={{ animation: "spin 1s linear infinite" }} /> Creating...</> : <><Target size={11} /> Create Campaign</>}
           </button>
-          <button onClick={onCancel} style={{ padding: "0.65rem 1.25rem", background: "transparent", border: `0.5px solid ${BORDER}`, color: MUTED, fontFamily: FONT_MONO, fontSize: "0.62rem", letterSpacing: "0.18em", textTransform: "uppercase", cursor: "pointer" }}>
+          <button onClick={() => { localStorage.removeItem(NEW_CAMPAIGN_DRAFT_KEY); onCancel(); }} style={{ padding: "0.65rem 1.25rem", background: "transparent", border: `0.5px solid ${BORDER}`, color: MUTED, fontFamily: FONT_MONO, fontSize: "0.62rem", letterSpacing: "0.18em", textTransform: "uppercase", cursor: "pointer" }}>
             Cancel
           </button>
         </div>

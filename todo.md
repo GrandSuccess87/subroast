@@ -1146,3 +1146,6 @@
 - [x] Fix subreddit editor same useEffect race condition — already covered by the campaign.id-only useEffect fix applied in the previous round
 - [x] Update new-leads email: instructions now read Filter by Strong match, Analyse & Draft, Send directly
 - [x] Add subroast.com link to new-leads notification email (hardcoded to https://subroast.com/dm-campaigns)
+
+## Create Campaign Form State Persistence
+- [x] Persist create-campaign form fields to localStorage (key: subroast_new_campaign_draft) — auto-saves on every field change, restores on mount, clears on successful create or explicit cancel
