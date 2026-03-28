@@ -1,0 +1,26 @@
+{
+  "query": "SELECT id, openId, name, plan, subscriptionStatus, trialEndsAt FROM users WHERE role = 'admin' OR name LIKE '%Quintessa%' OR name LIKE '%Tessa%' LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute SELECT id, openId, name, plan, subscriptionStatus, trialEndsAt FROM users WHERE role = 'admin' OR name LIKE '%Quintessa%' OR name LIKE '%Tessa%' LIMIT 5;",
+  "rows": [
+    {
+      "id": "1",
+      "openId": "RDBnQnfqCjrFLLLSW2Bvnd",
+      "name": "Quintessa Anderson",
+      "plan": "growth",
+      "subscriptionStatus": "canceled",
+      "trialEndsAt": "1773909604000"
+    },
+    {
+      "id": "962040",
+      "openId": "eiQ3PedhJcEnTDLMDBS7fQ",
+      "name": "Quintessa Anderson",
+      "plan": "none",
+      "subscriptionStatus": "none",
+      "trialEndsAt": "NULL"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\topenId\tname\tplan\tsubscriptionStatus\ttrialEndsAt\n1\tRDBnQnfqCjrFLLLSW2Bvnd\tQuintessa Anderson\tgrowth\tcanceled\t1773909604000\n962040\teiQ3PedhJcEnTDLMDBS7fQ\tQuintessa Anderson\tnone\tnone\tNULL\n",
+  "stderr": "",
+  "execution_time_ms": 55
+}

@@ -20,6 +20,7 @@ import { notifyNewLeads } from "./emailNotifications";
 import { users, outreachCampaigns } from "../drizzle/schema";
 import { eq, inArray } from "drizzle-orm";
 import { invokeLLM } from "./_core/llm";
+import { ENV } from "./_core/env";
 
 // ─── Sync window helpers ──────────────────────────────────────────────────────
 
@@ -134,13 +135,13 @@ async function searchRedditPosts(
   subreddit: string;
   createdUtc: number;
 }>> {
-  // Primary: Arctic Shift mirror (not IP-blocked)
+   // Arctic Shift mirror (not IP-blocked) — sole search backend
   const arcticResults = await searchArcticShiftPosts(subreddit, keyword, limit, 7);
-  if (arcticResults.length > 0) {
-    return arcticResults;
-  }
-
-  // Fallback: Reddit public API (may be IP-blocked on cloud servers)
+  return arcticResults;
+  // NOTE: Reddit public API fallback removed — it is IP-blocked on cloud servers
+  // and Arctic Shift provides sufficient coverage. If you need real-time results,
+  // connect a Reddit OAuth account in Settings → Reddit Account.
+  /* DEAD CODE BELOW — kept for reference only
   try {
     const query = encodeURIComponent(keyword);
     const url = `https://www.reddit.com/r/${subreddit}/search.json?q=${query}&restrict_sr=1&sort=new&limit=${limit}&t=month`;
@@ -177,12 +178,12 @@ async function searchRedditPosts(
       author: c.data.author,
       subreddit: c.data.subreddit,
       createdUtc: c.data.created_utc * 1000,
-    }));
+     }));
   } catch {
     return [];
   }
+  */ // end dead code
 }
-
 function scoreMatch(
   postTitle: string,
   postBody: string,
@@ -343,7 +344,7 @@ export async function runAutoSync(): Promise<void> {
   // Load user plans for all unique userIds in one query
   const userIds = Array.from(new Set(campaigns.map((c) => c.userId)));
   const userRows = await db
-    .select({ id: users.id, plan: users.plan, subscriptionStatus: users.subscriptionStatus, trialEndsAt: users.trialEndsAt })
+    .select({ id: users.id, openId: users.openId, plan: users.plan, subscriptionStatus: users.subscriptionStatus, trialEndsAt: users.trialEndsAt })
     .from(users)
     .where(inArray(users.id, userIds));
 
@@ -371,12 +372,13 @@ export async function runAutoSync(): Promise<void> {
     }
 
     const isTrialing = user.plan === "trial" && user.trialEndsAt != null && user.trialEndsAt > now;
+    const isOwner = ENV.ownerOpenId && user.openId === ENV.ownerOpenId;
     const hasActiveAccess =
+      isOwner || // owner always has access
       isTrialing ||
       user.subscriptionStatus === "active" ||
       user.subscriptionStatus === "trialing";
-
-    if (!hasActiveAccess) continue; // skip inactive users
+    if (!hasActiveAccess) continue; // skip inactive userss
 
     const isGrowth = user.plan === "growth";
 

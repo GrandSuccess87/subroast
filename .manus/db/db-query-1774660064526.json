@@ -1,0 +1,65 @@
+{
+  "query": "\nSELECT \n  oc.id, oc.name, oc.status, oc.lastSyncAt,\n  FROM_UNIXTIME(oc.lastSyncAt/1000) as lastSyncHuman,\n  u.plan, u.subscriptionStatus, u.trialEndsAt,\n  FROM_UNIXTIME(u.trialEndsAt/1000) as trialEndsHuman\nFROM outreach_campaigns oc\nJOIN users u ON u.id = oc.userId\nWHERE oc.status = 'active'\nORDER BY oc.lastSyncAt ASC;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2E9LwDmq6cTgS6X.1f00e7e95180 --database D6eMQgvSZZr9tsyS9zVhzn --execute \nSELECT \n  oc.id, oc.name, oc.status, oc.lastSyncAt,\n  FROM_UNIXTIME(oc.lastSyncAt/1000) as lastSyncHuman,\n  u.plan, u.subscriptionStatus, u.trialEndsAt,\n  FROM_UNIXTIME(u.trialEndsAt/1000) as trialEndsHuman\nFROM outreach_campaigns oc\nJOIN users u ON u.id = oc.userId\nWHERE oc.status = 'active'\nORDER BY oc.lastSyncAt ASC;\n",
+  "rows": [
+    {
+      "id": "60001",
+      "name": "SubRoast ICP Pain-Point Outreach",
+      "status": "active",
+      "lastSyncAt": "1774495426317",
+      "lastSyncHuman": "2026-03-26 03:23:46.3170",
+      "plan": "growth",
+      "subscriptionStatus": "canceled",
+      "trialEndsAt": "1773909604000",
+      "trialEndsHuman": "2026-03-19 08:40:04.0000"
+    },
+    {
+      "id": "30001",
+      "name": "App Validation Complaint Mining",
+      "status": "active",
+      "lastSyncAt": "1774567539205",
+      "lastSyncHuman": "2026-03-26 23:25:39.2050",
+      "plan": "growth",
+      "subscriptionStatus": "canceled",
+      "trialEndsAt": "1773909604000",
+      "trialEndsHuman": "2026-03-19 08:40:04.0000"
+    },
+    {
+      "id": "90001",
+      "name": "For Hire",
+      "status": "active",
+      "lastSyncAt": "1774568269837",
+      "lastSyncHuman": "2026-03-26 23:37:49.8370",
+      "plan": "growth",
+      "subscriptionStatus": "canceled",
+      "trialEndsAt": "1773909604000",
+      "trialEndsHuman": "2026-03-19 08:40:04.0000"
+    },
+    {
+      "id": "1",
+      "name": "Founders Outreach",
+      "status": "active",
+      "lastSyncAt": "1774584237520",
+      "lastSyncHuman": "2026-03-27 04:03:57.5200",
+      "plan": "growth",
+      "subscriptionStatus": "canceled",
+      "trialEndsAt": "1773909604000",
+      "trialEndsHuman": "2026-03-19 08:40:04.0000"
+    },
+    {
+      "id": "120001",
+      "name": "Healthcare Outreach",
+      "status": "active",
+      "lastSyncAt": "1774625370534",
+      "lastSyncHuman": "2026-03-27 15:29:30.5340",
+      "plan": "growth",
+      "subscriptionStatus": "canceled",
+      "trialEndsAt": "1773909604000",
+      "trialEndsHuman": "2026-03-19 08:40:04.0000"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tstatus\tlastSyncAt\tlastSyncHuman\tplan\tsubscriptionStatus\ttrialEndsAt\ttrialEndsHuman\n60001\tSubRoast ICP Pain-Point Outreach\tactive\t1774495426317\t2026-03-26 03:23:46.3170\tgrowth\tcanceled\t1773909604000\t2026-03-19 08:40:04.0000\n30001\tApp Validation Complaint Mining\tactive\t1774567539205\t2026-03-26 23:25:39.2050\tgrowth\tcanceled\t1773909604000\t2026-03-19 08:40:04.0000\n90001\tFor Hire\tactive\t1774568269837\t2026-03-26 23:37:49.8370\tgrowth\tcanceled\t1773909604000\t2026-03-19 08:40:04.0000\n1\tFounders Outreach\tactive\t1774584237520\t2026-03-27 04:03:57.5200\tgrowth\tcanceled\t1773909604000\t2026-03-19 08:40:04.0000\n120001\tHealthcare Outreach\tactive\t1774625370534\t2026-03-27 15:29:30.5340\tgrowth\tcanceled\t1773909604000\t2026-03-19 08:40:04.0000\n",
+  "stderr": "",
+  "execution_time_ms": 78
+}

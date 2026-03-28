@@ -1130,3 +1130,8 @@
 - [ ] Add postCreatedAt column (bigint) to outreach_leads schema
 - [ ] Save post.createdUtc into postCreatedAt on lead insert in both autoSync.ts and outreach.ts
 - [ ] Display postCreatedAt (Reddit post date) instead of discoveredAt in lead card UI
+
+## Auto-Sync Fix
+- [x] Add owner bypass in autoSync.ts so owner's campaigns always sync regardless of subscription status (uses ENV.ownerOpenId)
+- [x] Restore owner account subscriptionStatus to active in DB (plan: growth)
+- [x] Remove Reddit public API fallback from autoSync.ts — was causing 403 noise, Arctic Shift is sufficient
