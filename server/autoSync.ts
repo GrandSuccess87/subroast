@@ -135,7 +135,7 @@ async function searchRedditPosts(
   createdUtc: number;
 }>> {
   // Primary: Arctic Shift mirror (not IP-blocked)
-  const arcticResults = await searchArcticShiftPosts(subreddit, keyword, limit, 30);
+  const arcticResults = await searchArcticShiftPosts(subreddit, keyword, limit, 7);
   if (arcticResults.length > 0) {
     return arcticResults;
   }
@@ -296,6 +296,7 @@ async function syncCampaign(campaign: {
           intentType,
           painPoint,
           status: "new",
+          postCreatedAt: post.createdUtc || null,
           discoveredAt: Date.now(),
         });
         newLeads++;

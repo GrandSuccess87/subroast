@@ -1123,3 +1123,10 @@
 - [x] Update For Hire campaign subreddits to include broader communities
 - [x] Update Healthcare Outreach keywords to conversational Reddit language
 - [x] Verify syncs return leads after keyword update (8/10 keywords tested, 2 failing replaced with confirmed alternatives)
+
+## Lead Sync Date Fixes
+- [ ] Change afterDays from 30 to 7 in autoSync.ts
+- [ ] Change afterDays from 30 to 7 in outreach.ts syncLeads
+- [ ] Add postCreatedAt column (bigint) to outreach_leads schema
+- [ ] Save post.createdUtc into postCreatedAt on lead insert in both autoSync.ts and outreach.ts
+- [ ] Display postCreatedAt (Reddit post date) instead of discoveredAt in lead card UI

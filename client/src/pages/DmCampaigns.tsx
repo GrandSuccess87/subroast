@@ -93,6 +93,7 @@ type Lead = {
   spamScore?: number | null; spamFlags?: string | null;
   isFavorited?: boolean;
   painPoint?: string | null;
+  postCreatedAt?: number | null;
 };
 
 // ─── Shared input style ────────────────────────────────────────────────────────────────────────────────
@@ -772,7 +773,7 @@ function LeadCard({ lead, onGenerateDm, onSendDm, onSkip, onQueue, onCancelQueue
           </a>
 
           <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", color: MUTED }}>
-            u/{lead.authorUsername} · {new Date(lead.discoveredAt).toLocaleDateString()}
+            u/{lead.authorUsername} · {new Date(lead.postCreatedAt ?? lead.discoveredAt).toLocaleDateString()}
           </p>
 
           {isChaining && <div style={{ marginTop: "0.75rem" }}><ProgressSteps steps={["Reading", "Scoring", "Crafting DM", "DM ready", "Comment", "Done"]} currentStep={roastStep !== null ? roastStep : dmStep !== null ? dmStep + 2 : (commentStep ?? 0) + 4} /></div>}
