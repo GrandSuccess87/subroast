@@ -1152,3 +1152,4 @@
 
 ## Pricing Gate (Feedback Phase)
 - [x] Comment out pricing page redirect/gate in create campaign flow during feedback gathering phase (paywall block wrapped in /* */ with TODO to re-enable before launch)
+- [x] Update new-user signup notification email recipient to tessa@subroast.com

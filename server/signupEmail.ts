@@ -8,7 +8,7 @@
 
 import { ENV } from "./_core/env";
 
-const OWNER_EMAIL = "tessa.anderson@blackvectorhorizon.solutions";
+const OWNER_EMAIL = "tessa@subroast.com";
 const FROM_ADDRESS = "SubRoast <onboarding@resend.dev>";
 
 export async function sendSignupEmail(params: {
