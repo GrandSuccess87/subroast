@@ -15,6 +15,10 @@ import { getDb } from "./db";
 import { users, outreachCampaigns } from "../drizzle/schema";
 import { and, eq, isNull, lt, or } from "drizzle-orm";
 import { TRIAL_REMINDER_DAY, TRIAL_DAYS } from "./stripe/products";
+import { ENV } from "./_core/env";
+
+const OWNER_EMAIL = "tessa@subroast.com";
+const FROM_ADDRESS = "SubRoast <onboarding@resend.dev>";
 
 // ─── New Leads Digest ─────────────────────────────────────────────────────────
 
@@ -32,9 +36,8 @@ export async function notifyNewLeads(params: {
 
   const plural = params.newLeadsCount === 1 ? "lead" : "leads";
 
-  await notifyOwner({
-    title: `🎯 ${params.newLeadsCount} new ${plural} found — ${params.campaignName}`,
-    content: `SubRoast found **${params.newLeadsCount} new ${plural}** for your campaign **"${params.campaignName}"**.
+  const title = `🎯 ${params.newLeadsCount} new ${plural} found — ${params.campaignName}`;
+  const bodyText = `SubRoast found **${params.newLeadsCount} new ${plural}** for your campaign **"${params.campaignName}"**.
 
 Total leads in this campaign: ${params.totalLeadsCount}
 
@@ -44,13 +47,72 @@ Total leads in this campaign: ${params.totalLeadsCount}
 3. Click **Analyse & Draft** to generate your outreach message
 4. Send directly
 
-[Open SubRoast → DM Campaigns](https://subroast.com/dm-campaigns)
+[Open SubRoast → DM Campaigns](${params.appUrl}/dm-campaigns)
 
 ---
-*SubRoast monitors Reddit so you don't have to. Leads are scored Strong / Partial / Lowest based on keyword match.*`,
-  }).catch((err) => {
-    console.warn("[Notifications] Failed to send new leads notification:", err?.message ?? err);
+*SubRoast monitors Reddit so you don't have to. Leads are scored Strong / Partial / Lowest based on keyword match.*`;
+
+  // In-app owner notification
+  await notifyOwner({ title, content: bodyText }).catch((err) => {
+    console.warn("[Notifications] Failed to send in-app new leads notification:", err?.message ?? err);
   });
+
+  // Resend email to owner
+  if (ENV.resendApiKey) {
+    const html = `
+      <div style="font-family: sans-serif; max-width: 560px; margin: 0 auto; color: #1a1a1a;">
+        <h2 style="color: #e07b39; margin-bottom: 4px;">🎯 ${params.newLeadsCount} new ${plural} found</h2>
+        <p style="color: #6b7280; margin-top: 0;">Campaign: <strong>${params.campaignName}</strong></p>
+        <table style="width:100%; border-collapse:collapse; margin-top:16px;">
+          <tr>
+            <td style="padding:8px 12px; background:#f9fafb; border:1px solid #e5e7eb; font-weight:600; width:160px;">New leads</td>
+            <td style="padding:8px 12px; border:1px solid #e5e7eb;">${params.newLeadsCount}</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 12px; background:#f9fafb; border:1px solid #e5e7eb; font-weight:600;">Total leads</td>
+            <td style="padding:8px 12px; border:1px solid #e5e7eb;">${params.totalLeadsCount}</td>
+          </tr>
+        </table>
+        <div style="margin-top:24px;">
+          <p style="font-weight:600;">What to do next:</p>
+          <ol style="padding-left:20px; color:#374151;">
+            <li>Open your DM Campaigns inbox</li>
+            <li>Filter by <strong>Strong match</strong> to find your best leads</li>
+            <li>Click <strong>Analyse &amp; Draft</strong> to generate your outreach message</li>
+            <li>Send directly</li>
+          </ol>
+        </div>
+        <a href="${params.appUrl}/dm-campaigns" style="display:inline-block; margin-top:20px; padding:10px 20px; background:#e07b39; color:#fff; text-decoration:none; border-radius:6px; font-weight:600;">Open DM Campaigns →</a>
+        <p style="margin-top:24px; font-size:12px; color:#9ca3af;">
+          This is an automated notification from SubRoast. Leads are scored Strong / Partial / Lowest based on keyword match.
+        </p>
+      </div>
+    `;
+    fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${ENV.resendApiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: FROM_ADDRESS,
+        to: [OWNER_EMAIL],
+        subject: title,
+        html,
+      }),
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          const detail = await res.text().catch(() => "");
+          console.warn(`[Notifications] Resend API error (${res.status}): ${detail}`);
+        } else {
+          console.log(`[Notifications] New leads email sent for campaign "${params.campaignName}" (${params.newLeadsCount} leads)`);
+        }
+      })
+      .catch((err) => {
+        console.warn("[Notifications] Failed to send new leads email:", err?.message ?? err);
+      });
+  }
 }
 
 // ─── Trial Reminder ───────────────────────────────────────────────────────────
