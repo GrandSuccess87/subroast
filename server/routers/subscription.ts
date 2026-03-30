@@ -55,7 +55,7 @@ async function getOrCreateStripeCustomer(
 
 // ─── Test user guard ────────────────────────────────────────────────────────
 const TEST_USER_EMAILS = new Set([
-  "tessa.anderson@blackvectorhorizon.solutions",
+  "tessa@subroast.com",
 ]);
 
 function isTestUser(email: string | null | undefined): boolean {

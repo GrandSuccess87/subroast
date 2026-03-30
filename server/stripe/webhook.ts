@@ -7,7 +7,7 @@ import { eq } from "drizzle-orm";
 
 // ─── Test users: never charge, never update subscription state ───────────────
 const TEST_USER_EMAILS = new Set([
-  "tessa.anderson@blackvectorhorizon.solutions",
+  "tessa@subroast.com",
 ]);
 
 /** Returns true if the given email is a protected test account */
