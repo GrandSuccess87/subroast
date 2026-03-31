@@ -91,7 +91,9 @@ function EarlyAccessBanner() {
   const [dismissed, setDismissed] = useState(() =>
     sessionStorage.getItem("ea_banner_dismissed") === "1"
   );
+  const { data: subStatus } = trpc.subscription.getStatus.useQuery(undefined, { staleTime: 60_000 });
   if (dismissed) return null;
+  if (subStatus?.subscriptionStatus === "active") return null;
   return (
     <div
       style={{
