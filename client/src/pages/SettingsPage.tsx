@@ -181,16 +181,16 @@ export default function SettingsPage() {
                     <p style={{ fontSize: "0.85rem", color: FOREGROUND, fontWeight: 500, textTransform: "capitalize", marginBottom: "0.2rem" }}>
                       {subStatus.plan === "none" ? "No active plan" : `${subStatus.plan} Plan`}
                     </p>
-                    {subStatus.isTrialing && subStatus.trialDaysLeft !== undefined && (
+                    {subStatus.isTrialing && (
                       <p style={{ fontFamily: FONT_MONO, fontSize: "0.62rem", color: "oklch(0.78 0.14 65)", letterSpacing: "0.08em" }}>
-                        Free trial — {subStatus.trialDaysLeft} day{subStatus.trialDaysLeft !== 1 ? "s" : ""} remaining
+                        Beta access
                       </p>
                     )}
                     {subStatus.subscriptionStatus === "active" && !subStatus.isTrialing && (
                       <p style={{ fontFamily: FONT_MONO, fontSize: "0.62rem", color: IVORY, letterSpacing: "0.08em" }}>Active subscription</p>
                     )}
                     {subStatus.plan === "none" && (
-                      <p style={{ fontFamily: FONT_MONO, fontSize: "0.62rem", color: MUTED, letterSpacing: "0.08em" }}>Start a free trial to unlock campaigns</p>
+                      <p style={{ fontFamily: FONT_MONO, fontSize: "0.62rem", color: MUTED, letterSpacing: "0.08em" }}>Subscribe to unlock campaigns</p>
                     )}
                   </div>
                   <span style={{
@@ -211,7 +211,7 @@ export default function SettingsPage() {
                   <Shield size={12} color={MUTED} />
                   {subStatus.campaignLimit === null
                     ? "Unlimited campaigns (Growth plan)"
-                    : `${subStatus.campaignLimit} campaign max on ${subStatus.plan === "none" ? "free trial" : subStatus.plan + " plan"}`}
+                    : `${subStatus.campaignLimit} campaign max on ${subStatus.plan === "none" ? "free" : subStatus.plan + " plan"}`}
                 </div>
 
                 {/* Action buttons */}

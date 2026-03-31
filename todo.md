@@ -1154,3 +1154,11 @@
 - [x] Comment out pricing page redirect/gate in create campaign flow during feedback gathering phase (paywall block wrapped in /* */ with TODO to re-enable before launch)
 - [x] Update new-user signup notification email recipient to tessa@subroast.com
 - [x] Update new-leads notification to send Resend email to tessa@subroast.com
+- [x] Remove 7-day trial from pricing page and all CTAs
+- [x] Fix FAQs: remove Reddit commercial API approval answer, replace with accurate copy
+- [x] Update Chrome extension callout copy to remove API rate-limit framing
+- [x] Replace stat bar "7 / Day free trial" with meaningful stat
+- [x] Update WaitlistGateModal trial copy
+- [x] Update SettingsPage trial copy
+- [x] Add visible sync limit indicator in campaign detail view
+- [x] Improve sync limit error toast to show friendly plan-aware message

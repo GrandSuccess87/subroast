@@ -77,6 +77,7 @@ type Campaign = {
   campaignType: "outreach" | "validation"; reviewMode: "auto_send" | "review_first"; status: "active" | "paused" | "completed";
   leadsFound: number; dmsSent: number; lastSyncAt?: number | null;
   minSubSize?: number | null; maxSubSize?: number | null;
+  dailySyncsUsed?: number | null; dailySyncsResetAt?: number | null;
 };
 
 type Lead = {
@@ -1039,6 +1040,7 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
     { refetchInterval: 60_000 }
   );
   const { data: rateLimits } = trpc.reddit.getRateLimitStatus.useQuery();
+  const { data: subStatus } = trpc.subscription.getStatus.useQuery();
 
   const syncLeads = trpc.outreach.syncLeads.useMutation({
     onSuccess: (data) => {
@@ -1054,7 +1056,18 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
       utils.outreach.getLeads.invalidate({ campaignId: campaign.id });
       utils.outreach.listCampaigns.invalidate();
     },
-    onError: (err) => toast.error(err.message),
+    onError: (err) => {
+      if (err.message.includes("Daily sync limit reached")) {
+        const plan = subStatus?.plan ?? "starter";
+        const limit = plan === "growth" ? 6 : 2;
+        toast.error(`Daily sync limit reached (${limit}×/day on ${plan} plan). Resets at midnight UTC.`, {
+          action: plan !== "growth" ? { label: "Upgrade to Growth", onClick: () => window.location.href = "/pricing" } : undefined,
+          duration: 8000,
+        });
+      } else {
+        toast.error(err.message);
+      }
+    },
   });
 
   const generateDm = trpc.outreach.generateDm.useMutation({
@@ -1193,6 +1206,33 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
         </div>
         {showEdit && <EditCampaignModal key={campaign.id + '-' + campaign.keywords.length + '-' + campaign.subreddits.length + '-' + (campaign.aiPromptInstructions ?? '').length} campaign={campaign} onClose={() => setShowEdit(false)} />}
       </div>
+
+      {/* Sync limit indicator */}
+      {(() => {
+        const plan = subStatus?.plan ?? "none";
+        const dailyLimit = plan === "growth" ? 6 : 2;
+        const todayUtcStart = new Date();
+        todayUtcStart.setUTCHours(0, 0, 0, 0);
+        const resetAt = campaign.dailySyncsResetAt ?? 0;
+        const syncsUsed = resetAt < todayUtcStart.getTime() ? 0 : (campaign.dailySyncsUsed ?? 0);
+        const atLimit = syncsUsed >= dailyLimit;
+        return (
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.6rem 0.9rem", border: `0.5px solid ${atLimit ? "oklch(0.65 0.18 25 / 0.4)" : BORDER}`, background: atLimit ? "oklch(0.65 0.18 25 / 0.04)" : SURFACE, marginBottom: "1.25rem", flexWrap: "wrap" }}>
+            <RefreshCw size={11} color={atLimit ? DANGER : MUTED} />
+            <span style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: atLimit ? DANGER : MUTED }}>
+              Syncs today: {syncsUsed}/{dailyLimit}
+            </span>
+            {atLimit ? (
+              <span style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", color: DANGER }}>Limit reached · Resets at midnight UTC</span>
+            ) : (
+              <span style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", color: MUTED }}>{dailyLimit - syncsUsed} remaining</span>
+            )}
+            {plan !== "growth" && (
+              <a href="/pricing" style={{ marginLeft: "auto", fontFamily: FONT_MONO, fontSize: "0.55rem", letterSpacing: "0.1em", textTransform: "uppercase", color: AMBER, textDecoration: "none", borderBottom: `0.5px solid ${AMBER}50` }}>Upgrade for 6×/day →</a>
+            )}
+          </div>
+        );
+      })()}
 
       {/* Stats grid — commented out, kept in backlog for future consideration
       {(() => {

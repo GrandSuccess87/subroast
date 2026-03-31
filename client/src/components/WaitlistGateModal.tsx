@@ -378,7 +378,7 @@ export default function WaitlistGateModal({ open, onClose }: WaitlistGateModalPr
                 lineHeight: 1.25,
                 marginBottom: "0.75rem",
               }}>
-                Start your 7-day<br />free trial now.
+                Start finding leads<br />on Reddit today.
               </h2>
 
               <p style={{
@@ -416,7 +416,7 @@ export default function WaitlistGateModal({ open, onClose }: WaitlistGateModalPr
                 onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.opacity = "0.85")}
                 onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.opacity = "1")}
               >
-                Begin free trial →
+                Get started free →
               </a>
 
               <p style={{
@@ -426,7 +426,7 @@ export default function WaitlistGateModal({ open, onClose }: WaitlistGateModalPr
                 letterSpacing: "0.12em",
                 textTransform: "uppercase",
               }}>
-                No charge until day 7 · Cancel any time
+                No credit card required · Cancel any time
               </p>
             </div>
           )}

@@ -867,7 +867,7 @@ function StatBar() {
     { value: "5", label: "Buyer intent tiers" },
     { value: "AI", label: "Pain point extraction" },
     { value: "25", label: "DMs per day" },
-    { value: "7", label: "Day free trial" },
+    { value: "2×", label: "Daily auto-sync" },
   ];
   return (
     <section
@@ -2564,15 +2564,15 @@ const PRICING_FAQS = [
   },
   {
     q: "When will paid plans launch?",
-    a: "We are completing Reddit's commercial API approval process. Paid plans will launch once that approval is in place. Early-access users will be the first to know and will receive a locked-in early-adopter price.",
+    a: "Paid plans are ready now. Early-access users get a locked-in early-adopter rate. Subscribe directly from the pricing page — no waiting list, no approval process.",
   },
   {
     q: "Will my early-access price be locked in?",
-    a: "Yes. Founders who join during the beta will receive a discounted early-adopter rate that is locked in for the lifetime of their subscription.",
+    a: "Yes. Founders who subscribe during the beta will receive a discounted early-adopter rate that is locked in for the lifetime of their subscription.",
   },
   {
-    q: "Is this month-to-month when paid plans launch?",
-    a: "Yes — all plans will be billed monthly with no long-term contracts. Cancel anytime, no questions asked.",
+    q: "Is this month-to-month?",
+    a: "Yes — all plans are billed monthly with no long-term contracts. Cancel anytime, no questions asked.",
   },
 ];
 

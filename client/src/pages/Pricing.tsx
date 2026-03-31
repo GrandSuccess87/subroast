@@ -22,7 +22,7 @@ const PLANS = [
       "Match scoring (Strong / Partial / Lowest)",
       "Email alerts for new leads",
     ],
-    cta: "Begin 7-Day Trial",
+    cta: "Get Started",
     popular: false,
   },
   {
@@ -40,7 +40,7 @@ const PLANS = [
       "DM template library __COMING_SOON__",
       "Advanced analytics __COMING_SOON__",
     ],
-    cta: "Begin 7-Day Trial",
+    cta: "Get Started",
     popular: true,
   },
 ];
@@ -52,19 +52,19 @@ const FAQS = [
   },
   {
     q: "When will paid plans launch?",
-    a: "We are completing Reddit's commercial API approval process. Paid plans will launch once that approval is in place. Early-access users will be the first to know and will receive a locked-in early-adopter price.",
+    a: "Paid plans are ready now. Early-access users get a locked-in early-adopter rate. You can subscribe directly from the pricing page — no waiting list, no approval process.",
   },
   {
     q: "Will my early-access price be locked in?",
-    a: "Yes. Founders who join during the beta will receive a discounted early-adopter rate that is locked in for the lifetime of their subscription.",
+    a: "Yes. Founders who subscribe during the beta will receive a discounted early-adopter rate that is locked in for the lifetime of their subscription.",
   },
   {
-    q: "What are the usage limits during beta?",
-    a: "Beta users get generous daily limits across all features. When you reach a limit you'll see a clear message — full access unlocks when paid plans launch.",
+    q: "How does lead sync work?",
+    a: "SubRoast automatically scans your target subreddits for posts matching your keywords. Starter plans sync 2× daily; Growth plans sync every 4 hours (6× daily). You can also trigger a manual sync anytime from your campaign dashboard.",
   },
   {
-    q: "Is this month-to-month when paid plans launch?",
-    a: "Yes — all plans will be billed monthly with no long-term contracts. Cancel anytime, no questions asked.",
+    q: "Is this month-to-month?",
+    a: "Yes — all plans are billed monthly with no long-term contracts. Cancel anytime, no questions asked.",
   },
 ];
 
@@ -514,7 +514,7 @@ export default function Pricing() {
                 maxWidth: "60ch",
               }}
             >
-              Reddit's public API is rate-limited, increasingly restricted, and a direct line to account bans when used for automated sending. The Chrome extension sidesteps all of this — every action happens inside your own authenticated browser session, indistinguishable from a human manually clicking. No API keys, no bot fingerprints, no ban risk. SubRoast remains the intelligence layer; the extension is purely the delivery mechanism.
+              SubRoast finds the leads and drafts the perfect message. The Chrome extension will let you send it in one click — directly from your own browser session, indistinguishable from a human manually clicking. No API keys, no bot fingerprints, no ban risk. SubRoast is the intelligence layer; the extension is purely the delivery mechanism.
             </p>
           </div>
         </div>
