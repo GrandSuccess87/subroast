@@ -87,7 +87,7 @@ export default function Pricing() {
 
   const priceLabel = spots?.priceLabel ?? "$25/month";
   const spotsLabel = spots?.spotsLabel ?? "";
-  const priceUsd = spots?.priceUsd ?? 25;
+  const priceUsd = Math.round((spots?.priceUsd ?? 2500) / 100);
 
   return (
     <div style={{ minHeight: "100vh", background: BG, color: FOREGROUND, fontFamily: "Inter, sans-serif" }}>

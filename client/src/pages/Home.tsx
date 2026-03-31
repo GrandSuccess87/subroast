@@ -2386,7 +2386,7 @@ function HomePricingSection() {
   };
 
   const { data: spots } = trpc.subscription.getFounderSpots.useQuery(undefined, { staleTime: 30_000 });
-  const priceUsd = spots?.priceUsd ?? 25;
+  const priceUsd = Math.round((spots?.priceUsd ?? 2500) / 100);
   const spotsLabel = spots?.spotsLabel ?? "";
 
   return (
