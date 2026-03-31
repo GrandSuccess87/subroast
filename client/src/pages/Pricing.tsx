@@ -210,14 +210,7 @@ export default function Pricing() {
           ))}
         </div>
 
-        {/* Test card notice */}
-        <p style={{ textAlign: "center", fontFamily: FONT_MONO, fontSize: "0.6rem", color: MUTED, letterSpacing: "0.08em", marginTop: "4rem" }}>
-          Testing? Use card{" "}
-          <span style={{ border: `0.5px solid ${BORDER}`, padding: "0.1rem 0.4rem", background: SURFACE }}>
-            4242 4242 4242 4242
-          </span>{" "}
-          with any future expiry and any CVC.
-        </p>
+
       </div>
     </div>
   );
