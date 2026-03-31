@@ -1162,3 +1162,24 @@
 - [x] Update SettingsPage trial copy
 - [x] Add visible sync limit indicator in campaign detail view
 - [x] Improve sync limit error toast to show friendly plan-aware message
+- [ ] Update Stripe products.ts to single Founder Plan with $25/$35/$45 dynamic pricing
+- [ ] Add getFounderPlanPrice() server helper that reads paid subscriber count and returns correct price
+- [ ] Add getPaidSubscriberCount() DB helper
+- [ ] Update createCampaign paywall: re-enable gate, allow 1 free campaign, trigger UPGRADE_REQUIRED on 2nd
+- [ ] Update syncLeads paywall: allow 3 free syncs total (not daily), block on 4th with SYNC_LIMIT_REACHED
+- [ ] Add founderSpotsRemaining tRPC query for scarcity counter
+- [ ] Build PaywallModal component (sync limit + campaign limit variants)
+- [ ] Wire PaywallModal into DmCampaigns on sync error and campaign creation error
+- [ ] Update Pricing.tsx: single Founder Plan, dynamic price + scarcity counter, comment out Growth, remove Chrome extension section
+- [ ] Update Home.tsx: remove all Chrome extension references, replace beta copy with founder-access framing
+- [ ] Update WaitlistGateModal: founder-access copy
+- [ ] Update SettingsPage: founder-access copy, remove Growth plan references
+- [ ] Remove "(Strong / Partial / Lowest)" match score label everywhere
+- [ ] Remove "Free during beta" from all locations
+- [x] Replace HOME_PLANS two-plan grid with single Founder Plan card in Home.tsx
+- [x] Add dynamic scarcity counter (getFounderSpots) to Home.tsx pricing section
+- [x] Update PRICING_FAQS in Home.tsx to reflect 3 free syncs model
+- [x] Remove all "Free during beta" copy from Home.tsx
+- [x] Remove Chrome extension / "coming soon" copy from DmCampaigns.tsx
+- [x] Update campaign limit banner in DmCampaigns.tsx to Founder Access copy
+- [ ] Note: Resend emails will fail in dev (onboarding@resend.dev only works in production with verified domain)

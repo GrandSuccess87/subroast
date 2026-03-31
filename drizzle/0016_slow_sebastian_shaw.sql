@@ -1,0 +1,2 @@
+ALTER TABLE `users` MODIFY COLUMN `plan` enum('trial','starter','growth','founder','none') NOT NULL DEFAULT 'none';--> statement-breakpoint
+ALTER TABLE `outreach_campaigns` ADD `totalSyncsUsed` int DEFAULT 0 NOT NULL;

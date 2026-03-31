@@ -1198,7 +1198,7 @@ export default function Home() {
                   textTransform: "uppercase",
                 }}
               >
-                Free during beta · Full access · No credit card · No commitment
+                3 free syncs · No credit card · No commitment
               </p>
             </div>
             {/* RIGHT: Lead Intelligence section + animated demo */}
@@ -1547,15 +1547,15 @@ color: "oklch(0.92 0.006 80)",
         <div className="container" style={{ textAlign: "center" }}>
           <div style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", gap: "1.2rem" }}>
             <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "oklch(0.78 0.14 65)", background: "oklch(0.78 0.14 65 / 0.08)", border: "0.5px solid oklch(0.78 0.14 65 / 0.25)", padding: "0.35rem 0.9rem", borderRadius: "2px" }}>Early Access</span>
-            <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 400, color: "oklch(0.93 0.025 60)", margin: 0, lineHeight: 1.15 }}>Free during beta</h2>
-            <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.7rem", letterSpacing: "0.08em", color: "oklch(0.6 0.02 60)", margin: 0, maxWidth: "32ch", lineHeight: 1.7 }}>Full access. No credit card. No commitment.</p>
+            <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 400, color: "oklch(0.93 0.025 60)", margin: 0, lineHeight: 1.15 }}>Early users shape the product.</h2>
+            <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.7rem", letterSpacing: "0.08em", color: "oklch(0.6 0.02 60)", margin: 0, maxWidth: "32ch", lineHeight: 1.7 }}>3 free syncs to get started. No credit card required.</p>
             <a
               href={getLoginUrl("/onboarding")}
               className="btn-luxury-primary"
               style={{ marginTop: "0.5rem", textDecoration: "none", display: "inline-flex", alignItems: "center" }}
               onClick={trackMidpageCta}
             >
-              Get Early Access
+              Get Founder Access
             </a>
           </div>
         </div>
@@ -2019,7 +2019,6 @@ const SAFETY_ITEMS = [
   "Spam risk score on every lead",
   "Flags templated or bot-like content",
   "Roast catches promo language before you post",
-  "One-click send via extension — coming soon",
   "Sends from your browser session — no API token, no bot fingerprint",
   "Your browser session, your account",
 ];
@@ -2171,7 +2170,7 @@ function CtaSection({ onOpenModal }: { onOpenModal: () => void }) {
             marginTop: "1.5rem",
           }}
         >
-          Free during beta · No credit card required
+          3 free syncs · No credit card required
         </p>
       </div>
     </section>
@@ -2179,41 +2178,15 @@ function CtaSection({ onOpenModal }: { onOpenModal: () => void }) {
 }
 
 /* ── Pricing section (landing page) ── */
-const HOME_PLANS = [
-  {
-    key: "starter" as const,
-    tier: "I",
-    name: "Starter",
-    price: 19,
-    description: "For founders testing Reddit as a distribution channel.",
-    features: [
-      "1 outreach campaign",
-      "AI pain point extraction per lead",
-      "5-tier buyer intent classification",
-      "AI Draft & Roast with virality score",
-      "Lead sync: 2× daily",
-      "AI-generated personalized DMs",
-      "Match scoring (Strong / Partial / Lowest)",
-    ],
-    popular: false,
-  },
-  {
-    key: "growth" as const,
-    tier: "II",
-    name: "Growth",
-    price: 39,
-    description: "For founders ready to scale Reddit outreach systematically.",
-    features: [
-      "Everything in Starter",
-      "Unlimited outreach campaigns",
-      "Pain Point Frequency insights panel",
-      "Lead sync: every 4 hours (6× daily)",
-      "Market Intelligence campaigns",
-      "One-click send via Chrome extension — coming soon",
-      "Advanced analytics — coming soon",
-    ],
-    popular: true,
-  },
+const HOME_FOUNDER_FEATURES = [
+  "Unlimited outreach campaigns",
+  "Unlimited lead syncs",
+  "Buyer intent detection & heat scoring",
+  "AI-generated personalized DMs",
+  "AI Draft & Roast with virality score",
+  "Pain point clustering across leads",
+  "Email alerts for new leads",
+  "Lock in early pricing forever",
 ];
 
 /* ── What's Coming ── */
@@ -2403,14 +2376,18 @@ function HomePricingSection() {
     },
   });
 
-  const handleSelectPlan = (planKey: "starter" | "growth") => {
+  const handleGetAccess = () => {
     if (!user) {
       window.location.href = getLoginUrl();
       return;
     }
-    setLoadingPlan(planKey);
-    createCheckout.mutate({ plan: planKey, origin: window.location.origin });
+    setLoadingPlan("founder");
+    createCheckout.mutate({ plan: "founder", origin: window.location.origin });
   };
+
+  const { data: spots } = trpc.subscription.getFounderSpots.useQuery(undefined, { staleTime: 30_000 });
+  const priceUsd = spots?.priceUsd ?? 25;
+  const spotsLabel = spots?.spotsLabel ?? "";
 
   return (
     <section
@@ -2431,124 +2408,61 @@ function HomePricingSection() {
           </h2>
           <div className="rule-gold mx-auto mb-6" style={{ width: "3rem" }} />
           <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.9375rem", fontWeight: 300, color: "oklch(0.62 0.006 80)", lineHeight: 1.75, maxWidth: "40ch", margin: "0 auto" }}>
-            Free during beta. No credit card required.
+            3 free syncs to get started. No credit card required.
           </p>
+          {spotsLabel && (
+            <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", border: "0.5px solid oklch(0.88 0.025 85 / 0.35)", padding: "0.4rem 1.2rem", fontFamily: "var(--font-mono)", fontSize: "0.65rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "oklch(0.88 0.025 85)", marginBottom: "2rem" }}>
+              🔥 {spotsLabel}
+            </div>
+          )}
         </div>
 
-        {/* Plan cards */}
+        {/* Single Founder Plan card */}
         <div
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-            gap: "1.5px",
-            maxWidth: "780px",
+            maxWidth: "480px",
             margin: "0 auto 3rem",
             border: "0.5px solid oklch(0.22 0.007 60)",
           }}
         >
-          {HOME_PLANS.map((plan) => {
-            const isLoading = loadingPlan === plan.key;
-            return (
-              <div
-                key={plan.key}
-                style={{
-                  background: plan.popular ? "oklch(0.14 0.007 60)" : "oklch(0.12 0.007 60)",
-                  padding: "2.5rem 2rem",
-                  display: "flex",
-                  flexDirection: "column",
-                  borderRight: plan.popular ? "none" : "0.5px solid oklch(0.22 0.007 60)",
-                }}
-              >
-                {/* Tier */}
-                <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", letterSpacing: "0.25em", textTransform: "uppercase", color: "oklch(0.85 0.006 80)", marginBottom: "0.75rem" }}>
-                  Tier {plan.tier}
-                </p>
-                {/* Name */}
-                <h3 style={{ fontFamily: "var(--font-display)", fontSize: "2rem", fontWeight: 400, fontStyle: "italic", color: "oklch(0.93 0.010 80)", marginBottom: "0.4rem", lineHeight: 1.1 }}>
-                  {plan.name}
-                </h3>
-                <p style={{ fontSize: "0.82rem", color: "oklch(0.92 0.006 80)", marginBottom: "1.75rem", lineHeight: 1.6 }}>
-                  {plan.description}
-                </p>
-                {/* Price */}
-                <div style={{ borderTop: "0.5px solid oklch(0.22 0.007 60)", borderBottom: "0.5px solid oklch(0.22 0.007 60)", padding: "1.25rem 0", marginBottom: "1.75rem" }}>
-                  <div style={{ display: "flex", alignItems: "baseline", gap: "0.25rem" }}>
-                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "2.5rem", fontWeight: 400, color: "oklch(0.93 0.010 80)", lineHeight: 1 }}>
-                      ${plan.price}
-                    </span>
-                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.7rem", color: "oklch(0.85 0.006 80)", letterSpacing: "0.08em" }}>/ month</span>
-                  </div>
-                  <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", color: "oklch(0.85 0.006 80)", letterSpacing: "0.1em", marginTop: "0.35rem" }}>
-                    Free during beta
-                  </p>
-                </div>
-                {/* Features */}
-                <ul style={{ listStyle: "none", padding: 0, margin: "0 0 2rem", flex: 1, display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-                  {plan.features.map((feature) => {
-                    const isComingSoon = feature.endsWith(" — coming soon");
-                    const label = isComingSoon ? feature.replace(" — coming soon", "") : feature;
-                    return (
-                      <li key={feature} style={{ display: "flex", alignItems: "flex-start", gap: "0.65rem", fontSize: "0.82rem", color: isComingSoon ? "oklch(0.45 0 0)" : "oklch(0.93 0.010 80)", lineHeight: 1.5 }}>
-                        <span style={{ width: "14px", height: "14px", border: `0.5px solid ${isComingSoon ? "oklch(0.28 0 0)" : "oklch(0.88 0.025 85 / 0.35)"}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: "1px" }}>
-                          <Check size={8} color={isComingSoon ? "oklch(0.35 0 0)" : "oklch(0.88 0.025 85)"} />
-                        </span>
-                        <span style={{ display: "flex", alignItems: "center", gap: "0.4rem", flexWrap: "wrap" }}>
-                          {label}
-                          {isComingSoon && (
-                            <span style={{
-                              fontFamily: "var(--font-mono)",
-                              fontSize: "0.48rem",
-                              letterSpacing: "0.12em",
-                              textTransform: "uppercase",
-                              color: "oklch(0.78 0.14 65)",
-                              border: "0.5px solid oklch(0.78 0.14 65 / 0.35)",
-                              padding: "0.1rem 0.35rem",
-                            }}>
-                              Soon
-                            </span>
-                          )}
-                        </span>
-                      </li>
-                    );
-                  })}
-                </ul>
-                {/* CTA */}
-                <button
-                  onClick={() => handleSelectPlan(plan.key)}
-                  disabled={isLoading}
-                  style={{
-                    width: "100%",
-                    padding: "0.85rem 1.5rem",
-                    background: plan.popular ? "oklch(0.88 0.025 85)" : "transparent",
-                    border: `0.5px solid ${plan.popular ? "oklch(0.88 0.025 85)" : "oklch(0.22 0.007 60)"}`,
-                    color: plan.popular ? "oklch(0.09 0.008 60)" : "oklch(0.93 0.010 80)",
-                    fontFamily: "var(--font-mono)",
-                    fontSize: "0.68rem",
-                    letterSpacing: "0.2em",
-                    textTransform: "uppercase",
-                    cursor: isLoading ? "not-allowed" : "pointer",
-                    opacity: isLoading ? 0.6 : 1,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "0.5rem",
-                    transition: "background 0.25s ease, border-color 0.25s ease, color 0.25s ease",
-                  }}
-                >
-                  {isLoading ? (
-                    <><Loader2 size={12} style={{ animation: "spin 1s linear infinite" }} /> Opening checkout…</>
-                  ) : (
-                    "Start Free Access"
-                  )}
-                </button>
+          <div style={{ background: "oklch(0.14 0.007 60)", padding: "2.5rem 2rem", display: "flex", flexDirection: "column" }}>
+            <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", letterSpacing: "0.25em", textTransform: "uppercase", color: "oklch(0.85 0.006 80)", marginBottom: "0.75rem" }}>Founder Plan</p>
+            <h3 style={{ fontFamily: "var(--font-display)", fontSize: "2rem", fontWeight: 400, fontStyle: "italic", color: "oklch(0.93 0.010 80)", marginBottom: "0.4rem", lineHeight: 1.1 }}>Unlimited Access</h3>
+            <p style={{ fontSize: "0.82rem", color: "oklch(0.92 0.006 80)", marginBottom: "1.75rem", lineHeight: 1.6 }}>For founders ready to turn Reddit conversations into customers.</p>
+            <div style={{ borderTop: "0.5px solid oklch(0.22 0.007 60)", borderBottom: "0.5px solid oklch(0.22 0.007 60)", padding: "1.25rem 0", marginBottom: "1.75rem" }}>
+              <div style={{ display: "flex", alignItems: "baseline", gap: "0.25rem" }}>
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: "2.5rem", fontWeight: 400, color: "oklch(0.93 0.010 80)", lineHeight: 1 }}>${priceUsd}</span>
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.7rem", color: "oklch(0.85 0.006 80)", letterSpacing: "0.08em" }}>/ month</span>
               </div>
-            );
-          })}
+              {spotsLabel && <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", color: "oklch(0.72 0.18 50)", letterSpacing: "0.1em", marginTop: "0.35rem" }}>{spotsLabel}</p>}
+            </div>
+            <ul style={{ listStyle: "none", padding: 0, margin: "0 0 2rem", flex: 1, display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+              {HOME_FOUNDER_FEATURES.map((feature) => (
+                <li key={feature} style={{ display: "flex", alignItems: "flex-start", gap: "0.65rem", fontSize: "0.82rem", color: "oklch(0.93 0.010 80)", lineHeight: 1.5 }}>
+                  <span style={{ width: "14px", height: "14px", border: "0.5px solid oklch(0.88 0.025 85 / 0.35)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: "1px" }}>
+                    <Check size={8} color="oklch(0.88 0.025 85)" />
+                  </span>
+                  {feature}
+                </li>
+              ))}
+            </ul>
+            <button
+              onClick={handleGetAccess}
+              disabled={loadingPlan === "founder"}
+              style={{ width: "100%", padding: "0.85rem 1.5rem", background: "oklch(0.88 0.025 85)", border: "0.5px solid oklch(0.88 0.025 85)", color: "oklch(0.09 0.008 60)", fontFamily: "var(--font-mono)", fontSize: "0.68rem", letterSpacing: "0.2em", textTransform: "uppercase", cursor: loadingPlan === "founder" ? "not-allowed" : "pointer", opacity: loadingPlan === "founder" ? 0.6 : 1, display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", transition: "background 0.25s ease" }}
+            >
+              {loadingPlan === "founder" ? (
+                <><Loader2 size={12} style={{ animation: "spin 1s linear infinite" }} /> Opening checkout…</>
+              ) : (
+                "Get Founder Access"
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Trust line */}
         <p style={{ textAlign: "center", fontFamily: "var(--font-mono)", fontSize: "0.58rem", color: "oklch(0.75 0 0)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "4rem" }}>
-           Free during beta · No credit card required
+           3 free syncs · No credit card required
         </p>
         {/* FAQ accordion */}
         <PricingFAQ />
@@ -2560,19 +2474,19 @@ function HomePricingSection() {
 const PRICING_FAQS = [
   {
     q: "Do I need a credit card to get started?",
-    a: "No — SubRoast is completely free during the beta. No credit card, no payment details required. Just sign up and start finding leads.",
+    a: "No — you can sign up and run your first campaign with 3 free syncs, no card required. A card is only needed when you’re ready to unlock unlimited access.",
   },
   {
-    q: "When will paid plans launch?",
-    a: "Paid plans are ready now. Early-access users get a locked-in early-adopter rate. Subscribe directly from the pricing page — no waiting list, no approval process.",
+    q: "What happens after my 3 free syncs?",
+    a: "You keep all the leads you’ve already found. To continue syncing and finding new leads, upgrade to the Founder Plan.",
   },
   {
-    q: "Will my early-access price be locked in?",
-    a: "Yes. Founders who subscribe during the beta will receive a discounted early-adopter rate that is locked in for the lifetime of their subscription.",
+    q: "Will my Founder pricing be locked in?",
+    a: "Yes. Founders who subscribe early lock in their rate for the lifetime of their subscription — even as the price increases for new users.",
   },
   {
     q: "Is this month-to-month?",
-    a: "Yes — all plans are billed monthly with no long-term contracts. Cancel anytime, no questions asked.",
+    a: "Yes — billed monthly with no long-term contracts. Cancel anytime, no questions asked.",
   },
 ];
 

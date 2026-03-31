@@ -5,7 +5,8 @@ import { getStripe } from "../stripe/client";
 import { getDb } from "../db";
 import { users } from "../../drizzle/schema";
 import { eq } from "drizzle-orm";
-import { PLANS, TRIAL_DAYS, type PlanKey } from "../stripe/products";
+import { PLANS, FOUNDER_PLAN, getFounderPriceTier, FREE_SYNCS_LIMIT, FREE_CAMPAIGN_LIMIT, TRIAL_DAYS, type PlanKey } from "../stripe/products";
+import { getPaidSubscriberCount } from "../db";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -110,9 +111,9 @@ export const subscriptionRouter = router({
     };
   }),
 
-  /** Create Stripe Checkout session for a plan */
+  /** Create Stripe Checkout session for the Founder Plan */
   createCheckoutSession: protectedProcedure
-    .input(z.object({ plan: z.enum(["starter", "growth"]), origin: z.string() }))
+    .input(z.object({ plan: z.enum(["starter", "growth", "founder"]), origin: z.string() }))
     .mutation(async ({ ctx, input }) => {
       // ⚠️ Test user guard: never create real Stripe sessions for test accounts
       if (isTestUser(ctx.user.email)) {
@@ -123,8 +124,11 @@ export const subscriptionRouter = router({
       }
 
       const stripe = getStripe();
-      const plan = PLANS[input.plan as PlanKey];
-      if (!plan) throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid plan" });
+
+      // Determine dynamic price based on current paid subscriber count
+      const paidCount = await getPaidSubscriberCount();
+      const tier = getFounderPriceTier(paidCount);
+      const lookupKey = `subroast_founder_${tier.priceUsd}_monthly`;
 
       const customerId = await getOrCreateStripeCustomer(
         ctx.user.id,
@@ -132,25 +136,21 @@ export const subscriptionRouter = router({
         ctx.user.name
       );
 
-      // Create price on-the-fly (idempotent via lookup_key)
-      const lookupKey = `subroast_${input.plan}_monthly`;
       let priceId: string;
-
       try {
         const prices = await stripe.prices.list({ lookup_keys: [lookupKey], limit: 1 });
         if (prices.data.length > 0) {
           priceId = prices.data[0].id;
         } else {
-          // Create product + price
           const product = await stripe.products.create({
-            name: plan.name,
-            description: plan.description,
+            name: FOUNDER_PLAN.name,
+            description: FOUNDER_PLAN.description,
           });
           const price = await stripe.prices.create({
             product: product.id,
-            unit_amount: plan.priceUsd,
+            unit_amount: tier.priceUsd,
             currency: "usd",
-            recurring: { interval: plan.interval },
+            recurring: { interval: FOUNDER_PLAN.interval },
             lookup_key: lookupKey,
           });
           priceId = price.id;
@@ -160,10 +160,6 @@ export const subscriptionRouter = router({
         throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Failed to create price" });
       }
 
-      // Use trial_period_days so Stripe calculates the end date itself and always shows the correct count
-      const trialEndTimestamp = Math.floor(Date.now() / 1000) + TRIAL_DAYS * 24 * 60 * 60;
-
-      // Stripe requires exactly one of: customer or customer_email (not both)
       const customerParam = customerId
         ? { customer: customerId }
         : { customer_email: ctx.user.email ?? undefined };
@@ -173,19 +169,18 @@ export const subscriptionRouter = router({
         mode: "subscription",
         line_items: [{ price: priceId, quantity: 1 }],
         subscription_data: {
-          trial_period_days: TRIAL_DAYS,
           metadata: {
-            plan: input.plan,
+            plan: "founder",
             user_id: ctx.user.id.toString(),
-            trial_end: (trialEndTimestamp * 1000).toString(),
           },
         },
         allow_promotion_codes: true,
         client_reference_id: ctx.user.id.toString(),
         metadata: {
-          plan: input.plan,
+          plan: "founder",
           user_id: ctx.user.id.toString(),
-          trial_end: (trialEndTimestamp * 1000).toString(),
+          customer_email: ctx.user.email ?? "",
+          customer_name: ctx.user.name ?? "",
         },
         success_url: `${input.origin}/billing/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${input.origin}/pricing`,
@@ -216,18 +211,33 @@ export const subscriptionRouter = router({
       return { url: session.url };
     }),
 
-  /** Public plan info (no auth required) */
-  getPlans: publicProcedure.query(() => {
+  /** Public plan info with dynamic Founder pricing (no auth required) */
+  getPlans: publicProcedure.query(async () => {
+    const paidCount = await getPaidSubscriberCount();
+    const tier = getFounderPriceTier(paidCount);
     return {
-      starter: {
-        ...PLANS.starter,
-        key: "starter" as const,
+      founder: {
+        ...FOUNDER_PLAN,
+        key: "founder" as const,
+        priceUsd: tier.priceUsd,
+        priceLabel: tier.label,
+        spotsLabel: tier.spotsLabel,
+        paidCount,
       },
-      growth: {
-        ...PLANS.growth,
-        key: "growth" as const,
-        campaignLimit: null, // represent Infinity as null for JSON
-      },
+    };
+  }),
+
+  /** Founder spots remaining (public, for scarcity display) */
+  getFounderSpots: publicProcedure.query(async () => {
+    const paidCount = await getPaidSubscriberCount();
+    const tier = getFounderPriceTier(paidCount);
+    return {
+      paidCount,
+      priceLabel: tier.label,
+      priceUsd: tier.priceUsd,
+      spotsLabel: tier.spotsLabel,
+      freeSyncsLimit: FREE_SYNCS_LIMIT,
+      freeCampaignLimit: FREE_CAMPAIGN_LIMIT,
     };
   }),
 });

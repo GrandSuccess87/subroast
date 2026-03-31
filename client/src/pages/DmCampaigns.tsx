@@ -1,4 +1,5 @@
 import DashboardLayout from "@/components/DashboardLayout";
+import { PaywallModal, type PaywallVariant } from "@/components/PaywallModal";
 import { trpc } from "@/lib/trpc";
 import {
   ArrowLeft,
@@ -406,6 +407,7 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
   const [minSubSize, setMinSubSize] = useState<string>(draft?.minSubSize ?? "");
   const [maxSubSize, setMaxSubSize] = useState<string>(draft?.maxSubSize ?? "");
   const [showSizeFilter, setShowSizeFilter] = useState(false);
+  const [paywallVariant, setPaywallVariant] = useState<PaywallVariant | null>(null);
   const utils = trpc.useUtils();
   const [, navigate] = useLocation();
 
@@ -425,12 +427,8 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
   const createCampaign = trpc.outreach.createCampaign.useMutation({
     onSuccess: () => { localStorage.removeItem(NEW_CAMPAIGN_DRAFT_KEY); toast.success("Campaign created!"); utils.outreach.listCampaigns.invalidate(); onSuccess(); },
     onError: (err) => {
-      if (err.message === "CAMPAIGN_LIMIT_REACHED") {
-        toast.error("Free during beta — full access unlocking soon.", { action: { label: "Get priority access", onClick: () => navigate("/pricing") }, duration: 8000 });
-      } else if (err.message === "UPGRADE_REQUIRED") {
-        toast.error("Free during beta — full access unlocking soon.", { action: { label: "Get priority access", onClick: () => navigate("/pricing") }, duration: 8000 });
-      } else if (err.message === "VALIDATION_REQUIRES_GROWTH") {
-        toast.error("Free during beta — full access unlocking soon.", { action: { label: "Get priority access", onClick: () => navigate("/pricing") }, duration: 8000 });
+      if (err.message === "CAMPAIGN_LIMIT_REACHED" || err.message === "UPGRADE_REQUIRED") {
+        setPaywallVariant("campaign_limit");
       } else {
         toast.error(err.message);
       }
@@ -453,6 +451,12 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
   const tagStyle: React.CSSProperties = { display: "inline-flex", alignItems: "center", gap: "0.3rem", fontFamily: FONT_MONO, fontSize: "0.6rem", color: FOREGROUND, border: `0.5px solid ${BORDER}`, background: SURFACE_RAISED, padding: "0.2rem 0.5rem" };
 
   return (
+    <>
+    <PaywallModal
+      open={paywallVariant !== null}
+      onClose={() => setPaywallVariant(null)}
+      variant={paywallVariant ?? "campaign_limit"}
+    />
     <div style={{ border: `0.5px solid ${BORDER}`, background: SURFACE }}>
       <div style={{ padding: "1.25rem 1.5rem", borderBottom: `0.5px solid ${BORDER}`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: MUTED }}>New Outreach Campaign</p>
@@ -662,20 +666,6 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
               <p style={{ fontSize: "0.72rem", color: MUTED, lineHeight: 1.4 }}>You approve each DM before it's sent</p>
             </button>
 
-            {/* One-Click Send via Extension — coming soon, disabled */}
-            <div
-              style={{ padding: "0.85rem 1rem", background: "transparent", border: `0.5px solid ${BORDER}`, textAlign: "left", opacity: 0.5, cursor: "not-allowed", position: "relative" }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.25rem" }}>
-                <Zap size={12} color={AMBER} />
-                <p style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: FOREGROUND }}>One-Click Send</p>
-                <span style={{ fontFamily: FONT_MONO, fontSize: "0.48rem", letterSpacing: "0.12em", textTransform: "uppercase", color: AMBER, border: `0.5px solid ${AMBER}50`, padding: "0.05rem 0.3rem", display: "inline-flex", alignItems: "center", gap: "0.2rem" }}>
-                  <span style={{ width: 5, height: 5, borderRadius: "50%", background: AMBER, display: "inline-block", animation: "pulse 2s ease-in-out infinite" }} />
-                  Coming soon
-                </span>
-              </div>
-              <p style={{ fontSize: "0.72rem", color: MUTED, lineHeight: 1.4 }}>Send from your own browser — no API, no ban risk</p>
-            </div>
           </div>
         </div>
 
@@ -694,6 +684,7 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
         </div>
       </div>
     </div>
+    </>
   );
 }
 
@@ -1029,6 +1020,7 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
   const chainLeadIdRef = useRef<number | null>(null);
   const [showEdit, setShowEdit] = useState(false);
   const [painPointsOpen, setPainPointsOpen] = useState(true);
+  const [paywallVariant, setPaywallVariant] = useState<PaywallVariant | null>(null);
 
   const { data: painPointData, isLoading: painPointsLoading, refetch: refetchPainPoints } = trpc.outreach.getPainPointClusters.useQuery(
     { campaignId: campaign.id, days: 7 },
@@ -1057,13 +1049,8 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
       utils.outreach.listCampaigns.invalidate();
     },
     onError: (err) => {
-      if (err.message.includes("Daily sync limit reached")) {
-        const plan = subStatus?.plan ?? "starter";
-        const limit = plan === "growth" ? 6 : 2;
-        toast.error(`Daily sync limit reached (${limit}×/day on ${plan} plan). Resets at midnight UTC.`, {
-          action: plan !== "growth" ? { label: "Upgrade to Growth", onClick: () => window.location.href = "/pricing" } : undefined,
-          duration: 8000,
-        });
+      if (err.message === "FREE_SYNC_LIMIT_REACHED") {
+        setPaywallVariant("sync_limit");
       } else {
         toast.error(err.message);
       }
@@ -1181,6 +1168,14 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
   const monoBtn: React.CSSProperties = { fontFamily: FONT_MONO, fontSize: "0.58rem", letterSpacing: "0.12em", textTransform: "uppercase", background: "transparent", border: `0.5px solid ${BORDER}`, color: MUTED, padding: "0.4rem 0.85rem", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "0.3rem" };
 
   return (
+    <>
+    <PaywallModal
+      open={paywallVariant !== null}
+      onClose={() => setPaywallVariant(null)}
+      variant={paywallVariant ?? "sync_limit"}
+      leadsFound={campaign.leadsFound}
+      campaignName={campaign.name}
+    />
     <div>
       {/* Back + header */}
       <div style={{ display: "flex", alignItems: "flex-start", gap: "1rem", marginBottom: "2rem", flexWrap: "wrap" }}>
@@ -1329,12 +1324,7 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
           {campaign.reviewMode === "auto_send" ? "One-Click Send mode" : "Review First mode"}
         </span>
         <span style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", color: MUTED }}>— You review each DM before it's sent</span>
-        {campaign.reviewMode === "auto_send" && (
-          <span style={{ marginLeft: "auto", fontFamily: FONT_MONO, fontSize: "0.52rem", letterSpacing: "0.1em", textTransform: "uppercase", color: AMBER, border: `0.5px solid ${AMBER}50`, padding: "0.1rem 0.4rem", display: "inline-flex", alignItems: "center", gap: "0.2rem" }}>
-            <span style={{ width: 4, height: 4, borderRadius: "50%", background: AMBER, display: "inline-block", animation: "pulse 2s ease-in-out infinite" }} />
-            Extension coming soon
-          </span>
-        )}
+
       </div>
 
       {/* Pain Point Frequency Panel */}
@@ -1524,6 +1514,7 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
         </div>
       </div>
     </div>
+    </>
   );
 }
 
@@ -1580,11 +1571,11 @@ export default function DmCampaigns() {
         {!showNewForm && atLimit && (
           <div style={{ display: "flex", alignItems: "center", gap: "1rem", padding: "1rem 1.25rem", border: `0.5px solid oklch(0.78 0.14 65 / 0.35)`, background: "oklch(0.78 0.14 65 / 0.04)", marginBottom: "1.5rem" }}>
             <div style={{ flex: 1 }}>
-              <p style={{ fontFamily: FONT_MONO, fontSize: "0.65rem", letterSpacing: "0.1em", textTransform: "uppercase", color: AMBER, marginBottom: "0.25rem" }}>Free during beta</p>
-              <p style={{ fontSize: "0.78rem", color: MUTED, lineHeight: 1.5 }}>Full access — unlimited campaigns, priority sync, and DM templates — unlocking soon.</p>
+              <p style={{ fontFamily: FONT_MONO, fontSize: "0.65rem", letterSpacing: "0.1em", textTransform: "uppercase", color: AMBER, marginBottom: "0.25rem" }}>Campaign limit reached</p>
+              <p style={{ fontSize: "0.78rem", color: MUTED, lineHeight: 1.5 }}>Upgrade to the Founder Plan for unlimited campaigns and unlimited syncs.</p>
             </div>
             <button onClick={() => navigate("/pricing")} style={{ padding: "0.6rem 1.1rem", background: AMBER, border: `0.5px solid ${AMBER}`, color: BG, fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.15em", textTransform: "uppercase", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.3rem", flexShrink: 0 }}>
-              <Zap size={10} /> Get priority access
+              <Zap size={10} /> Get Founder Access
             </button>
           </div>
         )}

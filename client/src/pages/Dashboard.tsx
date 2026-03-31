@@ -117,8 +117,8 @@ export default function Dashboard() {
           >
             <span className="coming-soon-dot" />
             <p style={{ fontSize: "0.8rem", color: MUTED, lineHeight: 1.5 }}>
-              <span style={{ color: FOREGROUND, fontWeight: 500 }}>One-click send via Chrome extension — coming soon.</span>{" "}
-              Use Copy &amp; Open to send DMs and comments manually in the meantime.
+              <span style={{ color: FOREGROUND, fontWeight: 500 }}>Use Copy &amp; Open to send DMs and comments.</span>{" "}
+              Select a lead, generate a DM, then copy and open Reddit to send it directly.
             </p>
           </div>
         )}
@@ -178,7 +178,7 @@ export default function Dashboard() {
           >
             <AlertTriangle size={13} style={{ flexShrink: 0 }} />
             <span>
-              Free during beta — full access unlocking soon.{" "}
+              You’ve reached your free campaign limit.{" "}
               <button
                 onClick={() => setLocation("/pricing")}
                 style={{
@@ -193,7 +193,7 @@ export default function Dashboard() {
                   padding: 0,
                 }}
               >
-                Get priority access
+                Get Founder Access
               </button>.
             </span>
           </div>

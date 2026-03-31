@@ -181,8 +181,8 @@ export default function Schedule() {
           <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.75rem 1rem", border: `0.5px solid ${BORDER}`, background: SURFACE, marginBottom: "1.5rem" }}>
             <span className="coming-soon-dot" />
             <p style={{ fontSize: "0.78rem", color: MUTED, lineHeight: 1.5 }}>
-              <span style={{ color: FOREGROUND, fontWeight: 500 }}>One-click send via Chrome extension — coming soon.</span>{" "}
-              Scheduling will be enabled automatically once the extension ships.
+              <span style={{ color: FOREGROUND, fontWeight: 500 }}>Post scheduling is coming soon.</span>{" "}
+              In the meantime, use Copy &amp; Open to send DMs and comments directly from your browser.
             </p>
           </div>
         )}

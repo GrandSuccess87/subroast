@@ -268,39 +268,20 @@ export const outreachRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      // ── Paywall: TEMPORARILY DISABLED during feedback-gathering phase ─────────
-      // TODO: Re-enable before full launch by removing the /* */ comment wrapper
-      /*
+      // ── Campaign paywall ──────────────────────────────────────────────────────
+      // Founder plan (active subscription) → unlimited campaigns
+      // Free users → 1 campaign max
       const db_paywall = await getDb();
       if (db_paywall) {
         const userRows = await db_paywall.select().from(users).where(eq(users.id, ctx.user.id)).limit(1);
         const user = userRows[0];
         if (user) {
-          const now = Date.now();
-          const isTrialing = user.plan === "trial" && user.trialEndsAt != null && user.trialEndsAt > now;
-          const hasActiveAccess =
-            isTrialing ||
+          const hasActiveSub =
             user.subscriptionStatus === "active" ||
             user.subscriptionStatus === "trialing";
 
-          // No active plan at all → require subscription
-          if (!hasActiveAccess && user.plan === "none") {
-            throw new TRPCError({
-              code: "FORBIDDEN",
-              message: "UPGRADE_REQUIRED",
-            });
-          }
-
-          // Validation campaigns require Growth plan
-          if (input.campaignType === "validation" && user.plan !== "growth") {
-            throw new TRPCError({
-              code: "FORBIDDEN",
-              message: "VALIDATION_REQUIRES_GROWTH",
-            });
-          }
-
-          // Starter or trial → limit to 1 campaign
-          if (user.plan !== "growth") {
+          if (!hasActiveSub) {
+            // Free user: allow only 1 active campaign
             const existing = await getOutreachCampaignsByUserId(ctx.user.id);
             const activeCampaigns = existing.filter((c) => c.status !== "completed");
             if (activeCampaigns.length >= 1) {
@@ -312,7 +293,6 @@ export const outreachRouter = router({
           }
         }
       }
-      */
       // ────────────────────────────────────────────────────────────────────────
 
       const id = await createOutreachCampaign({
@@ -480,28 +460,34 @@ Rules:
       if (!c || c.userId !== ctx.user.id) throw new TRPCError({ code: "NOT_FOUND" });
       if (c.status !== "active") throw new TRPCError({ code: "PRECONDITION_FAILED", message: "Campaign is not active" });
 
-      // ── Daily sync limit ──────────────────────────────────────────────────────
-      // Get user plan to determine limit (growth = 6/day, others = 2/day)
+      // ── Sync limit ────────────────────────────────────────────────────────────
+      // Founder plan (active subscription) → unlimited syncs
+      // Free users → FREE_SYNCS_LIMIT total syncs across all time
+      const { FREE_SYNCS_LIMIT } = await import("../stripe/products");
       const db = await getDb();
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
-      const userRows = await db.select({ plan: users.plan }).from(users).where(eq(users.id, ctx.user.id)).limit(1);
-      const userPlan = userRows[0]?.plan ?? "none";
-      const dailyLimit = userPlan === "growth" ? 6 : 2;
+      const userRows = await db.select({ plan: users.plan, subscriptionStatus: users.subscriptionStatus }).from(users).where(eq(users.id, ctx.user.id)).limit(1);
+      const userRow = userRows[0];
+      const hasActiveSub =
+        userRow?.subscriptionStatus === "active" ||
+        userRow?.subscriptionStatus === "trialing";
 
       const nowMs = Date.now();
       const todayUtcStart = new Date();
       todayUtcStart.setUTCHours(0, 0, 0, 0);
       const todayStartMs = todayUtcStart.getTime();
-
-      // Reset counter if it's a new UTC day
       const lastResetAt = c.dailySyncsResetAt ?? 0;
       const syncsUsed = lastResetAt < todayStartMs ? 0 : (c.dailySyncsUsed ?? 0);
 
-      if (syncsUsed >= dailyLimit) {
-        throw new TRPCError({
-          code: "TOO_MANY_REQUESTS",
-          message: `Daily sync limit reached (${dailyLimit}x per day on your plan). Resets at midnight UTC.`,
-        });
+      if (!hasActiveSub) {
+        // Free user: check total lifetime syncs
+        const totalSyncs = c.totalSyncsUsed ?? 0;
+        if (totalSyncs >= FREE_SYNCS_LIMIT) {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "FREE_SYNC_LIMIT_REACHED",
+          });
+        }
       }
 
       const subreddits = JSON.parse(c.subreddits) as string[];
@@ -548,12 +534,12 @@ Rules:
       const isFreshCampaign = existingLeads.length === 0;
       const existingPostIds = new Set(existingLeads.map((l) => l.redditPostId));
 
-      // Growth users get all subreddits; Starter/trial capped at 5
-      const subLimit = userPlan === "growth" ? subreddits.length : 5;
+      // Founder (active sub) gets all subreddits; free users capped at 5
+      const subLimit = hasActiveSub ? subreddits.length : 5;
 
       console.log(`[syncLeads] Campaign ${input.campaignId}: subreddits=${JSON.stringify(subreddits)}, keywords=${JSON.stringify(keywords)}, existingLeads=${existingLeads.length}, subLimit=${subLimit}`);
 
-      for (const sub of subreddits.slice(0, subLimit)) { // Growth: all subreddits; Starter: first 5
+      for (const sub of subreddits.slice(0, subLimit)) { // Founder: all subreddits; Free: first 5
         // Check subreddit size filter if set
         if (minSubSize !== null || maxSubSize !== null) {
           const subscriberCount = await getSubredditSubscriberCount(sub, accessToken ?? "");
@@ -613,13 +599,14 @@ Rules:
       console.log(`[syncLeads] Campaign ${input.campaignId}: newLeads=${newLeads}, spamFiltered=${spamFiltered}`);
 
       // Update campaign lastSyncAt and leadsFound
-      // Always increment the daily sync counter (prevents unlimited spam syncing)
+      // Always increment sync counters
       const updatedLeadsFound = c.leadsFound + newLeads;
       await updateOutreachCampaign(input.campaignId, {
         lastSyncAt: nowMs,
         leadsFound: updatedLeadsFound,
         dailySyncsUsed: syncsUsed + 1,
         dailySyncsResetAt: lastResetAt < todayStartMs ? todayStartMs : lastResetAt,
+        totalSyncsUsed: (c.totalSyncsUsed ?? 0) + 1,
       });
 
       // Send email notification for new leads

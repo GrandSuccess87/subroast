@@ -20,7 +20,7 @@ export const users = mysqlTable("users", {
   // Stripe billing
   stripeCustomerId: varchar("stripeCustomerId", { length: 64 }),
   stripeSubscriptionId: varchar("stripeSubscriptionId", { length: 64 }),
-  plan: mysqlEnum("plan", ["trial", "starter", "growth", "none"]).default("none").notNull(),
+  plan: mysqlEnum("plan", ["trial", "starter", "growth", "founder", "none"]).default("none").notNull(),
   trialStartAt: bigint("trialStartAt", { mode: "number" }),   // unix ms
   trialEndsAt: bigint("trialEndsAt", { mode: "number" }),     // unix ms
   subscriptionStatus: mysqlEnum("subscriptionStatus", ["active", "trialing", "past_due", "canceled", "none"]).default("none").notNull(),
@@ -198,6 +198,7 @@ export const outreachCampaigns = mysqlTable("outreach_campaigns", {
   dmsSent: int("dmsSent").default(0).notNull(),
   dailySyncsUsed: int("dailySyncsUsed").default(0).notNull(),   // resets each UTC day
   dailySyncsResetAt: bigint("dailySyncsResetAt", { mode: "number" }), // unix ms of last reset
+  totalSyncsUsed: int("totalSyncsUsed").default(0).notNull(),  // lifetime total syncs (for free trial gate)
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });

@@ -591,3 +591,14 @@ export async function getQueuedLeadsForSending(): Promise<OutreachLead[]> {
     .orderBy(outreachLeads.discoveredAt)
     .limit(5);
 }
+
+/** Count users with an active paid subscription (for dynamic Founder pricing) */
+export async function getPaidSubscriberCount(): Promise<number> {
+  const db = await getDb();
+  if (!db) return 0;
+  const rows = await db
+    .select({ id: users.id })
+    .from(users)
+    .where(eq(users.subscriptionStatus, "active"));
+  return rows.length;
+}
