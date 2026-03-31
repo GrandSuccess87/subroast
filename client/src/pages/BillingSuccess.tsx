@@ -42,10 +42,10 @@ export default function BillingSuccess() {
           You're all set.
         </h1>
         <p style={{ fontSize: "0.85rem", color: MUTED, lineHeight: 1.7, marginBottom: "0.4rem" }}>
-          You’re in. Welcome to early access — full plans unlocking soon.
+          You're a Founder. Your pricing is locked in for life.
         </p>
         <p style={{ fontFamily: FONT_MONO, fontSize: "0.62rem", color: MUTED, letterSpacing: "0.08em", marginBottom: "2.5rem" }}>
-          No credit card required. No time limit. Just start finding leads.
+          Unlimited campaigns. Unlimited syncs. Early users shape the product.
         </p>
 
         {/* Steps */}

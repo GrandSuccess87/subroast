@@ -118,8 +118,24 @@ function EarlyAccessBanner() {
             color: "oklch(0.75 0.010 80)",
           }}
         >
-          You’re in early access — full plans unlocking soon
+          Founder pricing available for the first 10 users — lock in $25/mo before it goes up
         </span>
+        <a
+          href="/pricing"
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: "0.6rem",
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+            color: "oklch(0.88 0.14 65)",
+            textDecoration: "none",
+            border: "0.5px solid oklch(0.88 0.14 65 / 0.4)",
+            padding: "0.2rem 0.6rem",
+            flexShrink: 0,
+          }}
+        >
+          Get Founder Access →
+        </a>
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
         <button
