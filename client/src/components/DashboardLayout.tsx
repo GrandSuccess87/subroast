@@ -106,7 +106,7 @@ function EarlyAccessBanner() {
       style={{
         background: "oklch(0.14 0.007 60)",
         borderBottom: "0.5px solid oklch(0.22 0.007 60)",
-        padding: "0.45rem 1.5rem",
+        padding: "0.3rem 1.5rem",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
@@ -121,7 +121,7 @@ function EarlyAccessBanner() {
         style={{
           position: "absolute",
           inset: 0,
-          background: "radial-gradient(ellipse 80% 200% at 70% 50%, oklch(0.78 0.14 65 / 0.18) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse 40% 120% at 70% 50%, oklch(0.78 0.14 65 / 0.22) 0%, transparent 60%)",
           opacity: lit ? 1 : 0,
           transition: lit ? "opacity 0.05s ease" : "opacity 0.55s ease",
           pointerEvents: "none",
@@ -157,7 +157,7 @@ function EarlyAccessBanner() {
             padding: "0.2rem 0.6rem",
             flexShrink: 0,
             transition: "box-shadow 0.15s ease, background 0.15s ease",
-            boxShadow: lit ? "0 0 18px oklch(0.78 0.14 65 / 0.55), 0 0 6px oklch(0.78 0.14 65 / 0.30)" : "none",
+            boxShadow: lit ? "0 0 10px oklch(0.78 0.14 65 / 0.45), 0 0 4px oklch(0.78 0.14 65 / 0.25)" : "none",
             background: lit ? "oklch(0.78 0.14 65 / 0.12)" : "transparent",
           }}
         >
