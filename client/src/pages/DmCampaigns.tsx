@@ -49,6 +49,8 @@ const MUTED = "oklch(0.82 0.006 80)";
 const DANGER = "oklch(0.65 0.18 25)";
 const AMBER = "oklch(0.78 0.14 65)";
 
+const PEER_TONE_TEMPLATE = "Write as a peer, not a salesperson. Engage genuinely with what they said — acknowledge their specific situation as if you've been there. Don't mention any product upfront. Give one concrete, actionable insight they can use right now. Be conversational and warm, like a knowledgeable friend in a thread. Only after delivering real value, briefly mention you've been working on something related — as a side note, not a pitch. Mirror their vocabulary and energy. If they're venting, lead with empathy. Never use bullet points or headers. End with one open-ended question that invites them to share more.";
+
 // ─── Sync timing helpers ──────────────────────────────────────────────────────
 function getSyncIntervalMs(plan: string | undefined): number {
   return plan === "growth" ? 4 * 60 * 60 * 1000 : 12 * 60 * 60 * 1000;
@@ -371,9 +373,22 @@ function EditCampaignModal({ campaign, onClose }: { campaign: Campaign; onClose:
           <div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "0.35rem" }}>
               <label style={{ ...labelStyle, marginBottom: 0 }}>AI DM Tone/Style Instructions (optional)</label>
-              <span style={{ fontFamily: FONT_MONO, fontSize: "0.55rem", letterSpacing: "0.08em", color: aiInstructions.length > 900 ? (aiInstructions.length >= 1000 ? "#e05252" : "#d4a843") : MUTED }}>
-                {aiInstructions.length} / 1000
-              </span>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                {!aiInstructions && (
+                  <button
+                    type="button"
+                    onClick={() => setAiInstructions(PEER_TONE_TEMPLATE)}
+                    style={{ fontFamily: FONT_MONO, fontSize: "0.52rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "oklch(0.88 0.025 85 / 0.7)", background: "transparent", border: "0.5px solid oklch(0.88 0.025 85 / 0.25)", padding: "0.2rem 0.5rem", cursor: "pointer", borderRadius: "2px", transition: "all 0.15s" }}
+                    onMouseEnter={(e) => { (e.target as HTMLButtonElement).style.color = "oklch(0.88 0.025 85)"; (e.target as HTMLButtonElement).style.borderColor = "oklch(0.88 0.025 85 / 0.5)"; }}
+                    onMouseLeave={(e) => { (e.target as HTMLButtonElement).style.color = "oklch(0.88 0.025 85 / 0.7)"; (e.target as HTMLButtonElement).style.borderColor = "oklch(0.88 0.025 85 / 0.25)"; }}
+                  >
+                    Use template
+                  </button>
+                )}
+                <span style={{ fontFamily: FONT_MONO, fontSize: "0.55rem", letterSpacing: "0.08em", color: aiInstructions.length > 900 ? (aiInstructions.length >= 1000 ? "#e05252" : "#d4a843") : MUTED }}>
+                  {aiInstructions.length} / 1000
+                </span>
+              </div>
             </div>
             <textarea
               value={aiInstructions}
@@ -662,9 +677,22 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
         <div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "0.35rem" }}>
             <label style={{ ...labelStyle, marginBottom: 0 }}>AI DM Tone/Style Instructions (optional)</label>
-            <span style={{ fontFamily: FONT_MONO, fontSize: "0.55rem", letterSpacing: "0.08em", color: aiInstructions.length > 900 ? (aiInstructions.length >= 1000 ? "#e05252" : "#d4a843") : MUTED }}>
-              {aiInstructions.length} / 1000
-            </span>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+              {!aiInstructions && (
+                <button
+                  type="button"
+                  onClick={() => setAiInstructions(PEER_TONE_TEMPLATE)}
+                  style={{ fontFamily: FONT_MONO, fontSize: "0.52rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "oklch(0.88 0.025 85 / 0.7)", background: "transparent", border: "0.5px solid oklch(0.88 0.025 85 / 0.25)", padding: "0.2rem 0.5rem", cursor: "pointer", borderRadius: "2px", transition: "all 0.15s" }}
+                  onMouseEnter={(e) => { (e.target as HTMLButtonElement).style.color = "oklch(0.88 0.025 85)"; (e.target as HTMLButtonElement).style.borderColor = "oklch(0.88 0.025 85 / 0.5)"; }}
+                  onMouseLeave={(e) => { (e.target as HTMLButtonElement).style.color = "oklch(0.88 0.025 85 / 0.7)"; (e.target as HTMLButtonElement).style.borderColor = "oklch(0.88 0.025 85 / 0.25)"; }}
+                >
+                  Use template
+                </button>
+              )}
+              <span style={{ fontFamily: FONT_MONO, fontSize: "0.55rem", letterSpacing: "0.08em", color: aiInstructions.length > 900 ? (aiInstructions.length >= 1000 ? "#e05252" : "#d4a843") : MUTED }}>
+                {aiInstructions.length} / 1000
+              </span>
+            </div>
           </div>
           <textarea
             value={aiInstructions}
