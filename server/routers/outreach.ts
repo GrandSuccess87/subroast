@@ -650,27 +650,38 @@ Rules:
     }));
   }),
 
-  /** Returns daily sync usage across all campaigns for the current user */
+  /** Returns sync usage stats for the current user.
+   * For free users: returns total lifetime syncs vs FREE_SYNCS_LIMIT (3).
+   * For paid users: returns daily syncs vs daily limit.
+   */
   getSyncStats: protectedProcedure.query(async ({ ctx }) => {
+    const { FREE_SYNCS_LIMIT } = await import("../stripe/products");
     const campaigns = await getOutreachCampaignsByUserId(ctx.user.id);
     const db = await getDb();
     if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
     const userRows = await db.select({ plan: users.plan }).from(users).where(eq(users.id, ctx.user.id)).limit(1);
     const userPlan = userRows[0]?.plan ?? "none";
-    const dailyLimit = userPlan === "growth" ? 6 : 2;
+    const hasActiveSub = userPlan === "founder" || userPlan === "growth";
 
     const todayUtcStart = new Date();
     todayUtcStart.setUTCHours(0, 0, 0, 0);
     const todayStartMs = todayUtcStart.getTime();
 
-    // Sum syncs used today across all campaigns
+    if (!hasActiveSub) {
+      // Free users: show total lifetime syncs vs FREE_SYNCS_LIMIT
+      const totalSyncsUsed = campaigns.reduce((sum, c) => sum + (c.totalSyncsUsed ?? 0), 0);
+      return { syncsToday: totalSyncsUsed, dailyLimit: FREE_SYNCS_LIMIT, userPlan, isLifetimeLimit: true };
+    }
+
+    // Paid users: show daily syncs
+    const dailyLimit = userPlan === "growth" ? 6 : 999;
     const syncsToday = campaigns.reduce((sum, c) => {
       const lastResetAt = c.dailySyncsResetAt ?? 0;
       const used = lastResetAt < todayStartMs ? 0 : (c.dailySyncsUsed ?? 0);
       return sum + used;
     }, 0);
 
-    return { syncsToday, dailyLimit, userPlan };
+    return { syncsToday, dailyLimit, userPlan, isLifetimeLimit: false };
   }),
 
   // ── AI DM Generation ───────────────────────────────────────────────────────

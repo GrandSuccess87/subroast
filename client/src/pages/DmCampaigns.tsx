@@ -81,6 +81,7 @@ type Campaign = {
   leadsFound: number; dmsSent: number; lastSyncAt?: number | null;
   minSubSize?: number | null; maxSubSize?: number | null;
   dailySyncsUsed?: number | null; dailySyncsResetAt?: number | null;
+  totalSyncsUsed?: number | null;
 };
 
 type Lead = {
@@ -1286,25 +1287,32 @@ function CampaignDetail({ campaign, onBack }: { campaign: Campaign; onBack: () =
       {/* Sync limit indicator */}
       {(() => {
         const plan = subStatus?.plan ?? "none";
-        const dailyLimit = plan === "growth" ? 6 : 2;
+        const hasActiveSub = plan === "founder" || plan === "growth";
+        const FREE_SYNCS_LIMIT = 3;
         const todayUtcStart = new Date();
         todayUtcStart.setUTCHours(0, 0, 0, 0);
         const resetAt = campaign.dailySyncsResetAt ?? 0;
-        const syncsUsed = resetAt < todayUtcStart.getTime() ? 0 : (campaign.dailySyncsUsed ?? 0);
-        const atLimit = syncsUsed >= dailyLimit;
+        const dailySyncsUsed = resetAt < todayUtcStart.getTime() ? 0 : (campaign.dailySyncsUsed ?? 0);
+        // For free users show total lifetime syncs; for paid show daily
+        const syncsUsed = hasActiveSub ? dailySyncsUsed : (campaign.totalSyncsUsed ?? 0);
+        const dailyLimit = hasActiveSub ? (plan === "growth" ? 6 : 999) : FREE_SYNCS_LIMIT;
+        const atLimit = !hasActiveSub && syncsUsed >= FREE_SYNCS_LIMIT;
+        const label = hasActiveSub ? "Syncs today" : "Syncs used";
         return (
           <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.6rem 0.9rem", border: `0.5px solid ${atLimit ? "oklch(0.65 0.18 25 / 0.4)" : BORDER}`, background: atLimit ? "oklch(0.65 0.18 25 / 0.04)" : SURFACE, marginBottom: "1.25rem", flexWrap: "wrap" }}>
             <RefreshCw size={11} color={atLimit ? DANGER : MUTED} />
             <span style={{ fontFamily: FONT_MONO, fontSize: "0.6rem", letterSpacing: "0.1em", textTransform: "uppercase", color: atLimit ? DANGER : MUTED }}>
-              Syncs today: {syncsUsed}/{dailyLimit}
+              {label}: {syncsUsed}{hasActiveSub && plan !== "growth" ? "" : `/${dailyLimit}`}
             </span>
             {atLimit ? (
-              <span style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", color: DANGER }}>Limit reached · Resets at midnight UTC</span>
+              <span style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", color: DANGER }}>Limit reached · Upgrade to continue</span>
+            ) : !hasActiveSub ? (
+              <span style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", color: MUTED }}>{FREE_SYNCS_LIMIT - syncsUsed} free sync{FREE_SYNCS_LIMIT - syncsUsed !== 1 ? "s" : ""} remaining</span>
             ) : (
-              <span style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", color: MUTED }}>{dailyLimit - syncsUsed} remaining</span>
+              <span style={{ fontFamily: FONT_MONO, fontSize: "0.58rem", color: MUTED }}>{plan === "growth" ? `${6 - syncsUsed} remaining today` : "Unlimited"}</span>
             )}
-            {plan !== "growth" && (
-              <a href="/pricing" style={{ marginLeft: "auto", fontFamily: FONT_MONO, fontSize: "0.55rem", letterSpacing: "0.1em", textTransform: "uppercase", color: AMBER, textDecoration: "none", borderBottom: `0.5px solid ${AMBER}50` }}>Upgrade for 6×/day →</a>
+            {!hasActiveSub && (
+              <a href="/pricing" style={{ marginLeft: "auto", fontFamily: FONT_MONO, fontSize: "0.55rem", letterSpacing: "0.1em", textTransform: "uppercase", color: AMBER, textDecoration: "none", borderBottom: `0.5px solid ${AMBER}50` }}>Upgrade →</a>
             )}
           </div>
         );

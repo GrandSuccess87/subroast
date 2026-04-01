@@ -1183,3 +1183,9 @@
 - [x] Remove Chrome extension / "coming soon" copy from DmCampaigns.tsx
 - [x] Update campaign limit banner in DmCampaigns.tsx to Founder Access copy
 - [ ] Note: Resend emails will fail in dev (onboarding@resend.dev only works in production with verified domain)
+
+## Sync Limit Display Fix
+- [x] Fix getSyncStats: free users now return totalSyncsUsed vs FREE_SYNCS_LIMIT (3), paid users return daily syncs
+- [x] Fix sidebar "Syncs today" label: shows "Syncs used" for free users, "Syncs today" for paid
+- [x] Fix campaign detail sync indicator: shows X/3 for free users (was X/2), with correct remaining count
+- [x] Add totalSyncsUsed to Campaign type in DmCampaigns.tsx

@@ -478,7 +478,7 @@ function DashboardLayoutContent({
                 {syncStats && (
                   <div>
                     <div className="flex justify-between text-[11px] mb-1">
-                      <span className="text-sidebar-foreground/50">Syncs today</span>
+                      <span className="text-sidebar-foreground/50">{syncStats.isLifetimeLimit ? 'Syncs used' : 'Syncs today'}</span>
                       <span className={`font-medium ${
                         syncStats.syncsToday >= syncStats.dailyLimit
                           ? "text-orange-400"
