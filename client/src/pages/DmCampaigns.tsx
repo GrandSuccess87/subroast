@@ -369,8 +369,19 @@ function EditCampaignModal({ campaign, onClose }: { campaign: Campaign; onClose:
           </div>
           {/* AI instructions */}
           <div>
-            <label style={labelStyle}>AI DM Tone/Style Instructions (optional)</label>
-            <input value={aiInstructions} onChange={(e) => setAiInstructions(e.target.value)} placeholder="e.g. Be casual and friendly, mention free trial" style={inputStyle} />
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "0.35rem" }}>
+              <label style={{ ...labelStyle, marginBottom: 0 }}>AI DM Tone/Style Instructions (optional)</label>
+              <span style={{ fontFamily: FONT_MONO, fontSize: "0.55rem", letterSpacing: "0.08em", color: aiInstructions.length > 900 ? (aiInstructions.length >= 1000 ? "#e05252" : "#d4a843") : MUTED }}>
+                {aiInstructions.length} / 1000
+              </span>
+            </div>
+            <textarea
+              value={aiInstructions}
+              onChange={(e) => setAiInstructions(e.target.value)}
+              placeholder="e.g. Be casual and friendly, mention free trial"
+              rows={4}
+              style={{ ...inputStyle, resize: "vertical", lineHeight: 1.5 }}
+            />
           </div>
           {/* Actions */}
           <div style={{ display: "flex", gap: "0.75rem" }}>
@@ -649,8 +660,19 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
 
         {/* AI instructions */}
         <div>
-          <label style={labelStyle}>AI DM Tone/Style Instructions (optional)</label>
-          <input value={aiInstructions} onChange={(e) => setAiInstructions(e.target.value)} placeholder="e.g. Be casual and friendly, mention free trial, avoid technical jargon" style={inputStyle} />
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "0.35rem" }}>
+            <label style={{ ...labelStyle, marginBottom: 0 }}>AI DM Tone/Style Instructions (optional)</label>
+            <span style={{ fontFamily: FONT_MONO, fontSize: "0.55rem", letterSpacing: "0.08em", color: aiInstructions.length > 900 ? (aiInstructions.length >= 1000 ? "#e05252" : "#d4a843") : MUTED }}>
+              {aiInstructions.length} / 1000
+            </span>
+          </div>
+          <textarea
+            value={aiInstructions}
+            onChange={(e) => setAiInstructions(e.target.value)}
+            placeholder="e.g. Be casual and friendly, mention free trial, avoid technical jargon"
+            rows={4}
+            style={{ ...inputStyle, resize: "vertical", lineHeight: 1.5 }}
+          />
         </div>
 
         {/* Campaign type */}
