@@ -253,9 +253,23 @@ function EditCampaignModal({ campaign, onClose }: { campaign: Campaign; onClose:
       await utils.outreach.listCampaigns.invalidate();
       onClose();
     },
-    onError: (err) => toast.error(err.message),
+     onError: (err) => {
+      try {
+        const parsed = JSON.parse(err.message);
+        if (Array.isArray(parsed) && parsed.find((e: any) => e.path?.includes("aiPromptInstructions"))) {
+          toast.error("AI tone instructions are too long — please keep them under 1,000 characters.");
+        } else {
+          toast.error(err.message);
+        }
+      } catch {
+        if (err.message?.includes("aiPromptInstructions") || err.message?.includes("too_big")) {
+          toast.error("AI tone instructions are too long — please keep them under 1,000 characters.");
+        } else {
+          toast.error(err.message);
+        }
+      }
+    },
   });
-
   const addSub = () => { const s = subInput.trim().replace(/^r\//, ""); if (s && !subreddits.includes(s)) setSubreddits([...subreddits, s]); setSubInput(""); };
   const addKw = () => { const k = kwInput.trim(); if (k && !keywords.includes(k)) setKeywords([...keywords, k]); setKwInput(""); };
 
@@ -429,8 +443,25 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
     onError: (err) => {
       if (err.message === "CAMPAIGN_LIMIT_REACHED" || err.message === "UPGRADE_REQUIRED") {
         setPaywallVariant("campaign_limit");
+      } else if (err.message?.includes("aiPromptInstructions") || err.message?.includes("<=1000") || err.message?.includes("too_big")) {
+        toast.error("AI tone instructions are too long — please keep them under 1,000 characters.");
       } else {
-        toast.error(err.message);
+        // Try to parse Zod validation errors from the raw message
+        try {
+          const parsed = JSON.parse(err.message);
+          if (Array.isArray(parsed) && parsed[0]?.message) {
+            const zodErr = parsed.find((e: any) => e.path?.includes("aiPromptInstructions"));
+            if (zodErr) {
+              toast.error("AI tone instructions are too long — please keep them under 1,000 characters.");
+            } else {
+              toast.error(parsed[0].message);
+            }
+          } else {
+            toast.error(err.message);
+          }
+        } catch {
+          toast.error(err.message);
+        }
       }
     },
   });
