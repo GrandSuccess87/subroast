@@ -378,7 +378,7 @@ function EditCampaignModal({ campaign, onClose }: { campaign: Campaign; onClose:
             <textarea
               value={aiInstructions}
               onChange={(e) => setAiInstructions(e.target.value)}
-              placeholder="e.g. Be casual and friendly, mention free trial"
+              placeholder="Write as a peer, not a salesperson. Engage genuinely with what they said — acknowledge their specific situation as if you've been there. Don't mention any product upfront. Give one concrete, actionable insight they can use right now. Be conversational and warm, like a knowledgeable friend in a thread. Only after delivering real value, briefly mention you've been working on something related — as a side note, not a pitch. Mirror their vocabulary and energy. If they're venting, lead with empathy. Never use bullet points or headers. End with one open-ended question that invites them to share more."
               rows={4}
               style={{ ...inputStyle, resize: "vertical", lineHeight: 1.5 }}
             />
@@ -669,7 +669,7 @@ function NewCampaignForm({ onSuccess, onCancel }: { onSuccess: () => void; onCan
           <textarea
             value={aiInstructions}
             onChange={(e) => setAiInstructions(e.target.value)}
-            placeholder="e.g. Be casual and friendly, mention free trial, avoid technical jargon"
+            placeholder="Write as a peer, not a salesperson. Engage genuinely with what they said — acknowledge their specific situation as if you've been there. Don't mention any product upfront. Give one concrete, actionable insight they can use right now. Be conversational and warm, like a knowledgeable friend in a thread. Only after delivering real value, briefly mention you've been working on something related — as a side note, not a pitch. Mirror their vocabulary and energy. If they're venting, lead with empathy. Never use bullet points or headers. End with one open-ended question that invites them to share more."
             rows={4}
             style={{ ...inputStyle, resize: "vertical", lineHeight: 1.5 }}
           />
