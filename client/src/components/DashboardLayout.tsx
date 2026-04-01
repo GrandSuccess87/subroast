@@ -91,23 +91,44 @@ function EarlyAccessBanner() {
   const [dismissed, setDismissed] = useState(() =>
     sessionStorage.getItem("ea_banner_dismissed") === "1"
   );
+  const [lit, setLit] = useState(false);
   const { data: subStatus } = trpc.subscription.getStatus.useQuery(undefined, { staleTime: 60_000 });
   if (dismissed) return null;
   if (subStatus?.subscriptionStatus === "active") return null;
+
+  function handleCtaClick() {
+    setLit(true);
+    setTimeout(() => setLit(false), 600);
+  }
+
   return (
     <div
       style={{
         background: "oklch(0.14 0.007 60)",
         borderBottom: "0.5px solid oklch(0.22 0.007 60)",
-        padding: "0.6rem 1.5rem",
+        padding: "0.45rem 1.5rem",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
         gap: "1rem",
         flexWrap: "wrap",
+        position: "relative",
+        overflow: "hidden",
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+      {/* Illumination burst on click */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "radial-gradient(ellipse 80% 200% at 70% 50%, oklch(0.78 0.14 65 / 0.18) 0%, transparent 70%)",
+          opacity: lit ? 1 : 0,
+          transition: lit ? "opacity 0.05s ease" : "opacity 0.55s ease",
+          pointerEvents: "none",
+          zIndex: 0,
+        }}
+      />
+      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", position: "relative", zIndex: 1 }}>
         <Sparkles
           style={{ width: "0.875rem", height: "0.875rem", color: "oklch(0.88 0.025 85)", flexShrink: 0 }}
         />
@@ -124,6 +145,7 @@ function EarlyAccessBanner() {
         </span>
         <a
           href="/pricing"
+          onClick={handleCtaClick}
           style={{
             fontFamily: "var(--font-mono)",
             fontSize: "0.6rem",
@@ -134,12 +156,15 @@ function EarlyAccessBanner() {
             border: "0.5px solid oklch(0.88 0.14 65 / 0.4)",
             padding: "0.2rem 0.6rem",
             flexShrink: 0,
+            transition: "box-shadow 0.15s ease, background 0.15s ease",
+            boxShadow: lit ? "0 0 18px oklch(0.78 0.14 65 / 0.55), 0 0 6px oklch(0.78 0.14 65 / 0.30)" : "none",
+            background: lit ? "oklch(0.78 0.14 65 / 0.12)" : "transparent",
           }}
         >
           Get Founder Access →
         </a>
       </div>
-      <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "1rem", position: "relative", zIndex: 1 }}>
         <button
           onClick={() => {
             sessionStorage.setItem("ea_banner_dismissed", "1");
