@@ -1189,3 +1189,6 @@
 - [x] Fix sidebar "Syncs today" label: shows "Syncs used" for free users, "Syncs today" for paid
 - [x] Fix campaign detail sync indicator: shows X/3 for free users (was X/2), with correct remaining count
 - [x] Add totalSyncsUsed to Campaign type in DmCampaigns.tsx
+
+## SEO Blog Automation
+- [x] 2026-08-12: Published-ready article, "How to Find Leads on Reddit Without Getting Banned". Primary keyword: "how to find leads on Reddit without getting banned". Route: `/blog/how-to-find-leads-on-reddit-without-getting-banned`.

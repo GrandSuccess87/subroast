@@ -19,7 +19,7 @@ import FeedbackPage from "./pages/Feedback";
 import Waitlist from "./pages/Waitlist";
 import Onboarding from "./pages/Onboarding";
 import AdminResponses from "./pages/AdminResponses";
-import RedditLeadGeneration from "./pages/RedditLeadGeneration";
+import FindLeadsOnReddit from "./pages/blog/FindLeadsOnReddit";
 import { PwaInstallBanner } from "./components/PwaInstallBanner";
 
 function Router() {
@@ -38,7 +38,7 @@ function Router() {
       <Route path="/waitlist" component={Waitlist} />
       <Route path="/onboarding" component={Onboarding} />
       <Route path="/admin/responses" component={AdminResponses} />
-      <Route path="/blog/reddit-lead-generation" component={RedditLeadGeneration} />
+      <Route path="/blog/how-to-find-leads-on-reddit-without-getting-banned" component={FindLeadsOnReddit} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
