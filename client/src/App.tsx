@@ -36,6 +36,7 @@ function Router() {
       <Route path="/billing/success" component={BillingSuccess} />
       <Route path="/dashboard/feedback" component={FeedbackPage} />
       <Route path="/waitlist" component={Waitlist} />
+      <Route path="/billing/reserve" component={Waitlist} />
       <Route path="/onboarding" component={Onboarding} />
       <Route path="/admin/responses" component={AdminResponses} />
       <Route path="/blog/how-to-find-leads-on-reddit-without-getting-banned" component={FindLeadsOnReddit} />
